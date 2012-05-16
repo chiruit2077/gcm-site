@@ -1,0 +1,337 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
+  xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox" >
+  	<ui:style>
+  		.total{
+			font-style: italic; 
+			color: blue; 
+			text-align: left;
+		}
+		.convidado {
+			background-color: lightgray;
+			border: 1px solid gray;
+		}
+		.ficha {
+			border: 1px solid gray;
+		}
+		.casal {
+			background-color: lightgray;
+		}
+		.ele {
+			background-color: #ebeef2;
+			border-bottom: 1px solid lightgray;
+			width: 100%;
+		}
+		.ela {
+			background-color: #f2eaf1;
+			border-bottom: 1px solid lightgray;
+			width: 100%;
+		}
+  	</ui:style>
+  	<g:VerticalPanel horizontalAlignment="center">
+		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
+			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
+				<tr>
+					<td>
+				  		<g:Label ui:field="tituloFormularioLabel" width="100%"/>
+					</td>
+					<td width="30px" align="right">
+						<g:Image ui:field="fecharImage" url="images/close.png" styleName="portal-ImageCursor" width="20px"/>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center" visible="false">
+			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center" >
+				<g:HTMLPanel width="100%">
+					<table cellpadding="3" cellspacing="0" border="0" width="100%">
+						<tr>
+							<td>
+								<g:Button ui:field="filasButton">Gerenciar filas</g:Button>
+							</td>
+							<td align="right">
+								<g:Button ui:field="novoButton">Adicionar convite</g:Button>
+							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:HorizontalPanel> 
+		</g:VerticalPanel>
+		<g:VerticalPanel width="100%">
+			<g:HorizontalPanel spacing="2" width="100%">
+				<g:CheckBox ui:field="exibeRecusadosCheckBox" text="Exibir convites recusados"/>
+				<g:Label ui:field="itemTotal" width="100%" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
+			</g:HorizontalPanel>
+			<g:FlexTable ui:field="encontroConviteFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+		</g:VerticalPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaDialogBox" visible="false"
+				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do convite">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel" width="150px">Fila:</td>
+									<td>
+										<g:ListBox ui:field="filaListBox" width="150px"/>
+									</td>
+									<td class="portal-formLabel">Prioridade:</td>
+									<td>
+										<cn:NumberTextBox ui:field="prioridadeNumberTextBox" width="50px" alignment="CENTER"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Padrinhos:</td>
+									<td colspan="3">
+										<g:SuggestBox ui:field="casalSuggestBox" width="350px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Responsável convite:</td>
+									<td colspan="3">
+										<g:ListBox ui:field="responsavelListBox" width="350px"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel width="95%" styleName="{style.convidado}">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel" width="150px">Casal convidado:</td>
+									<td>
+										<g:SuggestBox ui:field="casalConvidadoSuggestBox" width="350px"/>
+									</td>
+									<td>
+										<g:Image ui:field="editaCasalImage" url="images/edit.png" styleName="portal-ImageCursor" title="Editar dados do casal"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Telefones:</td>
+									<td colspan="2">
+										<g:Label ui:field="casalConvidadoTelefoneLabel" width="350px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Observações:</td>
+									<td colspan="2">
+										<g:TextArea ui:field="observacaoTextArea" width="350px" height="40px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">&nbsp;</td>
+									<td colspan="2">
+										<g:CheckBox ui:field="esconderPagamentoCheckBox" text="Esconder informações de pagamento"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel" width="150px">Data do convite:</td>
+									<td>
+										<dp:DateBox ui:field="dataConviteDateBox" width="100px" styleName="portal-formField"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Resposta:</td>
+									<td>
+										<g:ListBox ui:field="respostaListBox" width="150px"/>
+									</td>
+									<td class="portal-formLabel">Data da resposta:</td>
+									<td>
+										<dp:DateBox ui:field="dataRespostaDateBox" width="100px" styleName="portal-formField"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel ui:field="respostaHTMLPanel" width="95%" styleName="{style.convidado}" visible="false">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td>
+										<g:CheckBox ui:field="gerarInscricaoCheckBox" text="Gerar inscrição ao evento para os padrinhos e afilhados"/>
+										<g:CheckBox ui:field="moverCheckBox" text="Adicionar novamente no final da fila (Normal)"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel ui:field="fichaHTMLPanel" width="95%" styleName="{style.ficha}" visible="false">
+							<table cellpadding="2" align="center">
+								<tr style="background-color:#ffeeb4;">
+									<td colspan="6" align="center"> Ficha do afilhado </td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="150px">Enviada:</td>
+									<td>
+										<g:TextBox ui:field="dataFichaEnviadaAfilhadoDateBox" width="100px" styleName="portal-formField" readOnly="true"/>
+									</td>
+									<td class="portal-formLabel" width="150px">Recebida:</td>
+									<td>
+										<g:TextBox ui:field="dataFichaRecebidaAfilhadoDateBox" width="100px" styleName="portal-formField" readOnly="true"/>
+									</td>
+									<td class="portal-formLabel" width="150px">Atualizada:</td>
+									<td>
+										<g:TextBox ui:field="dataFichaAtualizadaAfilhadoDateBox" width="100px" styleName="portal-formField" readOnly="true"/>
+									</td>
+								</tr>
+								<tr style="background-color:#ffeeb4;">
+									<td colspan="6" align="center"> Ficha do padrinho </td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="150px">Enviada:</td>
+									<td>
+										<g:TextBox ui:field="dataFichaEnviadaPadrinhoDateBox" width="100px" styleName="portal-formField" readOnly="true"/>
+									</td>
+									<td class="portal-formLabel" width="150px">Recebida:</td>
+									<td>
+										<g:TextBox ui:field="dataFichaRecebidaPadrinhoDateBox" width="100px" styleName="portal-formField" readOnly="true"/>
+									</td>
+									<td class="portal-formLabel" width="150px">Atualizada:</td>
+									<td>
+										<g:TextBox ui:field="dataFichaAtualizadaPadrinhoDateBox" width="100px" styleName="portal-formField" readOnly="true"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarButton">Salvar</g:Button>
+							<g:Button ui:field="fecharButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+			<g:DialogBox ui:field="filasDialogBox" visible="false"
+				         width="400px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Filas cadastradas">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="2" width="100%">
+							<g:Label ui:field="itemFilaTotal" width="100%" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
+						</g:HorizontalPanel>
+						<g:FlexTable ui:field="filaFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="novaFilaButton">Adicionar fila</g:Button>
+							<g:Button ui:field="fecharFilasButton">Fechar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+			<g:DialogBox ui:field="editaFilaDialogBox" visible="false"
+				         width="350px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da fila">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel">Nome:</td>
+									<td>
+										<g:TextBox ui:field="nomeTextBox" width="200px" maxLength="250"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Ordem:</td>
+									<td>
+										<cn:NumberTextBox ui:field="ordemNumberTextBox" width="80px" alignment="CENTER"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Qtde. vagas:</td>
+									<td>
+										<cn:NumberTextBox ui:field="qtdeVagasNumberTextBox" width="80px" alignment="CENTER"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Tipo :</td>
+									<td>
+										<g:ListBox ui:field="tipoListBox" width="150px"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarFilaButton">Salvar</g:Button>
+							<g:Button ui:field="fecharFilaButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+			<g:DialogBox ui:field="editaCasalDialogBox" visible="false"
+				         width="450px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do casal">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+						<g:HTMLPanel width="100%" styleName="{style.casal}">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel">Tel. Residencial:</td>
+									<td>
+										<g:TextBox ui:field="telefoneTextBox" width="200px" maxLength="250"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel width="100%" styleName="{style.ele}">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel">Ele:</td>
+									<td>
+										<g:TextBox ui:field="eleNomeTextBox" width="300px" maxLength="250"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Email:</td>
+									<td>
+										<g:TextBox ui:field="eleEmailTextBox" width="300px" maxLength="250"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Telefone:</td>
+									<td>
+										<g:TextBox ui:field="eleTelefoneTextBox" width="200px" maxLength="250"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel width="100%" styleName="{style.ela}">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel">Ela:</td>
+									<td>
+										<g:TextBox ui:field="elaNomeTextBox" width="300px" maxLength="250"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Email:</td>
+									<td>
+										<g:TextBox ui:field="elaEmailTextBox" width="300px" maxLength="250"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Telefone:</td>
+									<td>
+										<g:TextBox ui:field="elaTelefoneTextBox" width="200px" maxLength="250"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarCasalButton">Salvar</g:Button>
+							<g:Button ui:field="fecharCasalButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>

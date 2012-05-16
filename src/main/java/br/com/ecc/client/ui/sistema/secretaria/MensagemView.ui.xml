@@ -1,0 +1,176 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:rt="urn:import:br.com.ecc.client.ui.component.richtext" >
+  	<g:VerticalPanel horizontalAlignment="center">
+		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
+			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
+				<tr>
+					<td>
+				  		<g:Label ui:field="tituloFormularioLabel" width="100%"/>
+					</td>
+					<td width="30px" align="right">
+						<g:Image ui:field="fecharImage" url="images/close.png" styleName="portal-ImageCursor" width="20px"/>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
+			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center">
+				<g:HTMLPanel width="100%">
+					<table cellpadding="3" cellspacing="0" border="0">
+						<tr>
+							<td>
+								<g:Button ui:field="novoButton" text="Adicionar mensagem" />
+							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
+			<g:FlexTable ui:field="mensagemFlexTable" cellPadding="0" cellSpacing="0" />
+		</g:VerticalPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaDialogBox" visible="false"
+				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da mensagem">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" spacing="5">
+						<g:TabLayoutPanel barHeight="22" barUnit="PX" height="430px" width="100%">
+							<g:tab>
+								<g:header>Mensagem</g:header>
+								<g:VerticalPanel width="100%">
+									<g:HTMLPanel width="100%">
+										<table cellpadding="2" align="center">
+											<tr>
+												<td class="portal-formLabel">Descrição:</td>
+												<td>
+													<g:TextBox ui:field="descricaoTextBox" width="300px" maxLength="250"/>
+												</td>
+												<td class="portal-formLabel">Tipo:</td>
+												<td>
+													<g:ListBox ui:field="tipoListBox" width="180px"/>
+												</td>
+											</tr>
+											<tr>
+												<td class="portal-formLabel">Titulo do email:</td>
+												<td colspan="3">
+													<g:TextBox ui:field="tituloTextBox" width="570px" maxLength="250"/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="4">
+													<g:VerticalPanel spacing="2">
+														<g:HorizontalPanel spacing="2">
+															<rt:RichTextToolbar ui:field="mensagemRichTextToolbar"/>
+															<g:Label text="Adicionar:"/>
+															<g:ListBox ui:field="variaveisListBox" width="150px"/>
+														</g:HorizontalPanel>
+														<g:RichTextArea ui:field="mensagemRichTextArea" width="700px" height="275px"/>
+													</g:VerticalPanel>
+												</td>
+											</tr>
+										</table>
+									</g:HTMLPanel>
+								</g:VerticalPanel>
+							</g:tab>
+							<g:tab>
+								<g:header>Destinatários</g:header>
+								<g:VerticalPanel width="100%">
+									<g:HTMLPanel width="100%">
+										<table cellpadding="2" cellspacing="0" align="center" width="100%">
+											<tr>
+												<td class="portal-formLabel" width="100px">Agrupamento:</td>
+												<td>
+													<g:RadioButton ui:field="grupoRadioButton" name="tipo" text="Agrupamentos por Grupo" value="true"/>
+													<g:RadioButton ui:field="encontroRadioButton" name="tipo" text="Agrupamentos por Encontro" />
+												</td>
+											</tr>
+										</table>
+									</g:HTMLPanel>
+									<g:HTMLPanel width="100%">
+										<table cellpadding="2" cellspacing="0" width="100%">
+											<tr>
+												<td width="100px">&nbsp;</td>
+												<td>
+													<g:HTMLPanel ui:field="encontroHTMLPanel" width="100%" visible="false">
+														<table cellpadding="3" cellspacing="0" border="0">
+															<tr>
+																<td class="portal-formLabel">Encontro:</td>
+																<td>
+																	<g:ListBox ui:field="encontroListBox"  width="200px"/>
+																</td>
+																
+															</tr>
+														</table>
+													</g:HTMLPanel>
+												</td>
+												<td>
+													<table cellpadding="3" cellspacing="0" border="0">
+														<tr>
+															<td class="portal-formLabel">Nome:</td>
+															<td>
+																<g:ListBox ui:field="agrupamentoListBox" width="200px"/>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</g:HTMLPanel>
+									<g:HTMLPanel width="100%">
+										<table cellpadding="2" cellspacing="0" width="100%">
+											<tr>
+												<td class="portal-formLabel"  width="100px">Adicionar:</td>
+												<td style="border: 1px solid lightgray;">
+													<table cellpadding="2" >
+														<tr>
+															<td class="portal-formLabel">Casal:</td>
+															<td>
+																<g:SuggestBox ui:field="casalSuggestBox" width="400px"/>
+															</td>
+														</tr>
+														<tr>
+															<td class="portal-formLabel">Pessoa:</td>
+															<td>
+																<g:SuggestBox ui:field="pessoaSuggestBox" width="400px"/>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td>&nbsp;</td>
+												<td>
+													<g:Button ui:field="adicionarDestinatarioButton" text="Adicionar destinatário(s)"/>
+													<g:Button ui:field="excluirDestinatarioButton" text="Remover todos os destinatários"/>
+													<g:CheckBox ui:field="completoCheckBox" text="Exibir nomes completos"/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2">
+													<g:Label ui:field="itemDestinatarioTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" width="100%"/>
+													<g:FlowPanel styleName="portal-FlowPanel" height="190px">
+														<g:FlexTable ui:field="destinatarioFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
+													</g:FlowPanel>
+												</td>
+											</tr>
+										</table>
+									</g:HTMLPanel>
+								</g:VerticalPanel>
+							</g:tab>
+						</g:TabLayoutPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="enviarButton">Enviar mensagem</g:Button>
+							<g:Button ui:field="salvarButton">Salvar</g:Button>
+							<g:Button ui:field="fecharButton">Fechar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>

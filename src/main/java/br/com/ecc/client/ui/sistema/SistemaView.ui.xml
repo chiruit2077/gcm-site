@@ -1,0 +1,14 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+	xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:c="urn:import:br.com.ecc.client.ui.component">
+	<g:VerticalPanel ui:field="menuBarPanel" width="100%">
+		<g:MenuBar ui:field="sistemaMenuBar" animationEnabled="false" autoOpen="false"/>
+		<g:VerticalPanel width="100%" horizontalAlignment="center">
+			<g:FlowPanel ui:field="bodyLayout" width="100%" styleName="portal-bodyLayout">
+				<g:VerticalPanel ui:field="contentPortlet" horizontalAlignment="center"  width="100%"/>
+			</g:FlowPanel>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+</ui:UiBinder>

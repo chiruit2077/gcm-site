@@ -1,0 +1,181 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:c="urn:import:br.com.ecc.client.ui.component"
+  >
+
+	<ui:style>
+		.banner{
+			background-color: #054373;
+			background-image: -webkit-gradient(linear,left top,left bottom,from(#054373),to(#327FD6));
+			background-image: -webkit-linear-gradient(top,#054373,#327FD6);
+			background-image: -moz-linear-gradient(top,#054373,#327FD6);
+			background-image: -ms-linear-gradient(top,#054373,#327FD6);
+			background-image: -o-linear-gradient(top,#054373,#327FD6);
+			background-image: linear-gradient(top,#054373,#327FD6);
+		}
+		.corpo{
+			background-color: red;
+			margin-top: 0px;
+			margin-left: auto;
+			margin-right: auto;
+			padding: 0px;
+			background-color: white;
+			width: 100%;
+		}
+		.fundo {
+			padding: 0px;
+		}
+		.campo {
+			display: inline-block;
+			height: 29px;
+			margin: 0;
+			padding-left: 8px;
+			background: white;
+			border: 1px solid #D9D9D9;
+			border-top: 1px solid silver;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			-webkit-border-radius: 1px;
+			-moz-border-radius: 1px;
+			border-radius: 1px;
+			font-size: 15px;
+		}
+		.campo:hover {
+			border: 1px solid #B9B9B9;
+			border-top: 1px solid #A0A0A0;
+			-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+			-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+			box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+		}
+		.campo:focus {
+			border: 1px solid #4d90fe;
+		}
+		.boton {
+			border: 1px solid #3079ED;
+			color: white;
+			text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+			background-color: #4D90FE;
+			background-image: -webkit-gradient(linear,left top,left bottom,from(#4d90fe),to(#4787ed));
+			background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+			background-image: -moz-linear-gradient(top,#4d90fe,#4787ed);
+			background-image: -ms-linear-gradient(top,#4d90fe,#4787ed);
+			background-image: -o-linear-gradient(top,#4d90fe,#4787ed);
+			background-image: linear-gradient(top,#4d90fe,#4787ed);
+			padding: 2px;
+		}
+		.boton:hover{
+	      	border: 1px solid #2F5BB7;
+			color: white;
+			text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+			background-color: #357AE8;
+			background-image: -webkit-gradient(linear,left top,left bottom,from(#4d90fe),to(#357ae8));
+			background-image: -webkit-linear-gradient(top,#4d90fe,#357ae8);
+			background-image: -moz-linear-gradient(top,#4d90fe,#357ae8);
+			background-image: -ms-linear-gradient(top,#4d90fe,#357ae8);
+			background-image: -o-linear-gradient(top,#4d90fe,#357ae8);
+			background-image: linear-gradient(top,#4d90fe,#357ae8);
+		}
+		.boton:disabled {
+			border: 1px solid #b4b4b4;
+			color: darkgray;
+			background-color: #f5f5f5;
+			background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#d2d3d5));
+			background-image: -webkit-linear-gradient(top,#f5f5f5,#d2d3d5);
+			background-image: -moz-linear-gradient(top,#f5f5f5,#d2d3d5);
+			background-image: -ms-linear-gradient(top,#f5f5f5,#d2d3d5);
+			background-image: -o-linear-gradient(top,#f5f5f5,#d2d3d5);
+			background-image: linear-gradient(top,#f5f5f5,#d2d3d5);
+			padding: 2px;
+		}
+		.logo {
+			position: absolute;
+			top: -20px;
+			left: -15px;
+		}
+		.formulario {
+			margin-top: -5px;
+		}
+	</ui:style>
+
+	<g:VerticalPanel ui:field="mainPanel" styleName="{style.corpo}" horizontalAlignment="center">
+		<g:FlowPanel ui:field="waitFlowPanel" width="40px" styleName="portal-WaitParent">
+			<g:HTMLPanel width="100%" styleName="portal-WaitBar">
+				<table cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td align="center">
+							<g:Image url="images/wait.gif" width="40px"/>								
+						</td>
+					</tr>
+				</table>
+			</g:HTMLPanel>
+		</g:FlowPanel>
+		<g:HorizontalPanel ui:field="headerPanel" width="100%" styleName="{style.banner}" horizontalAlignment="center">
+			<g:HTMLPanel width="100%" height="35px">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%">
+					<tr>
+						 <td align="left" style="padding-left: 5px; width:180px;">
+							 <g:HorizontalPanel verticalAlignment="middle" height="35px" spacing="0">
+								<g:HorizontalPanel ui:field="grupoHorizontalPanel" verticalAlignment="middle" height="35px" width="150px" spacing="0" styleName="portal-headerBar" visible="false">
+									<g:HorizontalPanel width="5px"/>
+									<g:Image ui:field="grupoImage" url="" width="25px" height="25px"/>
+									<g:HorizontalPanel width="5px"/>
+									<g:Label ui:field="grupoLabel" styleName="portal-headerBarText" width="125px"/>
+							 	</g:HorizontalPanel>
+							 	<g:HorizontalPanel ui:field="encontroHorizontalPanel" verticalAlignment="middle" height="35px" width="170px" spacing="5" styleName="portal-headerBar" visible="false">
+									<g:Label ui:field="encontroLabel" styleName="portal-headerBarText" />
+							 	</g:HorizontalPanel> 
+						 	</g:HorizontalPanel>
+					 	 </td>
+						 <td align="center">
+						 	<g:HorizontalPanel ui:field="menuHorizontalPanel" spacing="0"/>
+						 </td>
+						 <td align="right" style="padding-right:4px;">
+						 	<g:HorizontalPanel ui:field="usuarioHorizontalPanel" styleName="portal-headerBar" height="35px" spacing="5" verticalAlignment="middle" visible="false">
+								<g:Label ui:field="usuarioNome" styleName="portal-headerBarText" />
+								<g:Image ui:field="usuarioImage" url="images/user.png" width="20px" height="20px"/>
+							</g:HorizontalPanel>
+						 </td>
+					</tr>
+				</table>
+			</g:HTMLPanel>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel ui:field="bodyContent" width="100%" horizontalAlignment="center"/>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="loginDialogBox" visible="false"
+						 width="400px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados de acesso">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" cellspacing="0" border="0" width="100%">
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr>
+									<td class="portal-formLabel" style="width:100px;">Email:</td>
+									<td>
+										<g:TextBox ui:field="emailTextBox" width="250px" styleName="{style.campo}"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Senha:</td>
+									<td>
+										<g:PasswordTextBox ui:field="senhaTextBox" width="250px" styleName="{style.campo}"/>
+									</td>
+								</tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="conectarButton" styleName="{style.boton}">Conectar</g:Button>
+							<g:Button ui:field="cancelarButton" styleName="{style.boton}">Cancelar</g:Button>
+							<g:Button ui:field="senhaButton" styleName="{style.boton}">Esquecí minha senha</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>

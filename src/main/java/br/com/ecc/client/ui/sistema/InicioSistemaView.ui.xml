@@ -1,0 +1,248 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:rt="urn:import:br.com.ecc.client.ui.component.richtext"
+  >
+  	<ui:style>
+	  	.formulario{
+			overflow-y:scroll;
+		}
+  		.recados {
+			border-right: 1px solid lightgray;
+			font-size: 10px;
+			width: 100%;
+			text-align: left;
+	    }
+	    .barra {
+			border-top: 1px solid lightgray;
+			border-bottom: 1px solid lightgray;
+			background-color: #f5f5f5;
+			padding-top: 5px; 
+	    }
+	    .titulo {
+			font-family: Arial, sans-serif;
+			color: darkblue;
+			font-size: 12px;
+			text-align: left;
+			padding-left: 2px;
+		}
+		.casal {
+			font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+			color: #1C2A47;
+			font-weight: bold;
+			font-size: 20px;
+			width: 100%;
+			text-align: left;
+		}
+		.bordeado {
+			border-left: 1px solid lightgray;
+			border-right: 1px solid lightgray;
+			border-bottom: 1px solid lightgray;
+			width: 100%;
+	    }
+	    .fonte11 {
+			font-size: 11px;
+	    }
+	    .logo {
+			border-radius: 10px 10px 0px 0px;
+			-webkit-border-radius: 10px 10px 0px 0px;
+			-moz-border-radius: 10px 10px 0px 0px;
+			
+			-webkit-box-shadow: 0px 0px 5px #888;
+			-moz-box-shadow: 0px 0px 5px #888;
+			box-shadow: 0px 0px 5px #888;
+			
+			margin-top: -70%;
+			background-color: white;
+			border: 1px solid lightgray;
+		}
+		.casalImage {
+			min-width:250px;
+			max-width:400px;
+			max-height: 300px;
+		}
+		.casalArea {
+			background-color: #f5f5f5;
+		}
+  	</ui:style>
+   <g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%">
+   		<g:HTMLPanel width="100%">
+			<table cellpadding="0" cellspacing="0" width="100%" border="0">
+				<tr>
+					<td align="center" style="vertical-align:top;font-size:11px;padding-left: 2px;padding-top: 2px;" width="250px">
+						<g:VerticalPanel ui:field="areaConvidadosVerticalPanel" width="100%" visible="false" styleName="{style.bordeado}">
+							<g:HTMLPanel width="100%" styleName="{style.barra}">
+								<table cellpadding="2" cellspacing="0" width="100%" border="0">
+									<tr>
+										<td width="16px">
+											<g:Image url="images/email.png" width="16px" height="auto"/>
+										</td>
+										<td><g:Label text="Convidados" styleName="{style.titulo}"/></td>
+									</tr>
+								</table>
+							</g:HTMLPanel>
+							<g:FlowPanel ui:field="convidadosFlowPanel" styleName="content-Scroll" width="100%">
+								<g:VerticalPanel ui:field="convidadosVerticalPanel" width="100%"/>
+							</g:FlowPanel>
+						</g:VerticalPanel>
+					</td>
+					<td style="vertical-align:top;font-size:11px;padding-top: 2px;" align="center">
+						<g:VerticalPanel ui:field="areaRecadoVerticalPanel" width="95%" visible="false" styleName="{style.bordeado}">
+							<g:HTMLPanel width="100%" styleName="{style.barra}">
+								<table cellpadding="2" cellspacing="0" width="100%" border="0">
+									<tr>
+										<td width="16px">
+											<g:Image url="images/email.png" width="16px" height="auto"/>
+										</td>
+										<td><g:Label text="Meus Recados" styleName="{style.titulo}"/></td>
+									    <td width="70px" align="center">
+									    	<g:Anchor ui:field="addRecadoAnchor" text="Enviar recado" styleName="portal-anchor"/>
+									    </td>
+									    <td width="70px" align="center">
+									    	<g:Anchor ui:field="verLidosAnchor" text="Ver lidos" styleName="portal-anchor"/>
+									    	<g:Anchor ui:field="esconderLidosAnchor" text="Esconder lidos" styleName="portal-anchor" visible="false"/>
+									    </td>
+									    <td width="50px" align="center">
+									    	<g:Anchor ui:field="verTodosAnchor" text="Ver todos" styleName="portal-anchor"/>
+									    </td>
+									</tr>
+								</table>
+							</g:HTMLPanel>
+							<g:FlowPanel ui:field="recadosFlowPanel" styleName="content-Scroll" width="100%">
+								<g:VerticalPanel ui:field="recadosVerticalPanel" width="100%"/>
+							</g:FlowPanel>
+						</g:VerticalPanel>
+					</td>
+					<td style="vertical-align:top;width:30%;min-width:250px;max-width:400px;">
+						<g:VerticalPanel width="100%">
+							<g:HTMLPanel width="100%" styleName="{style.casalArea}">
+								<table cellpadding="1" cellspacing="0" width="100%" border="0">
+									<tr><td align="center" colspan="3"><g:Image ui:field="casalImage" styleName="{style.casalImage}"/></td></tr>
+									<tr>
+										<td style='padding-left:6px;' width="100%">
+											<g:Label ui:field="casalLabel" width="100%" styleName="{style.casal}"/>
+										</td>
+										<td align="right" width="100px">
+											<g:Image ui:field="logoImage" width="auto" height="100px" styleName="{style.logo}"/>
+									 	 </td>
+									 	 <td width="10px">&nbsp;</td>
+									</tr>
+								</table>
+							</g:HTMLPanel>
+							<g:HorizontalPanel ui:field="areaAniversarioHorizontalPanel" visible="false" width="100%" styleName="{style.fonte11}">
+								<g:VerticalPanel styleName="{style.bordeado}">
+									<g:HTMLPanel width="100%" styleName="{style.barra}">
+										<table cellpadding="2" cellspacing="0" width="100%" border="0">
+											<tr>
+												<td width="16px">
+													<g:Image url="images/present.png" width="16px" height="auto"/>
+												</td>
+												<td>
+													<g:Label text="Aniversariantes" styleName="{style.titulo}"/>
+												</td>
+											</tr>
+										</table>
+									</g:HTMLPanel>
+									<g:FlowPanel ui:field="aniversarioPessoaFlowPanel" styleName="content-Scroll" width="100%">
+										<g:VerticalPanel ui:field="aniversarioPessoaVerticalPanel" width="100%"/>
+									</g:FlowPanel>
+								</g:VerticalPanel>
+								<g:VerticalPanel width="10px"/>
+								<g:VerticalPanel styleName="{style.bordeado}">
+									<g:HTMLPanel width="100%" styleName="{style.barra}">
+										<table cellpadding="2" cellspacing="0" width="100%" border="0">
+											<tr>
+												<td width="16px">
+													<g:Image url="images/heart_present.png" width="16px" height="auto"/>
+												</td>
+												<td>
+													<g:Label text="Aniversários de casamento" styleName="{style.titulo}"/>
+												</td>
+											</tr>
+										</table>
+									</g:HTMLPanel>
+									<g:FlowPanel ui:field="aniversarioCasalFlowPanel" styleName="content-Scroll">
+										<g:VerticalPanel ui:field="aniversarioCasalVerticalPanel" width="100%"/>
+									</g:FlowPanel>
+								</g:VerticalPanel>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaDialogBox" visible="false"
+				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Recado">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+						<g:HTMLPanel ui:field="tipoHTMLPanel" width="100%">
+							<table cellpadding="3" cellspacing="0" width="100%">
+								<tr style="background-color:#fcfdbb;">
+									<td class="portal-formLabel">Este recado pode ser visualizado por:</td>
+									<td>
+										<g:ListBox ui:field="tipoLitBox" width="200px"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" cellspacing="0" align="center">
+								<tr>
+									<td style="vertical-align:top;width:200px;border-right:1px solid lightgray;">
+										<g:Image ui:field="casalRecadoImage" width="100%"/>
+									</td>
+									<td style="vertical-align:top;">
+										<table cellpadding="2" align="center">
+											<tr>
+												<td class="portal-formLabel">Para:</td>
+												<td>
+													<g:SuggestBox ui:field="casalSuggestBox" width="405px"/>
+													<g:Label ui:field="casalRecadoLabel" width="405px" visible="false"/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2">
+													<g:VerticalPanel spacing="2">
+														<rt:RichTextToolbar ui:field="mensagemRichTextToolbar"/>
+														<g:RichTextArea ui:field="mensagemRichTextArea" width="445px" height="120px"/>
+													</g:VerticalPanel>
+													<!-- 
+													<g:TextArea ui:field="recadoTextArea" width="300px" height="95px"/>
+													 -->
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="enviarButton">Enviar</g:Button>
+							<g:Button ui:field="fecharButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+			<g:DialogBox ui:field="todosDialogBox" visible="false"
+				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Recados">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+						<g:FlowPanel ui:field="formularioFlowPanel" width="100%" styleName="content-Scroll" >
+							<g:VerticalPanel ui:field="recadosTodosVerticalPanel" width="100%" styleName="{style.recados}"/>
+						</g:FlowPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="maisTodosButton">Buscar mais recados</g:Button>
+							<g:Button ui:field="fecharTodosButton">Fechar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+</ui:UiBinder>

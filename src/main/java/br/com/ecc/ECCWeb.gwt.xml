@@ -1,0 +1,22 @@
+<module rename-to="eccweb">
+	<inherits name="com.google.gwt.user.User" />
+	<inherits name="com.google.gwt.inject.Inject" />
+	<inherits name='com.googlecode.gwt.crypto.Crypto'/>
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<inherits name="com.google.gwt.json.JSON"/>
+	<inherits name='com.google.gwt.ajaxloader.AjaxLoader' />
+		
+	<extend-property name="locale" values="en_US"/>
+	<extend-property name="locale" values="pt_BR"/>
+	
+	<entry-point class="br.com.ecc.client.ECCWeb"/>
+	<generate-with class="br.com.ecc.core.generator.presenter.PresenterServiceGenerator">
+		<when-type-assignable class="br.com.ecc.client.core.generator.presenter.PresenterService" />
+	</generate-with>
+	
+	<source path='client'/>
+	<source path='gin'/>
+	<source path='model'/>
+	<source path='core'/>
+	
+</module>

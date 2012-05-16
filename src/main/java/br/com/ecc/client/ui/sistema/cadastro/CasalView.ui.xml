@@ -1,0 +1,550 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
+  xmlns:u="urn:import:br.com.ecc.client.ui.component.upload"
+  xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox"
+  xmlns:pg="urn:import:br.com.ecc.client.ui.component.sistema"
+  >
+  <ui:style>
+  	.formulario{
+		overflow-y:scroll;
+	}
+	.ele {
+		background-color: #ebeef2;
+		border-bottom: 1px solid lightgray;
+		width: 100%;
+	}
+	.ela {
+		background-color: #f2eaf1;
+		border-bottom: 1px solid lightgray;
+		width: 100%;
+	}
+	.casal {
+		background-color: #f5f5f5;
+		border-bottom: 1px solid lightgray;
+		width: 100%;
+	}
+	.tituloDados {
+		 font-weight:bold;
+		 padding:3px;
+		 background-color:#ffeeb4;
+	}
+  </ui:style>
+  	<g:VerticalPanel horizontalAlignment="center">
+		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
+			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
+				<tr>
+					<td>
+				  		<g:Label ui:field="tituloFormularioLabel" width="100%"/>
+					</td>
+					<td width="30px" align="right">
+						<g:Image ui:field="fecharImage" url="images/close.png" styleName="portal-ImageCursor" width="20px"/>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center" visible="false">
+			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center">
+				<g:HTMLPanel width="100%">
+					<table cellpadding="3" cellspacing="0" border="0" width="100%">
+						<tr>
+							<td class="portal-formLabel" width="50px">Nome:</td>
+							<td width="160px">
+								<g:TextBox ui:field="nomeTextBox" width="160px" maxLength="100"/>
+							</td>
+							<td class="portal-formLabel" width="120px">Do agrupamento:</td>
+							<td width="160px">
+								<g:ListBox ui:field="agrupamentoListBox" width="160px"/>
+							</td>
+							<td class="portal-formLabel" width="90px">Do encontro:</td>
+							<td width="160px">
+								<g:ListBox ui:field="tipoInscricaoListBox" width="160px"/>
+							</td>
+							<td width="80px">
+								<g:Button ui:field="buscarButton" text="Pesquisar" />
+							</td>
+							<td align="right">
+								<g:Button ui:field="novoButton" text="Adicionar casal"  visible="false"/>
+							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:HorizontalPanel> 
+			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
+			<g:FlexTable ui:field="casalFlexTable" cellPadding="0" cellSpacing="0" />
+		</g:VerticalPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaDialogBox" visible="false"
+				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass">
+				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+					<g:FlowPanel ui:field="formularioFlowPanel" width="100%" styleName="{style.formulario}">
+						<!-- ELE -->
+						<g:HTMLPanel styleName="{style.ele}">
+							<table cellpadding="2" cellspacing="0" border="0" width="100%">
+								<tr class="{style.tituloDados}">
+									<td colspan="5">INFORMAÇÔES DO HOMEM</td>
+								</tr>
+								<tr>
+									<td width="80px" class="portal-formLabelNormal">Nome:</td>
+									<td>
+										<g:TextBox ui:field="eleNomeTextBox" width="250px"/>
+										<g:SuggestBox ui:field="eleSuggestBox" width="250px" visible="false"/>
+									</td>
+									<td class="portal-formLabelNormal">Apelido:</td>
+									<td width="150px">
+										<g:TextBox ui:field="eleApelidoTextBox" width="150px" />
+									</td>
+									<td style="font-style: italic;">[Como teus amigos te chamam]</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel styleName="{style.ele}">
+							<table cellpadding="2" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td width="80px" class="portal-formLabelNormal">Nascimento:</td>
+									<td>
+										<dp:DateBox ui:field="eleNascimentoDateBox" width="100px"/>
+									</td>
+									<td class="portal-formLabelNormal">
+										<span style="color:red;" title="Campo obrigatório">*</span>
+										RG:
+									</td>
+									<td colspan="2">
+										<g:TextBox ui:field="eleRgTextBox" width="150px" />
+									</td>
+									<td class="portal-formLabelNormal" width="160px">Órgão Expedidor:</td>
+									<td>
+										<g:TextBox ui:field="eleExpedidorTextBox" width="100px" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabelNormal">Naturalidade:</td>
+									<td>
+										<g:TextBox ui:field="eleNaturalidadeTextBox" width="150px" />
+									</td>
+									<td class="portal-formLabelNormal">Profissão:</td>
+									<td colspan="2">
+										<g:TextBox ui:field="eleProfissaoTextBox" width="150px" />
+									</td>
+									<td class="portal-formLabelNormal">
+										<span style="color:red;" title="Campo obrigatório">*</span>
+										CPF:
+									</td>
+									<td>
+										<g:TextBox ui:field="eleCpfTextBox" width="100px" />
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel styleName="{style.ele}">
+							<table cellpadding="2" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td width="80px" class="portal-formLabelNormal">Email:</td>
+									<td colspan="2">
+										<g:TextBox ui:field="eleEmailTextBox" width="250px" />
+									</td>
+									<td class="portal-formLabelNormal">Tel. Comercial:</td>
+									<td>
+										<g:TextBox ui:field="eleTelefoneComercialTextBox" width="100px" />
+									</td>
+									<td class="portal-formLabelNormal">Tel. Celular:</td>
+									<td>
+										<g:TextBox ui:field="eleTelefoneCelularTextBox" width="100px" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabelNormal">&nbsp;</td>
+									<td colspan="3">
+										<g:CheckBox ui:field="eleVegetarianoCheckBox" text="Vegetariano" />
+										<g:CheckBox ui:field="eleDiabeticoCheckBox" text="Diabético" />
+										<g:CheckBox ui:field="eleAlergicoCheckBox" text="Alérgico" />
+										<g:CheckBox ui:field="eleHipertensoCheckBox" text="Hipertenso" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabelNormal">Alergias:</td>
+									<td colspan="2">
+										<g:TextBox ui:field="eleAlergiaTextBox" width="250px" />
+									</td>
+									<td class="portal-formLabelNormal">Necessidades especiais:</td>
+									<td colspan="3">
+										<g:TextBox ui:field="eleNecessidadesTextBox" width="265px" />
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						
+						<!-- ELA -->
+						<g:HTMLPanel styleName="{style.ela}">
+							<table cellpadding="2" cellspacing="0" border="0" width="100%">
+								<tr class="{style.tituloDados}">
+									<td colspan="5">INFORMAÇÔES DA MULHER</td>
+								</tr>
+								<tr>
+									<td width="80px" class="portal-formLabelNormal">Nome:</td>
+									<td>
+										<g:TextBox ui:field="elaNomeTextBox" width="250px"/>
+										<g:SuggestBox ui:field="elaSuggestBox" width="250px" visible="false"/>
+									</td>
+									<td class="portal-formLabelNormal">Apelido:</td>
+									<td width="150px">
+										<g:TextBox ui:field="elaApelidoTextBox" width="150px" />
+									</td>
+									<td style="font-style: italic;">[Como teus amigos te chamam]</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel styleName="{style.ela}">
+							<table cellpadding="2" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td width="80px" class="portal-formLabelNormal">Nascimento:</td>
+									<td>
+										<dp:DateBox ui:field="elaNascimentoDateBox" width="100px"/>
+									</td>
+									<td class="portal-formLabelNormal">
+										<span style="color:red;" title="Campo obrigatório">*</span>
+										RG:
+									</td>
+									<td colspan="2">
+										<g:TextBox ui:field="elaRgTextBox" width="150px" />
+									</td>
+									<td class="portal-formLabelNormal" width="160px">Órgão Expedidor:</td>
+									<td>
+										<g:TextBox ui:field="elaExpedidorTextBox" width="100px" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabelNormal">Naturalidade:</td>
+									<td>
+										<g:TextBox ui:field="elaNaturalidadeTextBox" width="150px" />
+									</td>
+									<td class="portal-formLabelNormal">Profissão:</td>
+									<td colspan="2">
+										<g:TextBox ui:field="elaProfissaoTextBox" width="150px" />
+									</td>
+									<td class="portal-formLabelNormal">
+										<span style="color:red;" title="Campo obrigatório">*</span>
+										CPF:
+									</td>
+									<td>
+										<g:TextBox ui:field="elaCpfTextBox" width="100px" />
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel styleName="{style.ela}">
+							<table cellpadding="2" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td width="80px" class="portal-formLabelNormal">Email:</td>
+									<td colspan="2">
+										<g:TextBox ui:field="elaEmailTextBox" width="250px" />
+									</td>
+									<td class="portal-formLabelNormal">Tel. Comercial:</td>
+									<td>
+										<g:TextBox ui:field="elaTelefoneComercialTextBox" width="100px" />
+									</td>
+									<td class="portal-formLabelNormal">Tel. Celular:</td>
+									<td>
+										<g:TextBox ui:field="elaTelefoneCelularTextBox" width="100px" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabelNormal">&nbsp;</td>
+									<td colspan="3">
+										<g:CheckBox ui:field="elaVegetarianoCheckBox" text="Vegetariana" />
+										<g:CheckBox ui:field="elaDiabeticoCheckBox" text="Diabética" />
+										<g:CheckBox ui:field="elaAlergicoCheckBox" text="Alérgica" />
+										<g:CheckBox ui:field="elaHipertensoCheckBox" text="Hipertensa" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabelNormal">Alergias:</td>
+									<td colspan="2">
+										<g:TextBox ui:field="elaAlergiaTextBox" width="250px" />
+									</td>
+									<td class="portal-formLabelNormal">Necessidades especiais:</td>
+									<td colspan="3">
+										<g:TextBox ui:field="elaNecessidadesTextBox" width="265px" />
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						
+						<!-- CASAL -->
+						<g:HTMLPanel styleName="{style.casal}">
+							<table cellpadding="2" cellspacing="0" align="center" width="100%">
+								<tr class="{style.tituloDados}">
+									<td>INFORMAÇÔES DO CASAL</td>
+									<td align="center" width="300px">FOTO DO CASAL</td>
+								</tr>
+							</table>
+							<table cellpading="0" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td style="vertical-align:top;">
+										<g:HTMLPanel ui:field="situacaoHTMLPanel" visible="false">
+											<table cellpadding="2" cellspacing="0" align="center" border="0" width="100%">
+												<tr>
+													<td width="60px">Situacao:</td>
+													<td>
+														<g:ListBox ui:field="situacaoListBox" width="120px"/>
+													</td>
+													<td>Tipo:</td>
+													<td>
+														<g:ListBox ui:field="tipoListBox" width="120px"/>
+													</td>
+												</tr>
+											</table>
+										</g:HTMLPanel>
+										<table cellpadding="2" cellspacing="0" align="center" border="0" width="100%">
+											<tr>
+												<td>Endereço:</td>
+												<td colspan="3">
+													<g:TextBox ui:field="enderecoTextBox" width="370px" maxLength="254"/>
+												</td>
+											</tr>
+											<tr>
+												<td>Bairro:</td>
+												<td>
+													<g:TextBox ui:field="bairroTextBox" width="200px" maxLength="100"/>
+												</td>
+												<td>CEP:</td>
+												<td>
+													<g:TextBox ui:field="cepTextBox" width="80px" maxLength="15"/>
+												</td>
+											</tr>
+											<tr>
+												<td>Cidade:</td>
+												<td>
+													<g:TextBox ui:field="cidadeTextBox" width="200px" maxLength="100"/>
+												</td>
+												<td>Estado:</td>
+												<td>
+													<g:TextBox ui:field="estadoTextBox" width="80px" maxLength="2" textAlignment="center"/>
+												</td>
+											</tr>
+											<tr>
+												<td>Telefone:</td>
+												<td>
+													<g:TextBox ui:field="telefoneTextBox" width="100px" maxLength="50"/>
+												</td>
+												<td>Casamento:</td>
+												<td>
+													<dp:DateBox ui:field="casamentoDateBox" width="80px"/>
+												</td>
+											</tr>
+										</table>
+										<table cellpadding="2" cellspacing="0" align="center" border="0" width="100%">
+											<tr>
+												<td>Cor preferida do casal:</td>
+												<td colspan="5">
+													<g:TextBox ui:field="corTextBox" width="180px" maxLength="50"/>
+												</td>
+											</tr>
+											<tr>
+												<td>Um lugar que gostariam de estar juntos:</td>
+												<td colspan="5">
+													<g:TextBox ui:field="lugarTextBox" width="180px" maxLength="250"/>
+												</td>
+											</tr>
+											<tr>
+												<td>Que atividade de lazer os dois apreciam:</td>
+												<td colspan="5">
+													<g:TextBox ui:field="atividadeTextBox" width="180px" maxLength="250"/>
+												</td>
+											</tr>
+											<tr>
+												<td>Qual é música preferida do casal:</td>
+												<td colspan="5">
+													<g:TextBox ui:field="musicaTextBox" width="180px" maxLength="250"/>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td style="border-left:1px solid lightgray;vertical-align:top;">
+										<table cellpadding="0" cellspacing="0" border="0" width="100%">
+											<tr>
+												<td align="center">
+													<g:Image ui:field="casalImage" height="180px"/>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<u:UploadArquivoDigital ui:field="logotipoUploadArquivoDigital"/>
+												</td>
+											</tr>
+											<tr>
+												<td style="color:blue;font-style: italic;">
+													[Tamanho máximo da imágem: 1MB]
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<g:HTMLPanel ui:field="dadosAfilhadoHTMLPanel" visible="false">
+								<table cellpadding="2" cellspacing="0" align="center" border="0" width="100%">
+									<tr class="{style.tituloDados}">
+										<td width="55%">
+											INFORMAÇÔES DOS FILHOS
+										</td>
+										<td align="left">
+											<g:Button ui:field="addFilhoButton" width="150px">Adicionar filho</g:Button>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<g:FlexTable ui:field="filhosFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+										</td>
+									</tr>
+									<tr class="{style.tituloDados}">
+										<td>
+											INFORMAÇÔES DOS PAIS - HOMEM
+										</td>
+										<td align="left">
+											<g:Button ui:field="addElePaisButton" width="150px">Adicionar pais</g:Button>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<g:FlexTable ui:field="elePaisFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+										</td>
+									</tr>
+									<tr class="{style.tituloDados}">
+										<td>
+											INFORMAÇÔES DOS PAIS - MULHER
+										</td>
+										<td align="left">
+											<g:Button ui:field="addElaPaisButton" width="150px">Adicionar pais</g:Button>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<g:FlexTable ui:field="elaPaisFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+										</td>
+									</tr>
+									<tr class="{style.tituloDados}">
+										<td>
+											COM QUEM OS FILHOS FICARÃO DURANTE O ENCONTRO
+										</td>
+										<td align="left">
+											<g:Button ui:field="addResponsavelButton" width="150px">Adicionar responsável</g:Button>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<g:FlexTable ui:field="responsaveisFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+										</td>
+									</tr>
+									<tr class="{style.tituloDados}">
+										<td>
+											EM CASO DE EMERGÊNCIA QUEM DEVERÁ SER CONTATADO?
+										</td>
+										<td align="left">
+											<g:Button ui:field="addEmergenciaButton" width="150px">Adicionar contato</g:Button>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<g:FlexTable ui:field="emergenciaFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+										</td>
+									</tr>
+									<!-- 
+									<tr class="{style.tituloDados}">
+										<td>
+											AMIGOS DO CASAL - INDICAÇÃO PRA FUTUROS ENCONTROS
+										</td>
+										<td align="left">
+											<g:Button ui:field="addIndicacaoButton" width="150px">Adicionar casal</g:Button>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<g:FlexTable ui:field="indicacoesFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+										</td>
+									</tr>
+									 -->
+								</table>
+							</g:HTMLPanel>
+						</g:HTMLPanel>
+						<g:HTMLPanel ui:field="pagamentoHTMLPanel">
+							<table cellpadding="2" cellspacing="0" align="center" border="0" width="100%">
+								<tr class="{style.tituloDados}">
+									<td>INFORMAÇÔES DE PAGAMENTO</td>
+								</tr>
+								<tr>
+									<td>
+										<pg:DadosPagamento ui:field="dadosPagamentoComponent"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+					</g:FlowPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarButton">Salvar</g:Button>
+							<g:Button ui:field="fecharButton">Fechar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+			<g:DialogBox ui:field="editaContatoDialogBox" visible="false"
+				         width="400px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da pessoa">
+				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+					<g:HTMLPanel width="100%">
+						<table cellpadding="2" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td class="portal-formLabel" width="120px">Nome:</td>
+								<td>
+									<g:TextBox ui:field="nomeContatoTextBox" width="200px" maxLength="150"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="portal-formLabel">Email:</td>
+								<td>
+									<g:TextBox ui:field="emailContatoTextBox" width="200px" maxLength="150"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="portal-formLabel">Tel. residencial:</td>
+								<td>
+									<g:TextBox ui:field="residencialContatoTextBox" width="100px" maxLength="50"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="portal-formLabel">Tel. comercial:</td>
+								<td>
+									<g:TextBox ui:field="comercialContatoTextBox" width="100px" maxLength="50"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="portal-formLabel">Tel. celular:</td>
+								<td>
+									<g:TextBox ui:field="celularContatoTextBox" width="100px" maxLength="50"/>
+								</td>
+							</tr>
+						</table>
+					</g:HTMLPanel>
+					<g:HTMLPanel ui:field="idadeHTMLPanel" width="100%">
+						<table cellpadding="2" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td class="portal-formLabel" width="120px">Idade:</td>
+								<td>
+									<cn:NumberTextBox ui:field="idadeNumberTextBox" width="50px" alignment="CENTER"/>
+								</td>
+							</tr>
+						</table>
+					</g:HTMLPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarContatoButton">Salvar</g:Button>
+							<g:Button ui:field="fecharContatoButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>

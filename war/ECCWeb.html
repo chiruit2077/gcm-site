@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=8" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="gwt:property" content="locale=pt_BR">	
+
+		<title>ECC</title>
+
+		<!--CSS for loading message at application Startup-->
+		<style type="text/css">
+		</style>
+		
+	    <script type="text/javascript">
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-30392102-1']);
+		  _gaq.push(['_trackPageview', 'Home']);
+		
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	    <link rel="icon" href="/favicon.ico" />
+		<link type="text/css" rel="stylesheet" href="ECCWeb.css">
+		<link type="text/css" rel="stylesheet" href="ECCWebPrint.css" media="print">
+		<script language="javascript" src="javascript/cssutil.js"></script>
+		
+		<!-- styles needed by jScrollPane -->
+		<link type="text/css" href="jscroll/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+		
+		<!-- latest jQuery direct from google's CDN -->
+		<script type="text/javascript" src="jscroll/jquery.min.js"></script>
+		 
+		<!-- the mousewheel plugin - optional to provide mousewheel support -->
+		<script type="text/javascript" src="jscroll/jquery.mousewheel.js"></script>
+		 
+		<!-- the jScrollPane script -->
+		<script type="text/javascript" src="jscroll/jquery.jscrollpane.min.js"></script>
+		
+		<style type="text/css">
+	    	.jspVerticalBar {
+				width: 8px;
+				background: transparent;
+				right:1px;
+				top: 1px;
+			}
+			.jspHorizontalBar {
+				bottom: 5px;
+				width: 100%;
+				height: 8px;
+				background: transparent;
+			}
+			.jspTrack {
+				background: transparent;
+			}
+			.jspDrag {
+				background: url(images/transparent-black.png) repeat;
+				-webkit-border-radius:4px;
+				-moz-border-radius:4px;
+				border-radius:4px;
+			}
+			.jspHorizontalBar .jspTrack, .jspHorizontalBar .jspDrag {
+				float: left;
+				height: 100%;
+			}
+			.jspCorner {
+				display:none
+			}
+	    </style>
+		
+		<script>
+		/*
+			function initializeScroll(){
+				var pane = $('.content-Scroll');
+				pane.jScrollPane({
+					horizontalGutter:-8,
+					verticalGutter:-8,
+					'showArrows': false
+				});
+				$('.jspDrag').hide();
+				$('.jspScrollable').mouseenter(function(){
+					$('.jspDrag').stop(true, true).fadeIn('slow');
+				});
+				$('.jspScrollable').mouseleave(function(){
+					$('.jspDrag').stop(true, true).fadeOut('slow');
+				});
+			}
+		*/
+			var apis = [];
+			function destroyScroll(){
+				if (apis.length) {
+					$.each(
+						apis,
+						function(i) {
+							this.destroy();
+						}
+					)
+					apis = [];
+				}
+				return false;
+			}
+			function reinitScroll(){
+				if (apis.length) {
+					$.each(
+						apis,
+						function(i) {
+							this.reinitialise();
+						}
+					)
+					apis = [];
+				}
+				return false;
+			}
+			function createScroll(){
+				if(apis.length>0) {
+					reinitScroll();
+					return;
+				}
+				$('.content-Scroll').each(
+					function()
+					{
+						apis.push($(this).jScrollPane({
+							horizontalGutter:-8,
+							verticalGutter:-8,
+							'showArrows': false
+						}).data().jsp);
+					}
+				)
+				$('.jspDrag').hide();
+				$('.jspScrollable').mouseenter(function(){
+					$('.jspDrag').stop(true, true).fadeIn('slow');
+				});
+				$('.jspScrollable').mouseleave(function(){
+					$('.jspDrag').stop(true, true).fadeOut('slow');
+				});
+				return false;
+			}
+		</script>
+		
+	</head>
+
+	<body topmargin="0" leftmargin="0" bottommargin="0" rightmargin="0">
+		<!-- OPTIONAL: include this if you want history support -->
+		<iframe id="__gwt_historyFrame" style="width:0;height:0;border:0;display:none;"></iframe>
+		<script language="javascript" src="eccweb/eccweb.nocache.js"></script>
+	</body>
+</html>

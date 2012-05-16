@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+  	<g:FormPanel ui:field="uploadForm">
+  		<g:HTMLPanel>
+  			<table cellpadding="2" cellspacing="0" border="0">
+  			<!-- 
+  				<tr>
+  					<td class="ecc-formLabel">Nome:</td>
+  					<td><g:TextBox ui:field="textItem" name="textItem" width="270px"/></td>
+  				</tr>
+  			 -->
+  				<tr>
+  					<td>Arquivo:</td>
+  					<td>
+  						<g:FileUpload ui:field="arquivo" name="uploadItem" width="260px" />
+  					</td>
+  				</tr>
+  				<tr style="display: none;">
+  					<td>
+			  			<g:TextBox ui:field="hiddenIdItem" name="textItem" visible="false"/>
+			  			<g:TextBox name="decorateOutputItem" visible="false" value="false"/>
+  					</td>
+  				</tr>
+  			</table>
+  		</g:HTMLPanel>
+  	</g:FormPanel>
+</ui:UiBinder>
