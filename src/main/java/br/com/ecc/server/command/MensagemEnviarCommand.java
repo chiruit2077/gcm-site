@@ -4,9 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import br.com.ecc.client.util.StringUtil;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Mensagem;
@@ -16,6 +13,8 @@ import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.tipo.TipoVariavelEnum;
 import br.com.ecc.model.vo.MensagemVO;
+import br.com.ecc.server.command.basico.GetEntityListCommand;
+import br.com.ecc.server.command.basico.SaveEntityCommand;
 import br.com.ecc.server.util.CriptoUtil;
 
 import com.google.inject.Inject;
@@ -24,19 +23,18 @@ import com.google.inject.persist.Transactional;
 
 public class MensagemEnviarCommand implements Callable<MensagemVO>{
 
-	@Inject EntityManager em;
 	@Inject Injector injector;
 	
 	private MensagemVO mensagemVO;
 	private Boolean reenvio;
-	private Query q;
 
 	@Override
 	@Transactional
 	public MensagemVO call() throws Exception {
 		EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
 		cmdEmail.setAssunto(mensagemVO.getMensagem().getGrupo().getNome() + " - " + mensagemVO.getMensagem().getTitulo());
-
+		cmdEmail.setNaoEsperar(true);
+		
 		String sHTML = "";
 		boolean ok;
 		MensagemDestinatario d;
@@ -79,7 +77,9 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 				if(enviado){
 					d.setDataEnvio(new Date());
 					d.setDataConfirmacao(null);
-					mensagemVO.getListaDestinatarios().set(i, em.merge(d));
+					SaveEntityCommand cmdSave = injector.getInstance(SaveEntityCommand.class);
+					cmdSave.setBaseEntity(d);
+					mensagemVO.getListaDestinatarios().set(i, (MensagemDestinatario) cmdSave.call());
 				}
 			}
 		}
@@ -121,9 +121,10 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 	private String dadosUsuario(Pessoa pessoa){
 		String dadosUsuario = "";
 		if(pessoa.getEmail()!=null && !pessoa.getEmail().equals("")){
-			q = em.createNamedQuery("usuario.porPessoa");
-			q.setParameter("pessoa", pessoa);
-			List<Usuario> lista = q.getResultList();
+			GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+			cmd.setNamedQuery("usuario.porPessoa");
+			cmd.addParameter("pessoa", pessoa);
+			List<Usuario> lista = cmd.call();
 			Usuario usuario = null;
 			if(lista.size()>0){
 				usuario = lista.get(0);
@@ -133,7 +134,10 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 					usuario.setNivel(TipoNivelUsuarioEnum.NORMAL);
 					usuario.setPessoa(pessoa);
 					usuario.setSenha(CriptoUtil.Codifica(StringUtil.randomString(10)));
-					usuario = em.merge(usuario);
+					
+					SaveEntityCommand cmdSave = injector.getInstance(SaveEntityCommand.class);
+					cmdSave.setBaseEntity(usuario);
+					usuario = (Usuario) cmdSave.call();
 				} catch (Exception e) {
 					usuario = null;
 					e.printStackTrace();
