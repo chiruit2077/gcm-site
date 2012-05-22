@@ -16,7 +16,6 @@ import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoCasalEnum;
-import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -364,7 +363,7 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 	}
 	
 	protected void montaGrupoPanel() {
-		if(usuario.getNivel()!=null && usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getCasal()!=null && presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
 			simplePopupGrupo.clear();
 	        simplePopupGrupo.setStyleName("portal-headerBox");
 	        

@@ -28,7 +28,6 @@ import br.com.ecc.model.vo.InicioVO;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Window;
 
 public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter.Display>{
 
@@ -78,9 +77,9 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 						getDisplay().init();
 						if(getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
 							boolean go = false;
-							if(getDadosLoginVO().getCasal().getCasalPadrinho()==null){
-								go=Window.confirm("Não consta no seu cadastro o nome dos seus padrinhos.\nDeseja informar o nome agora?");
-							}
+//							if(getDadosLoginVO().getCasal().getCasalPadrinho()==null){
+//								go=Window.confirm("Não consta no seu cadastro o nome dos seus padrinhos.\nDeseja informar o nome agora?");
+//							}
 							if(!go){
 								buscaEncontros();
 							} else {
