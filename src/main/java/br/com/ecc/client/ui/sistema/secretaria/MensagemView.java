@@ -21,6 +21,7 @@ import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Mensagem;
 import br.com.ecc.model.MensagemDestinatario;
 import br.com.ecc.model.Pessoa;
+import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoMensagemEnum;
 import br.com.ecc.model.tipo.TipoSituacaoEnum;
@@ -441,12 +442,14 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		presenter.setAgrupamentoVO(null);
 		
 		// Se TODOS OS ENCONTRISTAS foi selecionado
-		if(agrupamentoListBox.getSelectedIndex()==1){
-			presenter.getEncontristas();
-		} else {
-			Agrupamento agrupamento = (Agrupamento) ListBoxUtil.getItemSelected(agrupamentoListBox, listaAgrupamento);
-			if(agrupamento!=null){
-				presenter.getAgrupamentoVO(agrupamento);
+		if(grupoRadioButton.getValue()){
+			if(agrupamentoListBox.getSelectedIndex()==1){
+				presenter.getEncontristas();
+			} else {
+				Agrupamento agrupamento = (Agrupamento) ListBoxUtil.getItemSelected(agrupamentoListBox, listaAgrupamento);
+				if(agrupamento!=null){
+					presenter.getAgrupamentoVO(agrupamento);
+				}
 			}
 		}
 	}
@@ -468,11 +471,11 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 				presenter.getMensagemVO().getListaDestinatarios().add(destinatario);
 			}
 			casalSuggestBox.setValue(null);
-		} else if (agrupamentoListBox.getSelectedIndex()>0){
+		} else if (grupoRadioButton.getValue() && agrupamentoListBox.getSelectedIndex()>0){
 			// Se TODOS OS ENCONTRISTAS foi selecionado
 			if(agrupamentoListBox.getSelectedIndex()==1){
 				for (Casal casal : presenter.getListaEncontristas()) {
-					if(casal.getSituacao().equals(TipoSituacaoEnum.ATIVO)){
+					if(casal.getSituacao().equals(TipoSituacaoEnum.ATIVO) && casal.getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)) {
 						destinatario = new MensagemDestinatario();
 						destinatario.setCasal(casal);
 						if(!buscaDestinatario(destinatario)){
@@ -492,7 +495,7 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 						presenter.getMensagemVO().getListaDestinatarios().add(destinatario);
 					}
 				}
-			}
+			} 
 		} else {
 			TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(agrupamentoListBox, TipoInscricaoEnum.values());
 			if(tipo!=null){
@@ -547,6 +550,7 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 			presenter.buscaAgrupamentos();
 		} else {
 			encontroHTMLPanel.setVisible(true);
+			encontroListBoxChangeHandler(null);
 		}
 	}
 	
@@ -558,7 +562,10 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 	@UiHandler("encontroListBox")
 	public void encontroListBoxChangeHandler(ChangeEvent event) {
 		if(getEncontroSelecionado()!=null){
+			showWaitMessage(true);
 			presenter.buscaAgrupamentos(getEncontroSelecionado());
+		} else {
+			agrupamentoListBox.clear();
 		}
 	}
 

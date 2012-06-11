@@ -253,7 +253,7 @@ public class DadosPagamento extends Composite {
 		
 		double valor = 0;
 		valor = entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue();
-		if(entidadeEditada.getListaPagamento().size()==0){
+		if(entidadeEditada.getListaPagamento().size()==0 && casal.getId().equals(entidadeEditada.getEncontroInscricao().getCasal().getId())){
 			if(entidadeEditada.getEncontroInscricao().getEncontro().getValorInscricao()!=null &&
 					entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao()!=null){
 				EncontroInscricaoPagamento p = new EncontroInscricaoPagamento();

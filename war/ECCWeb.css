@@ -915,3 +915,7 @@ html>body .gwt-DecoratedTabBar {
 	color: darkblue;
 	font-style: italic;
 }
+.portal-DialogBoxConteudo {
+	padding: 5px;
+	padding-bottom: 10px;
+}

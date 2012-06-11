@@ -177,8 +177,10 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			}
 		} else {
 		}
-		aniversarioPessoaFlowPanel.setHeight((h-128) + "px");
-		aniversarioCasalFlowPanel.setHeight((h-128) + "px");
+		if(h>128){
+			aniversarioPessoaFlowPanel.setHeight((h-128) + "px");
+			aniversarioCasalFlowPanel.setHeight((h-128) + "px");
+		}
 		
 		imagemLida = true;
 		createScroll();
