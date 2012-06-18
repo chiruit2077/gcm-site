@@ -283,7 +283,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		} else if (tipoExibicao.equals(TipoExibicaoPlanilhaEnum.TODAS_ATIVIDADES_MINHA_COLUNA)){
 			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual();
 			listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
-		}  
+		}
 		
 		Collections.sort(presenter.getListaEncontroAtividadeInscricao(), new Comparator<EncontroAtividadeInscricao>() {
 			@Override

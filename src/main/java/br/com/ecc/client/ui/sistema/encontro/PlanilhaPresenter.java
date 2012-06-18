@@ -211,7 +211,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 	public void getDadosEncontroVO(Encontro encontro){
 		getDisplay().showWaitMessage(true);
 		EncontroServiceAsync service = GWT.create(EncontroService.class);
-		service.getVO(encontro, new WebAsyncCallback<EncontroVO>(getDisplay()) {
+		service.getVO(encontro, true, new WebAsyncCallback<EncontroVO>(getDisplay()) {
 			@Override
 			protected void success(EncontroVO encontroVO) {
 				setEncontroVO(encontroVO);

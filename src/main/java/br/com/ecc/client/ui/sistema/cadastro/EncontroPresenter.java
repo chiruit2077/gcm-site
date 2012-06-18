@@ -82,7 +82,7 @@ public class EncontroPresenter extends BasePresenter<EncontroPresenter.Display> 
 	}
 	public void getVO(Encontro encontro) {
 		getDisplay().showWaitMessage(true);
-		service.getVO(encontro, new WebAsyncCallback<EncontroVO>(getDisplay()) {
+		service.getVO(encontro, false, new WebAsyncCallback<EncontroVO>(getDisplay()) {
 			@Override
 			public void success(EncontroVO encontroVO) {
 				getDisplay().setVO(encontroVO);

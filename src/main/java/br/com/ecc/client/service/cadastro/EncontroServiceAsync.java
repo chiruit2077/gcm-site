@@ -13,6 +13,6 @@ public interface EncontroServiceAsync {
 	public void lista(Grupo grupo, AsyncCallback<List<Encontro>> callback);
 	public void salva(EncontroVO encontroVO, AsyncCallback<Void> callback);
 	public void exclui(Encontro encontro, AsyncCallback<Void> asyncCallback);
-	public void getVO(Encontro encontro, AsyncCallback<EncontroVO> callback);
+	public void getVO(Encontro encontro, Boolean ignorarAfilhados, AsyncCallback<EncontroVO> callback);
 	public void listaInscricoes(Encontro encontroSelecionado, AsyncCallback<List<EncontroInscricao>> callback);
 }
