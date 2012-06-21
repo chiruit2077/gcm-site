@@ -36,7 +36,7 @@ public class RedirecionamentoServlet extends DownloadFileServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-		throw new ServletException("Get not supported!");
+		throw new ServletException("Post not supported!");
 	}
 
 	@Override

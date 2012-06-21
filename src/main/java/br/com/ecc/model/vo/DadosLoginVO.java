@@ -1,12 +1,8 @@
 package br.com.ecc.model.vo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import br.com.ecc.model.Casal;
-import br.com.ecc.model.Encontro;
-import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Usuario;
 
 public class DadosLoginVO implements Serializable {

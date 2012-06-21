@@ -33,7 +33,8 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 	public MensagemVO call() throws Exception {
 		EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
 		cmdEmail.setAssunto(mensagemVO.getMensagem().getGrupo().getNome() + " - " + mensagemVO.getMensagem().getTitulo());
-		cmdEmail.setNaoEsperar(true);
+		//cmdEmail.setNaoEsperar(true);
+		// se remover o cometario acima... arrumar a confirmacao de enviado
 		
 		String sHTML = "";
 		boolean ok;
@@ -54,24 +55,36 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 						sHTML = substituiTagNome(mensagemVO.getMensagem(), d.getCasal(), d.getCasal().getEle());
 						cmdEmail.setMensagem(sHTML);
 						cmdEmail.setDestinatario(d.getCasal().getEle().getEmail());
-						cmdEmail.call();
-						enviado = true;
+						try { 
+							cmdEmail.call();
+							enviado = true;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 					if(d.getCasal().getEla().getEmail()!=null && !d.getCasal().getEla().getEmail().equals("")){
 						sHTML = substituiTagNome(mensagemVO.getMensagem(), d.getCasal(), d.getCasal().getEla());
 						cmdEmail.setMensagem(sHTML);
 
 						cmdEmail.setDestinatario(d.getCasal().getEla().getEmail());
-						cmdEmail.call();
-						enviado = true;
+						try { 
+							cmdEmail.call();
+							enviado = true;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				} else {
 					if(d.getPessoa().getEmail()!=null && !d.getPessoa().getEmail().equals("")){
 						sHTML = substituiTagNome(mensagemVO.getMensagem(), null, d.getPessoa());
 						cmdEmail.setMensagem(sHTML);
 						cmdEmail.setDestinatario(d.getPessoa().getEmail());
-						cmdEmail.call();
-						enviado = true;
+						try { 
+							cmdEmail.call();
+							enviado = true;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 				if(enviado){
