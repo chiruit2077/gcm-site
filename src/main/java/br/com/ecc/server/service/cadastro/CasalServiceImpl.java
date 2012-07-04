@@ -14,11 +14,13 @@ import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
+import br.com.ecc.model.vo.CasalOpcaoRelatorioVO;
 import br.com.ecc.model.vo.CasalParamVO;
 import br.com.ecc.model.vo.CasalVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.SessionHelper;
 import br.com.ecc.server.auth.Permissao;
+import br.com.ecc.server.command.CasalListaImprimirCommand;
 import br.com.ecc.server.command.CasalSalvarCommand;
 import br.com.ecc.server.command.UsuarioGerarPorPessoaCommand;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
@@ -168,6 +170,14 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 		}
 		
 		return casalVO.getCasal();
+	}
+
+	@Override
+	public Integer imprimeLista(List<Casal> listaCasal, CasalOpcaoRelatorioVO casalOpcaoRelatorioVO) throws Exception {
+		CasalListaImprimirCommand cmd = injector.getInstance(CasalListaImprimirCommand.class);
+		cmd.setListaCasal(listaCasal);
+		cmd.setCasalOpcaoRelatorioVO(casalOpcaoRelatorioVO);
+		return cmd.call();
 	}
 	
 }

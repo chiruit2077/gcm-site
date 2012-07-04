@@ -14,6 +14,7 @@ import br.com.ecc.client.ui.sistema.encontro.EncontroConvitePresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroInscricaoPresenter;
 import br.com.ecc.client.ui.sistema.encontro.PlanilhaPresenter;
 import br.com.ecc.client.ui.sistema.patrimonio.ItemPatrimonioPresenter;
+import br.com.ecc.client.ui.sistema.secretaria.ListagemPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.MensagemPresenter;
 import br.com.ecc.client.ui.sistema.tesouraria.PagamentosPresenter;
 import br.com.ecc.core.mvp.presenter.Presenter;
@@ -39,6 +40,7 @@ public enum PresenterCodeEnum  {
 	
 	AGRUPAMENTO(2,9, AgrupamentoPresenter.class, "Agrupamentos", true),
 	MENSAGEM(2,10, MensagemPresenter.class, "Mensagens", true),
+	LISTAGEM(2,14, ListagemPresenter.class, "Listagem de casais", true),
 	
 	ITEM_PATRIMONIO(2,12, ItemPatrimonioPresenter.class, "Itens do patrimonio", true),
 	

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Listagem" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="822" leftMargin="10" rightMargin="10" topMargin="15" bottomMargin="15">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="361"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="titulo" class="java.lang.String"/>
+	<field name="nomeEle" class="java.lang.String"/>
+	<field name="dado1Ele" class="java.lang.String"/>
+	<field name="dado2Ele" class="java.lang.String"/>
+	<field name="dado3Ele" class="java.lang.String"/>
+	<field name="dado4Ele" class="java.lang.String"/>
+	<field name="dado5Ele" class="java.lang.String"/>
+	<field name="dado6Ele" class="java.lang.String"/>
+	<field name="dado7Ele" class="java.lang.String"/>
+	<field name="dado8Ele" class="java.lang.String"/>
+	<field name="dado9Ele" class="java.lang.String"/>
+	<field name="dado10Ele" class="java.lang.String"/>
+	<field name="nomeEla" class="java.lang.String"/>
+	<field name="dado1Ela" class="java.lang.String"/>
+	<field name="dado2Ela" class="java.lang.String"/>
+	<field name="dado3Ela" class="java.lang.String"/>
+	<field name="dado4Ela" class="java.lang.String"/>
+	<field name="dado5Ela" class="java.lang.String"/>
+	<field name="dado6Ela" class="java.lang.String"/>
+	<field name="dado7Ela" class="java.lang.String"/>
+	<field name="dado8Ela" class="java.lang.String"/>
+	<field name="dado9Ela" class="java.lang.String"/>
+	<field name="dado10Ela" class="java.lang.String"/>
+	<field name="titulo1" class="java.lang.String"/>
+	<field name="titulo2" class="java.lang.String"/>
+	<field name="titulo3" class="java.lang.String"/>
+	<field name="titulo4" class="java.lang.String"/>
+	<field name="titulo5" class="java.lang.String"/>
+	<field name="titulo6" class="java.lang.String"/>
+	<field name="titulo7" class="java.lang.String"/>
+	<field name="titulo8" class="java.lang.String"/>
+	<field name="titulo9" class="java.lang.String"/>
+	<field name="titulo10" class="java.lang.String"/>
+	<variable name="COUNTER" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA["1"]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="66" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="56" width="822" height="10" backcolor="#D6D5D5"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+			</frame>
+			<textField>
+				<reportElement key="staticText-1" x="312" y="15" width="191" height="17"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Arial" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" mode="Transparent" x="0" y="56" width="130" height="10" backcolor="#FFFFFF"/>
+				<box leftPadding="2">
+					<pen lineColor="#828181"/>
+					<topPen lineWidth="0.0" lineColor="#828181"/>
+					<leftPen lineWidth="0.0" lineColor="#828181"/>
+					<bottomPen lineWidth="0.0" lineColor="#828181"/>
+					<rightPen lineWidth="0.0" lineColor="#828181"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="130" y="56" width="139" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="269" y="56" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="399" y="56" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo3}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="529" y="56" width="89" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo4}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="618" y="56" width="90" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo5}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="708" y="56" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo6}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="746" y="56" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo7}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="staticText-2" mode="Transparent" x="784" y="56" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{titulo8}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="1" width="822" height="20" backcolor="#F2F0F0">
+					<printWhenExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) != 1)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+				</box>
+			</frame>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="0" y="1" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nomeEle}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="130" y="1" width="139" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado1Ele}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="269" y="1" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado2Ele}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="0" y="11" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nomeEla}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="130" y="11" width="139" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado1Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="269" y="11" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado2Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="399" y="1" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado3Ele}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="399" y="11" width="130" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado3Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="529" y="1" width="89" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado4Ele}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="529" y="11" width="89" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado4Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="618" y="11" width="90" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado5Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="618" y="1" width="90" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado5Ele}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="708" y="11" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado6Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="708" y="1" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado6Ele}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="746" y="11" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado7Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="746" y="1" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado7Ele}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="784" y="11" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado8Ela}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="staticText-7" mode="Transparent" x="784" y="1" width="38" height="10" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dado8Ele}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="10" splitType="Stretch"/>
+	</summary>
+</jasperReport>
