@@ -1,0 +1,100 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
+  xmlns:u="urn:import:br.com.ecc.client.ui.component.upload"
+  xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox"
+  xmlns:pg="urn:import:br.com.ecc.client.ui.component.sistema"
+  >
+  <ui:style>
+  	.formulario{
+		overflow-y:scroll;
+	}
+	.borde {
+		border: 1px solid gray;
+		background-color: lightgray;
+		width: 100%;
+	}
+	.opcao {
+		border: 1px solid gray;
+		width: 100%;
+	}
+	.titulo {
+		font-weight: bold;
+	}
+  </ui:style>
+  	<g:VerticalPanel horizontalAlignment="center">
+		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
+			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
+				<tr>
+					<td>
+				  		<g:Label ui:field="tituloFormularioLabel" width="100%"/>
+					</td>
+					<td width="30px" align="right">
+						<g:Image ui:field="fecharImage" url="images/close.png" styleName="portal-ImageCursor" width="20px"/>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+  		<g:HorizontalPanel spacing="1">
+			<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
+				<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center">
+					<g:HTMLPanel width="100%">
+						<table cellpadding="3" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td class="portal-formLabel" width="50px">Nome:</td>
+								<td width="160px">
+									<g:TextBox ui:field="nomeTextBox" width="160px" maxLength="100"/>
+								</td>
+								<td class="portal-formLabel" width="120px">Do agrupamento:</td>
+								<td width="160px">
+									<g:ListBox ui:field="agrupamentoListBox" width="160px"/>
+								</td>
+								<td class="portal-formLabel" width="90px">Do encontro:</td>
+								<td width="160px">
+									<g:ListBox ui:field="tipoInscricaoListBox" width="160px"/>
+								</td>
+								<td width="80px">
+									<g:Button ui:field="buscarButton" text="Pesquisar" />
+								</td>
+							</tr>
+						</table>
+					</g:HTMLPanel>
+				</g:HorizontalPanel> 
+				<g:HorizontalPanel styleName="{style.borde}" spacing="2" verticalAlignment="middle" width="100%">
+					<g:Label styleName="{style.titulo}" text="Resultado da busca" width="200px"/>
+					<g:Button ui:field="limparButton" text="Limpar listagem"/>
+					<g:Button ui:field="adicionarButton" text="Adicionar todos"/>
+					<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
+				</g:HorizontalPanel>
+				<g:FlowPanel height="200px"  styleName="{style.formulario}">
+					<g:FlexTable ui:field="casalFlexTable" cellPadding="0" cellSpacing="0" />
+				</g:FlowPanel>
+				<g:HorizontalPanel styleName="{style.borde}" spacing="2" verticalAlignment="middle" width="100%">
+					<g:Label styleName="{style.titulo}" text="Lista de casais" width="200px"/>
+					<g:Button ui:field="limparListagemButton" text="Limpar listagem"/>
+					<g:Button ui:field="imprimirButton" text="Imprimir listagem"/>
+					<g:Label ui:field="itemListagemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
+				</g:HorizontalPanel>
+				<g:FlexTable ui:field="casalListagemFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
+			</g:VerticalPanel>
+			<g:VerticalPanel width="200px" styleName="{style.opcao}" spacing="2">
+				<g:Label styleName="{style.titulo}" text="Opções de exibição" horizontalAlignment="center" width="100%"/>
+				<g:HorizontalPanel spacing="2" verticalAlignment="middle" width="100%">
+					<g:Label text="Titulo"/>
+					<g:TextBox ui:field="tituloTextBox" width="150px" />
+				</g:HorizontalPanel>
+				<g:CheckBox ui:field="apelidoCheckBox" text="Apelido"/>
+				<g:CheckBox ui:field="emailCheckBox" text="Email"/>
+				<g:CheckBox ui:field="enderecoCheckBox" text="Endereço"/>
+				<g:CheckBox ui:field="documentoCheckBox" text="Documentos"/>
+				<g:CheckBox ui:field="telefoneCheckBox" text="Telefones"/>
+				<g:CheckBox ui:field="alergiaCheckBox" text="Alergia"/>
+				<g:CheckBox ui:field="vegetarianoCheckBox" text="Vegetariano"/>
+				<g:CheckBox ui:field="diabeticoCheckBox" text="Diabetico"/>
+			</g:VerticalPanel>
+		</g:HorizontalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>
