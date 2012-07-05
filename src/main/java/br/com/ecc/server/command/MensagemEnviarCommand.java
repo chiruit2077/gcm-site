@@ -31,16 +31,15 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 	@Override
 	@Transactional
 	public MensagemVO call() throws Exception {
-		EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
+		final EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
 		cmdEmail.setAssunto(mensagemVO.getMensagem().getGrupo().getNome() + " - " + mensagemVO.getMensagem().getTitulo());
 		//cmdEmail.setNaoEsperar(true);
 		// se remover o cometario acima... arrumar a confirmacao de enviado
 		
 		String sHTML = "";
 		boolean ok;
-		MensagemDestinatario d;
 		for (int i=0; i<mensagemVO.getListaDestinatarios().size(); i++) {
-			d = mensagemVO.getListaDestinatarios().get(i);
+			final MensagemDestinatario d = mensagemVO.getListaDestinatarios().get(i);
 			ok = true;
 			if(d.getDataEnvio()!=null){
 				ok = false;
@@ -49,15 +48,24 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 				ok = true;
 			}
 			if(ok){
-				boolean enviado = false;
 				if(d.getCasal()!=null){
 					if(d.getCasal().getEle().getEmail()!=null && !d.getCasal().getEle().getEmail().equals("")){
 						sHTML = substituiTagNome(mensagemVO.getMensagem(), d.getCasal(), d.getCasal().getEle());
 						cmdEmail.setMensagem(sHTML);
 						cmdEmail.setDestinatario(d.getCasal().getEle().getEmail());
 						try { 
-							cmdEmail.call();
-							enviado = true;
+							Thread t = new Thread(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										cmdEmail.call();
+										marcarEnviado(d);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							t.start();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -68,8 +76,18 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 
 						cmdEmail.setDestinatario(d.getCasal().getEla().getEmail());
 						try { 
-							cmdEmail.call();
-							enviado = true;
+							Thread t = new Thread(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										cmdEmail.call();
+										marcarEnviado(d);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							t.start();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -80,25 +98,36 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 						cmdEmail.setMensagem(sHTML);
 						cmdEmail.setDestinatario(d.getPessoa().getEmail());
 						try { 
-							cmdEmail.call();
-							enviado = true;
+							Thread t = new Thread(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										cmdEmail.call();
+										marcarEnviado(d);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							t.start();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
-				}
-				if(enviado){
-					d.setDataEnvio(new Date());
-					d.setDataConfirmacao(null);
-					SaveEntityCommand cmdSave = injector.getInstance(SaveEntityCommand.class);
-					cmdSave.setBaseEntity(d);
-					mensagemVO.getListaDestinatarios().set(i, (MensagemDestinatario) cmdSave.call());
 				}
 			}
 		}
 		return mensagemVO;
 	}
 
+	private void marcarEnviado(MensagemDestinatario d){
+		d.setDataEnvio(new Date());
+		d.setDataConfirmacao(null);
+		SaveEntityCommand cmdSave = injector.getInstance(SaveEntityCommand.class);
+		cmdSave.setBaseEntity(d);
+//		mensagemVO.getListaDestinatarios().set(i, (MensagemDestinatario) cmdSave.call());
+	}
+	
 	public String substituiTagNome(Mensagem mensagem, Casal c, Pessoa p) throws Exception {
 		String sHTML = String.valueOf(mensagem.getMensagem());
 		String nome = "", dadosUsuario = "";

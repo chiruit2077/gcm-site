@@ -35,11 +35,12 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 		parametros.put("titulo", casalOpcaoRelatorioVO.getTitulo());
 		
 		List<CasalItemVO> dadosRelatorio = new ArrayList<CasalItemVO>();
-		CasalItemVO vo;
+		CasalItemVO voEle, voEla;
 		List<String> dadosItemEle = new ArrayList<String>();
 		List<String> dadosItemEla = new ArrayList<String>();
 		List<String> titulos = new ArrayList<String>();
 		String valorCampo;
+		int item = 0;
 		for (Casal casal : listaCasal) {
 			dadosItemEle = new ArrayList<String>();
 			dadosItemEla = new ArrayList<String>();
@@ -53,25 +54,25 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 			if(casalOpcaoRelatorioVO.getEndereco()){
 				titulos.add("Endereço");
 				dadosItemEle.add(casal.getEndereco());
-				dadosItemEla.add(null);
+				dadosItemEla.add(casal.getBairro() + " - " + casal.getCidade() + " " + casal.getEstado());
 			}
 			if(casalOpcaoRelatorioVO.getTelefone()){
 				titulos.add("Telefone");
 				valorCampo = "";
-				if(casal.getEle().getTelefone()!=null){
-					valorCampo = casal.getEle().getTelefone();
+				if(casal.getEle().getTelefone()!=null && !casal.getEle().getTelefone().equals("")){
+					valorCampo = casal.getEle().getTelefone() + " ";
 				}
-				if(casal.getEle().getTelefoneCelular()!=null){
-					valorCampo += " Cel: " + casal.getEle().getTelefoneCelular();
+				if(casal.getEle().getTelefoneCelular()!=null && !casal.getEle().getTelefoneCelular().equals("")){
+					valorCampo += "Cel: " + casal.getEle().getTelefoneCelular();
 				}
 				dadosItemEle.add(valorCampo);
 				
 				valorCampo = "";
-				if(casal.getEla().getTelefone()!=null){
-					valorCampo = casal.getEla().getTelefone();
+				if(casal.getEla().getTelefone()!=null && !casal.getEla().getTelefone().equals("")){
+					valorCampo = casal.getEla().getTelefone() + " ";
 				}
-				if(casal.getEla().getTelefoneCelular()!=null){
-					valorCampo += " Cel: " + casal.getEla().getTelefoneCelular();
+				if(casal.getEla().getTelefoneCelular()!=null && !casal.getEla().getTelefoneCelular().equals("")){
+					valorCampo += "Cel: " + casal.getEla().getTelefoneCelular();
 				}
 				dadosItemEla.add(valorCampo);
 			}
@@ -79,26 +80,26 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 			if(casalOpcaoRelatorioVO.getDocumento()){
 				titulos.add("Documento");
 				valorCampo = "";
-				if(casal.getEle().getRg()!=null){
+				if(casal.getEle().getRg()!=null && !casal.getEle().getRg().equals("")){
 					valorCampo = "RG: " + casal.getEle().getRg();
 				}
-				if(casal.getEle().getExpedidor()!=null){
+				if(casal.getEle().getExpedidor()!=null  && !casal.getEle().getExpedidor().equals("")){
 					valorCampo += " " + casal.getEle().getExpedidor();
 				}
-				if(casal.getEle().getCpf()!=null){
-					valorCampo += " CPF: " + casal.getEle().getCpf();
+				if(casal.getEle().getCpf()!=null && !casal.getEle().getCpf().equals("")){
+					valorCampo += "\nCPF: " + casal.getEle().getCpf();
 				}
 				dadosItemEle.add(valorCampo);
 
 				valorCampo = "";
-				if(casal.getEla().getRg()!=null){
+				if(casal.getEla().getRg()!=null &&  !casal.getEla().getRg().equals("")){
 					valorCampo = "RG: " + casal.getEla().getRg();
 				}
-				if(casal.getEla().getExpedidor()!=null){
+				if(casal.getEla().getExpedidor()!=null  && !casal.getEla().getExpedidor().equals("")){
 					valorCampo += " " + casal.getEla().getExpedidor();
 				}
-				if(casal.getEla().getCpf()!=null){
-					valorCampo += " CPF: " + casal.getEla().getCpf();
+				if(casal.getEla().getCpf()!=null && !casal.getEla().getCpf().equals("")){
+					valorCampo += "\nCPF: " + casal.getEla().getCpf();
 				}
 				dadosItemEla.add(valorCampo);
 			}
@@ -106,6 +107,11 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 				titulos.add("Apelido");
 				dadosItemEle.add(casal.getEle().getApelido());
 				dadosItemEla.add(casal.getEla().getApelido());
+			}
+			if(casalOpcaoRelatorioVO.getTipo()){
+				titulos.add("Tipo");
+				dadosItemEle.add(casal.getTipoCasal().getNome());
+				dadosItemEla.add(null);
 			}
 			
 			if(casalOpcaoRelatorioVO.getAlergia()){
@@ -137,7 +143,7 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 				dadosItemEla.add(valorCampo);
 			}
 			if(casalOpcaoRelatorioVO.getVegetariano()){
-				titulos.add("Vegetariano");
+				titulos.add("Veget.");
 				valorCampo = "Não";
 				if(casal.getEle().getVegetariano()!=null && casal.getEle().getVegetariano()){
 					valorCampo = "Sim";
@@ -166,68 +172,73 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 				dadosItemEla.add(valorCampo);
 			}
 			
-			vo = new CasalItemVO();
-			vo.setNomeEle(casal.getEle().getNome());
-			vo.setNomeEla(casal.getEla().getNome());
+			voEle = new CasalItemVO();
+			voEla = new CasalItemVO();
+			voEle.setNome(casal.getEle().getNome());
+			voEla.setNome(casal.getEla().getNome());
+			voEle.setItem(item);
+			voEla.setItem(item);
 			int i=0;
 			for (String titulo : titulos) {
 				switch (i) {
 				case 0:
-					vo.setTitulo1(titulo);
-					vo.setDado1Ele(dadosItemEle.get(i));
-					vo.setDado1Ela(dadosItemEla.get(i));
+					voEle.setTitulo1(titulo);
+					voEle.setDado1(dadosItemEle.get(i));
+					voEla.setDado1(dadosItemEla.get(i));
 					break;
 				case 1:
-					vo.setTitulo2(titulo);
-					vo.setDado2Ele(dadosItemEle.get(i));
-					vo.setDado2Ela(dadosItemEla.get(i));
+					voEle.setTitulo2(titulo);
+					voEle.setDado2(dadosItemEle.get(i));
+					voEla.setDado2(dadosItemEla.get(i));
 					break;
 				case 2:
-					vo.setTitulo3(titulo);
-					vo.setDado3Ele(dadosItemEle.get(i));
-					vo.setDado3Ela(dadosItemEla.get(i));
+					voEle.setTitulo3(titulo);
+					voEle.setDado3(dadosItemEle.get(i));
+					voEla.setDado3(dadosItemEla.get(i));
 					break;
 				case 3:
-					vo.setTitulo4(titulo);
-					vo.setDado4Ele(dadosItemEle.get(i));
-					vo.setDado4Ela(dadosItemEla.get(i));
+					voEle.setTitulo4(titulo);
+					voEle.setDado4(dadosItemEle.get(i));
+					voEla.setDado4(dadosItemEla.get(i));
 					break;
 				case 4:
-					vo.setTitulo5(titulo);
-					vo.setDado5Ele(dadosItemEle.get(i));
-					vo.setDado5Ela(dadosItemEla.get(i));
+					voEle.setTitulo5(titulo);
+					voEle.setDado5(dadosItemEle.get(i));
+					voEla.setDado5(dadosItemEla.get(i));
 					break;
 				case 5:
-					vo.setTitulo6(titulo);
-					vo.setDado6Ele(dadosItemEle.get(i));
-					vo.setDado6Ela(dadosItemEla.get(i));
+					voEle.setTitulo6(titulo);
+					voEle.setDado6(dadosItemEle.get(i));
+					voEla.setDado6(dadosItemEla.get(i));
 					break;
 				case 6:
-					vo.setTitulo7(titulo);
-					vo.setDado7Ele(dadosItemEle.get(i));
-					vo.setDado7Ela(dadosItemEla.get(i));
+					voEle.setTitulo7(titulo);
+					voEle.setDado7(dadosItemEle.get(i));
+					voEla.setDado7(dadosItemEla.get(i));
 					break;
 				case 7:
-					vo.setTitulo8(titulo);
-					vo.setDado8Ele(dadosItemEle.get(i));
-					vo.setDado8Ela(dadosItemEla.get(i));
+					voEle.setTitulo8(titulo);
+					voEle.setDado8(dadosItemEle.get(i));
+					voEla.setDado8(dadosItemEla.get(i));
 					break;
 				case 8:
-					vo.setTitulo9(titulo);
-					vo.setDado9Ele(dadosItemEle.get(i));
-					vo.setDado9Ela(dadosItemEla.get(i));
+					voEle.setTitulo9(titulo);
+					voEle.setDado9(dadosItemEle.get(i));
+					voEla.setDado9(dadosItemEla.get(i));
 					break;
 				case 9:
-					vo.setTitulo10(titulo);
-					vo.setDado10Ele(dadosItemEle.get(i));
-					vo.setDado10Ela(dadosItemEla.get(i));
+					voEle.setTitulo10(titulo);
+					voEle.setDado10(dadosItemEle.get(i));
+					voEla.setDado10(dadosItemEla.get(i));
 					break;
 				default:
 					break;
 				}
 				i++;
 			}
-			dadosRelatorio.add(vo);
+			dadosRelatorio.add(voEle);
+			dadosRelatorio.add(voEla);
+			item++;
 		}
 		
 		if(dadosRelatorio.size()>0){

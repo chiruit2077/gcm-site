@@ -11,6 +11,7 @@ import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Casal;
+import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.vo.CasalOpcaoRelatorioVO;
 import br.com.ecc.model.vo.CasalParamVO;
@@ -59,6 +60,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@UiField TextBox nomeTextBox;
 	@UiField ListBox agrupamentoListBox;
 	@UiField ListBox tipoInscricaoListBox;
+	@UiField ListBox tipoListBox;
 	
 	@UiField TextBox tituloTextBox;
 	@UiField CheckBox apelidoCheckBox;
@@ -69,6 +71,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@UiField CheckBox alergiaCheckBox;
 	@UiField CheckBox vegetarianoCheckBox;
 	@UiField CheckBox diabeticoCheckBox;
+	@UiField CheckBox tipoCheckBox;
 	
 	private List<Agrupamento> listaAgrupamento;
 	private List<Casal> listaCasalPesquisa = new ArrayList<Casal>();
@@ -83,6 +86,11 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		tipoInscricaoListBox.addItem("Todos os inscritos");
 		for (TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
 			tipoInscricaoListBox.addItem(tipo.toString());
+		}
+		
+		tipoListBox.addItem("");
+		for (TipoCasalEnum tipo : TipoCasalEnum.values()) {
+			tipoListBox.addItem(tipo.toString());
 		}
 		
 		nomeTextBox.addKeyDownHandler(new KeyDownHandler() {
@@ -111,6 +119,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalTableUtil.addColumn("A", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("D", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("V", "30", HasHorizontalAlignment.ALIGN_CENTER);
+		casalTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 	
 	private void criaTabelaListagem() {
@@ -127,6 +136,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalListagemTableUtil.addColumn("A", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalListagemTableUtil.addColumn("D", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalListagemTableUtil.addColumn("V", "30", HasHorizontalAlignment.ALIGN_CENTER);
+		casalListagemTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 	
 	@UiHandler("buscarButton")
@@ -136,6 +146,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		vo.setNome(nomeTextBox.getValue());
 		vo.setAgrupamento((Agrupamento) ListBoxUtil.getItemSelected(agrupamentoListBox, listaAgrupamento));
 		vo.setTipoInscricao((TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoInscricaoListBox, TipoInscricaoEnum.values()));
+		vo.setTipoCasal((TipoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoCasalEnum.values()));
 		vo.setTodosInscritos(false);
 		if(tipoInscricaoListBox.getSelectedIndex()==1){
 			vo.setTodosInscritos(true);
@@ -169,6 +180,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalOpcaoRelatorioVO.setEndereco(enderecoCheckBox.getValue());
 		casalOpcaoRelatorioVO.setTelefone(telefoneCheckBox.getValue());
 		casalOpcaoRelatorioVO.setVegetariano(vegetarianoCheckBox.getValue());
+		casalOpcaoRelatorioVO.setTipo(tipoCheckBox.getValue());
 		presenter.imprimir(casalOpcaoRelatorioVO);
 	}
 	
@@ -223,7 +235,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		Image imagem;
 		HorizontalPanel hp;
 		for (final Casal casal: lista) {
-			Object dados[] = new Object[9];
+			Object dados[] = new Object[10];
 			
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -267,6 +279,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
                     			(casal.getEla().getDiabetico()!=null&&casal.getEla().getDiabetico()?"Sim":"Não"));
 			dados[8] = new HTML((casal.getEle().getVegetariano()!=null&&casal.getEle().getVegetariano()?"Sim":"Não") + "<br>" + 
 								(casal.getEla().getVegetariano()!=null&&casal.getEla().getVegetariano()?"Sim":"Não"));
+			dados[9] = casal.getTipoCasal().getNome(); 
 			if(listagem){
 				casalListagemTableUtil.addRow(dados,row+1);
 			} else {

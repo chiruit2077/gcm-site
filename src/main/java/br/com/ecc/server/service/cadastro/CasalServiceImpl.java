@@ -76,6 +76,15 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 			cmd.addParameter("grupo", casalParamVO.getGrupo());
 			listaCasal =  cmd.call();
 		}
+		if(casalParamVO.getTipoCasal()!=null){
+			List<Casal> listaCasalLocal = new ArrayList<Casal>();
+			for (Casal casal : listaCasal) {
+				if(casal.getTipoCasal().equals(casalParamVO.getTipoCasal())){
+					listaCasalLocal.add(casal);
+				}
+			}
+			listaCasal = listaCasalLocal;
+		}
 		Collections.sort(listaCasal, new Comparator<Casal>() {
 			@Override
 			public int compare(Casal o1, Casal o2) {

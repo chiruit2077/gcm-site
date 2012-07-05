@@ -48,6 +48,10 @@
 								<td width="160px">
 									<g:TextBox ui:field="nomeTextBox" width="160px" maxLength="100"/>
 								</td>
+								<td class="portal-formLabel" width="120px">Tipo:</td>
+								<td width="160px">
+									<g:ListBox ui:field="tipoListBox" width="150px"/>
+								</td>
 								<td class="portal-formLabel" width="120px">Do agrupamento:</td>
 								<td width="160px">
 									<g:ListBox ui:field="agrupamentoListBox" width="160px"/>
@@ -70,7 +74,7 @@
 					<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
 				</g:HorizontalPanel>
 				<g:FlowPanel height="200px"  styleName="{style.formulario}">
-					<g:FlexTable ui:field="casalFlexTable" cellPadding="0" cellSpacing="0" />
+					<g:FlexTable ui:field="casalFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
 				</g:FlowPanel>
 				<g:HorizontalPanel styleName="{style.borde}" spacing="2" verticalAlignment="middle" width="100%">
 					<g:Label styleName="{style.titulo}" text="Lista de casais" width="200px"/>
@@ -83,7 +87,7 @@
 			<g:VerticalPanel width="200px" styleName="{style.opcao}" spacing="2">
 				<g:Label styleName="{style.titulo}" text="Opções de exibição" horizontalAlignment="center" width="100%"/>
 				<g:HorizontalPanel spacing="2" verticalAlignment="middle" width="100%">
-					<g:Label text="Titulo"/>
+					<g:Label text="Titulo: "/>
 					<g:TextBox ui:field="tituloTextBox" width="150px" />
 				</g:HorizontalPanel>
 				<g:CheckBox ui:field="apelidoCheckBox" text="Apelido"/>
@@ -94,6 +98,7 @@
 				<g:CheckBox ui:field="alergiaCheckBox" text="Alergia"/>
 				<g:CheckBox ui:field="vegetarianoCheckBox" text="Vegetariano"/>
 				<g:CheckBox ui:field="diabeticoCheckBox" text="Diabetico"/>
+				<g:CheckBox ui:field="tipoCheckBox" text="Tipo"/>
 			</g:VerticalPanel>
 		</g:HorizontalPanel>
 	</g:VerticalPanel>

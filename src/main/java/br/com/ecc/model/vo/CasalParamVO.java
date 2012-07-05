@@ -5,6 +5,7 @@ import java.io.Serializable;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
+import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 
 public class CasalParamVO implements Serializable {
@@ -14,6 +15,7 @@ public class CasalParamVO implements Serializable {
 	private String nome;
 	private Agrupamento agrupamento;
 	private TipoInscricaoEnum tipoInscricao;
+	private TipoCasalEnum tipoCasal;
 	private Encontro encontro;
 	private Boolean todosInscritos;
 	
@@ -52,5 +54,11 @@ public class CasalParamVO implements Serializable {
 	}
 	public void setTodosInscritos(Boolean todosInscritos) {
 		this.todosInscritos = todosInscritos;
+	}
+	public TipoCasalEnum getTipoCasal() {
+		return tipoCasal;
+	}
+	public void setTipoCasal(TipoCasalEnum tipoCasal) {
+		this.tipoCasal = tipoCasal;
 	}
 }

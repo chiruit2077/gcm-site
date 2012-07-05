@@ -16,163 +16,20 @@ public class CasalItemVO implements Serializable {
 	private String titulo9;
 	private String titulo10;
 	
-	private String nomeEle;
-	private String dado1Ele;
-	private String dado2Ele;
-	private String dado3Ele;
-	private String dado4Ele;
-	private String dado5Ele;
-	private String dado6Ele;
-	private String dado7Ele;
-	private String dado8Ele;
-	private String dado9Ele;
-	private String dado10Ele;
+	private String nome;
+	private String dado1;
+	private String dado2;
+	private String dado3;
+	private String dado4;
+	private String dado5;
+	private String dado6;
+	private String dado7;
+	private String dado8;
+	private String dado9;
+	private String dado10;
 	
-	private String nomeEla;
-	private String dado1Ela;
-	private String dado2Ela;
-	private String dado3Ela;
-	private String dado4Ela;
-	private String dado5Ela;
-	private String dado6Ela;
-	private String dado7Ela;
-	private String dado8Ela;
-	private String dado9Ela;
-	private String dado10Ela;
+	private Integer item;
 	
-	
-	public String getNomeEle() {
-		return nomeEle;
-	}
-	public void setNomeEle(String nomeEle) {
-		this.nomeEle = nomeEle;
-	}
-	public String getDado1Ele() {
-		return dado1Ele;
-	}
-	public void setDado1Ele(String dado1Ele) {
-		this.dado1Ele = dado1Ele;
-	}
-	public String getDado2Ele() {
-		return dado2Ele;
-	}
-	public void setDado2Ele(String dado2Ele) {
-		this.dado2Ele = dado2Ele;
-	}
-	public String getDado3Ele() {
-		return dado3Ele;
-	}
-	public void setDado3Ele(String dado3Ele) {
-		this.dado3Ele = dado3Ele;
-	}
-	public String getDado4Ele() {
-		return dado4Ele;
-	}
-	public void setDado4Ele(String dado4Ele) {
-		this.dado4Ele = dado4Ele;
-	}
-	public String getDado5Ele() {
-		return dado5Ele;
-	}
-	public void setDado5Ele(String dado5Ele) {
-		this.dado5Ele = dado5Ele;
-	}
-	public String getDado6Ele() {
-		return dado6Ele;
-	}
-	public void setDado6Ele(String dado6Ele) {
-		this.dado6Ele = dado6Ele;
-	}
-	public String getDado7Ele() {
-		return dado7Ele;
-	}
-	public void setDado7Ele(String dado7Ele) {
-		this.dado7Ele = dado7Ele;
-	}
-	public String getDado8Ele() {
-		return dado8Ele;
-	}
-	public void setDado8Ele(String dado8Ele) {
-		this.dado8Ele = dado8Ele;
-	}
-	public String getDado9Ele() {
-		return dado9Ele;
-	}
-	public void setDado9Ele(String dado9Ele) {
-		this.dado9Ele = dado9Ele;
-	}
-	public String getDado10Ele() {
-		return dado10Ele;
-	}
-	public void setDado10Ele(String dado10Ele) {
-		this.dado10Ele = dado10Ele;
-	}
-	public String getNomeEla() {
-		return nomeEla;
-	}
-	public void setNomeEla(String nomeEla) {
-		this.nomeEla = nomeEla;
-	}
-	public String getDado1Ela() {
-		return dado1Ela;
-	}
-	public void setDado1Ela(String dado1Ela) {
-		this.dado1Ela = dado1Ela;
-	}
-	public String getDado2Ela() {
-		return dado2Ela;
-	}
-	public void setDado2Ela(String dado2Ela) {
-		this.dado2Ela = dado2Ela;
-	}
-	public String getDado3Ela() {
-		return dado3Ela;
-	}
-	public void setDado3Ela(String dado3Ela) {
-		this.dado3Ela = dado3Ela;
-	}
-	public String getDado4Ela() {
-		return dado4Ela;
-	}
-	public void setDado4Ela(String dado4Ela) {
-		this.dado4Ela = dado4Ela;
-	}
-	public String getDado5Ela() {
-		return dado5Ela;
-	}
-	public void setDado5Ela(String dado5Ela) {
-		this.dado5Ela = dado5Ela;
-	}
-	public String getDado6Ela() {
-		return dado6Ela;
-	}
-	public void setDado6Ela(String dado6Ela) {
-		this.dado6Ela = dado6Ela;
-	}
-	public String getDado7Ela() {
-		return dado7Ela;
-	}
-	public void setDado7Ela(String dado7Ela) {
-		this.dado7Ela = dado7Ela;
-	}
-	public String getDado8Ela() {
-		return dado8Ela;
-	}
-	public void setDado8Ela(String dado8Ela) {
-		this.dado8Ela = dado8Ela;
-	}
-	public String getDado9Ela() {
-		return dado9Ela;
-	}
-	public void setDado9Ela(String dado9Ela) {
-		this.dado9Ela = dado9Ela;
-	}
-	public String getDado10Ela() {
-		return dado10Ela;
-	}
-	public void setDado10Ela(String dado10Ela) {
-		this.dado10Ela = dado10Ela;
-	}
 	public String getTitulo1() {
 		return titulo1;
 	}
@@ -232,6 +89,78 @@ public class CasalItemVO implements Serializable {
 	}
 	public void setTitulo10(String titulo10) {
 		this.titulo10 = titulo10;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public String getDado1() {
+		return dado1;
+	}
+	public void setDado1(String dado1) {
+		this.dado1 = dado1;
+	}
+	public String getDado2() {
+		return dado2;
+	}
+	public void setDado2(String dado2) {
+		this.dado2 = dado2;
+	}
+	public String getDado3() {
+		return dado3;
+	}
+	public void setDado3(String dado3) {
+		this.dado3 = dado3;
+	}
+	public String getDado4() {
+		return dado4;
+	}
+	public void setDado4(String dado4) {
+		this.dado4 = dado4;
+	}
+	public String getDado5() {
+		return dado5;
+	}
+	public void setDado5(String dado5) {
+		this.dado5 = dado5;
+	}
+	public String getDado6() {
+		return dado6;
+	}
+	public void setDado6(String dado6) {
+		this.dado6 = dado6;
+	}
+	public String getDado7() {
+		return dado7;
+	}
+	public void setDado7(String dado7) {
+		this.dado7 = dado7;
+	}
+	public String getDado8() {
+		return dado8;
+	}
+	public void setDado8(String dado8) {
+		this.dado8 = dado8;
+	}
+	public String getDado9() {
+		return dado9;
+	}
+	public void setDado9(String dado9) {
+		this.dado9 = dado9;
+	}
+	public String getDado10() {
+		return dado10;
+	}
+	public void setDado10(String dado10) {
+		this.dado10 = dado10;
+	}
+	public Integer getItem() {
+		return item;
+	}
+	public void setItem(Integer item) {
+		this.item = item;
 	}
 	
 }

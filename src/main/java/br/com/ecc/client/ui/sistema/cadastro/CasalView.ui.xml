@@ -55,6 +55,10 @@
 							<td width="160px">
 								<g:TextBox ui:field="nomeTextBox" width="160px" maxLength="100"/>
 							</td>
+							<td class="portal-formLabel" width="120px">Tipo:</td>
+							<td width="160px">
+								<g:ListBox ui:field="tipoCasalListBox" width="150px"/>
+							</td>
 							<td class="portal-formLabel" width="120px">Do agrupamento:</td>
 							<td width="160px">
 								<g:ListBox ui:field="agrupamentoListBox" width="160px"/>
@@ -74,7 +78,7 @@
 				</g:HTMLPanel>
 			</g:HorizontalPanel> 
 			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
-			<g:FlexTable ui:field="casalFlexTable" cellPadding="0" cellSpacing="0" />
+			<g:FlexTable ui:field="casalFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"

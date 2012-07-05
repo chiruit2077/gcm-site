@@ -176,6 +176,7 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		destinatarioTableUtil.addColumn("", "20", HasHorizontalAlignment.ALIGN_CENTER);
 		destinatarioTableUtil.addColumn("Nome", null, HasHorizontalAlignment.ALIGN_LEFT);
 		destinatarioTableUtil.addColumn("Email", null, HasHorizontalAlignment.ALIGN_LEFT);
+		destinatarioTableUtil.addColumn("Tipo", null, HasHorizontalAlignment.ALIGN_LEFT);
 		destinatarioTableUtil.addColumn("Envio", "120", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 		destinatarioTableUtil.addColumn("Confirmação", "120", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 	}
@@ -270,7 +271,7 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		Image excluir, enviar;
 		HorizontalPanel hp;
 		for (final MensagemDestinatario destinatario: presenter.getMensagemVO().getListaDestinatarios()) {
-			Object dados[] = new Object[5];
+			Object dados[] = new Object[6];
 			
 			excluir = new Image("images/delete.png");
 			excluir.setStyleName("portal-ImageCursor");
@@ -312,12 +313,13 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 				dados[1] = destinatario.getCasal()==null?destinatario.getPessoa().getApelido():destinatario.getCasal().getApelidos("e");
 			}
 			dados[2] = destinatario.getCasal()==null?destinatario.getPessoa().getEmail():new HTML(destinatario.getCasal().getEmails("<br>"));
+			dados[3] = destinatario.getCasal()!=null?destinatario.getCasal().getTipoCasal().getNome():null;
 			if(destinatario.getDataEnvio()!=null){
-				dados[3] = dfData.format(destinatario.getDataEnvio());
+				dados[4] = dfData.format(destinatario.getDataEnvio());
 				envios++;
 			}
 			if(destinatario.getDataConfirmacao()!=null){
-				dados[4] = dfData.format(destinatario.getDataConfirmacao());
+				dados[5] = dfData.format(destinatario.getDataConfirmacao());
 				confirmacoes++;
 			}
 			destinatarioTableUtil.addRow(dados,row+1);

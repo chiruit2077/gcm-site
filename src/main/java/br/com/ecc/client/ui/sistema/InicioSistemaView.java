@@ -592,18 +592,19 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dadosHP.add(label);
 		
-		Anchor recado = new Anchor("Enviar recado");
-		recado.setStyleName("portal-anchor");
-		recado.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent arg0) {
-				Recado r = new Recado();
-				r.setCasal(niver.getCasal());
-				edita(r);
-			}
-		});
-		dadosHP.add(recado);
-		
+		if(niver.getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
+			Anchor recado = new Anchor("Enviar recado");
+			recado.setStyleName("portal-anchor");
+			recado.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent arg0) {
+					Recado r = new Recado();
+					r.setCasal(niver.getCasal());
+					edita(r);
+				}
+			});
+			dadosHP.add(recado);
+		}
 		HorizontalPanel hpSpacer = new HorizontalPanel();
 		hpSpacer.setWidth("8px");
 		mainHP.add(hpSpacer);

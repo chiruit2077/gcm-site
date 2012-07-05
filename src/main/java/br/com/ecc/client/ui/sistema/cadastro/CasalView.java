@@ -80,6 +80,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiField TextBox nomeTextBox;
 	@UiField ListBox agrupamentoListBox;
 	@UiField ListBox tipoInscricaoListBox;
+	@UiField ListBox tipoCasalListBox;
 	
 	//ele
 	@UiField TextBox eleNomeTextBox;
@@ -226,6 +227,11 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			tipoInscricaoListBox.addItem(tipo.toString());
 		}
 		
+		tipoCasalListBox.addItem("");
+		for (TipoCasalEnum tipo : TipoCasalEnum.values()) {
+			tipoCasalListBox.addItem(tipo.toString());
+		}
+		
 		nomeTextBox.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -353,6 +359,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		vo.setNome(nomeTextBox.getValue());
 		vo.setAgrupamento((Agrupamento) ListBoxUtil.getItemSelected(agrupamentoListBox, listaAgrupamento));
 		vo.setTipoInscricao((TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoInscricaoListBox, TipoInscricaoEnum.values()));
+		vo.setTipoCasal((TipoCasalEnum) ListBoxUtil.getItemSelected(tipoCasalListBox, TipoCasalEnum.values()));
 		vo.setTodosInscritos(false);
 		if(tipoInscricaoListBox.getSelectedIndex()==1){
 			vo.setTodosInscritos(true);
