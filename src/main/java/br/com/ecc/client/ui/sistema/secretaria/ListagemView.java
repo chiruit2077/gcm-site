@@ -29,6 +29,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -36,6 +37,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -72,6 +74,9 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@UiField CheckBox vegetarianoCheckBox;
 	@UiField CheckBox diabeticoCheckBox;
 	@UiField CheckBox tipoCheckBox;
+	
+	@UiField DialogBox emailDialogBox;
+	@UiField TextArea emailTextArea;
 	
 	private List<Agrupamento> listaAgrupamento;
 	private List<Casal> listaCasalPesquisa = new ArrayList<Casal>();
@@ -183,6 +188,26 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalOpcaoRelatorioVO.setTipo(tipoCheckBox.getValue());
 		presenter.imprimir(casalOpcaoRelatorioVO);
 	}
+	
+	@UiHandler("emailButton")
+	public void emailButtonClickHandler(ClickEvent event){
+		String emails = "";
+		for (Casal casal : presenter.getListaCasal()) {
+			if(!emails.equals("")){
+				emails += ", ";	
+			}
+			emails += casal.getEmails(", ");
+		}
+		emailTextArea.setValue(emails);
+		emailDialogBox.center();
+		emailDialogBox.show();
+	}
+	
+	@UiHandler("fecharButton")
+	public void fecharButtonClickHandler(ClickEvent event){
+		emailDialogBox.hide();
+	}
+	
 	
 	@UiHandler("adicionarButton")
 	public void adicionarButtonClickHandler(ClickEvent event){

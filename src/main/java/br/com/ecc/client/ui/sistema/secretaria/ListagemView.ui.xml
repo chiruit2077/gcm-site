@@ -80,6 +80,7 @@
 					<g:Label styleName="{style.titulo}" text="Lista de casais" width="200px"/>
 					<g:Button ui:field="limparListagemButton" text="Limpar listagem"/>
 					<g:Button ui:field="imprimirButton" text="Imprimir listagem"/>
+					<g:Button ui:field="emailButton" text="Gerar lista de emails"/>
 					<g:Label ui:field="itemListagemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
 				</g:HorizontalPanel>
 				<g:FlexTable ui:field="casalListagemFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
@@ -101,5 +102,18 @@
 				<g:CheckBox ui:field="tipoCheckBox" text="Tipo"/>
 			</g:VerticalPanel>
 		</g:HorizontalPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="emailDialogBox" visible="false"
+				         width="500px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Emails da listagem">
+				<g:VerticalPanel width="100%" horizontalAlignment="center">
+					<g:TextArea ui:field="emailTextArea" height="250px" width="480px"/>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="fecharButton">Fechar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
 	</g:VerticalPanel>
  </ui:UiBinder>
