@@ -17,6 +17,7 @@ import br.com.ecc.model.EncontroConviteResponsavel;
 import br.com.ecc.model.EncontroFila;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model._WebBaseEntity;
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoFilaEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.tipo.TipoRespostaConviteEnum;
@@ -68,6 +69,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiField CheckBox moverCheckBox;
 	
 	@UiField CheckBox exibeRecusadosCheckBox;
+	@UiField CheckBox exibeDesistenciaCheckBox;
 	
 	//Convite
 	@UiField(provided = true) SuggestBox casalSuggestBox;
@@ -85,6 +87,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiField CheckBox esconderPagamentoCheckBox;
 	@UiField ListBox respostaListBox;
 	@UiField TextArea observacaoTextArea;
+	@UiField ListBox confirmacaoListBox;
 	
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
@@ -170,6 +173,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		
 		ListBoxUtil.populate(respostaListBox, true, TipoRespostaConviteEnum.values());
 		ListBoxUtil.populate(tipoListBox, false, TipoFilaEnum.values());
+		ListBoxUtil.populate(confirmacaoListBox, false, TipoConfirmacaoEnum.values());
 		
 		dataConviteDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataConviteDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
@@ -187,12 +191,13 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		encontroConviteTableUtil.addColumn("Fila", "80", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroConviteTableUtil.addColumn("#", "20", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.NUMBER, null);
 		encontroConviteTableUtil.addColumn("Casal", "150", HasHorizontalAlignment.ALIGN_LEFT);
-		encontroConviteTableUtil.addColumn("Casal convidado", "150", HasHorizontalAlignment.ALIGN_LEFT);
-		encontroConviteTableUtil.addColumn("Casal responsável", "150", HasHorizontalAlignment.ALIGN_LEFT);
+		encontroConviteTableUtil.addColumn("Casal convidado", "120", HasHorizontalAlignment.ALIGN_LEFT);
+		encontroConviteTableUtil.addColumn("Casal responsável", "120", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroConviteTableUtil.addColumn("Observação", "250", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroConviteTableUtil.addColumn("Convite", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 		encontroConviteTableUtil.addColumn("Resposta", "70", HasHorizontalAlignment.ALIGN_CENTER);
 		encontroConviteTableUtil.addColumn("Data Resp.", "90", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
+		encontroConviteTableUtil.addColumn("Confirmação", "70", HasHorizontalAlignment.ALIGN_CENTER);
 //		encontroConviteTableUtil.addColumn("Env. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 //		encontroConviteTableUtil.addColumn("Rec. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 //		encontroConviteTableUtil.addColumn("Pre. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
@@ -266,6 +271,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		entidadeEditada.setEsconderPlanoPagamento(esconderPagamentoCheckBox.getValue());
 		entidadeEditada.setObservacao(observacaoTextArea.getValue());
 		entidadeEditada.setTipoResposta(resposta);
+		entidadeEditada.setTipoConfirmacao((TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values()));
 		
 		entidadeEditada.setMoverFinalFila(moverCheckBox.getValue());
 		entidadeEditada.setGerarInscricao(gerarInscricaoCheckBox.getValue());
@@ -288,6 +294,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		prioridadeNumberTextBox.setNumber(null);
 		casalSuggestBox.setValue(null);
 		responsavelListBox.setSelectedIndex(0);
+		confirmacaoListBox.setSelectedIndex(0);
 		casalConvidadoSuggestBox.setValue(null);
 		observacaoTextArea.setValue(null);
 		esconderPagamentoCheckBox.setValue(null);
@@ -361,6 +368,9 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		dataConviteDateBox.setValue(encontroConvite.getDataConvite());
 		if(encontroConvite.getTipoResposta()!=null){
 			ListBoxUtil.setItemSelected(respostaListBox, encontroConvite.getTipoResposta().getNome());
+		}
+		if(encontroConvite.getTipoConfirmacao()!=null){
+			ListBoxUtil.setItemSelected(confirmacaoListBox, encontroConvite.getTipoConfirmacao().getNome());
 		}
 		dataRespostaDateBox.setValue(encontroConvite.getDataResposta());
 		setDadosFichaCasal();
@@ -443,7 +453,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		Image editar, excluir;
 		HorizontalPanel hp;
 		EncontroFila filaAnterior = null;
-		int contaFila = 1, convidar = 0, recusados = 0, aceitos = 0;
+		int contaFila = 1, convidar = 0, recusados = 0, aceitos = 0, desistencia=0;
 		boolean exibeEditar, exibeLinha;
 		for (final EncontroConvite encontroConvite: lista) {
 			exibeEditar = true;
@@ -451,7 +461,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				contaFila = 1;
 			}
 			filaAnterior = encontroConvite.getEncontroFila();
-			Object dados[] = new Object[10];
+			Object dados[] = new Object[11];
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
@@ -523,22 +533,24 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			if(encontroConvite.getDataResposta()!=null){
 				dados[9] = dfGlobal.format(encontroConvite.getDataResposta());
 			}
-//			if(encontroConvite.getCasal().getDataFichaEnvio()!=null){
-//				dados[10] = dfGlobal.format(encontroConvite.getCasal().getDataFichaEnvio());
-//			}
-//			if(encontroConvite.getCasal().getDataFichaRecebimento()!=null){
-//				dados[11] = dfGlobal.format(encontroConvite.getCasal().getDataFichaRecebimento());
-//			}
-//			if(encontroConvite.getCasal().getAtualizacaoCadastro()!=null){
-//				dados[12] = dfGlobal.format(encontroConvite.getCasal().getAtualizacaoCadastro());
-//			}
-			
+			if(encontroConvite.getTipoConfirmacao()!=null){
+				dados[10] = encontroConvite.getTipoConfirmacao().getNome();
+			} else {
+				dados[10] = TipoConfirmacaoEnum.CONFIRMADO.getNome();
+			}
 			exibeLinha = true;
 			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO) && !exibeRecusadosCheckBox.getValue()){
 				exibeLinha = false;
 			}
+			if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
+				exibeLinha = false;
+			}
 			if(exibeLinha){
 				encontroConviteTableUtil.addRow(dados,row+1);
+			}
+			if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
+				desistencia++;
+				encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalGrayLineThrough");
 			}
 			
 			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
@@ -572,9 +584,16 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		}
 		if(recusados>0){
 			if(recusados==1){
-				itemTotal.setText(itemTotal.getText() +  " / " + recusados + " convites recusados");
-			} else {
 				itemTotal.setText(itemTotal.getText() +  " / " + recusados + " convite recusado");
+			} else {
+				itemTotal.setText(itemTotal.getText() +  " / " + recusados + " convites recusados");
+			}
+		}
+		if(desistencia>0){
+			if(desistencia==1){
+				itemTotal.setText(itemTotal.getText() +  " / " + desistencia + " desistência");
+			} else {
+				itemTotal.setText(itemTotal.getText() +  " / " + desistencia + " desistências");
 			}
 		}
 		showWaitMessage(false);
@@ -793,6 +812,10 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	}
 	@UiHandler("exibeRecusadosCheckBox")
 	public void exibeRecusadosCheckBoxClickHandler(ClickEvent event){
+		populaEntidades(presenter.getListaConvites());
+	}
+	@UiHandler("exibeDesistenciaCheckBox")
+	public void exibeDesistenciaCheckBoxClickHandler(ClickEvent event){
 		populaEntidades(presenter.getListaConvites());
 	}
 

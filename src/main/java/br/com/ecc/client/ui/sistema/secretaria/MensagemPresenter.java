@@ -176,7 +176,7 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 			@Override
 			protected void success(List<Agrupamento> lista) {
 				getDisplay().populaAgrupamento(lista);
-				serviceEncontro.listaInscricoes(encontro, new WebAsyncCallback<List<EncontroInscricao>>(getDisplay()) {
+				serviceEncontro.listaInscricoes(encontro, false, new WebAsyncCallback<List<EncontroInscricao>>(getDisplay()) {
 					@Override
 					protected void success(List<EncontroInscricao> result) {
 						setListaInscricao(result);

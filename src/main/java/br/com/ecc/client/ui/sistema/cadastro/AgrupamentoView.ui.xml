@@ -90,7 +90,18 @@
 								<tr>
 									<td colspan="2">
 										<g:VerticalPanel width="100%">
-											<g:Label ui:field="itemMembroTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
+											<g:HTMLPanel width="100%">
+												<table cellpadding="3" width="100%">
+													<tr>
+														<td align="left">
+															<g:Button ui:field="excluirMembroButton" text="Excluir todos os membros"/>
+														</td>
+														<td align="right">
+															<g:Label ui:field="itemMembroTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
+														</td>
+													</tr>
+												</table>
+											</g:HTMLPanel>
 											<g:FlowPanel styleName="portal-FlowPanel" height="230px">
 												<g:FlexTable ui:field="membroFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
 											</g:FlowPanel>

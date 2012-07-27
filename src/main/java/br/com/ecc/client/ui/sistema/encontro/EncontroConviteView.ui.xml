@@ -64,6 +64,7 @@
 		<g:VerticalPanel width="100%">
 			<g:HorizontalPanel spacing="2" width="100%">
 				<g:CheckBox ui:field="exibeRecusadosCheckBox" text="Exibir convites recusados"/>
+				<g:CheckBox ui:field="exibeDesistenciaCheckBox" text="Exibir desistências"/>
 				<g:Label ui:field="itemTotal" width="100%" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
 			</g:HorizontalPanel>
 			<g:FlexTable ui:field="encontroConviteFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
@@ -95,6 +96,12 @@
 									<td class="portal-formLabel">Responsável convite:</td>
 									<td colspan="3">
 										<g:ListBox ui:field="responsavelListBox" width="350px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Confirmação:</td>
+									<td colspan="3">
+										<g:ListBox ui:field="confirmacaoListBox" width="350px"/>
 									</td>
 								</tr>
 							</table>

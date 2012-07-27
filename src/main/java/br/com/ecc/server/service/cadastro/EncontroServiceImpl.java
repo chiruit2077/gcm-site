@@ -74,9 +74,13 @@ public class EncontroServiceImpl extends SecureRemoteServiceServlet implements E
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<EncontroInscricao> listaInscricoes(Encontro encontro) throws Exception {
+	public List<EncontroInscricao> listaInscricoes(Encontro encontro, Boolean exibeRecusados) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
-		cmd.setNamedQuery("encontroInscricao.porEncontro");
+		if(exibeRecusados==null || exibeRecusados){
+			cmd.setNamedQuery("encontroInscricao.porEncontro");
+		} else {
+			cmd.setNamedQuery("encontroInscricao.porEncontroConfirmados");
+		}
 		cmd.addParameter("encontro", encontro);
 		return cmd.call();
 	}

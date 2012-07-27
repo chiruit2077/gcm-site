@@ -138,7 +138,7 @@ public class AgrupamentoPresenter extends BasePresenter<AgrupamentoPresenter.Dis
 	}
 	public void buscaInscricoes(Encontro encontroSelecionado) {
 		getDisplay().showWaitMessage(true);
-		serviceEncontro.listaInscricoes(encontroSelecionado, new WebAsyncCallback<List<EncontroInscricao>>(getDisplay()) {
+		serviceEncontro.listaInscricoes(encontroSelecionado, false, new WebAsyncCallback<List<EncontroInscricao>>(getDisplay()) {
 			@Override
 			protected void success(List<EncontroInscricao> result) {
 				setListaInscricoes(result);

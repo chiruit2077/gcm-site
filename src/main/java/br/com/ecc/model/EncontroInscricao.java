@@ -19,12 +19,18 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROINSCRICAO", sequenceName="SQ_ENCONTROINSCRICAO")
 @NamedQueries({
 	@NamedQuery(name="encontroInscricao.porEncontro", query="select u from EncontroInscricao u where u.encontro = :encontro order by u.tipo"),
+	@NamedQuery(name="encontroInscricao.porEncontroConfirmados", 
+		query="select u from EncontroInscricao u " +
+				"where  u.encontro = :encontro and" +
+				"		( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " +
+				"order by u.tipo"),
 	@NamedQuery(name="encontroInscricao.porEncontroConvidados", 
 		query="select u.casal from EncontroInscricao u where u.encontro = :encontro and u.tipo = 'AFILHADO' "),
 	@NamedQuery(name="encontroInscricao.porEncontroCasal", 
@@ -69,6 +75,10 @@ public class EncontroInscricao extends _WebBaseEntity {
 	private Date dataPrenchimentoFicha;
 	
 	private Boolean esconderPlanoPagamento;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(length=20)
+	private TipoConfirmacaoEnum tipoConfirmacao;
 	
 	@Version
 	private Integer version;
@@ -154,5 +164,13 @@ public class EncontroInscricao extends _WebBaseEntity {
 
 	public void setEsconderPlanoPagamento(Boolean esconderPlanoPagamento) {
 		this.esconderPlanoPagamento = esconderPlanoPagamento;
+	}
+
+	public TipoConfirmacaoEnum getTipoConfirmacao() {
+		return tipoConfirmacao;
+	}
+
+	public void setTipoConfirmacao(TipoConfirmacaoEnum tipoConfirmacao) {
+		this.tipoConfirmacao = tipoConfirmacao;
 	}
 }

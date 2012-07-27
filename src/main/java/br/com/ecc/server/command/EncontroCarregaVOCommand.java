@@ -70,7 +70,7 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 		});
 		
 		//Inscricao
-		q = em.createNamedQuery("encontroInscricao.porEncontro");
+		q = em.createNamedQuery("encontroInscricao.porEncontroConfirmados");
 		q.setParameter("encontro", vo.getEncontro());
 		vo.setListaInscricao(q.getResultList());
 		Collections.sort(vo.getListaInscricao(), new Comparator<EncontroInscricao>() {

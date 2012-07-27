@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import br.com.ecc.model.EncontroInscricaoPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 import br.com.ecc.model.Usuario;
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
 
 import com.google.inject.Inject;
@@ -58,6 +59,11 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 		}
 		
 		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));
+		if(encontroInscricaoVO.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
+			q = em.createNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+		}
 		
 		//pagamentos
 		List<EncontroInscricaoPagamento> novaLista = new ArrayList<EncontroInscricaoPagamento>();

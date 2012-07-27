@@ -35,6 +35,9 @@
 					<table cellpadding="3" cellspacing="0" border="0">
 						<tr>
 							<td>
+								<g:CheckBox ui:field="exibeDesistenciaCheckBox" text="Exibir desistências"/>
+							</td>
+							<td>
 								<g:Button ui:field="novoButton">Adicionar inscrição</g:Button>
 							</td>
 						</tr>
@@ -102,7 +105,7 @@
 										<table cellpadding="2" cellspacing="0" width="100%">
 											<tr>
 												<td class="portal-formLabel" width="80px">Email:</td>
-												<td>
+												<td colspan="3">
 													<g:Label ui:field="emailLabel" width="400px"/>
 												</td>
 											</tr>
@@ -112,13 +115,17 @@
 													<g:Label ui:field="tipoLabel" width="150px"/>
 													<g:ListBox ui:field="tipoListBox" width="150px" visible="false"/>
 												</td>
+												<td class="portal-formLabel">Confirmação:</td>
+												<td>
+													<g:ListBox ui:field="confirmacaoListBox" width="150px"/>
+												</td>
 											</tr>
 											<tr>
 												<td style='vertical-align:top;' class="portal-formLabel">
 													Detalhamento:
 													<g:Image ui:field="addDetalheImage" url="images/add.png" title="Adicionar detalhe" styleName="portal-ImageCursor"/>
 												</td>
-												<td style='vertical-align:top;' align="right">
+												<td  colspan="3" style='vertical-align:top;' align="right">
 													<g:FlowPanel styleName="portal-FlowPanel" height="80px" width="100%">
 														<g:FlexTable ui:field="detalheFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
 													</g:FlowPanel>
@@ -126,7 +133,7 @@
 											</tr>
 											<tr>
 												<td class="portal-formLabel">Valor total:</td>
-												<td style="color:blue;font-weight:bold;">
+												<td  colspan="3" style="color:blue;font-weight:bold;">
 													<g:Label ui:field="valorLabel" width="150px"/>
 												</td>
 											</tr>

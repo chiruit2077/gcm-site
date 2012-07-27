@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoRespostaConviteEnum;
 
 @Entity
@@ -74,6 +75,10 @@ public class EncontroConvite extends _WebBaseEntity {
 	@ManyToOne
 	@JoinColumn(name="mensagemDestinatarioFicha")
 	private MensagemDestinatario mensagemDestinatarioFicha;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(length=20)
+	private TipoConfirmacaoEnum tipoConfirmacao;
 
 	@Version
 	private Integer version;
@@ -179,5 +184,11 @@ public class EncontroConvite extends _WebBaseEntity {
 	}
 	public void setMensagemDestinatarioFicha(MensagemDestinatario mensagemDestinatarioFicha) {
 		this.mensagemDestinatarioFicha = mensagemDestinatarioFicha;
+	}
+	public TipoConfirmacaoEnum getTipoConfirmacao() {
+		return tipoConfirmacao;
+	}
+	public void setTipoConfirmacao(TipoConfirmacaoEnum tipoConfirmacao) {
+		this.tipoConfirmacao = tipoConfirmacao;
 	}
 }

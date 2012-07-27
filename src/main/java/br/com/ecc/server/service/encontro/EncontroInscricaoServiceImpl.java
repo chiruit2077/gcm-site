@@ -3,7 +3,6 @@ package br.com.ecc.server.service.encontro;
 import java.util.List;
 
 import br.com.ecc.client.service.encontro.EncontroInscricaoService;
-import br.com.ecc.core.mvp.infra.exception.WebException;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricao;
@@ -44,15 +43,20 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 	@Permissao(nomeOperacao="Excluir encontroInscricao", operacao=Operacao.EXCLUIR)
 	public void exclui(EncontroInscricao encontroInscricao) throws Exception {
 		//dependencias
-		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-		cmdEntidade.setNamedQuery("encontroAtividadeInscricao.porEncontroInscricao");
-		cmdEntidade.addParameter("encontroInscricao", encontroInscricao);
-		if(cmdEntidade.call().size()>0){
-			throw new WebException("Erro ao excluir esta inscrição. \nJá existem atividades planilhadas para esta inscrição.");
-		}
+//		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
+//		cmdEntidade.setNamedQuery("encontroAtividadeInscricao.porEncontroInscricao");
+//		cmdEntidade.addParameter("encontroInscricao", encontroInscricao);
+//		if(cmdEntidade.call().size()>0){
+//			throw new WebException("Erro ao excluir esta inscrição. \nJá existem atividades planilhadas para esta inscrição.");
+//		}
+		//removendo atividades no encontro
+		ExecuteUpdateCommand cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
+		cmdDelete.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
+		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
+		cmdDelete.call();
 		
 		//exclusão
-		ExecuteUpdateCommand cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
+		cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
 		cmdDelete.setNamedQuery("encontroInscricaoPagamento.deletePorEncontroInscricao");
 		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
 		cmdDelete.call();

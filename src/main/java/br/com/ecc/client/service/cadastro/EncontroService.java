@@ -16,5 +16,5 @@ public interface EncontroService extends RemoteService {
 	public void exclui(Encontro encontro) throws Exception;
 	public void salva(EncontroVO encontroVO) throws Exception;
 	public EncontroVO getVO(Encontro encontro, Boolean ignorarAfilhados) throws Exception;
-	public List<EncontroInscricao> listaInscricoes(Encontro encontroSelecionado) throws Exception;
+	public List<EncontroInscricao> listaInscricoes(Encontro encontroSelecionado, Boolean exibeRecusados) throws Exception;
 }

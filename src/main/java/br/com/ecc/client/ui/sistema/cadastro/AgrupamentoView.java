@@ -407,6 +407,13 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		populaMembros();
 	}
 	
+	@UiHandler("excluirMembroButton")
+	public void excluirMembroButtonClickHandler(ClickEvent event){
+		if(Window.confirm("Deseja excluir todos os membros deste agrupamento?")){
+			presenter.getAgrupamentoVO().setListaMembros(new ArrayList<AgrupamentoMembro>());
+			populaMembros();
+		}
+	}
 	@UiHandler("grupoRadioButton")
 	public void grupoRadioButtonClickHandler(ClickEvent event){
 		agrupamentoTableUtil.clearData();
