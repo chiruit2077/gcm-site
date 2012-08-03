@@ -1,6 +1,7 @@
 package br.com.ecc.server.service.secretaria;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.service.secretaria.MensagemService;
@@ -9,6 +10,7 @@ import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Mensagem;
 import br.com.ecc.model.MensagemDestinatario;
 import br.com.ecc.model.tipo.Operacao;
+import br.com.ecc.model.tipo.TipoMensagemEnum;
 import br.com.ecc.model.vo.MensagemVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
@@ -17,6 +19,7 @@ import br.com.ecc.server.command.MensagemEnviarCommand;
 import br.com.ecc.server.command.MensagemSalvarCommand;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.ExecuteUpdateCommand;
+import br.com.ecc.server.command.basico.GetEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 
 import com.google.inject.Inject;
@@ -36,7 +39,23 @@ public class MensagemServiceImpl extends SecureRemoteServiceServlet implements M
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("mensagem.porGrupo");
 		cmd.addParameter("grupo", grupo);
-		return cmd.call();
+		List<Object[]> resultado = cmd.call();
+		
+		List<Mensagem> listaRetorno = new ArrayList<Mensagem>();
+		Mensagem m;
+		for (Object[] objects : resultado) {
+			m = new Mensagem();
+			m.setId((Integer) objects[0]);
+			m.setGrupo((Grupo) objects[1]);
+			m.setData((Date) objects[2]);
+			m.setTitulo((String) objects[3]);
+			m.setDescricao((String) objects[4]);
+			m.setTipoMensagem((TipoMensagemEnum) objects[5]);
+			m.setVersion((Integer) objects[6]);
+			listaRetorno.add(m);
+		}
+		
+		return listaRetorno;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -46,7 +65,23 @@ public class MensagemServiceImpl extends SecureRemoteServiceServlet implements M
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("mensagem.porGrupoTipoEspecial");
 		cmd.addParameter("grupo", grupo);
-		return cmd.call();
+		List<Object[]> resultado = cmd.call();
+		
+		List<Mensagem> listaRetorno = new ArrayList<Mensagem>();
+		Mensagem m;
+		for (Object[] objects : resultado) {
+			m = new Mensagem();
+			m.setId((Integer) objects[0]);
+			m.setGrupo((Grupo) objects[1]);
+			m.setData((Date) objects[2]);
+			m.setTitulo((String) objects[3]);
+			m.setDescricao((String) objects[4]);
+			m.setTipoMensagem((TipoMensagemEnum) objects[5]);
+			m.setVersion((Integer) objects[6]);
+			listaRetorno.add(m);
+		}
+		
+		return listaRetorno;
 	}
 
 	@Override
@@ -84,6 +119,11 @@ public class MensagemServiceImpl extends SecureRemoteServiceServlet implements M
 	@SuppressWarnings("unchecked")
 	public MensagemVO getVO(Mensagem mensagem){
 		MensagemVO vo = new MensagemVO();
+		
+		GetEntityCommand cmdE = injector.getInstance(GetEntityCommand.class);
+		cmdE.setClazz(Mensagem.class);
+		cmdE.setId(mensagem.getId());
+		mensagem = (Mensagem) cmdE.call();
 		
 		vo.setMensagem(mensagem);
 		

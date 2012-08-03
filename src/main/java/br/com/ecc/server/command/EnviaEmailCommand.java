@@ -76,7 +76,7 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 				if(!dest.equals("")) dest+=",";
 				dest += message.getAllRecipients()[i];
 			}
-			throw new WebException("Erro ao enviar email para: \n" + dest + "\n\nErro: " + e.getMessage());
+			throw new WebException("Erro ao enviar email: " + e.getMessage() +  "\nDestinatarios:" + dest);
 		}
 	}
 

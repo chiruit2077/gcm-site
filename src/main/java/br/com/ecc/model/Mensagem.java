@@ -23,8 +23,12 @@ import br.com.ecc.model.tipo.TipoMensagemEnum;
 @Entity
 @SequenceGenerator(name="SQ_MENSAGEM", sequenceName="SQ_MENSAGEM")
 @NamedQueries({
-	@NamedQuery(name="mensagem.porGrupo", query="select u from Mensagem u where u.grupo = :grupo order by u.data desc"),
-	@NamedQuery(name="mensagem.porGrupoTipoEspecial", query="select u from Mensagem u where u.grupo = :grupo and u.tipoMensagem != 'NORMAL' order by u.data desc"),
+	@NamedQuery(name="mensagem.porGrupo", 
+		query="select u.id, u.grupo, u.data, u.titulo, u.descricao, u.tipoMensagem, u.version " +
+			  "from Mensagem u where u.grupo = :grupo order by u.data desc"),
+	@NamedQuery(name="mensagem.porGrupoTipoEspecial", 
+		query="select u.id, u.grupo, u.data, u.titulo, u.descricao, u.tipoMensagem, u.version " +
+			  "from Mensagem u where u.grupo = :grupo and u.tipoMensagem != 'NORMAL' order by u.data desc"),
 	@NamedQuery(name="mensagem.porDestinatario", 
 		query="Select distinct m.mensagem " +
 				"from MensagemDestinatario m " +

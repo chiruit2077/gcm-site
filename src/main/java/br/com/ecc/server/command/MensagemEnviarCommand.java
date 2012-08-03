@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import br.com.ecc.client.util.StringUtil;
+import br.com.ecc.core.mvp.infra.exception.WebException;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Mensagem;
 import br.com.ecc.model.MensagemDestinatario;
@@ -31,103 +32,132 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 	@Override
 	@Transactional
 	public MensagemVO call() throws Exception {
-		final EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
-		cmdEmail.setAssunto(mensagemVO.getMensagem().getGrupo().getNome() + " - " + mensagemVO.getMensagem().getTitulo());
-		//cmdEmail.setNaoEsperar(true);
-		// se remover o cometario acima... arrumar a confirmacao de enviado
+		SaveEntityCommand cmdSave = injector.getInstance(SaveEntityCommand.class);
 		
+		EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
+		cmdEmail.setAssunto(mensagemVO.getMensagem().getGrupo().getNome() + " - " + mensagemVO.getMensagem().getTitulo());
 		String sHTML = "";
 		boolean ok;
-		for (int i=0; i<mensagemVO.getListaDestinatarios().size(); i++) {
-			final MensagemDestinatario d = mensagemVO.getListaDestinatarios().get(i);
-			ok = true;
-			if(d.getDataEnvio()!=null){
-				ok = false;
-			}
-			if(reenvio){
+		
+		if( String.valueOf(mensagemVO.getMensagem().getMensagem()).indexOf(TipoVariavelEnum.NOME_ENCONTRISTA.getTag())<0 &&
+			String.valueOf(mensagemVO.getMensagem().getMensagem()).indexOf(TipoVariavelEnum.DADOS_USUARIO.getTag())<0){
+			sHTML = substituiTagNome(mensagemVO.getMensagem(), null, null);
+			cmdEmail.setMensagem(sHTML);
+			cmdEmail.setDestinatariosCopiaOculta("");
+			for (MensagemDestinatario d : mensagemVO.getListaDestinatarios()) {
 				ok = true;
-			}
-			if(ok){
-				if(d.getCasal()!=null){
-					if(d.getCasal().getEle().getEmail()!=null && !d.getCasal().getEle().getEmail().equals("")){
-						sHTML = substituiTagNome(mensagemVO.getMensagem(), d.getCasal(), d.getCasal().getEle());
-						cmdEmail.setMensagem(sHTML);
-						cmdEmail.setDestinatario(d.getCasal().getEle().getEmail());
-						try { 
-							Thread t = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										cmdEmail.call();
-										marcarEnviado(d);
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							t.start();
-						} catch (Exception e) {
-							e.printStackTrace();
+				if(d.getDataEnvio()!=null){
+					ok = false;
+				}
+				if(reenvio){
+					ok = true;
+				}
+				if(ok){
+					if(d.getCasal()!=null){
+						if(d.getCasal().getEle().getEmail()!=null && !d.getCasal().getEle().getEmail().equals("")){
+							if(!cmdEmail.getDestinatariosCopiaOculta().equals("")){
+								cmdEmail.setDestinatariosCopiaOculta(cmdEmail.getDestinatariosCopiaOculta() + ",");
+							}
+							cmdEmail.setDestinatariosCopiaOculta(cmdEmail.getDestinatariosCopiaOculta() + d.getCasal().getEle().getEmail());
 						}
-					}
-					if(d.getCasal().getEla().getEmail()!=null && !d.getCasal().getEla().getEmail().equals("")){
-						sHTML = substituiTagNome(mensagemVO.getMensagem(), d.getCasal(), d.getCasal().getEla());
-						cmdEmail.setMensagem(sHTML);
-
-						cmdEmail.setDestinatario(d.getCasal().getEla().getEmail());
-						try { 
-							Thread t = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										cmdEmail.call();
-										marcarEnviado(d);
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							t.start();
-						} catch (Exception e) {
-							e.printStackTrace();
+						if(d.getCasal().getEla().getEmail()!=null && !d.getCasal().getEla().getEmail().equals("")){
+							if(!cmdEmail.getDestinatariosCopiaOculta().equals("")){
+								cmdEmail.setDestinatariosCopiaOculta(cmdEmail.getDestinatariosCopiaOculta() + ",");
+							}
+							cmdEmail.setDestinatariosCopiaOculta(cmdEmail.getDestinatariosCopiaOculta() + d.getCasal().getEla().getEmail());
 						}
-					}
-				} else {
-					if(d.getPessoa().getEmail()!=null && !d.getPessoa().getEmail().equals("")){
-						sHTML = substituiTagNome(mensagemVO.getMensagem(), null, d.getPessoa());
-						cmdEmail.setMensagem(sHTML);
-						cmdEmail.setDestinatario(d.getPessoa().getEmail());
-						try { 
-							Thread t = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										cmdEmail.call();
-										marcarEnviado(d);
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							t.start();
-						} catch (Exception e) {
-							e.printStackTrace();
+					} else {
+						if(d.getPessoa().getEmail()!=null && !d.getPessoa().getEmail().equals("")){
+							if(!cmdEmail.getDestinatariosCopiaOculta().equals("")){
+								cmdEmail.setDestinatariosCopiaOculta(cmdEmail.getDestinatariosCopiaOculta() + ",");
+							}
+							cmdEmail.setDestinatariosCopiaOculta(cmdEmail.getDestinatariosCopiaOculta() + d.getPessoa().getEmail());
 						}
 					}
 				}
 			}
+			if(!cmdEmail.getDestinatariosCopiaOculta().equals("")){
+				try {
+					cmdEmail.call();
+					
+					MensagemDestinatario d;
+					for (int i=0; i<mensagemVO.getListaDestinatarios().size(); i++) {
+						cmdSave = injector.getInstance(SaveEntityCommand.class);
+						d = mensagemVO.getListaDestinatarios().get(i);
+						d.setDataEnvio(new Date());
+						d.setDataConfirmacao(null);
+						
+						cmdSave = injector.getInstance(SaveEntityCommand.class);
+						cmdSave.setBaseEntity(d);
+						d = (MensagemDestinatario) cmdSave.call();
+						
+						mensagemVO.getListaDestinatarios().set(i, d);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new WebException(e.getMessage());
+				}
+			}
+		} else {
+			//cmdEmail.setNaoEsperar(true);
+			// se remover o cometario acima... arrumar a confirmacao de enviado
+			
+			for (int i=0; i<mensagemVO.getListaDestinatarios().size(); i++) {
+				MensagemDestinatario d = mensagemVO.getListaDestinatarios().get(i);
+				ok = true;
+				if(d.getDataEnvio()!=null){
+					ok = false;
+				}
+				if(reenvio){
+					ok = true;
+				}
+				if(ok){
+					try {
+						ok = false;
+						if(d.getCasal()!=null){
+							if(d.getCasal().getEle().getEmail()!=null && !d.getCasal().getEle().getEmail().equals("")){
+								sHTML = substituiTagNome(mensagemVO.getMensagem(), d.getCasal(), d.getCasal().getEle());
+								cmdEmail.setMensagem(sHTML);
+								cmdEmail.setDestinatario(d.getCasal().getEle().getEmail());
+								cmdEmail.call();
+								ok = true;
+							}
+							if(d.getCasal().getEla().getEmail()!=null && !d.getCasal().getEla().getEmail().equals("")){
+								sHTML = substituiTagNome(mensagemVO.getMensagem(), d.getCasal(), d.getCasal().getEla());
+								cmdEmail.setMensagem(sHTML);
+								cmdEmail.setDestinatario(d.getCasal().getEla().getEmail());
+								cmdEmail.call();
+								ok = true;
+							}
+						} else {
+							if(d.getPessoa().getEmail()!=null && !d.getPessoa().getEmail().equals("")){
+								sHTML = substituiTagNome(mensagemVO.getMensagem(), null, d.getPessoa());
+								cmdEmail.setMensagem(sHTML);
+								cmdEmail.setDestinatario(d.getPessoa().getEmail());
+								cmdEmail.call();
+								ok = true;
+							}
+						}
+						
+						if(ok){
+							d.setDataEnvio(new Date());
+							d.setDataConfirmacao(null);
+							
+							cmdSave = injector.getInstance(SaveEntityCommand.class);
+							cmdSave.setBaseEntity(d);
+							mensagemVO.getListaDestinatarios().set(i, (MensagemDestinatario) cmdSave.call());
+						}
+					} catch (Exception e) {
+						System.out.println("Erro enviando email para:" + cmdEmail.getDestinatario());
+						e.printStackTrace();
+					}
+				}
+			}
+			
 		}
 		return mensagemVO;
 	}
 
-	private void marcarEnviado(MensagemDestinatario d){
-		d.setDataEnvio(new Date());
-		d.setDataConfirmacao(null);
-		SaveEntityCommand cmdSave = injector.getInstance(SaveEntityCommand.class);
-		cmdSave.setBaseEntity(d);
-//		mensagemVO.getListaDestinatarios().set(i, (MensagemDestinatario) cmdSave.call());
-	}
-	
 	public String substituiTagNome(Mensagem mensagem, Casal c, Pessoa p) throws Exception {
 		String sHTML = String.valueOf(mensagem.getMensagem());
 		String nome = "", dadosUsuario = "";
@@ -137,7 +167,7 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 			preParametros += "&c="+c.getId();
 			
 			dadosUsuario = dadosUsuario(p);
-		} else {
+		} else if(p!=null){
 			nome = p.getApelido();
 			preParametros += "&p="+p.getId();
 			

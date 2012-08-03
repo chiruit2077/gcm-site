@@ -106,7 +106,6 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 		}
 		
 		//resonsaveis pro convites
-		vo.setListaAgrupamentoVOEncontro(new ArrayList<AgrupamentoVO>());
 		q = em.createNamedQuery("encontroConviteResponsavel.porEncontro");
 		q.setParameter("encontro", vo.getEncontro());
 		vo.setListaResponsavelConvite(q.getResultList());

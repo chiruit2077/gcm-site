@@ -28,7 +28,11 @@ public class CasalFichaMensagemEnvioCommand implements Callable<EncontroInscrica
 	@Override
 	@Transactional
 	public EncontroInscricao call() throws Exception {
-		Query q = em.createNamedQuery("mensagemDestinatario.porMensagem");
+		Query q;
+		
+		mensagem = em.find(Mensagem.class, mensagem.getId());
+		
+		q = em.createNamedQuery("mensagemDestinatario.porMensagem");
 		q.setParameter("mensagem", mensagem);
 		List<MensagemDestinatario> lista = q.getResultList();
 		

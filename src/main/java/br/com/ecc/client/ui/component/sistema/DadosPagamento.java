@@ -253,20 +253,23 @@ public class DadosPagamento extends Composite {
 		
 		double valor = 0;
 		valor = entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue();
-		if(entidadeEditada.getListaPagamento().size()==0 && casal.getId().equals(entidadeEditada.getEncontroInscricao().getCasal().getId())){
-			if(entidadeEditada.getEncontroInscricao().getEncontro().getValorInscricao()!=null &&
-					entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao()!=null){
-				EncontroInscricaoPagamento p = new EncontroInscricaoPagamento();
-				p.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
-				p.setDataVencimento(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
-				p.setParcela(0);
-				p.setValor(new BigDecimal(entidadeEditada.getEncontroInscricao().getEncontro().getValorInscricao().doubleValue()+(entidadeEditada.getEncontroInscricao().getCodigo().doubleValue()/100)));
-				entidadeEditada.getListaPagamento().add(p);
-			} else {
-				for (EncontroInscricaoPagamento pagamento: entidadeEditada.getListaPagamento()) {
-					if(pagamento.getParcela()==0 && pagamento.getDataPagamento()==null){
-						entidadeEditada.getListaPagamento().remove(pagamento);
-						break;
+		if(entidadeEditada.getListaPagamento().size()==0){
+			if( (entidadeEditada.getEncontroInscricao().getCasal()!=null && casal.getId().equals(entidadeEditada.getEncontroInscricao().getCasal().getId())) || 
+				(entidadeEditada.getEncontroInscricao().getPessoa()!=null && usuario.getPessoa().getId().equals(entidadeEditada.getEncontroInscricao().getPessoa().getId()))){
+				if(entidadeEditada.getEncontroInscricao().getEncontro().getValorInscricao()!=null &&
+						entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao()!=null){
+					EncontroInscricaoPagamento p = new EncontroInscricaoPagamento();
+					p.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+					p.setDataVencimento(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
+					p.setParcela(0);
+					p.setValor(new BigDecimal(entidadeEditada.getEncontroInscricao().getEncontro().getValorInscricao().doubleValue()+(entidadeEditada.getEncontroInscricao().getCodigo().doubleValue()/100)));
+					entidadeEditada.getListaPagamento().add(p);
+				} else {
+					for (EncontroInscricaoPagamento pagamento: entidadeEditada.getListaPagamento()) {
+						if(pagamento.getParcela()==0 && pagamento.getDataPagamento()==null){
+							entidadeEditada.getListaPagamento().remove(pagamento);
+							break;
+						}
 					}
 				}
 			}
