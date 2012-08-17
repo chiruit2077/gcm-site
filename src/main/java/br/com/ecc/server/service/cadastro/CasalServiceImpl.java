@@ -13,6 +13,7 @@ import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.model.tipo.TipoCasalEnum;
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.vo.CasalOpcaoRelatorioVO;
 import br.com.ecc.model.vo.CasalParamVO;
@@ -61,7 +62,7 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 				} else if(casalParamVO.getTipoInscricao()!=null && casalParamVO.getTipoInscricao().equals(ei.getTipo())){
 					ok = true;
 				}
-				if(ok && ei.getCasal()!=null){
+				if(ok && ei.getCasal()!=null && ei.getTipoConfirmacao().equals(TipoConfirmacaoEnum.CONFIRMADO)){
 					listaCasal.add(ei.getCasal());
 				}
 			}
