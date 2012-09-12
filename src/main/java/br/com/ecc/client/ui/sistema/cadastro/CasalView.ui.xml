@@ -82,7 +82,7 @@
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass">
+				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass">
 				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
 					<g:FlowPanel ui:field="formularioFlowPanel" width="100%" styleName="{style.formulario}">
 						<!-- ELE -->
@@ -171,11 +171,11 @@
 								<tr>
 									<td class="portal-formLabelNormal">Alergias:</td>
 									<td colspan="2">
-										<g:TextBox ui:field="eleAlergiaTextBox" width="250px" />
+										<g:TextBox ui:field="eleAlergiaTextBox" width="230px" />
 									</td>
 									<td class="portal-formLabelNormal">Necessidades especiais:</td>
 									<td colspan="3">
-										<g:TextBox ui:field="eleNecessidadesTextBox" width="265px" />
+										<g:TextBox ui:field="eleNecessidadesTextBox" width="245px" />
 									</td>
 								</tr>
 							</table>
@@ -267,11 +267,11 @@
 								<tr>
 									<td class="portal-formLabelNormal">Alergias:</td>
 									<td colspan="2">
-										<g:TextBox ui:field="elaAlergiaTextBox" width="250px" />
+										<g:TextBox ui:field="elaAlergiaTextBox" width="230px" />
 									</td>
 									<td class="portal-formLabelNormal">Necessidades especiais:</td>
 									<td colspan="3">
-										<g:TextBox ui:field="elaNecessidadesTextBox" width="265px" />
+										<g:TextBox ui:field="elaNecessidadesTextBox" width="245px" />
 									</td>
 								</tr>
 							</table>
@@ -279,7 +279,7 @@
 						
 						<!-- CASAL -->
 						<g:HTMLPanel styleName="{style.casal}">
-							<table cellpadding="2" cellspacing="0" align="center" width="100%">
+							<table cellpadding="2" cellspacing="0" align="center" width="100%" border="0" >
 								<tr class="{style.tituloDados}">
 									<td>INFORMAÇÔES DO CASAL</td>
 									<td align="center" width="300px">FOTO DO CASAL</td>

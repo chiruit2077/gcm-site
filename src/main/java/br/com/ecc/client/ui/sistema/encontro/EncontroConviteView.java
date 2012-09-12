@@ -467,6 +467,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			hp.setSpacing(1);
 
 			if(convidador){
+				/*
 				exibeEditar = false;
 				if(presenter.getEncontroSelecionado().getQuantidadeAfilhados()!=null && 
 				   convidar<=presenter.getEncontroSelecionado().getQuantidadeAfilhados()){
@@ -474,6 +475,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 						exibeEditar = true;
 					}
 				}
+				*/
 			}
 			
 			if(podeEditar || convidador){
@@ -551,8 +553,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 				desistencia++;
 				encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalGrayLineThrough");
-			}
-			
+			} 
 			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
 				recusados++;
 				encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalGrayLineThrough");

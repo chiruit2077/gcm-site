@@ -29,7 +29,7 @@
 				</tr>
 			</table>
 		</g:HTMLPanel>
-		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center" visible="false">
+		<g:HorizontalPanel styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
 			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center" >
 				<g:HTMLPanel width="100%">
 					<table cellpadding="3" cellspacing="0" border="0">
@@ -37,14 +37,22 @@
 							<td>
 								<g:CheckBox ui:field="exibeDesistenciaCheckBox" text="Exibir desistências"/>
 							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:HorizontalPanel> 
+			<g:VerticalPanel ui:field="centralPanel"  styleName="formulario-opcoes" horizontalAlignment="center"  visible="false">
+				<g:HTMLPanel width="100%">
+					<table cellpadding="3" cellspacing="0" border="0">
+						<tr>
 							<td>
 								<g:Button ui:field="novoButton">Adicionar inscrição</g:Button>
 							</td>
 						</tr>
 					</table>
 				</g:HTMLPanel>
-			</g:HorizontalPanel> 
-		</g:VerticalPanel>
+			</g:VerticalPanel> 
+		</g:HorizontalPanel>
 		<g:HorizontalPanel spacing="2" width="100%">
 			<g:Label ui:field="totalLabel" styleName="{style.total}" />
 			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>

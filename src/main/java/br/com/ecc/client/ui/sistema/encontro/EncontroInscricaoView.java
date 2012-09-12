@@ -568,15 +568,16 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			row++;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 				desistencia++;
-			}
-			if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.COORDENADOR)){
-				coordenador++;
-			} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
-				padrinho++;
-			} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.APOIO)){
-				apoio++;
-			} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
-				afilhado++;
+			} else {
+				if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.COORDENADOR)){
+					coordenador++;
+				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
+					padrinho++;
+				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.APOIO)){
+					apoio++;
+				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
+					afilhado++;
+				}
 			}
 		}
 		String totais = "";

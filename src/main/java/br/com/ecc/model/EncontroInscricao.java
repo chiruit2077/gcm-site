@@ -28,11 +28,14 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 	@NamedQuery(name="encontroInscricao.porEncontro", query="select u from EncontroInscricao u where u.encontro = :encontro order by u.tipo"),
 	@NamedQuery(name="encontroInscricao.porEncontroConfirmados", 
 		query="select u from EncontroInscricao u " +
-				"where  u.encontro = :encontro and" +
+				"where  u.encontro = :encontro and " +
 				"		( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " +
 				"order by u.tipo"),
 	@NamedQuery(name="encontroInscricao.porEncontroConvidados", 
-		query="select u.casal from EncontroInscricao u where u.encontro = :encontro and u.tipo = 'AFILHADO' "),
+		query="select u.casal from EncontroInscricao u " +
+			  "where u.encontro = :encontro and " +
+			  "      u.tipo = 'AFILHADO' and " +
+				"	( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " ),
 	@NamedQuery(name="encontroInscricao.porEncontroCasal", 
 		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal order by u.id desc")
 })

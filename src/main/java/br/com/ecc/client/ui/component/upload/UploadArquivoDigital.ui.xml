@@ -15,7 +15,7 @@
   				<tr>
   					<td>Arquivo:</td>
   					<td>
-  						<g:FileUpload ui:field="arquivo" name="uploadItem" width="260px" />
+  						<g:FileUpload ui:field="arquivo" name="uploadItem"/>
   					</td>
   				</tr>
   				<tr style="display: none;">
