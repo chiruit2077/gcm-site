@@ -36,6 +36,8 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 		
 		EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
 		cmdEmail.setAssunto(mensagemVO.getMensagem().getGrupo().getNome() + " - " + mensagemVO.getMensagem().getTitulo());
+		cmdEmail.setFecharConexao(false);
+		
 		String sHTML = "";
 		boolean ok;
 		
@@ -99,9 +101,7 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 				}
 			}
 		} else {
-			//cmdEmail.setNaoEsperar(true);
-			// se remover o cometario acima... arrumar a confirmacao de enviado
-			
+			cmdEmail.setNaoEsperar(true);
 			for (int i=0; i<mensagemVO.getListaDestinatarios().size(); i++) {
 				MensagemDestinatario d = mensagemVO.getListaDestinatarios().get(i);
 				ok = true;
