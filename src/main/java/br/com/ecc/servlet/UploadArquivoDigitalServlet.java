@@ -6,6 +6,7 @@ import br.com.ecc.server.command.ArquivoDigitalSalvarCommand;
 import br.com.ecc.server.command.basico.GetEntityCommand;
 import br.com.ecc.server.service.core.multipart.FileRequest;
 import br.com.ecc.server.service.core.multipart.MultipartRequest;
+import br.com.ecc.server.util.ImageUtil;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -16,8 +17,7 @@ import com.google.inject.persist.Transactional;
 public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 
 	private static final long serialVersionUID = 800508960523259729L;
-	@Inject
-	Injector injector;
+	@Inject Injector injector;
 
 	@Override
 	@Transactional
@@ -29,18 +29,23 @@ public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 		String arquivoIdParam = multipartRequest.getParam("hiddenIdItem");
 		if (file != null && descricao != null) {
 			try {
+				byte[] dadosArquivo = file.getContent();
 				if(arquivoIdParam != null && !"".equals(arquivoIdParam.trim())) {
 					GetEntityCommand getCommand = injector.getInstance(GetEntityCommand.class);
 					getCommand.setClazz(ArquivoDigital.class);
 					getCommand.setId(new Integer(arquivoIdParam));
 					arquivoDigital = (ArquivoDigital) getCommand.call();
-				}
-				else {
+				} else {
 					arquivoDigital = new ArquivoDigital();
 				}
 				arquivoDigital.setMimeType(file.getContentType());
 				arquivoDigital.setTamanho(file.getContent().length);
-				arquivoDigital.setDados(file.getContent());
+				arquivoDigital.setDados(dadosArquivo);
+				if(file.getContentType().toUpperCase().contains("image")){
+					arquivoDigital.setThumb(ImageUtil.scale(dadosArquivo,150));
+				} else {
+					arquivoDigital.setThumb(null);
+				}
 				arquivoDigital.setNomeArquivo(file.getFileName());
 				arquivoDigital.setDescricao(descricao);
 				if (isDecorate != null && !"".equals(isDecorate)){
@@ -48,6 +53,7 @@ public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 						decorateOutput = false;
 					}
 				}
+				
 
 				ArquivoDigitalSalvarCommand salvarCmd = injector.getInstance(ArquivoDigitalSalvarCommand.class);
 				salvarCmd.setArquivoDigital(arquivoDigital);

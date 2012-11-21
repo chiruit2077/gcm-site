@@ -1,5 +1,8 @@
 package br.com.ecc.client.ui.component.upload;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.ecc.client.service.UploadProgressService;
 import br.com.ecc.client.service.UploadProgressServiceAsync;
 import br.com.ecc.client.ui.component.upload.event.UploadEvent;
@@ -87,12 +90,11 @@ public final class FileSubmit extends Composite {
 			if(showProgress){
 				timerProgress.cancel();
 			}
-			serviceUpload.getProgress(new AsyncCallback<UploadedFile>() {
+			serviceUpload.getProgress(new AsyncCallback<List<UploadedFile>>() {
 				@Override
-				public void onSuccess(UploadedFile uf) {
-					UploadEvent evento = new UploadEvent();
-					evento.setFilePath(uf.getPath() + uf.getFilename());
-					fireEvent(evento);
+				public void onSuccess(List<UploadedFile> lista) {
+					UploadedFile uf = lista.get(0);
+					fireEvent(new UploadEvent());
 					if(showProgress){
 						uploadProgressBar.atualiza(uf);
 					}
@@ -111,13 +113,11 @@ public final class FileSubmit extends Composite {
 				Window.alert("Selecione um arquivo");
 				return;
 			}
+			initialize();
 			uploadedFile = new UploadedFile();
-			uploadedFile.setFilename(filename);
-			uploadedFile.setProgress(0);
-			form.submit();
+			uploadedFile.setNomeArquivo(filename);
 			if(showProgress){
-				initialize(uploadedFile);
-				uploadProgressBar.initialize(filename);
+				uploadProgressBar.initialize(filename, true);
 				timerProgress = new Timer() {
 					@Override
 					public void run() {
@@ -127,16 +127,29 @@ public final class FileSubmit extends Composite {
 				};
 				timerProgress.schedule(1000);
 			}
+			List<UploadedFile> lista = new ArrayList<UploadedFile>();
+			lista.add(uploadedFile);
+			serviceUpload.setLista(lista, new AsyncCallback<Void>() {
+				@Override
+				public void onFailure(Throwable arg0) {
+				}
+				
+				@Override
+				public void onSuccess(Void arg0) {
+					form.submit();
+				}
+			});
 		}
 	}
 	private void getProgress() {
-		serviceUpload.getProgress(new AsyncCallback<UploadedFile>() {
+		serviceUpload.getProgress(new AsyncCallback<List<UploadedFile>>() {
 			@Override
-			public void onSuccess(UploadedFile uploadedFile) {
+			public void onSuccess(List<UploadedFile> lista) {
+				UploadedFile uploadedFile = lista.get(0);
 				setUploadedFile(uploadedFile);
 				if(uploadedFile!=null){
 					uploadProgressBar.atualiza(uploadedFile);
-					if(uploadedFile.getProgress()>=100){
+					if(uploadedFile.getProgresso()>=100){
 						if(showProgress){
 							timerProgress.cancel();
 						}
@@ -148,8 +161,8 @@ public final class FileSubmit extends Composite {
 			}
 		});
 	}
-	private void initialize(UploadedFile uploadedFile) {
-		serviceUpload.initialize(uploadedFile, new AsyncCallback<Void>() {
+	private void initialize() {
+		serviceUpload.initialize(new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
 			}

@@ -9,8 +9,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("uploadprogress")
 public interface UploadProgressService extends RemoteService {
-	public int countFiles(String uploadDirectory);
-	public List<UploadedFile> readFiles(String uploadDirectory);
-	public UploadedFile getProgress();
-	void initialize(UploadedFile uploadedFile);
+	public void initialize() throws Exception;
+	public List<UploadedFile> getProgress() throws Exception;
+	public void setLista(List<UploadedFile> lista) throws Exception;
+	public Integer gravaArquivoDigital(UploadedFile uf, Boolean resize) throws Exception;
 }

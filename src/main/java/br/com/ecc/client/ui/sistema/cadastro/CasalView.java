@@ -8,6 +8,7 @@ import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.sistema.DadosPagamento;
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.ui.component.upload.UploadArquivoDigital;
+import br.com.ecc.client.ui.component.upload.UploadImagePreview;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.FlexTableUtil.TipoColuna;
 import br.com.ecc.client.util.LabelTotalUtil;
@@ -181,6 +182,11 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	//dados do pagamento
 	@UiField HTMLPanel pagamentoHTMLPanel;
 	@UiField DadosPagamento dadosPagamentoComponent;
+	
+	
+	
+	@UiField DialogBox imageDialogBox;
+	@UiField UploadImagePreview uploadImagePreview;
 	
 	
 	private CasalVO entidadeEditada;
@@ -421,6 +427,12 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiHandler("fecharImage")
 	public void fecharImageClickHandler(ClickEvent event){
 		presenter.fechar();
+	}
+	@UiHandler("imagemButton")
+	public void imagemButtonClickHandler(ClickEvent event){
+		uploadImagePreview.setMultiple(true);
+		imageDialogBox.center();
+		imageDialogBox.show();
 	}
 	
 	@UiHandler("salvarButton")

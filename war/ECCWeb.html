@@ -137,6 +137,169 @@
 				});
 				return false;
 			}
+			
+			
+			function verificaHTML5(){
+				if(window.File && window.FileReader && window.FileList && window.Blob){
+					try {
+						var aFileParts = ["<a id=\"a\"><b id=\"b\">hey!<\/b><\/a>"];
+						var oMyBlob = new Blob(aFileParts, { "type" : "text\/xml" });
+						return true;
+					} catch(e) {
+						return false;
+					}
+				}
+				return false;
+			}
+			function getFileNames(what) {
+				var nomes = "";
+				for(var i = 0; i < what.files.length; i++) {
+					nomes += what.files[i].name + ",";
+				}
+				return nomes;
+			}
+			
+			var reader = [];
+			var idPreviewer=[], resampleSize=[], fileType=[], url=[];
+			function preview(what,i,id,size,u) {
+				reader[i] = new FileReader();
+				idPreviewer[i] = id;
+				resampleSize[i]=size;
+				fileType[i]=what.files[i].type;
+				url[i]=u;
+		        var accept = ["image/png","image/jpeg","image/jpg","image/gif"];
+		        if (accept.indexOf(what.files[0].type) > -1) {
+		            if(what.files && what.files[0]){
+		            	reader[i].onload = (function(indice) {
+	                        return function(e) {
+	                        	if(resampleSize[indice]==null){
+	        						document.getElementById(idPreviewer[indice]).src=e.target.result;
+	        						enviaDados(reader.result, indice);
+	        					} else {
+	        						Resample(e.target.result, resampleSize[indice], null, (function(indice) {
+	        	                        return function(data) {
+	        	                        	document.getElementById(idPreviewer[indice]).src = data;
+	        	        					enviaDados(data, indice);
+	        	                          };
+	        	                        })(indice));
+	        					}
+	                          };
+	                        })(i);
+		            	reader[i].readAsDataURL(what.files[i]);
+		            }
+		        }
+			}
+			function enviaDados(data, indicePreview){
+				var preData = dataURItoBlob(data, indicePreview);
+				var formData = new FormData();
+		        var xhr = new XMLHttpRequest();
+		        xhr.open('POST', url[indicePreview]);
+	            formData.append("fileUpload", preData);
+		        xhr.send(formData);
+			}
+			function dataURItoBlob(dataURI, indicePreview) {
+			    var binary = atob(dataURI.split(',')[1]);
+			    var array = [];
+			    for(var i = 0; i < binary.length; i++) {
+			        array.push(binary.charCodeAt(i));
+			    }
+				try {
+				    return new Blob([new Uint8Array(array)], {type: fileType[indicePreview]});
+				} catch (e){
+					var oBuilder = new BlobBuilder();
+					oBuilder.append(data);
+					return oBuilder.getBlob(new Uint8Array(array));
+				}
+			}
+			/*
+			var reader = new FileReader();
+			var idPreviewer, resampleSize=null, fileType, url;
+			function preview(what,i,id,size,u) {
+				idPreviewer = id;
+				resampleSize=size;
+				fileType=what.files[0].type;
+				url=u;
+		        var accept = ["image/png","image/jpeg","image/jpg","image/gif"];
+		        if (accept.indexOf(what.files[0].type) > -1) {
+		            if(what.files && what.files[0]){
+	                    reader.onload = imageHandler;
+	                    reader.readAsDataURL(what.files[0]);
+		            }
+		        }
+			}
+			
+			function enviaDados(data){
+				var preData = dataURItoBlob(data);
+				var formData = new FormData();
+		        var xhr = new XMLHttpRequest();
+		        xhr.open('POST', url);
+	            formData.append("fileUpload", preData);
+		        xhr.send(formData);
+			}
+			function dataURItoBlob(dataURI) {
+			    var binary = atob(dataURI.split(',')[1]);
+			    var array = [];
+			    for(var i = 0; i < binary.length; i++) {
+			        array.push(binary.charCodeAt(i));
+			    }
+				try {
+				    return new Blob([new Uint8Array(array)], {type: fileType});
+				} catch (e){
+					var oBuilder = new BlobBuilder();
+					oBuilder.append(data);
+					return oBuilder.getBlob(new Uint8Array(array));
+				}
+			}
+			function imageHandler(e2){
+				if(resampleSize==null){
+					document.getElementById(idPreviewer).src=reader.result;
+					enviaDados(reader.result);
+				} else {
+					Resample(reader.result, resampleSize, null, resampled);
+				}
+			}
+			function resampled(data) {
+				document.getElementById(idPreviewer).src = data;
+				enviaDados(data);
+		    }
+			*/
+			var Resample = (function (canvas) {
+				 function Resample(img, width, height, onresample) {
+					  var load = typeof img == "string", i = load || img;
+					  if (load) {
+						   i = new Image;
+						   i.onload = onload;
+						   i.onerror = onerror;
+					  }
+					  i._onresample = onresample;
+					  i._width = width;
+					  i._height = height;
+					  load ? (i.src = img) : onload.call(img);
+				 }
+				 function onerror() {
+				  	  throw ("not found: " + this.src);
+				 }
+				 function onload() {
+					  var img = this, width = img._width, height = img._height, type=img._type, onresample = img._onresample;
+					  if(width==null && height==null){
+						  width = img.width;
+					  }
+					  width == null && (width = round(img.width * height / img.height));
+					  height == null && (height = round(img.height * width / img.width));
+					  delete img._onresample;
+					  delete img._width;
+					  delete img._height;
+					  canvas.width = width;
+					  canvas.height = height;
+					  context.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+					  onresample(canvas.toDataURL());
+				 }
+				 
+				 var context = canvas.getContext("2d"), round = Math.round;
+				 return Resample;
+			}(
+				this.document.createElement("canvas"))
+			 );
 		</script>
 		
 	</head>

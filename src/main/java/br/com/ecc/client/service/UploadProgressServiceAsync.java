@@ -7,8 +7,8 @@ import br.com.ecc.client.ui.component.upload.UploadedFile;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface UploadProgressServiceAsync {
-	void countFiles(String uploadDirectory, AsyncCallback<Integer> asyncCallback);
-	void readFiles(String uploadDirectory, AsyncCallback<List<UploadedFile>> asyncCallback);
-	void getProgress(AsyncCallback<UploadedFile> asyncCallback);
-	void initialize(UploadedFile uploadedFile, AsyncCallback<Void> asyncCallback);
+	void getProgress(AsyncCallback<List<UploadedFile>> asyncCallback);
+	void initialize(AsyncCallback<Void> asyncCallback);
+	void setLista(List<UploadedFile> lista, AsyncCallback<Void> asyncCallback);
+	void gravaArquivoDigital(UploadedFile uf, Boolean resize, AsyncCallback<Integer> asyncCallback);
 }

@@ -66,6 +66,14 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		cmdVO.setEncontro(encontro);
 		EncontroVO encontroVO = cmdVO.call();
 		
+		List<EncontroInscricao> lei = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao ei : encontroVO.getListaInscricao()) {
+			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
+				lei.add(ei);
+			}
+		}
+		encontroVO.setListaInscricao(lei);
+		
 		EncontroPlanilhaCommand cmdEP = injector.getInstance(EncontroPlanilhaCommand.class);
 		cmdEP.setEncontro(encontro);
 		cmdEP.setEncontroPeriodo(encontroPeriodo);
@@ -242,7 +250,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 					planilhaRelatorio.getNos().add(nos);
 					i++;
 				}
-				while(i<60){
+				while(i<70){
 					planilhaRelatorio.getParticipante().add(null);
 					planilhaRelatorio.getPapel().add(null);
 					planilhaRelatorio.getPadrinho().add(false);

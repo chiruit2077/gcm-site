@@ -23,6 +23,7 @@ public class DownloadArquivoDigitalServlet extends DownloadFileServlet{
 		Integer arquivoId = ServletUtil.getParameterAsInteger(req, "id");
 		if(arquivoId != null) {
 			Boolean forceDownload = ServletUtil.getParameterAsBoolean(req, "forceDownload");
+			Boolean thumb = ServletUtil.getParameterAsBoolean(req, "thumb");
 			if(forceDownload == null) {
 				forceDownload = false;
 			}
@@ -31,7 +32,11 @@ public class DownloadArquivoDigitalServlet extends DownloadFileServlet{
 				entityCmd.setClazz(ArquivoDigital.class);
 				entityCmd.setId(arquivoId);
 				ArquivoDigital arquivo = (ArquivoDigital) entityCmd.call();
-				writeResponse(resp, arquivo.getNomeArquivo(), arquivo.getTamanho(), arquivo.getMimeType(), arquivo.getDados(), forceDownload);
+				if(thumb && arquivo.getThumb()!=null){
+					writeResponse(resp, arquivo.getNomeArquivo(), arquivo.getTamanho(), arquivo.getMimeType(), arquivo.getThumb(), forceDownload);
+				} else {
+					writeResponse(resp, arquivo.getNomeArquivo(), arquivo.getTamanho(), arquivo.getMimeType(), arquivo.getDados(), forceDownload);
+				}
 			} catch (Exception e) {
 				throw new WebRuntimeException("Erro ao realizar o download do arquivo: " + arquivoId + ". " + e.getMessage());
 			}

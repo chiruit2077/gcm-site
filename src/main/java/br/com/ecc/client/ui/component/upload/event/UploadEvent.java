@@ -6,7 +6,6 @@ public class UploadEvent extends GwtEvent<UploadEventHandler>{
 
 	
 	public static Type<UploadEventHandler> TYPE = new Type<UploadEventHandler>();
-	private String filePath;
 	
 	@Override
 	protected void dispatch(UploadEventHandler handler) {
@@ -15,11 +14,5 @@ public class UploadEvent extends GwtEvent<UploadEventHandler>{
 	@Override
 	public Type<UploadEventHandler> getAssociatedType() {
 		return TYPE;
-	}
-	public String getFilePath() {
-		return filePath;
-	}
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
 	}
 }

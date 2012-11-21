@@ -72,6 +72,7 @@
 							</td>
 							<td align="right">
 								<g:Button ui:field="novoButton" text="Adicionar casal"  visible="false"/>
+								<g:Button ui:field="imagemButton" text="Adicionar imagem"/>
 							</td>
 						</tr>
 					</table>
@@ -81,6 +82,12 @@
 			<g:FlexTable ui:field="casalFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
+		    <g:DialogBox ui:field="imageDialogBox" visible="false"
+				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass">
+				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+				    <u:UploadImagePreview ui:field="uploadImagePreview"/>
+			    </g:VerticalPanel>
+			</g:DialogBox>
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
 				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass">
 				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">

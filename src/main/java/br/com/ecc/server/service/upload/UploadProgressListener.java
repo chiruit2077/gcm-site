@@ -1,5 +1,7 @@
 package br.com.ecc.server.service.upload;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.ProgressListener;
@@ -11,14 +13,12 @@ public final class UploadProgressListener implements ProgressListener {
 
 	private static final double COMPLETE_PERECENTAGE = 100d;
 	private int percentage = -1;
-	private String fileName;
-	private String path;
 	private HttpSession session;
+	private String fileName;
 	
-	public UploadProgressListener(String path, String fileName, HttpSession session) {
-	    this.fileName = fileName;
+	public UploadProgressListener(HttpSession session, String fileName) {
 	    this.session = session;
-	    this.path = path;
+	    this.fileName=fileName;
 	  }
 
 	
@@ -32,11 +32,15 @@ public final class UploadProgressListener implements ProgressListener {
 
 		this.percentage = percentage;
 
-		UploadedFile uploadedFile = SessionHelper.getUploadFile(session);
-		uploadedFile.setFilename(this.fileName);
-		uploadedFile.setPath(this.path);
-		uploadedFile.setProgress(percentage);
-		
-		SessionHelper.setUploadFile(session, uploadedFile);
+		List<UploadedFile> listaUploadedFile = SessionHelper.getUploadFile(session);
+		for (int i=0; i<listaUploadedFile.size(); i++) {
+			UploadedFile uf = listaUploadedFile.get(i);
+			if(uf.getNomeArquivo().equals(fileName)){
+				uf.setProgresso(percentage);
+				listaUploadedFile.set(i, uf);
+				break;
+			}
+		}
+		SessionHelper.setUploadFile(session, listaUploadedFile);
 	}
 }

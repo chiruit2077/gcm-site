@@ -24,7 +24,7 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 	
 	private Transport transport;
 	private Session mailSession;
-	private Boolean fecharConexao;
+	private Boolean fecharConexao = false;
 
 	@Override
 	public Void call() throws Exception {
@@ -73,7 +73,7 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 				transport = conecta();
 			}
 			transport.sendMessage(message, message.getAllRecipients());
-			if(fecharConexao){
+			if(fecharConexao!=null && fecharConexao){
 				transport.close();
 			}
 		} catch (Exception e) {

@@ -1,5 +1,7 @@
 package br.com.ecc.server;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import br.com.ecc.client.ui.component.upload.UploadedFile;
@@ -18,10 +20,11 @@ public class SessionHelper {
 	public static void setUsuario(HttpSession session, Usuario user){
 		session.setAttribute(USUARIO, user);
 	}
-	public static UploadedFile getUploadFile(HttpSession session){
-		return (UploadedFile) session.getAttribute(UPLOAD_FILE);
+	@SuppressWarnings("unchecked")
+	public static List<UploadedFile> getUploadFile(HttpSession session){
+		return (List<UploadedFile>) session.getAttribute(UPLOAD_FILE);
 	}
-	public static void setUploadFile(HttpSession session, UploadedFile uploadFile){
+	public static void setUploadFile(HttpSession session, List<UploadedFile> uploadFile){
 		session.setAttribute(UPLOAD_FILE, uploadFile);
 	}
 	public static ParametrosRedirecionamentoVO getParametros(HttpSession session){

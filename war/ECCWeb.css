@@ -552,7 +552,7 @@ html>body .gwt-DecoratedTabBar {
 }
 /* Progress */
 .ProgressBar {
-  width: 200px;
+  width: 150px;
   margin-right: 5px;
   border: 1px solid lightgrey;
 }
@@ -560,7 +560,7 @@ html>body .gwt-DecoratedTabBar {
 .ProgressBar .progress {
   height:10px;
   background-color: lightsteelblue;
-  margin: 2px;
+  margin: 1px;
   font-size: 0px;
 }
 
@@ -749,6 +749,10 @@ html>body .gwt-DecoratedTabBar {
 	overflow-y: auto; 
 	border: 1px solid gray; 
 	background-color: #bcf;
+}
+.upload-FlowPanel {
+	overflow-y: auto; 
+	border: 1px solid gray; 
 }
 .portal-rowCountLabel{
 	font-style: italic; 

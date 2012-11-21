@@ -3,6 +3,7 @@ package br.com.ecc.server.service.upload;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -50,26 +51,48 @@ public class UploadArquivoServlet extends HttpServlet {
 		FileItemIterator fileItemIterator = servletFileUpload.getItemIterator(request);
 
 		String uploadDirectory = System.getProperty("java.io.tmpdir") + File.separator + "UploadFile" + StringUtil.right(Math.random()+"",10) + File.separator;
+		
 		UploadedFile uploadedFile = new UploadedFile();
-		uploadedFile.setPath(uploadDirectory);
-		uploadedFile.setProgress(0);
-		SessionHelper.setUploadFile(request.getSession(), uploadedFile);
 		
 		while (fileItemIterator.hasNext()) {
+			List<UploadedFile> listaUploadedFile = SessionHelper.getUploadFile(request.getSession());
+			int posicaoLista = 0;
+			for (int i=0; i<listaUploadedFile.size(); i++) {
+				UploadedFile uf = listaUploadedFile.get(i);
+				if(uf.getProgresso()==null){
+					uploadedFile = uf;
+					posicaoLista=i;
+					break;
+				}
+			}
 			FileItemStream fileItemStream = fileItemIterator.next();
-
-			String fileName = fileItemStream.getName().substring(fileItemStream.getName().lastIndexOf(File.separator) + 1);
-			//System.out.println("Uploading: " + fileName + " to " + uploadDirectory);
+			String fileName = "arquivo"+StringUtil.randomString(10)+".jpg";
+			if(fileItemStream.getName()!=null && !fileItemStream.getName().equals("blob")){
+				if(uploadedFile!=null && uploadedFile.getNomeArquivo()==null){
+					fileName = fileItemStream.getName().substring(fileItemStream.getName().lastIndexOf(File.separator) + 1);
+				} else {
+					fileName = fileItemStream.getName();
+				}
+			} else {
+				fileName = uploadedFile.getNomeArquivo();
+			}
+			System.out.println("Uploading: " + fileName + " to " + uploadDirectory);
 			
 			new File(uploadDirectory).mkdir();
 
-			UploadProgressListener uploadProgressListener = new UploadProgressListener(uploadDirectory, fileName, request.getSession());
+			uploadedFile.setCaminho(uploadDirectory);
+			uploadedFile.setNomeArquivo(fileName);
+			uploadedFile.setProgresso(0);
+			listaUploadedFile.set(posicaoLista, uploadedFile);
+			SessionHelper.setUploadFile(request.getSession(), listaUploadedFile);
+			
+			UploadProgressListener uploadProgressListener = new UploadProgressListener(request.getSession(), fileName);
 
 			UploadProgressInputStream inputStream = new UploadProgressInputStream(fileItemStream.openStream(), request.getContentLength());
 			inputStream.addListener(uploadProgressListener);
 
 			File file = new File(uploadDirectory, fileName);
-
+			
 			Streams.copy(inputStream, new FileOutputStream(file), true);
 		}
 	}

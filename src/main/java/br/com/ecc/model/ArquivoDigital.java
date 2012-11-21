@@ -41,6 +41,9 @@ public class ArquivoDigital extends _WebBaseEntity {
 	@Column(columnDefinition="BLOB")
 	private byte[] dados;
 	
+	@Column(columnDefinition="BLOB")
+	private byte[] thumb;
+	
 	private Integer tamanho;
 	
 	@Enumerated(EnumType.STRING)
@@ -114,5 +117,11 @@ public class ArquivoDigital extends _WebBaseEntity {
 	}
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+	public byte[] getThumb() {
+		return thumb;
+	}
+	public void setThumb(byte[] thumb) {
+		this.thumb = thumb;
 	}
 }
