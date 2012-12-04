@@ -752,7 +752,6 @@ html>body .gwt-DecoratedTabBar {
 }
 .upload-FlowPanel {
 	overflow-y: auto; 
-	border: 1px solid gray; 
 }
 .portal-rowCountLabel{
 	font-style: italic; 

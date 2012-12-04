@@ -19,8 +19,8 @@ import br.com.ecc.model.tipo.TipoArquivoEnum;
 @NamedQueries({
 	@NamedQuery(name="arquivoDigital.limpaLixo", 
 			query="delete from ArquivoDigital ad " +
-				  "where ad not in ( Select c.idArquivoDigital from Casal c ) and " +
-				  "      ad not in ( Select g.idArquivoDigital from Grupo g ) ")
+				  "where ad not in ( Select c.idArquivoDigital from Casal c where c.idArquivoDigital is not null ) and " +
+				  "      ad not in ( Select g.idArquivoDigital from Grupo g where g.idArquivoDigital is not null ) ")
 })
 public class ArquivoDigital extends _WebBaseEntity {
 	private static final long serialVersionUID = 205467600581307417L;

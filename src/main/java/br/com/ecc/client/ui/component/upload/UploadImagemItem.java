@@ -4,12 +4,13 @@ import com.google.gwt.user.client.ui.Image;
 
 public class UploadImagemItem {
 
-	public enum Status {PREVISUALIZANDO, SUBINDO, FINALIZADO};
+	public enum Status {PREVISUALIZANDO, CARREGADA, SUBINDO, FINALIZADO};
 	
 	private String fileName;
 	private UploadProgressBar uploadProgressBar;
 	private Image image;
 	private Status situacao;
+	private Integer idArquivoDigital;
 	
 	public UploadImagemItem(UploadProgressBar uploadProgressBar, Image image, String fileName) {
 		this.uploadProgressBar=uploadProgressBar;
@@ -39,5 +40,11 @@ public class UploadImagemItem {
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	public Integer getIdArquivoDigital() {
+		return idArquivoDigital;
+	}
+	public void setIdArquivoDigital(Integer idArquivoDigital) {
+		this.idArquivoDigital = idArquivoDigital;
 	}
 }

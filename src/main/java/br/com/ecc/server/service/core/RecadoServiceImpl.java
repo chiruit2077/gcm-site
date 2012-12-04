@@ -102,7 +102,7 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 			texto.append("<table cellpadding='3' cellspacing='0' style='border:1px solid lightgray; background-color:#dbedff;'><tr><td style='vertical-align:top;'>");
 			if(recado.getCasalOrigem().getIdArquivoDigital()!=null){
 				texto.append("<table><tr><td>");
-				texto.append("<img width='100px' height='auto' src='http://www.eccbrasil.com.br/eccweb/downloadArquivoDigital?id="+recado.getCasalOrigem().getIdArquivoDigital() +"'/>");
+				texto.append("<img width='100px' height='auto' src='http://www.eccbrasil.com.br/eccweb/downloadArquivoDigital?thumb=true&id="+recado.getCasalOrigem().getIdArquivoDigital() +"'/>");
 				texto.append("</td></tr><tr><td>");
 				texto.append("<b>"+recado.getCasalOrigem().getApelidos("e") + "</b>");
 				texto.append("</td></tr></table>");
@@ -117,7 +117,7 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 			texto.append("</td></tr></table><br>");
 			texto.append("Clique no endereço a seguir para visualizar, responder ou enviar novos recados.<br>");
 			texto.append("<a href='http://www.eccbrasil.com.br'>www.eccbrasil.com.br</a><br><br>");
-			texto.append("<img width='100px' src='http://www.eccbrasil.com.br/eccweb/downloadArquivoDigital?id=" +recado.getCasal().getGrupo().getIdArquivoDigital() + "'/>");
+			texto.append("<img width='100px' src='http://www.eccbrasil.com.br/eccweb/downloadArquivoDigital?thumb=true&id=" +recado.getCasal().getGrupo().getIdArquivoDigital() + "'/>");
 	
 			EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
 			cmdEmail.setAssunto(recado.getCasal().getGrupo().getNome() + " - Notificação de recado");

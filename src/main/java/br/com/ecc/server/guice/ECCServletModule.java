@@ -9,6 +9,7 @@ import br.com.ecc.server.service.cadastro.PapelServiceImpl;
 import br.com.ecc.server.service.cadastro.PessoaServiceImpl;
 import br.com.ecc.server.service.cadastro.QuartoServiceImpl;
 import br.com.ecc.server.service.core.AdministracaoServiceImpl;
+import br.com.ecc.server.service.core.ArquivoDigitalServiceImpl;
 import br.com.ecc.server.service.core.EmailServiceImpl;
 import br.com.ecc.server.service.core.EntidadeGenericaServiceImpl;
 import br.com.ecc.server.service.core.RecadoServiceImpl;
@@ -60,6 +61,7 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "encontroConviteResponsavel").with(EncontroConviteResponsavelServiceImpl.class);
 		
 		// core
+		this.serve(contextPath + "arquivoDigital").with(ArquivoDigitalServiceImpl.class);
 		this.serve(contextPath + "autenticacao").with(AdministracaoServiceImpl.class);
 		this.serve(contextPath + "recado").with(RecadoServiceImpl.class);
 		this.serve(contextPath + "uploadArquivoDigital").with(UploadArquivoDigitalServlet.class);

@@ -4,20 +4,27 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
 
-import com.google.gwt.dev.util.collect.HashMap;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class ImageUtil {
+	
+	public static final Integer TAMANHO_IMAGEM = 1024;
+	public static final Integer TAMANHO_THUMB = 150;
+
 
 	public static byte[] scale(byte[] pImageData, int pMaxWidth) throws Exception {
 		ImageIcon imageIcon = new ImageIcon(pImageData);
 		int width = imageIcon.getIconWidth();
 		int height = imageIcon.getIconHeight();
+		if(width==-1 && height==-1){
+			return null;
+		}
 		if (pMaxWidth > 0 && width > pMaxWidth) {
 			double ratio = (double) pMaxWidth / imageIcon.getIconWidth();
 			height = (int) (imageIcon.getIconHeight() * ratio);

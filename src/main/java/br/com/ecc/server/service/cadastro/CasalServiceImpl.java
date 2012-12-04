@@ -174,10 +174,10 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 		cmd.setUsuario(usuario);
 		casalVO = cmd.call();
 		
-		if(casalVO.getCasal().getTipoCasal()!=null && !casalVO.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
-			UsuarioGerarPorPessoaCommand cmdGeraUsuarios = injector.getInstance(UsuarioGerarPorPessoaCommand.class);
-			cmdGeraUsuarios.call();
-		}
+		//if(casalVO.getCasal().getTipoCasal()!=null && !casalVO.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
+		UsuarioGerarPorPessoaCommand cmdGeraUsuarios = injector.getInstance(UsuarioGerarPorPessoaCommand.class);
+		cmdGeraUsuarios.call();
+		//}
 		
 		return casalVO.getCasal();
 	}

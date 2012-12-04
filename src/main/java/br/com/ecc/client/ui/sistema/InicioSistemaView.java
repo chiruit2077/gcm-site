@@ -121,7 +121,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 						return;
 					} else {
 						if(casal.getIdArquivoDigital()!=null){
-							casalRecadoImage.setUrl("eccweb/downloadArquivoDigital?id="+casal.getIdArquivoDigital());
+							casalRecadoImage.setUrl("eccweb/downloadArquivoDigital?thumb=true&id="+casal.getIdArquivoDigital());
 						}
 					}
 				}
@@ -391,7 +391,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			mainHP.add(hp3);
 		}
 		if(recado.getCasal().getIdArquivoDigital()!=null){
-			Image imagem = new Image("eccweb/downloadArquivoDigital?id=" + recado.getCasalOrigem().getIdArquivoDigital());
+			Image imagem = new Image("eccweb/downloadArquivoDigital?thumb=true&id=" + recado.getCasalOrigem().getIdArquivoDigital());
 			imagem.setWidth("60px");
 			imagem.setHeight("auto");
 			mainHP.add(imagem);
@@ -537,7 +537,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			}
 		}
 		if(niver.getCasal().getIdArquivoDigital()!=null){
-			Image imagem = new Image("eccweb/downloadArquivoDigital?id=" + niver.getCasal().getIdArquivoDigital());
+			Image imagem = new Image("eccweb/downloadArquivoDigital?thumb=true&id=" + niver.getCasal().getIdArquivoDigital());
 			imagem.setWidth("30px");
 			imagem.setHeight("auto");
 			mainHP.add(imagem);

@@ -9,4 +9,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ArquivoDigitalService  extends RemoteService {
 	public void removeArquivosDigitais(Integer... ids) throws Exception;
 	public ArquivoDigital getInfo(Integer id) throws Exception;
+	public void limpaLixo() throws Exception;
+	public void redimensionaGeraThumb() throws Exception;
 }

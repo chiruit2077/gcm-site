@@ -24,9 +24,6 @@ public class UploadImagemArquivoDigitalSalvarCommand implements Callable<Integer
 	@Inject EntityManager em;
 	@Inject Injector injector;
 	
-	private Integer TAMANHO_IMAGEM = 1024;
-	private Integer TAMANHO_THUMB = 150;
-	
 	private UploadedFile uploadedFile;
 	private Boolean resize = false;
 
@@ -36,7 +33,7 @@ public class UploadImagemArquivoDigitalSalvarCommand implements Callable<Integer
 		File file = new File(uploadedFile.getCaminho() + uploadedFile.getNomeArquivo());
 		byte[] dadosArquivo = read(file);
 		if(resize){
-			dadosArquivo = ImageUtil.scale(dadosArquivo, TAMANHO_IMAGEM);
+			dadosArquivo = ImageUtil.scale(dadosArquivo, ImageUtil.TAMANHO_IMAGEM);
 		}
 		
 		ArquivoDigital arquivoDigital;
@@ -53,8 +50,8 @@ public class UploadImagemArquivoDigitalSalvarCommand implements Callable<Integer
 		}
 		arquivoDigital.setMimeType(uploadedFile.getTipo());
 		arquivoDigital.setDados(dadosArquivo);
-		if(uploadedFile.getTipo().toUpperCase().contains("IMAGE")){
-			arquivoDigital.setThumb(ImageUtil.scale(dadosArquivo, TAMANHO_THUMB));
+		if(arquivoDigital.getMimeType().toUpperCase().contains("IMAGE")){
+			arquivoDigital.setThumb(ImageUtil.scale(dadosArquivo, ImageUtil.TAMANHO_THUMB));
 		} else {
 			arquivoDigital.setThumb(null);
 		}
@@ -70,7 +67,9 @@ public class UploadImagemArquivoDigitalSalvarCommand implements Callable<Integer
 		dir.delete();
 		
 		return arquivoDigital.getId();
-	}  
+	}
+	
+	
 	
 	public byte[] read(File file) throws IOException {
 		ByteArrayOutputStream ous = null;
@@ -105,11 +104,9 @@ public class UploadImagemArquivoDigitalSalvarCommand implements Callable<Integer
 	public void setUploadedFile(UploadedFile uploadedFile) {
 		this.uploadedFile = uploadedFile;
 	}
-
 	public Boolean getResize() {
 		return resize;
 	}
-
 	public void setResize(Boolean resize) {
 		this.resize = resize;
 	}

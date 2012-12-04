@@ -7,7 +7,6 @@ import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.sistema.DadosPagamento;
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
-import br.com.ecc.client.ui.component.upload.UploadArquivoDigital;
 import br.com.ecc.client.ui.component.upload.UploadImagePreview;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.FlexTableUtil.TipoColuna;
@@ -165,6 +164,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiField DialogBox editaDialogBox;
 	@UiField Button novoButton;
 	@UiField Button salvarButton;
+	@UiField HorizontalPanel ferramentasHorizontalPanel;
 	
 	//Contato
 	@UiField DialogBox editaContatoDialogBox;
@@ -177,17 +177,15 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiField(provided=true) NumberTextBox idadeNumberTextBox;
 	
 	@UiField Image casalImage;
-	@UiField UploadArquivoDigital logotipoUploadArquivoDigital;
+	//@UiField UploadArquivoDigital logotipoUploadArquivoDigital;
 	
 	//dados do pagamento
 	@UiField HTMLPanel pagamentoHTMLPanel;
 	@UiField DadosPagamento dadosPagamentoComponent;
 	
 	
-	
 	@UiField DialogBox imageDialogBox;
 	@UiField UploadImagePreview uploadImagePreview;
-	
 	
 	private CasalVO entidadeEditada;
 	private CasalContato contatoEditado;
@@ -428,11 +426,14 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	public void fecharImageClickHandler(ClickEvent event){
 		presenter.fechar();
 	}
-	@UiHandler("imagemButton")
-	public void imagemButtonClickHandler(ClickEvent event){
-		uploadImagePreview.setMultiple(true);
+	
+	@UiHandler("alterarImagemButton")
+	public void alterarImagemButtonClickHandler(ClickEvent event){
+		//uploadImagePreview.setMultiple(true);
+		uploadImagePreview.clear();
 		imageDialogBox.center();
 		imageDialogBox.show();
+		uploadImagePreview.adicionaImage();
 	}
 	
 	@UiHandler("salvarButton")
@@ -512,6 +513,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	
 	@Override
 	public void init(){
+		ferramentasHorizontalPanel.clear();
 		if(presenter.getDadosLoginVO().getUsuario()==null) return;
 		if(presenter.getDadosLoginVO().getCasal()==null) return;
 		if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
@@ -521,6 +523,22 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			centralPanel.setVisible(true);
 			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 				novoButton.setVisible(true);
+				Button b = new Button("Redimensionar");
+				b.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent arg0) {
+						presenter.redimensiona();
+					}
+				});
+				ferramentasHorizontalPanel.add(b);
+				b = new Button("Limpar lixo de imágens");
+				b.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent arg0) {
+						presenter.limpaLixo();
+					}
+				});
+				ferramentasHorizontalPanel.add(b);
 			} else {
 				novoButton.setVisible(false);
 			}
@@ -529,7 +547,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	}
 	
 	public void limpaCampos(){
-		logotipoUploadArquivoDigital.limpaCampos();
+		//logotipoUploadArquivoDigital.limpaCampos();
 		salvarButton.setVisible(true);
 		casalImage.setUrl("images/blank.png");
 		eleSuggestBox.setValue(null);
@@ -807,10 +825,30 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		casalTableUtil.applyDataRowStyles();
 	}
 
-	@Override
-	public void defineFoto() {
-		casalImage.setUrl("eccweb/downloadArquivoDigital?id="+logotipoUploadArquivoDigital.getIdArquivoDigital());
-		entidadeEditada.getCasal().setIdArquivoDigital(logotipoUploadArquivoDigital.getIdArquivoDigital());
+	@UiHandler("selecionarUploadButton")
+	public void selecionarUploadButtonClickHandler(ClickEvent event){
+		uploadImagePreview.adicionaImage();
+	}
+	
+	@UiHandler("aceitarUploadButton")
+	public void aceitarUploadButtonClickHandler(ClickEvent event){
+		if(uploadImagePreview.getListaImagens().size()>0 && 
+		   uploadImagePreview.getListaImagens().get(0)!=null && 
+		   uploadImagePreview.getListaImagens().get(0).getIdArquivoDigital() != null && 
+		   !uploadImagePreview.getListaImagens().get(0).getIdArquivoDigital().equals(new Integer(0) )){
+			Integer id = uploadImagePreview.getListaImagens().get(0).getIdArquivoDigital();
+			casalImage.setUrl("eccweb/downloadArquivoDigital?id="+id);
+			entidadeEditada.getCasal().setIdArquivoDigital(id);
+		} else {
+			casalImage.setUrl("images/blank.png");
+			entidadeEditada.getCasal().setIdArquivoDigital(null);
+		}
+		imageDialogBox.hide();
+	}
+	
+	@UiHandler("cancelarUploadButton")
+	public void cancelarUploadButtonClickHandler(ClickEvent event){
+		imageDialogBox.hide();
 	}
 	
 	@UiHandler("addFilhoButton")

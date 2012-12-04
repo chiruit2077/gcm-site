@@ -3,13 +3,13 @@ package br.com.ecc.client.ui.sistema.cadastro;
 import java.util.List;
 
 import br.com.ecc.client.core.event.ExecutaMenuEvent;
-import br.com.ecc.client.core.event.UploadFinishedEvent;
-import br.com.ecc.client.core.event.UploadFinishedHandler;
 import br.com.ecc.client.core.mvp.WebAsyncCallback;
 import br.com.ecc.client.core.mvp.presenter.BasePresenter;
 import br.com.ecc.client.core.mvp.view.BaseDisplay;
 import br.com.ecc.client.service.AdministracaoService;
 import br.com.ecc.client.service.AdministracaoServiceAsync;
+import br.com.ecc.client.service.ArquivoDigitalService;
+import br.com.ecc.client.service.ArquivoDigitalServiceAsync;
 import br.com.ecc.client.service.cadastro.AgrupamentoService;
 import br.com.ecc.client.service.cadastro.AgrupamentoServiceAsync;
 import br.com.ecc.client.service.cadastro.CasalService;
@@ -35,12 +35,14 @@ import br.com.ecc.model.vo.EncontroInscricaoVO;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 	
 	public interface Display extends BaseDisplay {
 		void populaEntidades(List<Casal> lista);
-		void defineFoto();
+		//void defineFoto();
 		void edita(Casal casal);
 		void init();
 		void setVO(CasalVO resposta);
@@ -63,12 +65,14 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 	
 	@Override
 	public void bind() {
+		/*
 		getWebResource().getEventBus().addHandler(UploadFinishedEvent.TYPE, new UploadFinishedHandler() {
 			@Override
 			public void onUploadFinished(UploadFinishedEvent event) {
 				getDisplay().defineFoto();
 			}
 		});
+		*/
 	}
 
 	public void fechar(){
@@ -226,6 +230,34 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			public void success(Void resposta) {
 				getDisplay().reset();
 				buscaCasais(casalParamVO);
+			}
+		});
+	}
+	
+	public void redimensiona(){
+		ArquivoDigitalServiceAsync serviceUpload = GWT.create(ArquivoDigitalService.class);
+		serviceUpload.redimensionaGeraThumb(new AsyncCallback<Void>() {
+			@Override
+			public void onSuccess(Void arg0) {
+				Window.alert("Operação efetuada com sucesso");
+			}
+			
+			@Override
+			public void onFailure(Throwable arg0) {
+			}
+		});
+	}
+	
+	public void limpaLixo(){
+		ArquivoDigitalServiceAsync serviceUpload = GWT.create(ArquivoDigitalService.class);
+		serviceUpload.limpaLixo(new AsyncCallback<Void>() {
+			@Override
+			public void onSuccess(Void arg0) {
+				Window.alert("Operação efetuada com sucesso");
+			}
+			
+			@Override
+			public void onFailure(Throwable arg0) {
 			}
 		});
 	}

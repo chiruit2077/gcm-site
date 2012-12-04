@@ -9,6 +9,8 @@ import br.com.ecc.model.ArquivoDigital;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.ArquivoDigitalGetInfoCommand;
 import br.com.ecc.server.command.basico.DeleteEntitiesCommand;
+import br.com.ecc.server.command.basico.ExecuteUpdateCommand;
+import br.com.ecc.server.service.upload.UploadImagemArquivoDigitalThumbCommand;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -36,6 +38,20 @@ public class ArquivoDigitalServiceImpl extends SecureRemoteServiceServlet implem
 		ArquivoDigitalGetInfoCommand getInfoCmd = injector.getInstance(ArquivoDigitalGetInfoCommand.class);
 		getInfoCmd.setId(id);
 		return getInfoCmd.call();
+	}
+	
+	@Override
+	public void limpaLixo() throws Exception {
+		System.out.println("Limpando lixo de arquivo digital");
+		ExecuteUpdateCommand cmd = injector.getInstance(ExecuteUpdateCommand.class);
+		cmd.setNamedQuery("arquivoDigital.limpaLixo");
+		cmd.call();
+	}
+	
+	@Override
+	public void redimensionaGeraThumb() throws Exception {
+		UploadImagemArquivoDigitalThumbCommand cmd = injector.getInstance(UploadImagemArquivoDigitalThumbCommand.class);
+		cmd.call();
 	}
 	
 }

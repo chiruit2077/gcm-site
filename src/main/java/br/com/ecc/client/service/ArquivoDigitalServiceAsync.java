@@ -8,5 +8,7 @@ public interface ArquivoDigitalServiceAsync {
 
 	void removeArquivosDigitais(Integer[] ids, AsyncCallback<Void> callback);
 	void getInfo(Integer id, AsyncCallback<ArquivoDigital> callback);
+	void limpaLixo(AsyncCallback<Void> callback);
+	void redimensionaGeraThumb(AsyncCallback<Void> callback);
 
 }

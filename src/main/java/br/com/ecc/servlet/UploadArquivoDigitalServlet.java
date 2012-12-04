@@ -18,7 +18,7 @@ public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 
 	private static final long serialVersionUID = 800508960523259729L;
 	@Inject Injector injector;
-
+	
 	@Override
 	@Transactional
 	public String doPost(MultipartRequest multipartRequest) throws Exception {
@@ -41,8 +41,8 @@ public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 				arquivoDigital.setMimeType(file.getContentType());
 				arquivoDigital.setTamanho(file.getContent().length);
 				arquivoDigital.setDados(dadosArquivo);
-				if(file.getContentType().toUpperCase().contains("image")){
-					arquivoDigital.setThumb(ImageUtil.scale(dadosArquivo,150));
+				if(file.getContentType().toUpperCase().contains("IMAGE")){
+					arquivoDigital.setThumb(ImageUtil.scale(dadosArquivo,ImageUtil.TAMANHO_THUMB));
 				} else {
 					arquivoDigital.setThumb(null);
 				}

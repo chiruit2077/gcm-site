@@ -3,7 +3,6 @@ package br.com.ecc.servlet;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.ecc.model.ArquivoDigital;
-import br.com.ecc.server.command.basico.DeleteEntitiesCommand;
+import br.com.ecc.server.command.basico.DeleteEntityCommand;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -51,10 +50,19 @@ public class ReportServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+			/*
 			Integer[] ids = new Integer[]{ relatorio.getId() };
 			DeleteEntitiesCommand deleteCmd = injector.getInstance(DeleteEntitiesCommand.class);
 			deleteCmd.setClazz(ArquivoDigital.class);
 			deleteCmd.setIds(Arrays.asList(ids));
+			try {
+				deleteCmd.call();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			*/
+			DeleteEntityCommand deleteCmd = injector.getInstance(DeleteEntityCommand.class);
+			deleteCmd.setBaseEntity(relatorio);
 			try {
 				deleteCmd.call();
 			} catch (Exception e) {

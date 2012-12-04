@@ -32,6 +32,9 @@
 		 padding:3px;
 		 background-color:#ffeeb4;
 	}
+	.toolbar {
+		 background-color:#c5c5c5;
+	}
   </ui:style>
   	<g:VerticalPanel horizontalAlignment="center">
 		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
@@ -72,7 +75,7 @@
 							</td>
 							<td align="right">
 								<g:Button ui:field="novoButton" text="Adicionar casal"  visible="false"/>
-								<g:Button ui:field="imagemButton" text="Adicionar imagem"/>
+								<g:HorizontalPanel ui:field="ferramentasHorizontalPanel"/>
 							</td>
 						</tr>
 					</table>
@@ -83,13 +86,28 @@
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 		    <g:DialogBox ui:field="imageDialogBox" visible="false"
-				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass">
-				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
-				    <u:UploadImagePreview ui:field="uploadImagePreview"/>
+				         width="550px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Selecionar imagem">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%">
+					    <u:UploadImagePreview ui:field="uploadImagePreview" multiple="false"/>
+				    </g:VerticalPanel>
+				    <g:HTMLPanel styleName="{style.toolbar}">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td>
+									<g:Button ui:field="selecionarUploadButton" text="Selecionar imagem"/>
+								</td>
+								<td align="right">
+									<g:Button ui:field="aceitarUploadButton" text="Salvar imagem"/>
+									<g:Button ui:field="cancelarUploadButton" text="Cancelar"/>
+								</td>
+							</tr>
+						</table>
+					</g:HTMLPanel>
 			    </g:VerticalPanel>
 			</g:DialogBox>
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass">
+				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Informações do casal">
 				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
 					<g:FlowPanel ui:field="formularioFlowPanel" width="100%" styleName="{style.formulario}">
 						<!-- ELE -->
@@ -375,12 +393,18 @@
 										</table>
 									</td>
 									<td style="border-left:1px solid lightgray;vertical-align:top;">
-										<table cellpadding="0" cellspacing="0" border="0" width="100%">
+										<table cellpadding="0" cellspacing="2" border="0" width="100%">
 											<tr>
 												<td align="center">
 													<g:Image ui:field="casalImage" height="180px"/>
 												</td>
 											</tr>
+											<tr>
+												<td style="color:blue;font-style: italic;" align="center">
+													<g:Button ui:field="alterarImagemButton" width="150px">Alterar imagem</g:Button>
+												</td>
+											</tr>
+											<!-- 
 											<tr>
 												<td>
 													<u:UploadArquivoDigital ui:field="logotipoUploadArquivoDigital"/>
@@ -391,6 +415,7 @@
 													[Tamanho máximo da imágem: 1MB]
 												</td>
 											</tr>
+											 -->
 										</table>
 									</td>
 								</tr>

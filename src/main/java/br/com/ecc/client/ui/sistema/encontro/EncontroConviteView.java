@@ -290,6 +290,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		prioridadeNumberTextBox.setFocus(true);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void limpaCampos(){
 		prioridadeNumberTextBox.setNumber(null);
 		casalSuggestBox.setValue(null);
@@ -321,6 +322,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		esconderPagamentoCheckBox.setEnabled(true);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void defineCampos(EncontroConvite encontroConvite){
 		boolean convidador = false;
 		for (EncontroConviteResponsavel responsavel : presenter.getListaResponsavel()) {

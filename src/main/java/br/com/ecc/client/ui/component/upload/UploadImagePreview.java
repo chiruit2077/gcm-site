@@ -5,12 +5,16 @@ import java.util.List;
 
 import br.com.ecc.client.service.UploadProgressService;
 import br.com.ecc.client.service.UploadProgressServiceAsync;
+import br.com.ecc.client.ui.component.upload.UploadImagemItem.Status;
 import br.com.ecc.client.util.StringUtil;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -57,7 +61,6 @@ public final class UploadImagePreview extends Composite {
 		imagensFlowPanel.setHeight("400px");
 		imagensFlowPanel.setStyleName("upload-FlowPanel");
 		
-		
 		final VerticalPanel imgVPanel = new VerticalPanel();
 		imgVPanel.setWidth("100%");
 		imagensFlowPanel.add(imgVPanel);
@@ -74,6 +77,7 @@ public final class UploadImagePreview extends Composite {
 		form.setAction("eccweb/" + servletURL);
 		form.setWidget(fileUpload);
 		uploadPanel.add(form);
+		form.setVisible(false);
 		
 		this.initWidget(uploadPanel);
 		
@@ -81,117 +85,160 @@ public final class UploadImagePreview extends Composite {
 
 		fileUpload.addChangeHandler(new ChangeHandler() {
 			@Override
-			public void onChange(ChangeEvent arg0) {
-				initialize();
-				listaImagens = new ArrayList<UploadImagemItem>();
-				String nomeArquivos = getFileNames(arg0.getRelativeElement());
-				if(!multiple){
-					imgVPanel.clear();
-				}
-				
-				List<UploadedFile> listaArquivos = new ArrayList<UploadedFile>();
-				UploadedFile uf;
-				String[] sa = nomeArquivos.split(",");
-				for (String nomeArquivo : sa) {
-					String fileName = nomeArquivo.indexOf("\\")>=0?nomeArquivo.substring(nomeArquivo.lastIndexOf("\\")+1):nomeArquivo;
-
-					uf = new UploadedFile();
-					uf.setTipo("image/"+fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase());
-					uf.setNomeArquivo(fileName);
-					
-					listaArquivos.add(uf);
-				}
-				
-				serviceUpload.setLista(listaArquivos, new AsyncCallback<Void>() {
+			public void onChange(final ChangeEvent evento) {
+				final Element elementoNativo = evento.getRelativeElement();
+				final String nomeArquivos = getFileNames(elementoNativo);
+				serviceUpload.initialize(new AsyncCallback<Void>() {
 					@Override
-					public void onFailure(Throwable arg0) {
+					public void onSuccess(Void result) {
+						if(!multiple){
+							clear();
+						}
+						listaImagens = new ArrayList<UploadImagemItem>();
+						if(!multiple){
+							imgVPanel.clear();
+						}
+						
+						List<UploadedFile> listaArquivos = new ArrayList<UploadedFile>();
+						UploadedFile uf;
+						final String[] sa = nomeArquivos.split(",");
+						for (String nomeArquivo : sa) {
+							String fileName = nomeArquivo.indexOf("\\")>=0?nomeArquivo.substring(nomeArquivo.lastIndexOf("\\")+1):nomeArquivo;
+
+							uf = new UploadedFile();
+							uf.setTipo("image/"+fileName.substring(fileName.lastIndexOf(".")+1).toLowerCase());
+							uf.setNomeArquivo(fileName);
+							
+							listaArquivos.add(uf);
+						}
+						
+						enableHTML5 = verificaCompatibilidadeHTML5();
+						serviceUpload.setLista(listaArquivos, new AsyncCallback<Void>() {
+							@Override
+							public void onFailure(Throwable arg0) {
+							}
+
+							@Override
+							public void onSuccess(Void arg0) {
+								int i=0;
+								for (String nomeArquivo : sa) {
+									if(indiceImagens % 3 == 0){
+										imgHPanel = new HorizontalPanel();
+										imgHPanel.setWidth("100%");
+										imgHPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+										imgHPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+										imgHPanel.setSpacing(2);
+										imgVPanel.add(imgHPanel);
+									}
+									VerticalPanel panel = new VerticalPanel();
+									panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+									panel.setSpacing(1);
+									if(multiple){
+										panel.setWidth("200px");
+										panel.setHeight("150px");
+									} else {
+										panel.setWidth("100%");
+									}
+									imgHPanel.add(panel);
+									if(multiple){
+										imgHPanel.setCellWidth(panel, "200px");
+									}
+									
+									//IMAGEM
+									String idImage = "imageUploadItem" + StringUtil.randomString(5);
+									final Image image = new Image();
+									panel.add(image);
+									if(multiple){
+										panel.setCellHeight(image, "100px");
+										image.setHeight("100px");
+										image.setWidth("auto");
+										idImage+=StringUtil.randomString(5);
+									} else {
+										image.setHeight("350px");
+										panel.setCellHeight(image, "350px");
+										image.setWidth("auto");
+									}
+									image.getElement().removeAttribute("name");
+									image.getElement().removeAttribute("id");
+									image.getElement().setAttribute("name",idImage);
+									image.getElement().setAttribute("id",idImage);
+									
+									final int indice = i;
+									image.addLoadHandler(new LoadHandler() {
+										@Override
+										public void onLoad(LoadEvent arg0) {
+											verificaImagens(indice);
+										}
+									});
+									
+									//filename
+									String fileName = nomeArquivo.indexOf("\\")>=0?nomeArquivo.substring(nomeArquivo.lastIndexOf("\\")+1):nomeArquivo;
+									Label l = new Label(fileName);
+									l.setStyleName("label-italicBlue");
+									panel.add(l);
+									
+									//progress
+									UploadProgressBar uploadProgressBar = new UploadProgressBar();
+									panel.add(uploadProgressBar);
+									
+									UploadImagemItem itemImagem = new UploadImagemItem(uploadProgressBar, image, fileName);
+									listaImagens.add(itemImagem);
+									if(showProgress){
+										itemImagem.getUploadProgressBar().initialize(fileName, false);
+									}
+									if(enableHTML5){
+										previewImage(elementoNativo, i, idImage, 1024, GWT.getModuleBaseURL()+servletURL);
+										itemImagem.setSituacao(UploadImagemItem.Status.PREVISUALIZANDO);
+									}
+									i++;
+									indiceImagens++;
+								}
+								//uploadLista();
+								if(!enableHTML5){
+									form.submit();
+								}
+								iniciaTimer();
+							}
+						});
 					}
-
 					@Override
-					public void onSuccess(Void arg0) {
+					public void onFailure(Throwable caught) {
 					}
 				});
-				
-				enableHTML5 = verificaCompatibilidadeHTML5();
-				int i=0;
-				for (String nomeArquivo : sa) {
-					if(indiceImagens % 3 == 0){
-						imgHPanel = new HorizontalPanel();
-						imgHPanel.setWidth("100%");
-						imgHPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-						imgHPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-						imgHPanel.setSpacing(2);
-						imgVPanel.add(imgHPanel);
-					}
-					VerticalPanel  panel = new VerticalPanel();
-					panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-					panel.setSpacing(1);
-					if(multiple){
-						panel.setWidth("200px");
-						panel.setHeight("150px");
-					} else {
-						panel.setWidth("100%");
-					}
-					imgHPanel.add(panel);
-					if(multiple){
-						imgHPanel.setCellWidth(panel, "200px");
-					}
-					
-					//IMAGEM
-					String idImage = "imageUploadItem" + StringUtil.randomString(5);
-					final Image image = new Image();
-					panel.add(image);
-					if(multiple){
-						panel.setCellHeight(image, "100px");
-						image.setHeight("100px");
-						image.setWidth("auto");
-						idImage+=StringUtil.randomString(5);
-					} else {
-						image.setHeight("330px");
-						panel.setCellHeight(image, "330px");
-						image.setWidth("auto");
-					}
-					image.getElement().removeAttribute("name");
-					image.getElement().removeAttribute("id");
-					image.getElement().setAttribute("name",idImage);
-					image.getElement().setAttribute("id",idImage);
-					
-					//filename
-					String fileName = nomeArquivo.indexOf("\\")>=0?nomeArquivo.substring(nomeArquivo.lastIndexOf("\\")+1):nomeArquivo;
-					Label l = new Label(fileName);
-					l.setStyleName("label-italicBlue");
-					panel.add(l);
-					
-					//progress
-					UploadProgressBar uploadProgressBar = new UploadProgressBar();
-					panel.add(uploadProgressBar);
-					
-					UploadImagemItem itemImagem = new UploadImagemItem(uploadProgressBar, image, fileName);
-					listaImagens.add(itemImagem);
-					if(showProgress){
-						itemImagem.getUploadProgressBar().initialize(fileName, false);
-					}
-					if(enableHTML5){
-						previewImage(arg0.getRelativeElement(), i, idImage, 1024, GWT.getModuleBaseURL()+servletURL);
-						itemImagem.setSituacao(UploadImagemItem.Status.PREVISUALIZANDO);
-					}
-					i++;
-					indiceImagens++;
-				}
-				uploadLista();
-				if(!enableHTML5){
-					form.submit();
-				}
-				iniciaTimer();
 			}
 		});
 	}
+	private void verificaImagens(int indice){
+		boolean ok = true;
+		for (int i= 0; i < listaImagens.size(); i++) {
+			if(i==indice){
+				listaImagens.get(i).setSituacao(Status.CARREGADA);
+			}
+			if(!listaImagens.get(i).getSituacao().equals(Status.CARREGADA)){
+				ok = false;
+			}
+		}
+		if(ok){
+			uploadLista();
+		}
+	}
+	
+	public void clear(){
+		listaImagens = new ArrayList<UploadImagemItem>();
+		if(timerProgress!=null){
+			timerProgress.cancel();
+		}
+		imgHPanel.clear();
+		indiceImagens = 0;
+	}
+	
 	private void uploadLista(){
 		boolean ok = false;
+		int i=0;
 		for (final UploadImagemItem item : listaImagens) {
 			ok = false;
 			if(item.getSituacao()!=null){
-				if(item.getSituacao().equals(UploadImagemItem.Status.FINALIZADO)){
+				if(!item.getSituacao().equals(UploadImagemItem.Status.FINALIZADO)){
 					ok = true;
 				}
 			} else {
@@ -201,11 +248,13 @@ public final class UploadImagePreview extends Composite {
 				if(!enableHTML5){
 					item.getImage().setUrl("images/wait.gif");
 				}
+				uploadImage(i);
 				if(item.getSituacao()==null || item.getSituacao().equals(UploadImagemItem.Status.PREVISUALIZANDO)){
 					item.setSituacao(UploadImagemItem.Status.SUBINDO);
 				}
 				break;
 			}
+			i++;
 		}
 	}
 	
@@ -220,7 +269,7 @@ public final class UploadImagePreview extends Composite {
 						for (UploadedFile uf : listaUploadedFile) {
 							for (int i=0; i<listaImagens.size(); i++) {
 								final UploadImagemItem itemImagem = listaImagens.get(i);
-								if(uf.getNomeArquivo().equals(itemImagem.getFileName())){
+								if(uf.getNomeArquivo()!=null && itemImagem.getFileName()!=null && uf.getNomeArquivo().equals(itemImagem.getFileName())){
 									if(uf!=null){
 										if(showProgress){
 											itemImagem.getUploadProgressBar().atualiza(uf);
@@ -228,6 +277,7 @@ public final class UploadImagePreview extends Composite {
 										if(uf.getProgresso()!=null && uf.getProgresso()>=100){
 											itemImagem.setSituacao(UploadImagemItem.Status.FINALIZADO);
 											listaImagens.set(i, itemImagem);
+											final int j = i;
 											serviceUpload.gravaArquivoDigital(uf, true, new AsyncCallback<Integer>() {
 												@Override
 												public void onFailure(Throwable arg0) {
@@ -235,6 +285,7 @@ public final class UploadImagePreview extends Composite {
 
 												@Override
 												public void onSuccess(Integer id) {
+													listaImagens.get(j).setIdArquivoDigital(id);
 													if(!enableHTML5){
 														itemImagem.getImage().setUrl("eccweb/downloadArquivoDigital?thumb=true&id="+id);
 													}
@@ -262,22 +313,14 @@ public final class UploadImagePreview extends Composite {
 		};
 		timerProgress.schedule(1000);
 	}
-	protected void initialize() {
-		serviceUpload.initialize(new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void result) {
-
-			}
-			@Override
-			public void onFailure(Throwable caught) {
-			}
-		});
-	}
 	private static native String getFileNames(Element what)/*-{
 		return $wnd.getFileNames(what);
 	}-*/;
 	private static native void previewImage(Element what, Integer indice, String id, Integer resampleSize, String url)/*-{
 		$wnd.preview(what, indice, id, resampleSize, url);
+	}-*/;
+	private static native void uploadImage(Integer indice)/*-{
+		$wnd.enviaDados(indice);
 	}-*/;
 	private static native boolean verificaCompatibilidadeHTML5()/*-{
 		return $wnd.verificaHTML5();
@@ -305,5 +348,12 @@ public final class UploadImagePreview extends Composite {
 			fileUpload.getElement().removeAttribute("multiple");
 		}
 		this.multiple = multiple;
+	}
+	public List<UploadImagemItem> getListaImagens() {
+		return listaImagens;
+	}
+	
+	public void adicionaImage(){
+		fileUpload.getElement().<InputElement>cast().click();
 	}
 }

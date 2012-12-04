@@ -273,9 +273,6 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 	private void defineDadosUsuario(){
 		usuarioHorizontalPanel.setVisible(true);
 		usuarioNome.setText(usuario.getNome());
-//		if(presenter.getCasal()!=null && presenter.getCasal().getIdArquivoDigital()!=null){
-//			usuarioImage.setUrl("eccweb/downloadArquivoDigital?id="+presenter.getCasal().getIdArquivoDigital());
-//        }
 		if(!paginaIncial){
 		}
 	}
@@ -307,7 +304,7 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 	        //MEUS DADOS
 	        String url = "images/user.png";
 	        if(presenter.getCasal()!=null && presenter.getCasal().getIdArquivoDigital()!=null){
-	        	url = "eccweb/downloadArquivoDigital?id="+presenter.getCasal().getIdArquivoDigital();
+	        	url = "eccweb/downloadArquivoDigital?thumb=true&id="+presenter.getCasal().getIdArquivoDigital();
 	        }
 	        PortletItem meusDadosPortlet = criaPortletItem(null, url, Position.LEFT, 50);
 			

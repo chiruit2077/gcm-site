@@ -161,6 +161,7 @@
 			
 			var reader = [];
 			var idPreviewer=[], resampleSize=[], fileType=[], url=[];
+			var dataToSend = [];
 			function preview(what,i,id,size,u) {
 				reader[i] = new FileReader();
 				idPreviewer[i] = id;
@@ -174,12 +175,14 @@
 	                        return function(e) {
 	                        	if(resampleSize[indice]==null){
 	        						document.getElementById(idPreviewer[indice]).src=e.target.result;
-	        						enviaDados(reader.result, indice);
+	        						dataToSend[indice] = reader.result;
+	        						//enviaDados(reader.result, indice);
 	        					} else {
 	        						Resample(e.target.result, resampleSize[indice], null, (function(indice) {
 	        	                        return function(data) {
 	        	                        	document.getElementById(idPreviewer[indice]).src = data;
-	        	        					enviaDados(data, indice);
+	        	                        	dataToSend[indice] = data;
+	        	        					//enviaDados(data, indice);
 	        	                          };
 	        	                        })(indice));
 	        					}
@@ -189,8 +192,8 @@
 		            }
 		        }
 			}
-			function enviaDados(data, indicePreview){
-				var preData = dataURItoBlob(data, indicePreview);
+			function enviaDados(indicePreview){
+				var preData = dataURItoBlob(dataToSend[indicePreview], indicePreview);
 				var formData = new FormData();
 		        var xhr = new XMLHttpRequest();
 		        xhr.open('POST', url[indicePreview]);
@@ -211,6 +214,7 @@
 					return oBuilder.getBlob(new Uint8Array(array));
 				}
 			}
+			
 			/*
 			var reader = new FileReader();
 			var idPreviewer, resampleSize=null, fileType, url;
