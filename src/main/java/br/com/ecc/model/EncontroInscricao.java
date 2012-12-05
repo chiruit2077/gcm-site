@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
@@ -76,6 +77,9 @@ public class EncontroInscricao extends _WebBaseEntity {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataPrenchimentoFicha;
+	
+	@Transient
+	private String dataPrenchimentoFichaStr;
 	
 	private Boolean esconderPlanoPagamento;
 	
@@ -152,28 +156,28 @@ public class EncontroInscricao extends _WebBaseEntity {
 	public void setDataPrenchimentoFicha(Date dataPrenchimentoFicha) {
 		this.dataPrenchimentoFicha = dataPrenchimentoFicha;
 	}
-
 	public Date getDataMaximaParcela() {
 		return dataMaximaParcela;
 	}
-
 	public void setDataMaximaParcela(Date dataMaximaParcela) {
 		this.dataMaximaParcela = dataMaximaParcela;
 	}
-
 	public Boolean getEsconderPlanoPagamento() {
 		return esconderPlanoPagamento;
 	}
-
 	public void setEsconderPlanoPagamento(Boolean esconderPlanoPagamento) {
 		this.esconderPlanoPagamento = esconderPlanoPagamento;
 	}
-
 	public TipoConfirmacaoEnum getTipoConfirmacao() {
 		return tipoConfirmacao;
 	}
-
 	public void setTipoConfirmacao(TipoConfirmacaoEnum tipoConfirmacao) {
 		this.tipoConfirmacao = tipoConfirmacao;
+	}
+	public String getDataPrenchimentoFichaStr() {
+		return dataPrenchimentoFichaStr;
+	}
+	public void setDataPrenchimentoFichaStr(String dataPrenchimentoFichaStr) {
+		this.dataPrenchimentoFichaStr = dataPrenchimentoFichaStr;
 	}
 }

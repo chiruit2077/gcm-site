@@ -102,6 +102,8 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 	@UiField RadioButton encontroRadioButton;
 	@UiField HTMLPanel encontroHTMLPanel;
 
+	@UiField ListBox tipoFiltroListBox;
+	
 	private List<Agrupamento> listaAgrupamento;
 	
 	private Casal casalEditado;
@@ -154,6 +156,8 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		tituloFormularioLabel.setText(getDisplayTitle());
 		ListBoxUtil.populate(variaveisListBox, true, TipoVariavelEnum.values());
 		ListBoxUtil.populate(tipoListBox, false, TipoMensagemEnum.values());
+		
+		ListBoxUtil.populate(tipoFiltroListBox, true, TipoMensagemEnum.values());
 	}
 	
 	private void criaTabela() {
@@ -164,6 +168,7 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		mensagemTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		mensagemTableUtil.addColumn("Data", "120", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 		mensagemTableUtil.addColumn("Tipo", "200", HasHorizontalAlignment.ALIGN_LEFT);
+		mensagemTableUtil.addColumn("Encontro", "150", HasHorizontalAlignment.ALIGN_LEFT);
 		mensagemTableUtil.addColumn("Descrição", "200", HasHorizontalAlignment.ALIGN_LEFT);
 		mensagemTableUtil.addColumn("Titulo", "400", HasHorizontalAlignment.ALIGN_LEFT);
 	}
@@ -200,6 +205,9 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		presenter.getMensagemVO().getMensagem().setDescricao(descricaoTextBox.getValue());
 		presenter.getMensagemVO().getMensagem().setMensagem(mensagemRichTextArea.getHTML().toCharArray());
 		presenter.getMensagemVO().getMensagem().setTipoMensagem((TipoMensagemEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoMensagemEnum.values()));
+		if(!presenter.getMensagemVO().getMensagem().getTipoMensagem().equals(TipoMensagemEnum.NORMAL)){
+			presenter.getMensagemVO().getMensagem().setEncontro(presenter.getEncontroSelecionado());
+		}
 	}
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
@@ -314,12 +322,12 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 			}
 			dados[2] = destinatario.getCasal()==null?destinatario.getPessoa().getEmail():new HTML(destinatario.getCasal().getEmails("<br>"));
 			dados[3] = destinatario.getCasal()!=null?destinatario.getCasal().getTipoCasal().getNome():null;
-			if(destinatario.getDataEnvio()!=null){
-				dados[4] = dfData.format(destinatario.getDataEnvio());
+			if(destinatario.getDataEnvioStr()!=null){
+				dados[4] = destinatario.getDataEnvioStr();
 				envios++;
 			}
-			if(destinatario.getDataConfirmacao()!=null){
-				dados[5] = dfData.format(destinatario.getDataConfirmacao());
+			if(destinatario.getDataConfirmacaoStr()!=null){
+				dados[5] = destinatario.getDataConfirmacaoStr();
 				confirmacoes++;
 			}
 			destinatarioTableUtil.addRow(dados,row+1);
@@ -373,7 +381,7 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		Image editar, excluir;
 		HorizontalPanel hp;
 		for (final Mensagem mensagem: lista) {
-			Object dados[] = new Object[5];
+			Object dados[] = new Object[6];
 			
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
@@ -405,15 +413,18 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 			if(mensagem.getTipoMensagem()!=null){
 				dados[2] = mensagem.getTipoMensagem().getNome();
 			}
-			dados[3] = mensagem.getDescricao();
-			dados[4] = mensagem.getTitulo();
+			if(mensagem.getEncontro()!=null){
+				dados[3] = mensagem.getEncontro().toString();
+			}
+			dados[4] = mensagem.getDescricao();
+			dados[5] = mensagem.getTitulo();
 			mensagemTableUtil.addRow(dados,row+1);
 			row++;
 		}
 		mensagemTableUtil.applyDataRowStyles();
 	}
 	
-	public Encontro getEncontroSelecionado() {
+	public Encontro getEncontroSelecionadoAgrupamento() {
 		return (Encontro) ListBoxUtil.getItemSelected(encontroListBox, listaEncontro);
 	}
 
@@ -563,9 +574,9 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 	
 	@UiHandler("encontroListBox")
 	public void encontroListBoxChangeHandler(ChangeEvent event) {
-		if(getEncontroSelecionado()!=null){
+		if(getEncontroSelecionadoAgrupamento()!=null){
 			showWaitMessage(true);
-			presenter.buscaAgrupamentos(getEncontroSelecionado());
+			presenter.buscaAgrupamentos(getEncontroSelecionadoAgrupamento());
 		} else {
 			agrupamentoListBox.clear();
 		}
@@ -586,5 +597,16 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 			mensagemRichTextArea.setHTML(sHTML);
 			variaveisListBox.setSelectedIndex(0);
 		}
+	}
+
+	@Override
+	public void init() {
+		TipoMensagemEnum tipo = (TipoMensagemEnum) ListBoxUtil.getItemSelected(tipoFiltroListBox, TipoMensagemEnum.values());
+		presenter.buscaMensagens(tipo);
+	}
+	
+	@UiHandler("tipoFiltroListBox")
+	public void tipoFiltroListChangeHandler(ChangeEvent event){
+		init();
 	}
 }

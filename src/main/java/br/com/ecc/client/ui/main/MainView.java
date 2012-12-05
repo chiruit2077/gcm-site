@@ -263,11 +263,11 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 //			grupoHorizontalPanel.setStyleName(null);
 //		}
 		//if(usuario.getNivel()!=null && !usuario.getNivel().equals(TipoNivelUsuarioEnum.CONVIDADO)){
-		if(presenter.getCasal()!=null && !presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
-			encontroHorizontalPanel.setStyleName("portal-headerBar");
-		} else {
-			encontroHorizontalPanel.setStyleName(null);
-		}
+//		if(presenter.getCasal()!=null && !presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
+//			encontroHorizontalPanel.setStyleName("portal-headerBar");
+//		} else {
+//			encontroHorizontalPanel.setStyleName(null);
+//		}
 	}
 	
 	private void defineDadosUsuario(){

@@ -124,7 +124,7 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 	public void buscaMensagem() {
 		getDisplay().showWaitMessage(true);
 		MensagemServiceAsync service = GWT.create(MensagemService.class);
-		service.listaEspecial(grupoSelecionado, new WebAsyncCallback<List<Mensagem>>(getDisplay()) {
+		service.listaEspecial(grupoSelecionado, encontroSelecionado, new WebAsyncCallback<List<Mensagem>>(getDisplay()) {
 			@Override
 			protected void success(List<Mensagem> result) {
 				getDisplay().populaMensagem(result);

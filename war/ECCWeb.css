@@ -795,8 +795,9 @@ html>body .gwt-DecoratedTabBar {
 	background: white;
 }
 .portal-headerBarText {
-	color: white;
-	font-size: 12px;
+	color: #FFFDBF;
+	font-weight: bold;
+	font-size: 13px;
 	text-align: left;
 }
 .portal-headerBarTextClicked {

@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 @Entity
@@ -50,6 +51,12 @@ public class MensagemDestinatario extends _WebBaseEntity {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataConfirmacao;
+	
+	@Transient
+	private String dataEnvioStr;
+	
+	@Transient
+	private String dataConfirmacaoStr;
 	
 	@Version
 	private Integer version;
@@ -101,5 +108,17 @@ public class MensagemDestinatario extends _WebBaseEntity {
 	}
 	public void setDataConfirmacao(Date dataConfirmacao) {
 		this.dataConfirmacao = dataConfirmacao;
+	}
+	public String getDataEnvioStr() {
+		return dataEnvioStr;
+	}
+	public void setDataEnvioStr(String dataEnvioStr) {
+		this.dataEnvioStr = dataEnvioStr;
+	}
+	public String getDataConfirmacaoStr() {
+		return dataConfirmacaoStr;
+	}
+	public void setDataConfirmacaoStr(String dataConfirmacaoStr) {
+		this.dataConfirmacaoStr = dataConfirmacaoStr;
 	}
 }

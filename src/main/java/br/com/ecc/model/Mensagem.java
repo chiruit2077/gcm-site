@@ -24,11 +24,13 @@ import br.com.ecc.model.tipo.TipoMensagemEnum;
 @SequenceGenerator(name="SQ_MENSAGEM", sequenceName="SQ_MENSAGEM")
 @NamedQueries({
 	@NamedQuery(name="mensagem.porGrupo", 
-		query="select u.id, u.grupo, u.data, u.titulo, u.descricao, u.tipoMensagem, u.version " +
-			  "from Mensagem u where u.grupo = :grupo order by u.data desc"),
+		query="select u from Mensagem u where u.grupo = :grupo order by u.data desc"),
 	@NamedQuery(name="mensagem.porGrupoTipoEspecial", 
-		query="select u.id, u.grupo, u.data, u.titulo, u.descricao, u.tipoMensagem, u.version " +
-			  "from Mensagem u where u.grupo = :grupo and u.tipoMensagem != 'NORMAL' order by u.data desc"),
+		query="select u from Mensagem u " +
+			  "where u.grupo = :grupo and " +
+			  "      u.encontro = :encontro and " +
+			  "	     u.tipoMensagem != 'NORMAL' " +
+			  "order by u.data desc"),
 	@NamedQuery(name="mensagem.porDestinatario", 
 		query="Select distinct m.mensagem " +
 				"from MensagemDestinatario m " +
@@ -62,6 +64,10 @@ public class Mensagem extends _WebBaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoMensagemEnum tipoMensagem;
+	
+	@ManyToOne
+	@JoinColumn(name="encontro")
+	private Encontro encontro;
 	
 	@Version
 	private Integer version;
@@ -126,5 +132,13 @@ public class Mensagem extends _WebBaseEntity {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Encontro getEncontro() {
+		return encontro;
+	}
+
+	public void setEncontro(Encontro encontro) {
+		this.encontro = encontro;
 	}
 }

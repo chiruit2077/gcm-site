@@ -24,6 +24,7 @@ import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Mensagem;
 import br.com.ecc.model.MensagemDestinatario;
+import br.com.ecc.model.tipo.TipoMensagemEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.CasalParamVO;
 import br.com.ecc.model.vo.MensagemVO;
@@ -39,6 +40,7 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 		void setVO(MensagemVO mensagemVO);
 		void populaAgrupamento(List<Agrupamento> result);
 		void populaEncontro(List<Encontro> result);
+		void init();
 	}
 
 	public MensagemPresenter(Display display, WebResource portalResource) {
@@ -95,7 +97,7 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 						break;
 					}
 				}
-				buscaMensagens();
+				getDisplay().init();
 			}
 		});
 	}
@@ -131,8 +133,9 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 			}
 		});
 	}
-	public void buscaMensagens(){
-		service.lista(grupoSelecionado, new WebAsyncCallback<List<Mensagem>>(getDisplay()) {
+	public void buscaMensagens(TipoMensagemEnum tipo){
+		getDisplay().showWaitMessage(true);
+		service.lista(grupoSelecionado, tipo, new WebAsyncCallback<List<Mensagem>>(getDisplay()) {
 			@Override
 			protected void success(List<Mensagem> lista) {
 				getDisplay().populaEntidades(lista);

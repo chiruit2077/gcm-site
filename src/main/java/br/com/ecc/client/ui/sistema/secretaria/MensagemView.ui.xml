@@ -20,9 +20,15 @@
 		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
 			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center">
 				<g:HTMLPanel width="100%">
-					<table cellpadding="3" cellspacing="0" border="0">
+					<table cellpadding="3" cellspacing="0" border="0" width="100%">
 						<tr>
+							<td width="180px">
+								Listar as mensagens de tipo:
+							</td>
 							<td>
+								<g:ListBox ui:field="tipoFiltroListBox"/>
+							</td>
+							<td align="right">
 								<g:Button ui:field="novoButton" text="Adicionar mensagem" />
 							</td>
 						</tr>

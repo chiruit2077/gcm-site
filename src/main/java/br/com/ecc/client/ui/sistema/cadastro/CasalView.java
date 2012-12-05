@@ -401,18 +401,20 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 				verificar = true;
 			}
 		}
-		if(getEncontroInscricaoVO().getEncontroInscricao().getValorEncontro()==null ||
-		   (getEncontroInscricaoVO().getEncontroInscricao().getEsconderPlanoPagamento()!=null && 
-		    getEncontroInscricaoVO().getEncontroInscricao().getEsconderPlanoPagamento())){
-			verificar = false;
-		}
 		boolean dadosPagamento = true;
-		if(verificar){
-			dadosPagamento = false;
-			for (EncontroInscricaoPagamento pagamento : getEncontroInscricaoVO().getListaPagamento()) {
-				if(!pagamento.getParcela().equals(0)){
-					dadosPagamento = true;
-					break;
+		if(getEncontroInscricaoVO()!=null){
+			if(getEncontroInscricaoVO().getEncontroInscricao().getValorEncontro()==null ||
+			   (getEncontroInscricaoVO().getEncontroInscricao().getEsconderPlanoPagamento()!=null && 
+			    getEncontroInscricaoVO().getEncontroInscricao().getEsconderPlanoPagamento())){
+				verificar = false;
+			}
+			if(verificar){
+				dadosPagamento = false;
+				for (EncontroInscricaoPagamento pagamento : getEncontroInscricaoVO().getListaPagamento()) {
+					if(!pagamento.getParcela().equals(0)){
+						dadosPagamento = true;
+						break;
+					}
 				}
 			}
 		}

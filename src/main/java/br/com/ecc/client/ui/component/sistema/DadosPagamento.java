@@ -535,7 +535,11 @@ public class DadosPagamento extends Composite {
 					p = new EncontroInscricaoPagamento();
 					p.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
 
-					hoje = new Date(hoje.getYear(), hoje.getMonth()+1, 5, 0, 0, 0);
+					if(hoje.getDate()<=5 && i==0){
+						hoje = new Date(hoje.getYear(), hoje.getMonth(), 5, 0, 0, 0);
+					} else {
+						hoje = new Date(hoje.getYear(), hoje.getMonth()+1, 5, 0, 0, 0);
+					}
 					p.setDataVencimento(hoje);
 
 					p.setParcela(i+1);

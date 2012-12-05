@@ -11,6 +11,7 @@ import br.com.ecc.model.Mensagem;
 import br.com.ecc.model.MensagemDestinatario;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.Usuario;
+import br.com.ecc.model.tipo.TipoMensagemEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.tipo.TipoVariavelEnum;
 import br.com.ecc.model.vo.MensagemVO;
@@ -42,7 +43,8 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 		boolean ok;
 		
 		if( String.valueOf(mensagemVO.getMensagem().getMensagem()).indexOf(TipoVariavelEnum.NOME_ENCONTRISTA.getTag())<0 &&
-			String.valueOf(mensagemVO.getMensagem().getMensagem()).indexOf(TipoVariavelEnum.DADOS_USUARIO.getTag())<0){
+			String.valueOf(mensagemVO.getMensagem().getMensagem()).indexOf(TipoVariavelEnum.DADOS_USUARIO.getTag())<0 &&
+			 mensagemVO.getMensagem().getTipoMensagem().equals(TipoMensagemEnum.NORMAL)){
 			sHTML = substituiTagNome(mensagemVO.getMensagem(), null, null);
 			cmdEmail.setMensagem(sHTML);
 			cmdEmail.setDestinatariosCopiaOculta("");

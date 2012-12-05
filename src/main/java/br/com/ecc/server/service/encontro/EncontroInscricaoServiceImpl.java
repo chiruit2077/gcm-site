@@ -1,5 +1,6 @@
 package br.com.ecc.server.service.encontro;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import br.com.ecc.client.service.encontro.EncontroInscricaoService;
@@ -36,19 +37,29 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("encontroInscricao.porEncontro");
 		cmd.addParameter("encontro", encontro);
-		return cmd.call();
+		List<EncontroInscricao> lista = cmd.call();
+		
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		for (EncontroInscricao encontroInscricao : lista) {
+			if(encontroInscricao.getMensagemDestinatario()!=null){
+				if(encontroInscricao.getMensagemDestinatario().getDataEnvio()!=null){
+					encontroInscricao.getMensagemDestinatario().setDataEnvioStr(df.format(encontroInscricao.getMensagemDestinatario().getDataEnvio()));
+				}
+				if(encontroInscricao.getMensagemDestinatario().getDataConfirmacao()!=null){
+					encontroInscricao.getMensagemDestinatario().setDataConfirmacaoStr(df.format(encontroInscricao.getMensagemDestinatario().getDataConfirmacao()));
+				}
+			}
+			if(encontroInscricao.getDataPrenchimentoFicha()!=null){
+				encontroInscricao.setDataPrenchimentoFichaStr(df.format(encontroInscricao.getDataPrenchimentoFicha()));
+			}
+		}
+		
+		return lista;
 	}
 
 	@Override
 	@Permissao(nomeOperacao="Excluir encontroInscricao", operacao=Operacao.EXCLUIR)
 	public void exclui(EncontroInscricao encontroInscricao) throws Exception {
-		//dependencias
-//		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-//		cmdEntidade.setNamedQuery("encontroAtividadeInscricao.porEncontroInscricao");
-//		cmdEntidade.addParameter("encontroInscricao", encontroInscricao);
-//		if(cmdEntidade.call().size()>0){
-//			throw new WebException("Erro ao excluir esta inscrição. \nJá existem atividades planilhadas para esta inscrição.");
-//		}
 		//removendo atividades no encontro
 		ExecuteUpdateCommand cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
 		cmdDelete.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
@@ -92,6 +103,19 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		cmdEntidade.addParameter("encontroInscricao", vo.getEncontroInscricao());
 		vo.setListaPagamentoDetalhe(cmdEntidade.call());
 		
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		if(vo.getEncontroInscricao().getMensagemDestinatario()!=null){
+			if(vo.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()!=null){
+				vo.getEncontroInscricao().getMensagemDestinatario().setDataEnvioStr(df.format(vo.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()));
+			}
+			if(vo.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()!=null){
+				vo.getEncontroInscricao().getMensagemDestinatario().setDataConfirmacaoStr(df.format(vo.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()));
+			}
+		}
+		if(vo.getEncontroInscricao().getDataPrenchimentoFicha()!=null){
+			vo.getEncontroInscricao().setDataPrenchimentoFichaStr(df.format(vo.getEncontroInscricao().getDataPrenchimentoFicha()));
+		}
+		
 		return vo;
 	}
 	
@@ -108,8 +132,21 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		List<EncontroInscricao> lista = cmdEntidade.call();
 		
 		if(lista.size()>0){
-			return getVO(lista.get(0));
+			vo = getVO(lista.get(0));
+			SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			if(vo.getEncontroInscricao().getMensagemDestinatario()!=null){
+				if(vo.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()!=null){
+					vo.getEncontroInscricao().getMensagemDestinatario().setDataEnvioStr(df.format(vo.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()));
+				}
+				if(vo.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()!=null){
+					vo.getEncontroInscricao().getMensagemDestinatario().setDataConfirmacaoStr(df.format(vo.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()));
+				}
+			}
+			if(vo.getEncontroInscricao().getDataPrenchimentoFicha()!=null){
+				vo.getEncontroInscricao().setDataPrenchimentoFichaStr(df.format(vo.getEncontroInscricao().getDataPrenchimentoFicha()));
+			}
 		}
+		
 		return vo;
 	}
 	

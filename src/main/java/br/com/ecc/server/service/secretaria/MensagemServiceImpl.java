@@ -1,10 +1,11 @@
 package br.com.ecc.server.service.secretaria;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.service.secretaria.MensagemService;
+import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Mensagem;
@@ -35,24 +36,32 @@ public class MensagemServiceImpl extends SecureRemoteServiceServlet implements M
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Listar mensagems", operacao=Operacao.VISUALIZAR)
-	public List<Mensagem> lista(Grupo grupo) throws Exception {
+	public List<Mensagem> lista(Grupo grupo, TipoMensagemEnum tipo) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("mensagem.porGrupo");
 		cmd.addParameter("grupo", grupo);
-		List<Object[]> resultado = cmd.call();
+		List<Mensagem> resultado = cmd.call();
 		
 		List<Mensagem> listaRetorno = new ArrayList<Mensagem>();
 		Mensagem m;
-		for (Object[] objects : resultado) {
+		boolean ok;
+		for (Mensagem mensagem : resultado) {
+			ok = true;
 			m = new Mensagem();
-			m.setId((Integer) objects[0]);
-			m.setGrupo((Grupo) objects[1]);
-			m.setData((Date) objects[2]);
-			m.setTitulo((String) objects[3]);
-			m.setDescricao((String) objects[4]);
-			m.setTipoMensagem((TipoMensagemEnum) objects[5]);
-			m.setVersion((Integer) objects[6]);
-			listaRetorno.add(m);
+			m.setId(mensagem.getId());
+			m.setGrupo(mensagem.getGrupo());
+			m.setData(mensagem.getData());
+			m.setTitulo(mensagem.getTitulo());
+			m.setDescricao(mensagem.getDescricao());
+			m.setTipoMensagem(mensagem.getTipoMensagem());
+			m.setEncontro(mensagem.getEncontro());
+			m.setVersion(mensagem.getVersion());
+			if(tipo!=null && !m.getTipoMensagem().equals(tipo)){
+				ok = false;
+			}
+			if(ok){
+				listaRetorno.add(m);
+			}
 		}
 		
 		return listaRetorno;
@@ -60,24 +69,26 @@ public class MensagemServiceImpl extends SecureRemoteServiceServlet implements M
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	@Permissao(nomeOperacao="Listar mensagems", operacao=Operacao.VISUALIZAR)
-	public List<Mensagem> listaEspecial(Grupo grupo) throws Exception {
+	@Permissao(nomeOperacao="Listar mensagens", operacao=Operacao.VISUALIZAR)
+	public List<Mensagem> listaEspecial(Grupo grupo, Encontro encontro) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("mensagem.porGrupoTipoEspecial");
 		cmd.addParameter("grupo", grupo);
-		List<Object[]> resultado = cmd.call();
+		cmd.addParameter("encontro", encontro);
+		List<Mensagem> resultado = cmd.call();
 		
 		List<Mensagem> listaRetorno = new ArrayList<Mensagem>();
 		Mensagem m;
-		for (Object[] objects : resultado) {
+		for (Mensagem mensagem : resultado) {
 			m = new Mensagem();
-			m.setId((Integer) objects[0]);
-			m.setGrupo((Grupo) objects[1]);
-			m.setData((Date) objects[2]);
-			m.setTitulo((String) objects[3]);
-			m.setDescricao((String) objects[4]);
-			m.setTipoMensagem((TipoMensagemEnum) objects[5]);
-			m.setVersion((Integer) objects[6]);
+			m.setId(mensagem.getId());
+			m.setGrupo(mensagem.getGrupo());
+			m.setData(mensagem.getData());
+			m.setTitulo(mensagem.getTitulo());
+			m.setDescricao(mensagem.getDescricao());
+			m.setTipoMensagem(mensagem.getTipoMensagem());
+			m.setEncontro(mensagem.getEncontro());
+			m.setVersion(mensagem.getVersion());
 			listaRetorno.add(m);
 		}
 		
@@ -131,6 +142,16 @@ public class MensagemServiceImpl extends SecureRemoteServiceServlet implements M
 		cmd.setNamedQuery("mensagemDestinatario.porMensagem");
 		cmd.addParameter("mensagem", mensagem);
 		vo.setListaDestinatarios(cmd.call());
+		
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		for (MensagemDestinatario md : vo.getListaDestinatarios()) {
+			if(md.getDataEnvio()!=null){
+				md.setDataEnvioStr(df.format(md.getDataEnvio()));
+			}
+			if(md.getDataConfirmacao()!=null){
+				md.setDataConfirmacaoStr(df.format(md.getDataConfirmacao()));
+			}
+		}
 		
 		return vo;
 	}

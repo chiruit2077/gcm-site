@@ -119,8 +119,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	private FlexTableUtil detalheTableUtil = new FlexTableUtil();
 	@UiField ListBox confirmacaoListBox;
 	
-	DateTimeFormat dfGlobal = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
-	DateTimeFormat dfGlobalTempo = DateTimeFormat.getFormat("dd-MM-yyy HH:mm");
+	//DateTimeFormat dfGlobal = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
+	//DateTimeFormat dfGlobalTempo = DateTimeFormat.getFormat("dd-MM-yyy HH:mm");
 	NumberFormat dfCurrency = NumberFormat.getCurrencyFormat();
 	
 	private EncontroInscricaoVO entidadeEditada;
@@ -424,16 +424,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		entidadeEditada.setEncontroInscricao(encontroInscricao);
 		if(entidadeEditada.getEncontroInscricao()!=null){
 			if(entidadeEditada.getEncontroInscricao().getMensagemDestinatario()!=null){
-			   if(entidadeEditada.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()!=null){
-				   dataFichaEnviadaAfilhadoDateBox.setValue(dfGlobalTempo.format(entidadeEditada.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()));
-				}
-				if(entidadeEditada.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()!=null){
-					dataFichaRecebidaAfilhadoDateBox.setValue(dfGlobalTempo.format(entidadeEditada.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()));
-				}
+				dataFichaEnviadaAfilhadoDateBox.setValue(entidadeEditada.getEncontroInscricao().getMensagemDestinatario().getDataEnvioStr());
+				dataFichaRecebidaAfilhadoDateBox.setValue(entidadeEditada.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacaoStr());
 			}
-			if(entidadeEditada.getEncontroInscricao().getDataPrenchimentoFicha()!=null){
-				dataFichaAtualizadaAfilhadoDateBox.setValue(dfGlobalTempo.format(entidadeEditada.getEncontroInscricao().getDataPrenchimentoFicha()));
-			}
+			dataFichaAtualizadaAfilhadoDateBox.setValue(entidadeEditada.getEncontroInscricao().getDataPrenchimentoFichaStr());
 		}
 	}
 	
@@ -537,17 +531,12 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			dados[3] = encontroInscricao.getCasal()==null?encontroInscricao.getPessoa().getNome():encontroInscricao.getCasal().toString();
 			
 			if(encontroInscricao.getMensagemDestinatario()!=null){
-			   if(encontroInscricao.getMensagemDestinatario().getDataEnvio()!=null){
-				   dados[4] = dfGlobalTempo.format(encontroInscricao.getMensagemDestinatario().getDataEnvio());
-				}
-				if(encontroInscricao.getMensagemDestinatario().getDataConfirmacao()!=null){
-					dados[5] = dfGlobalTempo.format(encontroInscricao.getMensagemDestinatario().getDataConfirmacao());
-				}
+			   dados[4] = encontroInscricao.getMensagemDestinatario().getDataEnvioStr();
+			   dados[5] = encontroInscricao.getMensagemDestinatario().getDataConfirmacaoStr();
 			}
-			if(encontroInscricao.getDataPrenchimentoFicha()!=null){
-				dataFichaAtualizadaAfilhadoDateBox.setValue(dfGlobalTempo.format(encontroInscricao.getDataPrenchimentoFicha()));
-				dados[6] = dfGlobalTempo.format(encontroInscricao.getDataPrenchimentoFicha());
-			}
+			dataFichaAtualizadaAfilhadoDateBox.setValue(encontroInscricao.getDataPrenchimentoFichaStr());
+			dados[6] = encontroInscricao.getDataPrenchimentoFichaStr();
+			
 			if(encontroInscricao.getTipoConfirmacao()!=null){
 				dados[7] = encontroInscricao.getTipoConfirmacao().getNome();
 			} else {
