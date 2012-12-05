@@ -40,7 +40,6 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 		void setVO(MensagemVO mensagemVO);
 		void populaAgrupamento(List<Agrupamento> result);
 		void populaEncontro(List<Encontro> result);
-		void init();
 	}
 
 	public MensagemPresenter(Display display, WebResource portalResource) {
@@ -97,7 +96,7 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 						break;
 					}
 				}
-				getDisplay().init();
+				getDisplay().showWaitMessage(false);
 			}
 		});
 	}

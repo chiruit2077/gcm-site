@@ -29,12 +29,12 @@ public class LabelTotalUtil {
 		}
 		if(tamanho>0){
 			if(tamanho==1){
-				label.setText(tamanho + " " + nome + " adicionad" + gender);
+				label.setText(tamanho + " " + nome + " listad" + gender);
 			} else {
-				label.setText(tamanho + " " + nomePlural + " adicionad" + gender + "s");
+				label.setText(tamanho + " " + nomePlural + " listad" + gender + "s");
 			}
 		} else {
-			label.setText("Nenhum" + noneSingularGender + " " + nome + " adicionad" + gender);			
+			label.setText("Nenhum" + noneSingularGender + " " + nome + " listad" + gender);			
 		}
 	}
 }

@@ -599,14 +599,9 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		}
 	}
 
-	@Override
-	public void init() {
-		TipoMensagemEnum tipo = (TipoMensagemEnum) ListBoxUtil.getItemSelected(tipoFiltroListBox, TipoMensagemEnum.values());
-		presenter.buscaMensagens(tipo);
-	}
-	
 	@UiHandler("tipoFiltroListBox")
 	public void tipoFiltroListChangeHandler(ChangeEvent event){
-		init();
+		TipoMensagemEnum tipo = (TipoMensagemEnum) ListBoxUtil.getItemSelected(tipoFiltroListBox, TipoMensagemEnum.values());
+		presenter.buscaMensagens(tipo);
 	}
 }
