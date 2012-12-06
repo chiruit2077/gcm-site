@@ -22,9 +22,7 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 	private String mensagem;
 	private Boolean naoEsperar;
 	
-	private Transport transport;
-	private Session mailSession;
-	private Boolean fecharConexao = false;
+	Session mailSession;
 
 	@Override
 	public Void call() throws Exception {
@@ -32,13 +30,14 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 		props.put("mail.transport.protocol", "smtps");
 		props.put("mail.smtps.host", "smtp.gmail.com");
 		props.put("mail.smtps.auth", "true");
+		
 		mailSession = Session.getDefaultInstance(props);
 		mailSession.setDebug(false);
+		
 		final MimeMessage message = new MimeMessage(mailSession);
 		message.setSubject(assunto, "UTF-8");
 		message.setText(mensagem, "UTF-8");
 		message.setHeader("Content-Type", "text/html; charset=UTF-8");
-		//message.setContent(mensagem, "text/html");
 		message.setFrom(new InternetAddress("ecc.uberlandia@gmail.com", "ECC Uberlandia"));
 		if(destinatario!=null){
 			message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
@@ -49,6 +48,7 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 		if(destinatariosCopiaOculta!=null && !destinatariosCopiaOculta.equals("")){
 			message.addRecipients(Message.RecipientType.BCC, InternetAddress.parse(destinatariosCopiaOculta));
 		}
+		
 		if(naoEsperar!=null && naoEsperar){
 			Thread t = new Thread(new Runnable() {
 				@Override
@@ -56,6 +56,7 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 					try {
 						envia(message);
 					} catch (Exception e) {
+						System.out.println("Erro ao enviar email - Thread:" + destinatario + " " + destinatariosCopia + " " + destinatariosCopiaOculta);
 						e.printStackTrace();
 					}
 				}
@@ -69,13 +70,10 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 
 	private void envia(final MimeMessage message) throws Exception {
 		try {
-			if(transport==null){
-				transport = conecta();
-			}
+			Transport transport = mailSession.getTransport();
+			transport.connect("smtp.gmail.com", 465, "ecc.uberlandia@gmail.com","ecc1508udia");
 			transport.sendMessage(message, message.getAllRecipients());
-			if(fecharConexao!=null && fecharConexao){
-				transport.close();
-			}
+			transport.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			String dest = "";
@@ -85,12 +83,6 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 			}
 			throw new WebException("Erro ao enviar email: " + e.getMessage() +  "\nDestinatarios:" + dest);
 		}
-	}
-
-	public Transport conecta() throws Exception {
-		transport = mailSession.getTransport();
-		transport.connect("smtp.gmail.com", 465, "ecc.uberlandia@gmail.com","ecc1508udia");
-		return transport;
 	}
 
 	public String getAssunto() {
@@ -128,11 +120,5 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 	}
 	public void setNaoEsperar(Boolean naoEsperar) {
 		this.naoEsperar = naoEsperar;
-	}
-	public Boolean getFecharConexao() {
-		return fecharConexao;
-	}
-	public void setFecharConexao(Boolean fecharConexao) {
-		this.fecharConexao = fecharConexao;
 	}
 }

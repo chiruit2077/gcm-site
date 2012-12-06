@@ -37,14 +37,13 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 		
 		EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
 		cmdEmail.setAssunto(mensagemVO.getMensagem().getGrupo().getNome() + " - " + mensagemVO.getMensagem().getTitulo());
-		cmdEmail.setFecharConexao(false);
 		
 		String sHTML = "";
 		boolean ok;
 		
 		if( String.valueOf(mensagemVO.getMensagem().getMensagem()).indexOf(TipoVariavelEnum.NOME_ENCONTRISTA.getTag())<0 &&
 			String.valueOf(mensagemVO.getMensagem().getMensagem()).indexOf(TipoVariavelEnum.DADOS_USUARIO.getTag())<0 &&
-			 mensagemVO.getMensagem().getTipoMensagem().equals(TipoMensagemEnum.NORMAL)){
+			mensagemVO.getMensagem().getTipoMensagem().equals(TipoMensagemEnum.NORMAL)){
 			sHTML = substituiTagNome(mensagemVO.getMensagem(), null, null);
 			cmdEmail.setMensagem(sHTML);
 			cmdEmail.setDestinatariosCopiaOculta("");
