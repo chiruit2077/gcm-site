@@ -259,6 +259,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		int row = 0;
 		Image imagem;
 		HorizontalPanel hp;
+		String t = "";
 		for (final Casal casal: lista) {
 			Object dados[] = new Object[10];
 			
@@ -294,16 +295,57 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 			
 			dados[0] = hp;
 			dados[1] = casal.getApelidos("e");
-			dados[2] = new HTML(casal.getEle().getNome() + "<br>" + casal.getEla().getNome());
-			dados[3] = new HTML((casal.getEle().getEmail()==null?"&nbsp;":casal.getEle().getEmail()) + "<br>" + (casal.getEla().getEmail()==null?"&nbsp;":casal.getEla().getEmail()));
-			dados[4] = new HTML((casal.getEle().getTelefoneCelular()==null?"&nbsp;":casal.getEle().getTelefoneCelular()) + "<br>" + (casal.getEla().getTelefoneCelular()==null?"&nbsp;":casal.getEla().getTelefoneCelular()));
+			
+			t = "";
+			if(casal.getEle()!=null){
+				t = casal.getEle().getNome()+ "<br>" ;
+			}
+			if(casal.getEla()!=null){
+				t += casal.getEla().getNome();
+			}
+			dados[2] = new HTML(t);
+			
+			t = "";
+			if(casal.getEle()!=null){
+				t = (casal.getEle().getEmail()==null?"&nbsp;":casal.getEle().getEmail()) + "<br>";
+			}
+			if(casal.getEla()!=null){
+				t = (casal.getEla().getEmail()==null?"&nbsp;":casal.getEla().getEmail());
+			}
+			dados[3] = new HTML(t);
+			t = "";
+			if(casal.getEle()!=null){
+				t = (casal.getEle().getTelefoneCelular()==null?"&nbsp;":casal.getEle().getTelefoneCelular()) + "<br>";
+			}
+			if(casal.getEla()!=null){
+				t = (casal.getEla().getTelefoneCelular()==null?"&nbsp;":casal.getEla().getTelefoneCelular());
+			}
+			dados[4] = new HTML(t);
 			dados[5] = casal.getTelefone();
-			dados[6] = new HTML((casal.getEle().getAlergico()!=null&&casal.getEle().getAlergico()?"Sim":"Não") + "<br>" + 
-					            (casal.getEla().getAlergico()!=null&&casal.getEla().getAlergico()?"Sim":"Não"));
-			dados[7] = new HTML((casal.getEle().getDiabetico()!=null&&casal.getEle().getDiabetico()?"Sim":"Não") + "<br>" + 
-                    			(casal.getEla().getDiabetico()!=null&&casal.getEla().getDiabetico()?"Sim":"Não"));
-			dados[8] = new HTML((casal.getEle().getVegetariano()!=null&&casal.getEle().getVegetariano()?"Sim":"Não") + "<br>" + 
-								(casal.getEla().getVegetariano()!=null&&casal.getEla().getVegetariano()?"Sim":"Não"));
+			t = "";
+			if(casal.getEle()!=null){
+				t = (casal.getEle().getAlergico()!=null&&casal.getEle().getAlergico()?"Sim":"Não") + "<br>";
+			}
+			if(casal.getEla()!=null){
+				t = (casal.getEla().getAlergico()!=null&&casal.getEla().getAlergico()?"Sim":"Não");
+			}
+			dados[6] = new HTML(t);
+			t = "";
+			if(casal.getEle()!=null){
+				t = (casal.getEle().getDiabetico()!=null&&casal.getEle().getDiabetico()?"Sim":"Não") + "<br>";
+			}
+			if(casal.getEla()!=null){
+				t = (casal.getEla().getDiabetico()!=null&&casal.getEla().getDiabetico()?"Sim":"Não");
+			}
+			dados[7] = new HTML(t);
+			t = "";
+			if(casal.getEle()!=null){
+				t = (casal.getEle().getVegetariano()!=null&&casal.getEle().getVegetariano()?"Sim":"Não") + "<br>";
+			}
+			if(casal.getEla()!=null){
+				t = (casal.getEla().getVegetariano()!=null&&casal.getEla().getVegetariano()?"Sim":"Não");
+			}
+			dados[8] = new HTML(t);
 			dados[9] = casal.getTipoCasal().getNome(); 
 			if(listagem){
 				casalListagemTableUtil.addRow(dados,row+1);

@@ -39,6 +39,7 @@ public final class UploadImagePreview extends Composite {
 	private Boolean showProgress=true;
 	private Boolean multiple=false;
 	private Boolean enableHTML5;
+	private Boolean resample=true;
 	
 	private List<UploadImagemItem> listaImagens = new ArrayList<UploadImagemItem>();
 	HorizontalPanel imgHPanel;
@@ -187,7 +188,11 @@ public final class UploadImagePreview extends Composite {
 										itemImagem.getUploadProgressBar().initialize(fileName, false);
 									}
 									if(enableHTML5){
-										previewImage(elementoNativo, i, idImage, 1024, GWT.getModuleBaseURL()+servletURL);
+										if(resample){
+											previewImage(elementoNativo, i, idImage, 1024, GWT.getModuleBaseURL()+servletURL);
+										} else {
+											previewImage(elementoNativo, i, idImage, null, GWT.getModuleBaseURL()+servletURL);
+										}
 										itemImagem.setSituacao(UploadImagemItem.Status.PREVISUALIZANDO);
 									}
 									i++;
@@ -278,7 +283,7 @@ public final class UploadImagePreview extends Composite {
 											itemImagem.setSituacao(UploadImagemItem.Status.FINALIZADO);
 											listaImagens.set(i, itemImagem);
 											final int j = i;
-											serviceUpload.gravaArquivoDigital(uf, true, new AsyncCallback<Integer>() {
+											serviceUpload.gravaArquivoDigital(uf, resample, new AsyncCallback<Integer>() {
 												@Override
 												public void onFailure(Throwable arg0) {
 												}
@@ -326,9 +331,6 @@ public final class UploadImagePreview extends Composite {
 		return $wnd.verificaHTML5();
 	}-*/;
 	
-	public Boolean getShowProgress() {
-		return showProgress;
-	}
 	public void setShowProgress(Boolean showProgress) {
 		this.showProgress = showProgress;
 	}
@@ -337,9 +339,6 @@ public final class UploadImagePreview extends Composite {
 	}
 	public void setServletURL(String servletURL) {
 		this.servletURL = servletURL;
-	}
-	public Boolean getMultiple() {
-		return multiple;
 	}
 	public void setMultiple(Boolean multiple) {
 		if(multiple){
@@ -352,8 +351,10 @@ public final class UploadImagePreview extends Composite {
 	public List<UploadImagemItem> getListaImagens() {
 		return listaImagens;
 	}
-	
 	public void adicionaImage(){
 		fileUpload.getElement().<InputElement>cast().click();
+	}
+	public void setResample(Boolean resample) {
+		this.resample = resample;
 	}
 }

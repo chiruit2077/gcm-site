@@ -318,11 +318,11 @@ td.datePickerMonth {
 .dateBoxPopup {
 }
 .iframePortal {
-overflow-x:hidden; 
-overflow-y:scroll;
-height: 460px;
-width: 100%;
-border: 0px;
+	overflow-x:hidden; 
+	overflow-y:scroll;
+	height: 460px;
+	width: 100%;
+	border: 0px;
 }
 .gwt-DecoratedTabBar {
 }

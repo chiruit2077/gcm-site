@@ -89,7 +89,7 @@
 				         width="550px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Selecionar imagem">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%">
-					    <u:UploadImagePreview ui:field="uploadImagePreview" multiple="false"/>
+					    <u:UploadImagePreview ui:field="uploadImagePreview" multiple="false" resample="false"/>
 				    </g:VerticalPanel>
 				    <g:HTMLPanel styleName="{style.toolbar}">
 						<table cellpadding="5" cellspacing="0" border="0" width="100%">

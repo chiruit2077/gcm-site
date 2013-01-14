@@ -71,23 +71,6 @@
 	    </style>
 		
 		<script>
-		/*
-			function initializeScroll(){
-				var pane = $('.content-Scroll');
-				pane.jScrollPane({
-					horizontalGutter:-8,
-					verticalGutter:-8,
-					'showArrows': false
-				});
-				$('.jspDrag').hide();
-				$('.jspScrollable').mouseenter(function(){
-					$('.jspDrag').stop(true, true).fadeIn('slow');
-				});
-				$('.jspScrollable').mouseleave(function(){
-					$('.jspDrag').stop(true, true).fadeOut('slow');
-				});
-			}
-		*/
 			var apis = [];
 			function destroyScroll(){
 				if (apis.length) {
@@ -175,7 +158,7 @@
 	                        return function(e) {
 	                        	if(resampleSize[indice]==null){
 	        						document.getElementById(idPreviewer[indice]).src=e.target.result;
-	        						dataToSend[indice] = reader.result;
+	        						dataToSend[indice] = e.target.result;
 	        						//enviaDados(reader.result, indice);
 	        					} else {
 	        						Resample(e.target.result, resampleSize[indice], null, (function(indice) {
@@ -215,58 +198,6 @@
 				}
 			}
 			
-			/*
-			var reader = new FileReader();
-			var idPreviewer, resampleSize=null, fileType, url;
-			function preview(what,i,id,size,u) {
-				idPreviewer = id;
-				resampleSize=size;
-				fileType=what.files[0].type;
-				url=u;
-		        var accept = ["image/png","image/jpeg","image/jpg","image/gif"];
-		        if (accept.indexOf(what.files[0].type) > -1) {
-		            if(what.files && what.files[0]){
-	                    reader.onload = imageHandler;
-	                    reader.readAsDataURL(what.files[0]);
-		            }
-		        }
-			}
-			
-			function enviaDados(data){
-				var preData = dataURItoBlob(data);
-				var formData = new FormData();
-		        var xhr = new XMLHttpRequest();
-		        xhr.open('POST', url);
-	            formData.append("fileUpload", preData);
-		        xhr.send(formData);
-			}
-			function dataURItoBlob(dataURI) {
-			    var binary = atob(dataURI.split(',')[1]);
-			    var array = [];
-			    for(var i = 0; i < binary.length; i++) {
-			        array.push(binary.charCodeAt(i));
-			    }
-				try {
-				    return new Blob([new Uint8Array(array)], {type: fileType});
-				} catch (e){
-					var oBuilder = new BlobBuilder();
-					oBuilder.append(data);
-					return oBuilder.getBlob(new Uint8Array(array));
-				}
-			}
-			function imageHandler(e2){
-				if(resampleSize==null){
-					document.getElementById(idPreviewer).src=reader.result;
-					enviaDados(reader.result);
-				} else {
-					Resample(reader.result, resampleSize, null, resampled);
-				}
-			}
-			function resampled(data) {
-				document.getElementById(idPreviewer).src = data;
-				enviaDados(data);
-		    }
-			*/
 			var Resample = (function (canvas) {
 				 function Resample(img, width, height, onresample) {
 					  var load = typeof img == "string", i = load || img;
