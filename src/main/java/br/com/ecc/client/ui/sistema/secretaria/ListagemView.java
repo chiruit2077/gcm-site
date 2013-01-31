@@ -346,7 +346,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 				t = (casal.getEla().getVegetariano()!=null&&casal.getEla().getVegetariano()?"Sim":"Não");
 			}
 			dados[8] = new HTML(t);
-			dados[9] = casal.getTipoCasal().getNome(); 
+			dados[9] = casal.getTipoCasal()==null?"":casal.getTipoCasal().getNome(); 
 			if(listagem){
 				casalListagemTableUtil.addRow(dados,row+1);
 			} else {

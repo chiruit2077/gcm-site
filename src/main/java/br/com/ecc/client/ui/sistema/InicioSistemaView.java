@@ -577,7 +577,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dadosHP.add(label);
 		
-		label = new Label(niver.getCasal().getGrupo().getNome());
+		label = new Label();
+		if(niver.getCasal().getGrupo()!=null){
+			label.setText(niver.getCasal().getGrupo().getNome());
+		} else {
+			label.setText("*Sem grupo");
+		}
 		label.setStyleName("label-italicBlue");
 		dadosHP.add(label);
 		
