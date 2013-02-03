@@ -18,7 +18,7 @@ public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 
 	private static final long serialVersionUID = 800508960523259729L;
 	@Inject Injector injector;
-	
+
 	@Override
 	@Transactional
 	public String doPost(MultipartRequest multipartRequest) throws Exception {
@@ -53,7 +53,7 @@ public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 						decorateOutput = false;
 					}
 				}
-				
+
 
 				ArquivoDigitalSalvarCommand salvarCmd = injector.getInstance(ArquivoDigitalSalvarCommand.class);
 				salvarCmd.setArquivoDigital(arquivoDigital);
@@ -67,5 +67,5 @@ public class UploadArquivoDigitalServlet extends BaseUploadServlet {
 		}
 		return arquivoDigital.getId().toString();
 	}
-	
+
 }

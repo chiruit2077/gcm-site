@@ -19,6 +19,7 @@ import br.com.ecc.server.service.encontro.EncontroAtividadeServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroConviteResponsavelServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroConviteServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroFilaServiceImpl;
+import br.com.ecc.server.service.encontro.EncontroInscricaoFichaPagamentoServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroInscricaoServiceImpl;
 import br.com.ecc.server.service.patrimonio.ItemPatrimonioServiceImpl;
 import br.com.ecc.server.service.redirecionamento.ConfirmacaoServlet;
@@ -49,17 +50,18 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "agrupamento").with(AgrupamentoServiceImpl.class);
 		this.serve(contextPath + "mensagem").with(MensagemServiceImpl.class);
 		this.serve(contextPath + "itemPatrimonio").with(ItemPatrimonioServiceImpl.class);
-		
+
 		this.serve(contextPath + "quarto").with(QuartoServiceImpl.class);
-		
+
 		this.serve(contextPath + "encontroInscricao").with(EncontroInscricaoServiceImpl.class);
 		this.serve(contextPath + "encontroAtividade").with(EncontroAtividadeServiceImpl.class);
 		this.serve(contextPath + "encontroAtividadeInscricao").with(EncontroAtividadeInscricaoServiceImpl.class);
-		
+		this.serve(contextPath + "encontroInscricaoFichaPagamento").with(EncontroInscricaoFichaPagamentoServiceImpl.class);
+
 		this.serve(contextPath + "encontroConvite").with(EncontroConviteServiceImpl.class);
 		this.serve(contextPath + "encontroFila").with(EncontroFilaServiceImpl.class);
 		this.serve(contextPath + "encontroConviteResponsavel").with(EncontroConviteResponsavelServiceImpl.class);
-		
+
 		// core
 		this.serve(contextPath + "arquivoDigital").with(ArquivoDigitalServiceImpl.class);
 		this.serve(contextPath + "autenticacao").with(AdministracaoServiceImpl.class);
@@ -69,14 +71,14 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "email").with(EmailServiceImpl.class);
 		this.serve(contextPath + "readresources").with(ResourceReaderServiceImpl.class);
 		this.serve(contextPath + "entidadegenerica").with(EntidadeGenericaServiceImpl.class);
-		
+
 		// servlets
 		this.serve(contextPath + "report").with(ReportServlet.class);
 		this.serve(contextPath + "dr").with(DownloadResourceServlet.class);
-		
+
 		this.serve(contextPath + "uploadArquivo").with(UploadArquivoServlet.class);
 		this.serve(contextPath + "uploadprogress").with(UploadProgressServiceImpl.class);
-		
+
 		// servlets de redirecionamento
 		this.serve(contextPath + "ficha").with(FichaServlet.class);
 		this.serve(contextPath + "confirmacao").with(ConfirmacaoServlet.class);

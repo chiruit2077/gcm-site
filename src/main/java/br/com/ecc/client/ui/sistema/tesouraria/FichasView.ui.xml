@@ -1,0 +1,93 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
+  xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox"  >
+  	<g:VerticalPanel horizontalAlignment="center">
+		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
+			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
+				<tr>
+					<td>
+				  		<g:Label ui:field="tituloFormularioLabel" width="100%"/>
+					</td>
+					<td width="30px" align="right">
+						<g:Image ui:field="fecharImage" url="images/close.png" styleName="portal-ImageCursor" width="20px"/>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
+			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center" >
+				<g:HTMLPanel width="100%">
+					<table cellpadding="3" cellspacing="0" border="0">
+						<tr>
+							<td>
+								<g:Button ui:field="novoButton">Adicionar Ficha</g:Button>
+							</td>
+							<td>
+								<g:Button ui:field="gerarButton">Gerar Ficha Vagas</g:Button>
+							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel spacing="2" width="100%">
+				<g:CheckBox ui:field="exibeLiberadosCheckBox" text="Exibir ficha Liberadas"/>
+				<g:CheckBox ui:field="exibeReservadasCheckBox" text="Exibir ficha Reservadas"/>
+				<g:Label ui:field="itemTotal" width="100%" styleName="portal-rowCountLabel" text="Nenhum Ficha adicionada" horizontalAlignment="right"/>
+			</g:HorizontalPanel>
+			<g:FlexTable ui:field="fichaFlexTable" cellPadding="0" cellSpacing="0" />
+		</g:VerticalPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaDialogBox" visible="false"
+				         width="350px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Ficha">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
+						<g:HTMLPanel >
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel">Ficha:</td>
+									<td>
+										<cn:NumberTextBox ui:field="fichaTextBox" width="80px" textAlignment="center"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Tipo:</td>
+									<td>
+										<g:ListBox ui:field="tipoListBox" width="100px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Status:</td>
+									<td>
+										<g:ListBox ui:field="statusListBox" width="100px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Observação:</td>
+									<td>
+										<g:TextBox ui:field="observacaoTextBox" width="200px" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Nome:</td>
+									<td>
+										<g:Label ui:field="nomeLabel" width="100px"/>
+									</td>
+								</tr>
+						</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarButton">Salvar</g:Button>
+							<g:Button ui:field="fecharButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>

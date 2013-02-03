@@ -27,6 +27,7 @@ import br.com.ecc.model.tipo.TipoSituacaoEnum;
 import br.com.ecc.model.vo.CasalParamVO;
 import br.com.ecc.model.vo.CasalVO;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
+import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -69,24 +70,24 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiTemplate("CasalView.ui.xml")
 	interface CasalViewUiBinder extends UiBinder<Widget, CasalView> {}
 	private CasalViewUiBinder uiBinder = GWT.create(CasalViewUiBinder.class);
-	
+
 	@UiField FlowPanel formularioFlowPanel;
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 	@UiField VerticalPanel centralPanel;
 	@UiField(provided=true) FlexTable casalFlexTable;
 	private FlexTableUtil casalTableUtil = new FlexTableUtil();
-	
+
 	@UiField TextBox nomeTextBox;
 	@UiField ListBox agrupamentoListBox;
 	@UiField ListBox tipoInscricaoListBox;
 	@UiField ListBox tipoCasalListBox;
-	
+
 	//ele
 	@UiField TextBox eleNomeTextBox;
 	@UiField(provided = true) SuggestBox eleSuggestBox;
 	private final GenericEntitySuggestOracle eleSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField TextBox eleApelidoTextBox;
 	@UiField DateBox eleNascimentoDateBox;
 	@UiField TextBox eleRgTextBox;
@@ -103,12 +104,12 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiField CheckBox eleHipertensoCheckBox;
 	@UiField TextBox eleAlergiaTextBox;
 	@UiField TextBox eleNecessidadesTextBox;
-	
+
 	//ela
 	@UiField TextBox elaNomeTextBox;
 	@UiField(provided = true) SuggestBox elaSuggestBox;
 	private final GenericEntitySuggestOracle elaSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField TextBox elaApelidoTextBox;
 	@UiField DateBox elaNascimentoDateBox;
 	@UiField TextBox elaRgTextBox;
@@ -125,7 +126,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiField CheckBox elaHipertensoCheckBox;
 	@UiField TextBox elaAlergiaTextBox;
 	@UiField TextBox elaNecessidadesTextBox;
-	
+
 	//casal
 	@UiField HTMLPanel situacaoHTMLPanel;
 	@UiField ListBox situacaoListBox;
@@ -142,13 +143,13 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiField TextBox atividadeTextBox;
 	@UiField TextBox musicaTextBox;
 	@UiField HTMLPanel dadosAfilhadoHTMLPanel;
-	
+
 	@UiField(provided=true) FlexTable filhosFlexTable;
 	private FlexTableUtil filhosTableUtil = new FlexTableUtil();
-	
+
 	@UiField(provided=true) FlexTable elePaisFlexTable;
 	private FlexTableUtil elePaisTableUtil = new FlexTableUtil();
-	
+
 	@UiField(provided=true) FlexTable elaPaisFlexTable;
 	private FlexTableUtil elaPaisTableUtil = new FlexTableUtil();
 
@@ -157,15 +158,16 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 
 	@UiField(provided=true) FlexTable emergenciaFlexTable;
 	private FlexTableUtil emergenciaTableUtil = new FlexTableUtil();
-	
+
 //	@UiField(provided=true) FlexTable indicacoesFlexTable;
 //	private FlexTableUtil indicacoesTableUtil = new FlexTableUtil();
-	
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button novoButton;
 	@UiField Button salvarButton;
+	@UiField Button printButton;
 	@UiField HorizontalPanel ferramentasHorizontalPanel;
-	
+
 	//Contato
 	@UiField DialogBox editaContatoDialogBox;
 	@UiField HTMLPanel idadeHTMLPanel;
@@ -175,18 +177,18 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiField TextBox comercialContatoTextBox;
 	@UiField TextBox celularContatoTextBox;
 	@UiField(provided=true) NumberTextBox idadeNumberTextBox;
-	
+
 	@UiField Image casalImage;
 	//@UiField UploadArquivoDigital logotipoUploadArquivoDigital;
-	
+
 	//dados do pagamento
 	@UiField HTMLPanel pagamentoHTMLPanel;
 	@UiField DadosPagamento dadosPagamentoComponent;
-	
-	
+
+
 	@UiField DialogBox imageDialogBox;
 	@UiField UploadImagePreview uploadImagePreview;
-	
+
 	private CasalVO entidadeEditada;
 	private CasalContato contatoEditado;
 
@@ -200,17 +202,17 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		criaTabelaResponsaveis();
 		criaTabelaEmergencia();
 //		criaTabelaIndicacoes();
-		
+
 		eleSuggest.setMinimoCaracteres(2);
 		eleSuggest.setSuggestQuery("pessoa.porNomeLike");
 		eleSuggestBox = new SuggestBox(eleSuggest);
-		
+
 		elaSuggest.setMinimoCaracteres(2);
 		elaSuggest.setSuggestQuery("pessoa.porNomeLike");
 		elaSuggestBox = new SuggestBox(elaSuggest);
-		
-		idadeNumberTextBox = new NumberTextBox(false, false, 5, 5);		
-		
+
+		idadeNumberTextBox = new NumberTextBox(false, false, 5, 5);
+
 		initWidget(uiBinder.createAndBindUi(this));
 
 		eleNascimentoDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM)));
@@ -219,23 +221,23 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		elaNascimentoDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 		casamentoDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM)));
 		casamentoDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		tituloFormularioLabel.setText(getDisplayTitle());
 
 		ListBoxUtil.populate(situacaoListBox, false, TipoSituacaoEnum.values());
 		ListBoxUtil.populate(tipoListBox, false, TipoCasalEnum.values());
-		
+
 		tipoInscricaoListBox.addItem("");
 		tipoInscricaoListBox.addItem("Todos os inscritos");
 		for (TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
 			tipoInscricaoListBox.addItem(tipo.toString());
 		}
-		
+
 		tipoCasalListBox.addItem("");
 		for (TipoCasalEnum tipo : TipoCasalEnum.values()) {
 			tipoCasalListBox.addItem(tipo.toString());
 		}
-		
+
 		nomeTextBox.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -264,12 +266,12 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		});
 		formularioFlowPanel.setHeight((this.getWindowHeight() - 150) + "px");
 	}
-	
+
 	private void criaTabelaFilhos() {
 		filhosFlexTable = new FlexTable();
 		filhosFlexTable.setStyleName("portal-formSmall");
 		filhosTableUtil.initialize(filhosFlexTable);
-		
+
 		filhosTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		filhosTableUtil.addColumn("Nome", "160", HasHorizontalAlignment.ALIGN_LEFT);
 		filhosTableUtil.addColumn("Idade", "30", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.NUMBER, null);
@@ -282,7 +284,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		elePaisFlexTable = new FlexTable();
 		elePaisFlexTable.setStyleName("portal-formSmall");
 		elePaisTableUtil.initialize(elePaisFlexTable);
-		
+
 		elePaisTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		elePaisTableUtil.addColumn("Nome", "160", HasHorizontalAlignment.ALIGN_LEFT);
 		elePaisTableUtil.addColumn("Residencial", "50", HasHorizontalAlignment.ALIGN_LEFT);
@@ -294,7 +296,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		elaPaisFlexTable = new FlexTable();
 		elaPaisFlexTable.setStyleName("portal-formSmall");
 		elaPaisTableUtil.initialize(elaPaisFlexTable);
-		
+
 		elaPaisTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		elaPaisTableUtil.addColumn("Nome", "160", HasHorizontalAlignment.ALIGN_LEFT);
 		elaPaisTableUtil.addColumn("Residencial", "50", HasHorizontalAlignment.ALIGN_LEFT);
@@ -306,7 +308,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		responsaveisFlexTable = new FlexTable();
 		responsaveisFlexTable.setStyleName("portal-formSmall");
 		responsaveisTableUtil.initialize(responsaveisFlexTable);
-		
+
 		responsaveisTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		responsaveisTableUtil.addColumn("Nome", "160", HasHorizontalAlignment.ALIGN_LEFT);
 		responsaveisTableUtil.addColumn("Residencial", "50", HasHorizontalAlignment.ALIGN_LEFT);
@@ -318,7 +320,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		emergenciaFlexTable = new FlexTable();
 		emergenciaFlexTable.setStyleName("portal-formSmall");
 		emergenciaTableUtil.initialize(emergenciaFlexTable);
-		
+
 		emergenciaTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		emergenciaTableUtil.addColumn("Nome", "160", HasHorizontalAlignment.ALIGN_LEFT);
 		emergenciaTableUtil.addColumn("Residencial", "50", HasHorizontalAlignment.ALIGN_LEFT);
@@ -331,7 +333,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		indicacoesFlexTable = new FlexTable();
 		indicacoesFlexTable.setStyleName("portal-formSmall");
 		indicacoesTableUtil.initialize(indicacoesFlexTable);
-		
+
 		indicacoesTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		indicacoesTableUtil.addColumn("Nome", null, HasHorizontalAlignment.ALIGN_LEFT);
 		indicacoesTableUtil.addColumn("Residencial", "50", HasHorizontalAlignment.ALIGN_LEFT);
@@ -344,7 +346,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		casalFlexTable = new FlexTable();
 		casalFlexTable.setStyleName("portal-formSmall");
 		casalTableUtil.initialize(casalFlexTable);
-		
+
 		casalTableUtil.addColumn("", "10", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("Apelidos", "140", HasHorizontalAlignment.ALIGN_LEFT);
 		casalTableUtil.addColumn("Nomes", "230", HasHorizontalAlignment.ALIGN_LEFT);
@@ -355,7 +357,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		casalTableUtil.addColumn("Estado", "50", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("Tipo", "70", HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	@UiHandler("buscarButton")
 	public void buscarButtonClickHandler(ClickEvent event){
 		CasalParamVO vo = new CasalParamVO();
@@ -373,7 +375,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		}
 		presenter.buscaCasais(vo);
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
@@ -394,6 +396,12 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			presenter.fechar();
 		}
 	}
+
+	@UiHandler("printButton")
+	public void printButtonClickHandler(ClickEvent event){
+		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",formularioFlowPanel.getElement());
+	}
+
 	private Boolean verificaDadosPagamento(){
 		boolean verificar = false;
 		if(entidadeEditada.getCasal()!=null){
@@ -404,7 +412,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		boolean dadosPagamento = true;
 		if(getEncontroInscricaoVO()!=null){
 			if(getEncontroInscricaoVO().getEncontroInscricao().getValorEncontro()==null ||
-			   (getEncontroInscricaoVO().getEncontroInscricao().getEsconderPlanoPagamento()!=null && 
+			   (getEncontroInscricaoVO().getEncontroInscricao().getEsconderPlanoPagamento()!=null &&
 			    getEncontroInscricaoVO().getEncontroInscricao().getEsconderPlanoPagamento())){
 				verificar = false;
 			}
@@ -428,7 +436,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	public void fecharImageClickHandler(ClickEvent event){
 		presenter.fechar();
 	}
-	
+
 	@UiHandler("alterarImagemButton")
 	public void alterarImagemButtonClickHandler(ClickEvent event){
 		//uploadImagePreview.setMultiple(true);
@@ -437,7 +445,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		imageDialogBox.show();
 		uploadImagePreview.adicionaImage();
 	}
-	
+
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		if(!presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
@@ -486,7 +494,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		entidadeEditada.getCasal().setGrupo(presenter.getGrupoSelecionado());
 		entidadeEditada.getCasal().setSituacao((TipoSituacaoEnum)ListBoxUtil.getItemSelected(situacaoListBox, TipoSituacaoEnum.values()));
 		entidadeEditada.getCasal().setTipoCasal((TipoCasalEnum)ListBoxUtil.getItemSelected(tipoListBox, TipoCasalEnum.values()));
-		
+
 		entidadeEditada.getCasal().setMusica(musicaTextBox.getValue());
 		entidadeEditada.getCasal().setCor(corTextBox.getValue());
 		entidadeEditada.getCasal().setLugar(lugarTextBox.getValue());
@@ -503,7 +511,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			entidadeEditada.getCasal().setEle(new Pessoa());
 			entidadeEditada.getCasal().setEla(new Pessoa());
 			entidadeEditada.setListaContatos(new ArrayList<CasalContato>());
-			
+
 			cidadeTextBox.setValue(presenter.getGrupoSelecionado().getCidade());
 			estadoTextBox.setValue(presenter.getGrupoSelecionado().getEstado());
 			editaDialogBox.center();
@@ -512,7 +520,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			presenter.getVO(casal);
 		}
 	}
-	
+
 	@Override
 	public void init(){
 		ferramentasHorizontalPanel.clear();
@@ -547,7 +555,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		}
 		nomeTextBox.setFocus(true);
 	}
-	
+
 	public void limpaCampos(){
 		//logotipoUploadArquivoDigital.limpaCampos();
 		salvarButton.setVisible(true);
@@ -569,17 +577,17 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		responsaveisTableUtil.clearData();
 		emergenciaTableUtil.clearData();
 		limpaPessoa();
-		
+
 		dadosPagamentoComponent.limpaCampos();
 		pagamentoHTMLPanel.setVisible(false);
 		dadosAfilhadoHTMLPanel.setVisible(false);
 		situacaoHTMLPanel.setVisible(false);
-		
+
 		musicaTextBox.setValue(null);
 		corTextBox.setValue(null);
 		lugarTextBox.setValue(null);
 		atividadeTextBox.setValue(null);
-		
+
 //		indicacoesTableUtil.clearData();
 	}
 
@@ -600,7 +608,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		if(casalVO.getCasal().getIdArquivoDigital()!=null){
 			casalImage.setUrl("eccweb/downloadArquivoDigital?id="+casalVO.getCasal().getIdArquivoDigital());
 		}
-		
+
 		enderecoTextBox.setValue(casalVO.getCasal().getEndereco());
 		bairroTextBox.setValue(casalVO.getCasal().getBairro());
 		cepTextBox.setValue(casalVO.getCasal().getCep());
@@ -608,12 +616,12 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		estadoTextBox.setValue(casalVO.getCasal().getEstado());
 		telefoneTextBox.setValue(casalVO.getCasal().getTelefone());
 		casamentoDateBox.setValue(casalVO.getCasal().getCasamento());
-		
+
 		corTextBox.setValue(casalVO.getCasal().getCor());
 		lugarTextBox.setValue(casalVO.getCasal().getLugar());
 		atividadeTextBox.setValue(casalVO.getCasal().getAtividade());
 		musicaTextBox.setValue(casalVO.getCasal().getMusica());
-		
+
 		salvarButton.setVisible(false);
 		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 			situacaoHTMLPanel.setVisible(true);
@@ -644,7 +652,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		eleHipertensoCheckBox.setValue(null);
 		eleAlergiaTextBox.setValue(null);
 		eleNecessidadesTextBox.setValue(null);
-		
+
 		elaNomeTextBox.setValue(null);
 		elaSuggestBox.setValue(null);
 		elaApelidoTextBox.setValue(null);
@@ -749,7 +757,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		}
 		return pessoa;
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Cadastro de Casais";
@@ -773,7 +781,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		}
 		for (final Casal casal: lista) {
 			Object dados[] = new Object[9];
-			
+
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
@@ -806,7 +814,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 				});
 				hp.add(excluir);
 			}
-			
+
 			dados[0] = hp;
 			dados[1] = casal.getApelidos("e");
 			dados[2] = new HTML(casal.getEle().getNome() + "<br>" + casal.getEla().getNome());
@@ -831,12 +839,12 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	public void selecionarUploadButtonClickHandler(ClickEvent event){
 		uploadImagePreview.adicionaImage();
 	}
-	
+
 	@UiHandler("aceitarUploadButton")
 	public void aceitarUploadButtonClickHandler(ClickEvent event){
-		if(uploadImagePreview.getListaImagens().size()>0 && 
-		   uploadImagePreview.getListaImagens().get(0)!=null && 
-		   uploadImagePreview.getListaImagens().get(0).getIdArquivoDigital() != null && 
+		if(uploadImagePreview.getListaImagens().size()>0 &&
+		   uploadImagePreview.getListaImagens().get(0)!=null &&
+		   uploadImagePreview.getListaImagens().get(0).getIdArquivoDigital() != null &&
 		   !uploadImagePreview.getListaImagens().get(0).getIdArquivoDigital().equals(new Integer(0) )){
 			Integer id = uploadImagePreview.getListaImagens().get(0).getIdArquivoDigital();
 			casalImage.setUrl("eccweb/downloadArquivoDigital?id="+id);
@@ -847,12 +855,12 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		}
 		imageDialogBox.hide();
 	}
-	
+
 	@UiHandler("cancelarUploadButton")
 	public void cancelarUploadButtonClickHandler(ClickEvent event){
 		imageDialogBox.hide();
 	}
-	
+
 	@UiHandler("addFilhoButton")
 	public void addFilhoButtonClickHandler(ClickEvent event){
 		editaContato(null, TipoCasalContatoEnum.FILHO);
@@ -882,7 +890,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 	@UiHandler("salvarContatoButton")
 	public void salvarContatoClickHandler(ClickEvent event){
 		entidadeEditada.getListaContatos().remove(contatoEditado);
-		
+
 		contatoEditado.setNome(nomeContatoTextBox.getValue());
 		contatoEditado.setEmail(emailContatoTextBox.getValue());
 		contatoEditado.setTelefoneResidencial(residencialContatoTextBox.getValue());
@@ -945,7 +953,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		editaDialogBox.center();
 		editaDialogBox.show();
 	}
-	
+
 	public void populaContatos() {
 		filhosTableUtil.clearData();
 		elePaisTableUtil.clearData();
@@ -953,16 +961,16 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		responsaveisTableUtil.clearData();
 		emergenciaTableUtil.clearData();
 //		indicacoesTableUtil.clearData();
-		
+
 		int row = 0;
 		Image editar, excluir;
 		HorizontalPanel hp;
 		for (final CasalContato contato: entidadeEditada.getListaContatos()) {
-			
+
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
-			
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.setTitle("Editar dados desta pessoa");
@@ -986,7 +994,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 				}
 			});
 			hp.add(excluir);
-			
+
 			if(contato.getTipoContato().equals(TipoCasalContatoEnum.FILHO)){
 				Object dados[] = new Object[7];
 				dados[0] = hp;
@@ -1066,7 +1074,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			agrupamentoListBox.addItem(agrupamento.toString());
 		}
 	}
-	
+
 	@UiHandler("agrupamentoListBox")
 	public void agrupamentoListBoxChangeHandler(ChangeEvent event) {
 		nomeTextBox.setValue(null);

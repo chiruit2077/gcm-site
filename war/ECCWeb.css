@@ -24,11 +24,11 @@ input {
 	font-size: 12px;
 }
 
-.gwt-TextArea { 
+.gwt-TextArea {
 	font-family: Tahoma, Arial, Verdana;
 	font-size: 12px;
  }
-.gwt-TextArea-readonly { 
+.gwt-TextArea-readonly {
 	font-family: Tahoma, Arial, Verdana;
 	font-size: 12px;
 }
@@ -70,8 +70,8 @@ button.gwt-Button, #wrapper button.gwt-Button {
     padding: 0 5px;
 }
 
-button.gwt-Button:disabled{ 
-    color: gray; 
+button.gwt-Button:disabled{
+    color: gray;
     border: solid 1px darkgray;
     outline: none;
     vertical-align: baseline;
@@ -120,7 +120,7 @@ button.gwt-Button:disabled{
 .gwt-MenuBar-horizontal .gwt-MenuItemSeparator .menuSeparatorInner {
   width: 1px;
   height: 1px;
-  background: white; 
+  background: white;
 }
 
 .gwt-MenuBar-vertical {
@@ -318,7 +318,7 @@ td.datePickerMonth {
 .dateBoxPopup {
 }
 .iframePortal {
-	overflow-x:hidden; 
+	overflow-x:hidden;
 	overflow-y:scroll;
 	height: 460px;
 	width: 100%;
@@ -416,7 +416,7 @@ html>body .gwt-DecoratedTabBar {
   padding: 6px;
 }
 
-.gwt-TextBox-readonly { 
+.gwt-TextBox-readonly {
 	border: 1px solid lightgray;
 	padding: 2px;
 	background-color: #f3f3f3;
@@ -427,10 +427,10 @@ html>body .gwt-DecoratedTabBar {
    border: 1px solid lightgray;
    background-color: #f3f3f3;
  }
- 
- 
+
+
 .gwt-SuggestBox {
-    
+
 }
 
 .gwt-SuggestBoxPopup {
@@ -445,13 +445,13 @@ html>body .gwt-DecoratedTabBar {
 
 .gwt-SuggestBoxPopup .item {
 	min-width: 300px;
-    max-width: 500px; 
+    max-width: 500px;
 }
 
 .gwt-SuggestBoxPopup .item-selected {
 	background-color: #C3D9FF;
 	min-width: 300px;
-    max-width: 500px; 
+    max-width: 500px;
 }
 
 
@@ -512,6 +512,10 @@ html>body .gwt-DecoratedTabBar {
 .FlexTable-RowSpecialBoldRed {
 	font-weight: bold;
 	color: red;
+}
+.FlexTable-RowSpecialBoldGreen {
+	font-weight: bold;
+	color: green;
 }
 .FlexTable-RowSpecialBoldBlue {
 	font-weight: bold;
@@ -739,23 +743,23 @@ html>body .gwt-DecoratedTabBar {
 	text-align: center;
 	width: 100%;
 	padding-top: 5px;
-	padding-bottom: 5px; 
+	padding-bottom: 5px;
 	min-width: 300px;
 }
 .portal-ImageCursor {
 	cursor: pointer;
 }
 .portal-FlowPanel {
-	overflow-y: auto; 
-	border: 1px solid gray; 
+	overflow-y: auto;
+	border: 1px solid gray;
 	background-color: #bcf;
 }
 .upload-FlowPanel {
-	overflow-y: auto; 
+	overflow-y: auto;
 }
 .portal-rowCountLabel{
-	font-style: italic; 
-	color: blue; 
+	font-style: italic;
+	color: blue;
 	text-align: right;
 }
 .portal-portlet-content {
@@ -788,8 +792,8 @@ html>body .gwt-DecoratedTabBar {
 .portal-headerBar {
 	cursor: pointer;
 }
-.portal-headerBar:hover { 
-	background-color: #4296eb; 
+.portal-headerBar:hover {
+	background-color: #4296eb;
 }
 .portal-headerBarClicked {
 	background: white;
@@ -838,8 +842,8 @@ html>body .gwt-DecoratedTabBar {
 	border-bottom: 1px solid #bcbcbc;
 	border-left: 1px solid #bcbcbc;
 	border-right: 1px solid #bcbcbc;
-	
-	filter:alpha(opacity=80); 
+
+	filter:alpha(opacity=80);
     opacity: 0.8;
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
@@ -870,7 +874,7 @@ html>body .gwt-DecoratedTabBar {
 	border-right: 1px solid lightgray;
 	border-bottom: 1px solid lightgray;
 	padding-left: 2px;
-	padding-right: 2px;	
+	padding-right: 2px;
 	min-width: 30px;
 }
 .portal-corFundo{

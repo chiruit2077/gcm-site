@@ -13,7 +13,7 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class ImageUtil {
-	
+
 	public static final Integer TAMANHO_IMAGEM = 1024;
 	public static final Integer TAMANHO_THUMB = 150;
 
@@ -95,7 +95,7 @@ public class ImageUtil {
 
 		// draw image to canvas
 		// s = source
-		// d = destination     
+		// d = destination
 		double dx = 0;
 		double dy = 0;
 		context.drawImage(imageElement, dx, dy);
@@ -106,7 +106,7 @@ public class ImageUtil {
 		return imageData;
 	}
 
-	
+
 	public static void addImageToScreen(ImageData imageData) {
 
 		Canvas canvasTmp = Canvas.createIfSupported();
@@ -137,7 +137,7 @@ public class ImageUtil {
 		ImageElement imageElement = ImageElement.as(image.getElement());
 
 		// s = source
-		// d = destination 
+		// d = destination
 		double sx = 0;
 		double sy = 0;
 		double sw = imageElement.getWidth();

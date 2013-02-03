@@ -3,19 +3,19 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=8" />
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<meta name="gwt:property" content="locale=pt_BR">	
+		<meta name="gwt:property" content="locale=pt_BR">
 
 		<title>ECC</title>
 
 		<!--CSS for loading message at application Startup-->
 		<style type="text/css">
 		</style>
-		
+
 	    <script type="text/javascript">
 		  var _gaq = _gaq || [];
 		  _gaq.push(['_setAccount', 'UA-30392102-1']);
 		  _gaq.push(['_trackPageview', 'Home']);
-		
+
 		  (function() {
 		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -26,19 +26,19 @@
 		<link type="text/css" rel="stylesheet" href="ECCWeb.css">
 		<link type="text/css" rel="stylesheet" href="ECCWebPrint.css" media="print">
 		<script language="javascript" src="javascript/cssutil.js"></script>
-		
+
 		<!-- styles needed by jScrollPane -->
 		<link type="text/css" href="jscroll/jquery.jscrollpane.css" rel="stylesheet" media="all" />
-		
+
 		<!-- latest jQuery direct from google's CDN -->
 		<script type="text/javascript" src="jscroll/jquery.min.js"></script>
-		 
+
 		<!-- the mousewheel plugin - optional to provide mousewheel support -->
 		<script type="text/javascript" src="jscroll/jquery.mousewheel.js"></script>
-		 
+
 		<!-- the jScrollPane script -->
 		<script type="text/javascript" src="jscroll/jquery.jscrollpane.min.js"></script>
-		
+
 		<style type="text/css">
 	    	.jspVerticalBar {
 				width: 8px;
@@ -69,7 +69,7 @@
 				display:none
 			}
 	    </style>
-		
+
 		<script>
 			var apis = [];
 			function destroyScroll(){
@@ -120,8 +120,8 @@
 				});
 				return false;
 			}
-			
-			
+
+
 			function verificaHTML5(){
 				if(window.File && window.FileReader && window.FileList && window.Blob){
 					try {
@@ -141,7 +141,7 @@
 				}
 				return nomes;
 			}
-			
+
 			var reader = [];
 			var idPreviewer=[], resampleSize=[], fileType=[], url=[];
 			var dataToSend = [];
@@ -197,7 +197,7 @@
 					return oBuilder.getBlob(new Uint8Array(array));
 				}
 			}
-			
+
 			var Resample = (function (canvas) {
 				 function Resample(img, width, height, onresample) {
 					  var load = typeof img == "string", i = load || img;
@@ -229,19 +229,20 @@
 					  context.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
 					  onresample(canvas.toDataURL());
 				 }
-				 
+
 				 var context = canvas.getContext("2d"), round = Math.round;
 				 return Resample;
 			}(
 				this.document.createElement("canvas"))
 			 );
 		</script>
-		
+
 	</head>
 
 	<body topmargin="0" leftmargin="0" bottommargin="0" rightmargin="0">
 		<!-- OPTIONAL: include this if you want history support -->
 		<iframe id="__gwt_historyFrame" style="width:0;height:0;border:0;display:none;"></iframe>
+		<iframe id="__printingFrame" style="width:0;height:0;border:0;display:none;"></iframe>
 		<script language="javascript" src="eccweb/eccweb.nocache.js"></script>
 	</body>
 </html>

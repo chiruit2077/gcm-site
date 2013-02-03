@@ -32,58 +32,58 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 
 	@UiField VerticalPanel contentPortlet;
 	@UiField MenuBar sistemaMenuBar;
-	
+
 	@UiTemplate("SistemaView.ui.xml")
 	interface SistemaViewUiBinder extends UiBinder<Widget, SistemaView> {
 	}
-	
+
 	private SistemaViewUiBinder uiBinder = GWT.create(SistemaViewUiBinder.class);
 
 	public SistemaView() {
 		this.initWidget(uiBinder.createAndBindUi(this));
 	}
-	
+
 	@Override
 	public void init() {
 		if(presenter.getUsuario()!=null){
 			montaMenu();
 		}
 	}
-	
+
 	private void montaMenu() {
 		MenuItem menuItem;
-		
+
 		boolean administrador = presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR);
 		boolean convidado = presenter.getCasal().getTipoCasal()==null || presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO);
-		
+
 		//Cadastro
 		menuItem = new MenuItem("Cadastro", new MenuBar(true));
 		sistemaMenuBar.addItem(menuItem);
-		
+
 		if(administrador){
 			menuItem.getSubMenu().addItem("Grupo", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.GRUPO); } });
 		}
-		
+
 		menuItem.getSubMenu().addItem("Casal", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.CASAL); } });
-		
+
 		if(administrador){
 			menuItem.getSubMenu().addItem("Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO); } });
 			menuItem.getSubMenu().addItem("Atividade", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ATIVIDADE); } });
 			menuItem.getSubMenu().addItem("Papel", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.PAPEL); } });
 			menuItem.getSubMenu().addItem("Quarto", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.QUARTO); } });
 		}
-		
+
 		//Secretaria
 		if(administrador){
 			menuItem = new MenuItem("Secretaria", new MenuBar(true));
 			sistemaMenuBar.addItem(menuItem);
-			
+
 			menuItem.getSubMenu().addItem("Agrupamento", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.AGRUPAMENTO); } });
 			menuItem.getSubMenu().addItem("Mensagens", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.MENSAGEM); } });
 			menuItem.getSubMenu().addItem("Listagem de casais", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.LISTAGEM); } });
-			
+
 		}
-		
+
 		//Patrimonio
 		if(administrador){
 			menuItem = new MenuItem("Patrimônio", new MenuBar(true));
@@ -95,20 +95,21 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 			menuItem = new MenuItem("Tesouraria", new MenuBar(true));
 			sistemaMenuBar.addItem(menuItem);
 			menuItem.getSubMenu().addItem("Pagamentos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.TESOURARIA_PAGAMENTOS); } });
+			menuItem.getSubMenu().addItem("Fichas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.TESOURARIA_FICHAS); } });
 		}
-		
+
 		//if(!presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.CONVIDADO)){
 		if(!convidado){
 			//Encontro
 			menuItem = new MenuItem("Encontro", new MenuBar(true));
 			sistemaMenuBar.addItem(menuItem);
-			
+
 			menuItem.getSubMenu().addItem("Convites ao encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_CONVITE); } });
 			menuItem.getSubMenu().addItem("Inscrição no encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_INSCRICAO); } });
 			menuItem.getSubMenu().addItem("Planilha de atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
 		}
-		
-		
+
+
 	}
 	private void executaMenu(PresenterCodeEnum p) {
 		//executaMenu(presenter, null);
@@ -116,7 +117,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		e.setJanela(p);
 		WebResource.getInstanceCreated().getEventBus().fireEvent(e);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public void executaMenu(Class<? extends Presenter> presenter, Map<String, Serializable> parametros) {
 		StateHistory state = new StateHistory(presenter);
@@ -127,7 +128,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		}
 		PresenterShow.showPresenter(state,contentPortlet,this.presenter);
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Sistema Inicio";

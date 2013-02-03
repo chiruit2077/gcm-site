@@ -6,13 +6,16 @@ import java.util.concurrent.Callable;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroConvite;
 import br.com.ecc.model.EncontroFila;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoFilaEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoRespostaConviteEnum;
+import br.com.ecc.model.tipo.TipoSituacaoEnum;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
@@ -29,14 +32,14 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 		boolean mover = encontroConvite.getMoverFinalFila();
 		boolean inscrever = encontroConvite.getGerarInscricao();
 		encontroConvite = em.merge(encontroConvite);
-		
-		if(encontroConvite.getTipoResposta()!=null && 
+
+		if(encontroConvite.getTipoResposta()!=null &&
 		   encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO) &&
 		   inscrever){
-			
+
 			EncontroInscricao ei;
 			EncontroInscricaoPagamentoDetalhe eip;
-			
+
 			//padrinho
 			Query q = em.createNamedQuery("encontroInscricao.porEncontroCasal");
 			q.setParameter("encontro", encontroConvite.getEncontro());
@@ -53,7 +56,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 					ei.setValorEncontro(encontroConvite.getEncontro().getValorPadrinho());
 				}
 				ei = em.merge(ei);
-				
+
 				if(ei.getValorEncontro()!=null){
 					eip = new EncontroInscricaoPagamentoDetalhe();
 					eip.setEncontroInscricao(ei);
@@ -69,12 +72,16 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 					}
 				}
 			}
-			
+
 			//afilhado
 			q = em.createNamedQuery("encontroInscricao.porEncontroCasal");
 			q.setParameter("encontro", encontroConvite.getEncontro());
 			q.setParameter("casal", encontroConvite.getCasalConvidado());
 			if(q.getResultList().size()==0){
+				Casal casalConvidado = encontroConvite.getCasalConvidado();
+				casalConvidado.setSituacao(TipoSituacaoEnum.ATIVO);
+				casalConvidado = em.merge(casalConvidado);
+
 				ei = new EncontroInscricao();
 				ei.setEncontro(encontroConvite.getEncontro());
 				ei.setTipo(TipoInscricaoEnum.AFILHADO);
@@ -85,8 +92,9 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 				} else {
 					ei.setValorEncontro(encontroConvite.getEncontro().getValorAfilhado());
 				}
+				ei.setTipoConfirmacao(TipoConfirmacaoEnum.CONFIRMADO);
 				ei = em.merge(ei);
-				
+
 				if(ei.getValorEncontro()!=null){
 					eip = new EncontroInscricaoPagamentoDetalhe();
 					eip.setEncontroInscricao(ei);
@@ -95,13 +103,13 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 					em.merge(eip);
 				}
 			}
-			
+
 			encontroConvite.getCasalConvidado().setCasalPadrinho(encontroConvite.getCasal());
 			em.merge(encontroConvite.getCasalConvidado());
 		}
-		if(encontroConvite.getTipoResposta()!=null && 
+		if(encontroConvite.getTipoResposta()!=null &&
 		   encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
-			
+
 			Query q;
 			if(mover){
 				q = em.createNamedQuery("encontroFila.porEncontroFilaNormal");
@@ -110,26 +118,26 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 				List<EncontroFila> listaFila = q.getResultList();
 				if(listaFila.size()>0){
 					EncontroFila encontroFila = listaFila.get(0);
-					
+
 					q = em.createQuery("Select max(ordem) from EncontroConvite e where e.encontro = :encontro and e.encontroFila.tipoFila = :tipoFila");
 					q.setParameter("encontro", encontroConvite.getEncontro());
 					q.setParameter("tipoFila", TipoFilaEnum.NORMAL);
 					Integer max = (Integer) q.getSingleResult();
-					
+
 					EncontroConvite ec = new EncontroConvite();
 					ec.setCasal(encontroConvite.getCasal());
 					ec.setEncontro(encontroConvite.getEncontro());
 					ec.setEncontroFila(encontroFila);
 					ec.setOrdem(max+1);
-					
+
 					em.merge(ec);
 				}
 			}
-			
+
 			q = em.createNamedQuery("encontroConvite.porEncontro");
 			q.setParameter("encontro", encontroConvite.getEncontro());
 			List<EncontroConvite> listaConvite = q.getResultList();
-			
+
 			boolean achei = false;
 			for (EncontroConvite ec : listaConvite) {
 				if(ec.getId().equals(encontroConvite.getId())){

@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
 public class UploadProgressServiceImpl extends RemoteServiceServlet implements UploadProgressService {
 	private static final long serialVersionUID = -2369978776140825255L;
 	@Inject Injector injector;
-	
+
 	@Override
 	public List<UploadedFile> getProgress() {
 		return SessionHelper.getUploadFile(getThreadLocalRequest().getSession());
@@ -26,7 +26,7 @@ public class UploadProgressServiceImpl extends RemoteServiceServlet implements U
 	public void initialize() {
 		SessionHelper.setUploadFile(getThreadLocalRequest().getSession(), new ArrayList<UploadedFile>());
 	}
-	
+
 	@Override
 	public void setLista(List<UploadedFile> lista) {
 		SessionHelper.setUploadFile(getThreadLocalRequest().getSession(), lista);

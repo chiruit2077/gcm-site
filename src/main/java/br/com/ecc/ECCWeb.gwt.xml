@@ -5,18 +5,20 @@
 	<inherits name="com.google.gwt.i18n.I18N"/>
 	<inherits name="com.google.gwt.json.JSON"/>
 	<inherits name='com.google.gwt.ajaxloader.AjaxLoader' />
-		
+	<inherits name='br.com.freller.tool.PrintIt' />
+
+
 	<extend-property name="locale" values="en_US"/>
 	<extend-property name="locale" values="pt_BR"/>
-	
+
 	<entry-point class="br.com.ecc.client.ECCWeb"/>
 	<generate-with class="br.com.ecc.core.generator.presenter.PresenterServiceGenerator">
 		<when-type-assignable class="br.com.ecc.client.core.generator.presenter.PresenterService" />
 	</generate-with>
-	
+
 	<source path='client'/>
 	<source path='gin'/>
 	<source path='model'/>
 	<source path='core'/>
-	
+
 </module>
