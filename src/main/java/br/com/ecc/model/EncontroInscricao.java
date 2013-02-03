@@ -27,17 +27,17 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 @SequenceGenerator(name="SQ_ENCONTROINSCRICAO", sequenceName="SQ_ENCONTROINSCRICAO")
 @NamedQueries({
 	@NamedQuery(name="encontroInscricao.porEncontro", query="select u from EncontroInscricao u where u.encontro = :encontro order by u.tipo"),
-	@NamedQuery(name="encontroInscricao.porEncontroConfirmados", 
+	@NamedQuery(name="encontroInscricao.porEncontroConfirmados",
 		query="select u from EncontroInscricao u " +
 				"where  u.encontro = :encontro and " +
 				"		( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " +
 				"order by u.tipo"),
-	@NamedQuery(name="encontroInscricao.porEncontroConvidados", 
+	@NamedQuery(name="encontroInscricao.porEncontroConvidados",
 		query="select u.casal from EncontroInscricao u " +
 			  "where u.encontro = :encontro and " +
 			  "      u.tipo = 'AFILHADO' and " +
 				"	( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " ),
-	@NamedQuery(name="encontroInscricao.porEncontroCasal", 
+	@NamedQuery(name="encontroInscricao.porEncontroCasal",
 		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal order by u.id desc")
 })
 public class EncontroInscricao extends _WebBaseEntity {
@@ -46,7 +46,7 @@ public class EncontroInscricao extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTROINSCRICAO", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontro")
 	private Encontro encontro;
@@ -54,42 +54,46 @@ public class EncontroInscricao extends _WebBaseEntity {
 	@ManyToOne
 	@JoinColumn(name="casal")
 	private Casal casal;
-	
+
 	@ManyToOne
 	@JoinColumn(name="pessoa")
 	private Pessoa pessoa;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoInscricaoEnum tipo;
-	
+
 	private Integer codigo;
-	
+
+	@ManyToOne
+	@JoinColumn(name="fichaPagamento")
+	private EncontroInscricaoFichaPagamento fichaPagamento;
+
 	@Temporal(TemporalType.DATE)
 	private Date dataMaximaParcela;
-	
+
 	@Column(precision=15, scale=2)
 	private BigDecimal valorEncontro;
-	
+
 	@ManyToOne
 	@JoinColumn(name="mensagemDestinatario")
 	private MensagemDestinatario mensagemDestinatario;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataPrenchimentoFicha;
-	
+
 	@Transient
 	private String dataPrenchimentoFichaStr;
-	
+
 	private Boolean esconderPlanoPagamento;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoConfirmacaoEnum tipoConfirmacao;
-	
+
 	@Version
 	private Integer version;
-	
+
 	@Override
 	public String toString() {
 		if(casal!=null) return casal.toString();
@@ -179,5 +183,11 @@ public class EncontroInscricao extends _WebBaseEntity {
 	}
 	public void setDataPrenchimentoFichaStr(String dataPrenchimentoFichaStr) {
 		this.dataPrenchimentoFichaStr = dataPrenchimentoFichaStr;
+	}
+	public EncontroInscricaoFichaPagamento getFichaPagamento() {
+		return fichaPagamento;
+	}
+	public void setFichaPagamento(EncontroInscricaoFichaPagamento fichaPagamento) {
+		this.fichaPagamento = fichaPagamento;
 	}
 }

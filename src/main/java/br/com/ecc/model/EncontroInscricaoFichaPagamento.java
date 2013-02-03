@@ -21,7 +21,9 @@ import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 @SequenceGenerator(name="SQ_ENCONTROINSCRICAOFICHAP", sequenceName="SQ_ENCONTROINSCRICAOFICHAP")
 @NamedQueries({
 	@NamedQuery(name="encontroInscricaoFichaPagamento.porEncontro", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro order by u.tipo, u.ficha "),
-	@NamedQuery(name="encontroInscricaoFichaPagamento.porFichaEncontro", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro and u.ficha = :ficha ")
+	@NamedQuery(name="encontroInscricaoFichaPagamento.porFichaEncontro", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro and u.ficha = :ficha "),
+	@NamedQuery(name="encontroInscricaoFichaPagamento.porVagalLivre", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro and " +
+			"u.encontroInscricao is null and u.tipo = :tipo and u.status = :status order by u.ficha ")
 })
 public class EncontroInscricaoFichaPagamento extends _WebBaseEntity {
 

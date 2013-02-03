@@ -7,13 +7,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.ecc.model.Casal;
+import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroConvite;
 import br.com.ecc.model.EncontroFila;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.EncontroInscricaoFichaPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoFilaEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
+import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 import br.com.ecc.model.tipo.TipoRespostaConviteEnum;
 import br.com.ecc.model.tipo.TipoSituacaoEnum;
 
@@ -55,7 +59,17 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 				} else {
 					ei.setValorEncontro(encontroConvite.getEncontro().getValorPadrinho());
 				}
+				ei.setTipoConfirmacao(TipoConfirmacaoEnum.CONFIRMADO);
+				EncontroInscricaoFichaPagamento ficha = getFichaVaga(TipoInscricaoFichaEnum.ENCONTRISTA,encontroConvite.getEncontro());
+				if (ficha!=null){
+					ei.setFichaPagamento(ficha);
+					ei.setCodigo(ficha.getFicha());
+				}
 				ei = em.merge(ei);
+				if (ficha != null){
+					ficha.setEncontroInscricao(ei);
+					ficha = em.merge(ficha);
+				}
 
 				if(ei.getValorEncontro()!=null){
 					eip = new EncontroInscricaoPagamentoDetalhe();
@@ -93,7 +107,17 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 					ei.setValorEncontro(encontroConvite.getEncontro().getValorAfilhado());
 				}
 				ei.setTipoConfirmacao(TipoConfirmacaoEnum.CONFIRMADO);
+				EncontroInscricaoFichaPagamento ficha = getFichaVaga(TipoInscricaoFichaEnum.AFILHADO,encontroConvite.getEncontro());
+				if (ficha!=null){
+					ei.setFichaPagamento(ficha);
+					ei.setCodigo(ficha.getFicha());
+
+				}
 				ei = em.merge(ei);
+				if (ficha != null){
+					ficha.setEncontroInscricao(ei);
+					ficha = em.merge(ficha);
+				}
 
 				if(ei.getValorEncontro()!=null){
 					eip = new EncontroInscricaoPagamentoDetalhe();
@@ -153,6 +177,21 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 			}
 		}
 		return encontroConvite;
+	}
+
+	@SuppressWarnings("unchecked")
+	private EncontroInscricaoFichaPagamento getFichaVaga(
+			TipoInscricaoFichaEnum tipo, Encontro encontro) {
+		if (encontro.getUsaFichaPagamento()!= null && encontro.getUsaFichaPagamento().equals(1)){
+			Query q = em.createNamedQuery("encontroInscricaoFichaPagamento.porVagalLivre");
+			q.setParameter("encontro", encontro);
+			q.setParameter("tipo", tipo);
+			q.setParameter("status", TipoInscricaoFichaStatusEnum.NORMAL);
+			List<EncontroInscricaoFichaPagamento> fichas = q.getResultList();
+			if (fichas.size()>0)
+				return fichas.get(0);
+		}
+		return null;
 	}
 
 	public EncontroConvite getEncontroConvite() {

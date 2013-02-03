@@ -58,28 +58,28 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiTemplate("EncontroConviteView.ui.xml")
 	interface EncontroConviteViewUiBinder extends UiBinder<Widget, EncontroConviteView> {}
 	private EncontroConviteViewUiBinder uiBinder = GWT.create(EncontroConviteViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 	@UiField Label itemFilaTotal;
 	@UiField VerticalPanel centralPanel;
-	
+
 	@UiField HTMLPanel respostaHTMLPanel;
 	@UiField CheckBox gerarInscricaoCheckBox;
 	@UiField CheckBox moverCheckBox;
-	
+
 	@UiField CheckBox exibeRecusadosCheckBox;
 	@UiField CheckBox exibeDesistenciaCheckBox;
-	
+
 	//Convite
 	@UiField(provided = true) SuggestBox casalSuggestBox;
 	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField ListBox responsavelListBox;
-	
+
 	@UiField(provided = true) SuggestBox casalConvidadoSuggestBox;
 	private final GenericEntitySuggestOracle casalConvidadoSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField DateBox dataConviteDateBox;
 	@UiField DateBox dataRespostaDateBox;
 	@UiField ListBox filaListBox;
@@ -88,25 +88,25 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiField ListBox respostaListBox;
 	@UiField TextArea observacaoTextArea;
 	@UiField ListBox confirmacaoListBox;
-	
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
-	
+
 	@UiField HTMLPanel fichaHTMLPanel;
-	
+
 	@UiField(provided=true) FlexTable encontroConviteFlexTable;
 	private FlexTableUtil encontroConviteTableUtil = new FlexTableUtil();
-	
+
 	@UiField(provided=true) FlexTable filaFlexTable;
 	private FlexTableUtil filaTableUtil = new FlexTableUtil();
-	
+
 	@UiField Label casalConvidadoTelefoneLabel;
-	
+
 	//Fila
 	@UiField DialogBox filasDialogBox;
-	
+
 	@UiField DialogBox editaFilaDialogBox;
 	@UiField TextBox nomeTextBox;
 	@UiField(provided=true) NumberTextBox qtdeVagasNumberTextBox;
@@ -118,7 +118,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiField TextBox dataFichaEnviadaPadrinhoDateBox;
 	@UiField TextBox dataFichaRecebidaPadrinhoDateBox;
 	@UiField TextBox dataFichaAtualizadaPadrinhoDateBox;
-	
+
 	@UiField Button salvarFilaButton;
 	@UiField Button fecharFilaButton;
 	@UiField Button novaFilaButton;
@@ -132,9 +132,9 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiField TextBox elaNomeTextBox;
 	@UiField TextBox elaEmailTextBox;
 	@UiField TextBox elaTelefoneTextBox;
-	
+
 	DateTimeFormat dfGlobal = DateTimeFormat.getFormat("dd-MM-yyyy HH:mm");
-	
+
 	private EncontroConvite entidadeEditada;
 	private EncontroFila entidadeFilaEditada;
 	private List<EncontroFila> listaFilas;
@@ -145,18 +145,18 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		casalSuggest.setMinimoCaracteres(2);
 		casalSuggest.setSuggestQuery("casal.porNomeLike");
 		casalSuggestBox = new SuggestBox(casalSuggest);
-		
+
 		casalConvidadoSuggest.setMinimoCaracteres(2);
 		casalConvidadoSuggest.setSuggestQuery("casal.porNomeLike");
 		casalConvidadoSuggestBox = new SuggestBox(casalConvidadoSuggest);
-		
+
 		prioridadeNumberTextBox = new NumberTextBox(false, false, 5, 5);
 		qtdeVagasNumberTextBox = new NumberTextBox(false, false, 5, 5);
 		ordemNumberTextBox = new NumberTextBox(false, false, 5, 5);
-		
+
 		initWidget(uiBinder.createAndBindUi(this));
-		
-		
+
+
 		casalConvidadoSuggestBox.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
@@ -168,25 +168,25 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				}
 			}
 		});
-		
+
 		tituloFormularioLabel.setText(getDisplayTitle());
-		
+
 		ListBoxUtil.populate(respostaListBox, true, TipoRespostaConviteEnum.values());
 		ListBoxUtil.populate(tipoListBox, false, TipoFilaEnum.values());
 		ListBoxUtil.populate(confirmacaoListBox, false, TipoConfirmacaoEnum.values());
-		
+
 		dataConviteDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataConviteDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		dataRespostaDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataRespostaDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 	}
-	
+
 	private void criaTabela() {
 		encontroConviteFlexTable = new FlexTable();
 		encontroConviteFlexTable.setStyleName("portal-formSmall");
 		encontroConviteTableUtil.initialize(encontroConviteFlexTable);
-		
+
 		encontroConviteTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		encontroConviteTableUtil.addColumn("Fila", "80", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroConviteTableUtil.addColumn("#", "20", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.NUMBER, null);
@@ -202,18 +202,18 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 //		encontroConviteTableUtil.addColumn("Rec. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 //		encontroConviteTableUtil.addColumn("Pre. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 	}
-	
+
 	private void criaTabelaFila() {
 		filaFlexTable = new FlexTable();
 		filaFlexTable.setStyleName("portal-formSmall");
 		filaTableUtil.initialize(filaFlexTable);
-		
+
 		filaTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		filaTableUtil.addColumn("Ordem", "50", HasHorizontalAlignment.ALIGN_CENTER);
 		filaTableUtil.addColumn("Nome", null, HasHorizontalAlignment.ALIGN_LEFT);
 		filaTableUtil.addColumn("Vagas", "20", HasHorizontalAlignment.ALIGN_CENTER);
 	}
-	
+
 	@Override
 	public void init(){
 		centralPanel.setVisible(false);
@@ -221,7 +221,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			centralPanel.setVisible(true);
 		}
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -246,7 +246,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			Window.alert("Defina o casal convidado");
 			return;
 		}
-		
+
 		entidadeEditada.setEncontro(presenter.getEncontroSelecionado());
 		entidadeEditada.setEncontroFila(fila);
 		entidadeEditada.setOrdem(null);
@@ -272,7 +272,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		entidadeEditada.setObservacao(observacaoTextArea.getValue());
 		entidadeEditada.setTipoResposta(resposta);
 		entidadeEditada.setTipoConfirmacao((TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values()));
-		
+
 		entidadeEditada.setMoverFinalFila(moverCheckBox.getValue());
 		entidadeEditada.setGerarInscricao(gerarInscricaoCheckBox.getValue());
 		presenter.salvar(entidadeEditada);
@@ -289,7 +289,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		editaDialogBox.show();
 		prioridadeNumberTextBox.setFocus(true);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void limpaCampos(){
 		prioridadeNumberTextBox.setNumber(null);
@@ -306,14 +306,14 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		gerarInscricaoCheckBox.setValue(false);
 		moverCheckBox.setValue(false);
 		respostaHTMLPanel.setVisible(false);
-		
+
 		dataFichaEnviadaAfilhadoDateBox.setValue(null);
 		dataFichaRecebidaAfilhadoDateBox.setValue(null);
 		dataFichaAtualizadaAfilhadoDateBox.setValue(null);
 		dataFichaEnviadaPadrinhoDateBox.setValue(null);
 		dataFichaRecebidaPadrinhoDateBox.setValue(null);
 		dataFichaAtualizadaPadrinhoDateBox.setValue(null);
-		
+
 		filaListBox.setEnabled(true);
 		prioridadeNumberTextBox.setEnabled(true);
 		casalSuggestBox.getTextBox().setEnabled(true);
@@ -343,8 +343,8 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			casalConvidadoSuggestBox.getTextBox().setEnabled(false);
 			esconderPagamentoCheckBox.setEnabled(false);
 		}
-		
-		
+
+
 		entidadeEditada = encontroConvite;
 		if(encontroConvite.getEncontroFila()!=null){
 			ListBoxUtil.setItemSelected(filaListBox, encontroConvite.getEncontroFila().getNome());
@@ -363,7 +363,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			casalConvidadoSuggest.setListaEntidades(new ArrayList<_WebBaseEntity>());
 			casalConvidadoSuggest.getListaEntidades().add(encontroConvite.getCasalConvidado());
 			defineTelefone(encontroConvite.getCasalConvidado());
-			
+
 		}
 		observacaoTextArea.setValue(encontroConvite.getObservacao());
 		esconderPagamentoCheckBox.setValue(encontroConvite.getEsconderPlanoPagamento());
@@ -377,7 +377,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		dataRespostaDateBox.setValue(encontroConvite.getDataResposta());
 		setDadosFichaCasal();
 	}
-	
+
 	public void setDadosFichaCasal(){
 		/*
 		//afilhado
@@ -392,7 +392,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				dataFichaAtualizadaAfilhadoDateBox.setValue(dfGlobal.format(entidadeEditada.getCasalConvidado().getAtualizacaoCadastro()));
 			}
 		}
-		
+
 		//padrinho
 		if(entidadeEditada.getCasal()!=null){
 			if(entidadeEditada.getCasal().getDataFichaEnvio()!=null){
@@ -408,7 +408,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		respostaListBoxChangeHandler(null);
 		*/
 	}
-	
+
 	private void defineTelefone(Casal casalConvidado) {
 		if(casalConvidado==null) return;
 		String telefones = "";
@@ -422,7 +422,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			telefones += " - Ela: " + casalConvidado.getEla().getTelefoneCelular();
 		}
 		casalConvidadoTelefoneLabel.setText(telefones);
-		
+
 	}
 
 	@Override
@@ -448,7 +448,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				break;
 			}
 		}
-		
+
 		LabelTotalUtil.setTotal(itemTotal, lista.size(), "convite", "convites", "");
 		encontroConviteTableUtil.clearData();
 		int row = 0;
@@ -456,126 +456,130 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		HorizontalPanel hp;
 		EncontroFila filaAnterior = null;
 		int contaFila = 1, convidar = 0, recusados = 0, aceitos = 0, desistencia=0;
-		boolean exibeEditar, exibeLinha;
 		for (final EncontroConvite encontroConvite: lista) {
-			exibeEditar = true;
-			if(filaAnterior!=null && !filaAnterior.getId().equals(encontroConvite.getEncontroFila().getId())){
-				contaFila = 1;
+			boolean exibeLinha = true;
+			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
+				recusados++;
+				if ( !exibeRecusadosCheckBox.getValue()){
+					exibeLinha = false;
+				}
 			}
-			filaAnterior = encontroConvite.getEncontroFila();
-			Object dados[] = new Object[11];
-			hp = new HorizontalPanel();
-			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			hp.setSpacing(1);
+			if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
+				desistencia++;
+				if (!exibeDesistenciaCheckBox.getValue()){
+					exibeLinha = false;
+				}
+			}
 
-			if(convidador){
-				/*
+			if (exibeLinha){
+				row++;
+
+				boolean exibeEditar = true;
+				if(filaAnterior!=null && !filaAnterior.getId().equals(encontroConvite.getEncontroFila().getId())){
+					contaFila = 1;
+				}
+				filaAnterior = encontroConvite.getEncontroFila();
+				Object dados[] = new Object[11];
+				hp = new HorizontalPanel();
+				hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				hp.setSpacing(1);
+
+				if(convidador){
+					/*
 				exibeEditar = false;
-				if(presenter.getEncontroSelecionado().getQuantidadeAfilhados()!=null && 
+				if(presenter.getEncontroSelecionado().getQuantidadeAfilhados()!=null &&
 				   convidar<=presenter.getEncontroSelecionado().getQuantidadeAfilhados()){
 					if(filaAnterior.getQuantidadeVagas()==null || contaFila <= filaAnterior.getQuantidadeVagas()){
 						exibeEditar = true;
 					}
 				}
-				*/
-			}
-			
-			if(podeEditar || convidador){
-				if(exibeEditar){
-					editar = new Image("images/edit.png");
-					editar.setTitle("Editar as informações do convite");
-					editar.setStyleName("portal-ImageCursor");
-					editar.addClickHandler(new ClickHandler() {
-						@Override
-						public void onClick(ClickEvent arg0) {
-							edita(encontroConvite);
-						}
-					});
-					hp.add(editar);
+					 */
 				}
-				if(podeEditar){
-					excluir = new Image("images/delete.png");
-					excluir.setStyleName("portal-ImageCursor");
-					excluir.setTitle("Excluir convite");
-					excluir.addClickHandler(new ClickHandler() {
-						@Override
-						public void onClick(ClickEvent arg0) {
-							if(Window.confirm("Deseja excluir esta inscrição ?")){
-								presenter.excluir(encontroConvite);
+
+				if(podeEditar || convidador){
+					if(exibeEditar){
+						editar = new Image("images/edit.png");
+						editar.setTitle("Editar as informações do convite");
+						editar.setStyleName("portal-ImageCursor");
+						editar.addClickHandler(new ClickHandler() {
+							@Override
+							public void onClick(ClickEvent arg0) {
+								edita(encontroConvite);
 							}
-						}
-					});
-					hp.add(excluir);
+						});
+						hp.add(editar);
+					}
+					if(podeEditar){
+						excluir = new Image("images/delete.png");
+						excluir.setStyleName("portal-ImageCursor");
+						excluir.setTitle("Excluir convite");
+						excluir.addClickHandler(new ClickHandler() {
+							@Override
+							public void onClick(ClickEvent arg0) {
+								if(Window.confirm("Deseja excluir esta inscrição ?")){
+									presenter.excluir(encontroConvite);
+								}
+							}
+						});
+						hp.add(excluir);
+					}
 				}
-			}
-			
-			dados[0] = hp;
-			if(encontroConvite.getEncontroFila()!=null){
-				dados[1] = encontroConvite.getEncontroFila().getNome();
-			}
-			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
-				dados[2] = "";
-			} else {
+
+				dados[0] = hp;
+				if(encontroConvite.getEncontroFila()!=null){
+					dados[1] = encontroConvite.getEncontroFila().getNome();
+				}
 				dados[2] = encontroConvite.getOrdem();
-			}
-			if(encontroConvite.getCasal()!=null){
-				dados[3] = encontroConvite.getCasal().getApelidos("e");
-			}
-			if(encontroConvite.getCasalConvidado()!=null){
-				dados[4] = encontroConvite.getCasalConvidado().getApelidos("e");
-			}
-			if(encontroConvite.getCasalResponsavel()!=null){
-				dados[5] = encontroConvite.getCasalResponsavel().getApelidos("e");
-			}
-			dados[6] = encontroConvite.getObservacao();
-			if(encontroConvite.getDataConvite()!=null){
-				dados[7] = dfGlobal.format(encontroConvite.getDataConvite());
-			}
-			if(encontroConvite.getTipoResposta()!=null){
-				dados[8] = encontroConvite.getTipoResposta().getNome();
-			}
-			if(encontroConvite.getDataResposta()!=null){
-				dados[9] = dfGlobal.format(encontroConvite.getDataResposta());
-			}
-			if(encontroConvite.getTipoConfirmacao()!=null){
-				dados[10] = encontroConvite.getTipoConfirmacao().getNome();
-			} else {
-				dados[10] = TipoConfirmacaoEnum.CONFIRMADO.getNome();
-			}
-			exibeLinha = true;
-			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO) && !exibeRecusadosCheckBox.getValue()){
-				exibeLinha = false;
-			}
-			if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
-				exibeLinha = false;
-			}
-			if(exibeLinha){
-				encontroConviteTableUtil.addRow(dados,row+1);
-			}
-			if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
-				desistencia++;
-				encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalGrayLineThrough");
-			} 
-			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
-				recusados++;
-				encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalGrayLineThrough");
-			} else { 
-				if(filaAnterior.getQuantidadeVagas()!=null && contaFila > filaAnterior.getQuantidadeVagas()){
-					encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalGray");
+				if(encontroConvite.getCasal()!=null){
+					dados[3] = encontroConvite.getCasal().getApelidos("e");
+				}
+				if(encontroConvite.getCasalConvidado()!=null){
+					dados[4] = encontroConvite.getCasalConvidado().getApelidos("e");
+				}
+				if(encontroConvite.getCasalResponsavel()!=null){
+					dados[5] = encontroConvite.getCasalResponsavel().getApelidos("e");
+				}
+				dados[6] = encontroConvite.getObservacao();
+				if(encontroConvite.getDataConvite()!=null){
+					dados[7] = dfGlobal.format(encontroConvite.getDataConvite());
+				}
+				if(encontroConvite.getTipoResposta()!=null){
+					dados[8] = encontroConvite.getTipoResposta().getNome();
+				}
+				if(encontroConvite.getDataResposta()!=null){
+					dados[9] = dfGlobal.format(encontroConvite.getDataResposta());
+				}
+				if(encontroConvite.getTipoConfirmacao()!=null){
+					dados[10] = encontroConvite.getTipoConfirmacao().getNome();
 				} else {
-					convidar++;
+					dados[10] = TipoConfirmacaoEnum.CONFIRMADO.getNome();
 				}
-				if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO)){
-					encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialBkYellow");
-					aceitos++;
+
+				encontroConviteTableUtil.addRow(dados,row);
+
+				if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
+					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
 				}
-				contaFila++;
+				if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
+					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
+				} else {
+					if(filaAnterior.getQuantidadeVagas()!=null && contaFila > filaAnterior.getQuantidadeVagas()){
+						encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGray");
+					} else {
+						convidar++;
+					}
+					if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO)){
+						encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialBkYellow");
+						aceitos++;
+					}
+					contaFila++;
+				}
+				if(presenter.getEncontroSelecionado().getQuantidadeAfilhados()!=null &&
+						convidar<=presenter.getEncontroSelecionado().getQuantidadeAfilhados()){
+					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalBlue");
+				}
+				row++;
 			}
-			if(presenter.getEncontroSelecionado().getQuantidadeAfilhados()!=null && 
-			   convidar<=presenter.getEncontroSelecionado().getQuantidadeAfilhados()){
-				encontroConviteTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalBlue");
-			}
-			row++;
 		}
 		encontroConviteTableUtil.applyDataRowStyles();
 		if(aceitos>0){
@@ -601,7 +605,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		}
 		showWaitMessage(false);
 	}
-	
+
 	//fila
 	@UiHandler("filasButton")
 	public void filasButtonClickHandler(ClickEvent event){
@@ -651,7 +655,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		editaFilaDialogBox.show();
 		nomeTextBox.setFocus(true);
 	}
-	
+
 	public void limpaCamposFila(){
 		nomeTextBox.setValue(null);
 		ordemNumberTextBox.setNumber(1 + listaFilas.size());
@@ -675,7 +679,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		editaFilaDialogBox.hide();
 		populaTabelaFilas(lista);
 	}
-	
+
 	//casal
 	@UiHandler("fecharCasalButton")
 	public void fecharCasalButtonClickHandler(ClickEvent event){
@@ -695,7 +699,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		entidadeEditada.getCasalConvidado().getEla().setNome(elaNomeTextBox.getValue());
 		entidadeEditada.getCasalConvidado().getEla().setEmail(elaEmailTextBox.getValue());
 		entidadeEditada.getCasalConvidado().getEla().setTelefoneCelular(elaTelefoneTextBox.getValue());
-		
+
 		presenter.salvarCasal(entidadeEditada.getCasalConvidado());
 	}
 	private void editaCasal(Casal casal) {
@@ -711,7 +715,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		editaCasalDialogBox.show();
 		telefoneTextBox.setFocus(true);
 	}
-	
+
 	public void limpaCamposCasal(){
 		telefoneTextBox.setValue(null);
 		eleNomeTextBox.setValue(null);
@@ -740,12 +744,13 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 			podeEditar = true;
 		}
-		
+
 		filaTableUtil.clearData();
 		int row = 0;
 		Image editar, excluir;
 		HorizontalPanel hp;
 		for (final EncontroFila encontroFila: lista) {
+			row++;
 			Object dados[] = new Object[4];
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -762,7 +767,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 					}
 				});
 				hp.add(editar);
-				
+
 				excluir = new Image("images/delete.png");
 				excluir.setStyleName("portal-ImageCursor");
 				excluir.addClickHandler(new ClickHandler() {
@@ -775,12 +780,12 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				});
 				hp.add(excluir);
 			}
-			
+
 			dados[0] = hp;
 			dados[1] = encontroFila.getOrdem();
 			dados[2] = encontroFila.getNome();
 			dados[3] = encontroFila.getQuantidadeVagas();
-			filaTableUtil.addRow(dados,row+1);
+			filaTableUtil.addRow(dados,row);
 			row++;
 		}
 		filaTableUtil.applyDataRowStyles();

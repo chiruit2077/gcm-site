@@ -31,40 +31,42 @@ public class Encontro extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTRO", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="grupo")
 	private Grupo grupo;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date inicio;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date fim;
-	
+
 	private Integer quantidadeAfilhados;
-	
+
+	private Integer usaFichaPagamento;
+
 	@Column(precision=15, scale=2)
 	private BigDecimal valorAfilhado;
-	
+
 	@Column(precision=15, scale=2)
 	private BigDecimal valorPadrinho;
-	
+
 	@Column(precision=15, scale=2)
 	private BigDecimal valorApoio;
-	
+
 	@Column(precision=15, scale=2)
 	private BigDecimal valorInscricao;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date dataPagamentoInscricao;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date dataMaximaPagamento;
-	
+
 	@Version
 	private Integer version;
-	
+
 	@Override
 	public String toString() {
 		DateTimeFormat fmt = DateTimeFormat.getFormat("MMMM yyyy");
@@ -142,5 +144,11 @@ public class Encontro extends _WebBaseEntity {
 	}
 	public void setDataMaximaPagamento(Date dataMaximaPagamento) {
 		this.dataMaximaPagamento = dataMaximaPagamento;
+	}
+	public Integer getUsaFichaPagamento() {
+		return usaFichaPagamento;
+	}
+	public void setUsaFichaPagamento(Integer usaFichaPagamento) {
+		this.usaFichaPagamento = usaFichaPagamento;
 	}
 }
