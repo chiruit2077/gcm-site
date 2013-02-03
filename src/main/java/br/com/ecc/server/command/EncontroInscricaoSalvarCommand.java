@@ -8,10 +8,12 @@ import java.util.concurrent.Callable;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.ecc.model.EncontroInscricaoFichaPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
 
 import com.google.inject.Inject;
@@ -22,7 +24,7 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 	@Inject EntityManager em;
 	private EncontroInscricaoVO encontroInscricaoVO;
 	private Usuario usuarioAtual;
-	
+
 	@Override
 	@Transactional
 	public EncontroInscricaoVO call() throws Exception {
@@ -38,10 +40,10 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			if(usuarioAtual.getPessoa().getId().equals(encontroInscricaoVO.getEncontroInscricao().getPessoa().getId())){
 				atualiza = true;
 			}
-		} 
+		}
 		if(atualiza){
 			if(encontroInscricaoVO.getEncontroInscricao().getValorEncontro()!=null ||
-			   (encontroInscricaoVO.getEncontroInscricao().getEsconderPlanoPagamento()!=null && 
+			   (encontroInscricaoVO.getEncontroInscricao().getEsconderPlanoPagamento()!=null &&
 			    !encontroInscricaoVO.getEncontroInscricao().getEsconderPlanoPagamento())){
 				atualiza = false;
 				for (EncontroInscricaoPagamento pagamento : encontroInscricaoVO.getListaPagamento()) {
@@ -57,14 +59,26 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 		} else {
 			encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(null);
 		}
-		
+
 		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));
 		if(encontroInscricaoVO.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 			q = em.createNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
 			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
 			q.executeUpdate();
+			if (encontroInscricaoVO.getEncontroInscricao().getFichaPagamento()!=null){
+				EncontroInscricaoFichaPagamento ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
+				ficha.setStatus(TipoInscricaoFichaStatusEnum.LIBERADO);
+				ficha.setObservacao(TipoConfirmacaoEnum.DESISTENCIA.getNome());
+				ficha = em.merge(ficha);
+				EncontroInscricaoFichaPagamento vaga = new EncontroInscricaoFichaPagamento();
+				vaga.setFicha(vaga.getFicha());
+				vaga.setEncontro(vaga.getEncontro());
+				vaga.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
+				vaga.setTipo(vaga.getTipo());
+				vaga = em.merge(vaga);
+			}
 		}
-		
+
 		//pagamentos
 		List<EncontroInscricaoPagamento> novaLista = new ArrayList<EncontroInscricaoPagamento>();
 		if(encontroInscricaoVO.getListaPagamento()!=null){
@@ -92,7 +106,7 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 				encontroInscricaoVO.getListaPagamento().set(i, em.merge(eip));
 			}
 		}
-		
+
 		//detalhe
 		List<EncontroInscricaoPagamentoDetalhe> novaListaDetalhe = new ArrayList<EncontroInscricaoPagamentoDetalhe>();
 		if(encontroInscricaoVO.getListaPagamentoDetalhe()!=null){

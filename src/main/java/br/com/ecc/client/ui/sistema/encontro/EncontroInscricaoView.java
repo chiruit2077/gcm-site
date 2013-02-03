@@ -67,7 +67,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiTemplate("EncontroInscricaoView.ui.xml")
 	interface EncontroInscricaoViewUiBinder extends UiBinder<Widget, EncontroInscricaoView> {}
 	private EncontroInscricaoViewUiBinder uiBinder = GWT.create(EncontroInscricaoViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 	@UiField Label totalLabel;
@@ -80,27 +80,27 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiField ListBox mensagemListBox;
 	@UiField DateBox dataMaxParcelaDateBox;
 	@UiField CheckBox esconderPagamentoCheckBox;
-	
+
 	@UiField HTMLPanel participanteHTMLPanel;
 	@UiField Label participanteLabel;
 	@UiField CheckBox exibeDesistenciaCheckBox;
-	
+
 	@UiField(provided = true) SuggestBox casalSuggestBox;
 	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField(provided = true) SuggestBox pessoaSuggestBox;
 	private final GenericEntitySuggestOracle pessoaSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField ListBox tipoListBox;
 	@UiField Label tipoLabel;
 	@UiField(provided=true) NumberTextBox codigoNumberTextBox;
-	
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
 	@UiField Image addDetalheImage;
-	
+
 	@UiField(provided=true) FlexTable encontroInscricaoFlexTable;
 	private FlexTableUtil encontroInscricaoTableUtil = new FlexTableUtil();
 
@@ -108,7 +108,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiField TextBox dataFichaEnviadaAfilhadoDateBox;
 	@UiField TextBox dataFichaRecebidaAfilhadoDateBox;
 	@UiField TextBox dataFichaAtualizadaAfilhadoDateBox;
-	
+
 	//detalhe
 	@UiField DialogBox detalheDialogBox;
 	@UiField TextBox descricaoDetalheTextBox;
@@ -118,11 +118,11 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiField(provided=true) FlexTable detalheFlexTable;
 	private FlexTableUtil detalheTableUtil = new FlexTableUtil();
 	@UiField ListBox confirmacaoListBox;
-	
+
 	//DateTimeFormat dfGlobal = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
 	//DateTimeFormat dfGlobalTempo = DateTimeFormat.getFormat("dd-MM-yyy HH:mm");
 	NumberFormat dfCurrency = NumberFormat.getCurrencyFormat();
-	
+
 	private EncontroInscricaoVO entidadeEditada;
 	private Casal casalEditado;
 	private Pessoa pessoaEditada;
@@ -139,21 +139,21 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		casalSuggest.setMinimoCaracteres(2);
 		casalSuggest.setSuggestQuery("casal.porNomeLike");
 		casalSuggestBox = new SuggestBox(casalSuggest);
-		
+
 		pessoaSuggest.setMinimoCaracteres(2);
 		pessoaSuggest.setSuggestQuery("pessoa.porNomeLike");
 		pessoaSuggestBox = new SuggestBox(pessoaSuggest);
-		
+
 		codigoNumberTextBox = new NumberTextBox(false, false, 2, 2);
 		valorDetalheNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
-		
+
 		initWidget(uiBinder.createAndBindUi(this));
-		
+
 		dataMaxParcelaDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM)));
 		dataMaxParcelaDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		tituloFormularioLabel.setText(getDisplayTitle());
-		
+
 		casalSuggestBox.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
@@ -200,12 +200,12 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoEnum.values());
 		ListBoxUtil.populate(confirmacaoListBox, false, TipoConfirmacaoEnum.values());
 	}
-	
+
 	private void criaTabela() {
 		encontroInscricaoFlexTable = new FlexTable();
 		encontroInscricaoFlexTable.setStyleName("portal-formSmall");
 		encontroInscricaoTableUtil.initialize(encontroInscricaoFlexTable);
-		
+
 		encontroInscricaoTableUtil.addColumn("", "10px", HasHorizontalAlignment.ALIGN_CENTER);
 		encontroInscricaoTableUtil.addColumn("Código", "50px", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.NUMBER, null);
 		encontroInscricaoTableUtil.addColumn("Tipo", "80px", HasHorizontalAlignment.ALIGN_CENTER);
@@ -219,7 +219,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		detalheFlexTable = new FlexTable();
 		detalheFlexTable.setStyleName("portal-formSmall");
 		detalheTableUtil.initialize(detalheFlexTable);
-		
+
 		detalheTableUtil.addColumn("", "10px", HasHorizontalAlignment.ALIGN_CENTER);
 		detalheTableUtil.addColumn("Descrição", "300px", HasHorizontalAlignment.ALIGN_LEFT);
 		detalheTableUtil.addColumn("Valor", "100px", HasHorizontalAlignment.ALIGN_RIGHT, TipoColuna.NUMBER, null);
@@ -234,7 +234,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			addDetalheImage.setVisible(true);
 		}
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		if(dadosPagamentoComponent.getDadosAlterados()){
@@ -270,7 +270,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		entidadeEditada.getEncontroInscricao().setDataMaximaParcela(dataMaxParcelaDateBox.getValue());
 		entidadeEditada.getEncontroInscricao().setEsconderPlanoPagamento(esconderPagamentoCheckBox.getValue());
 		entidadeEditada.getEncontroInscricao().setTipoConfirmacao((TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values()));
-		
+
 		if(!verificaDadosPagamento()){
 			if(!Window.confirm("Não foram definidas suas opções de pagamento.\nDeseja sair mesmo assim?")){
 				return;
@@ -302,7 +302,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		}
 		return dadosPagamento;
 	}
-	
+
 	@Override
 	public void edita(EncontroInscricao encontroInscricao) {
 		limpaCampos();
@@ -311,13 +311,13 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			entidadeEditada.setEncontroInscricao(new EncontroInscricao());
 			entidadeEditada.getEncontroInscricao().setEncontro(presenter.getEncontroSelecionado());
 			entidadeEditada.setListaPagamento(new ArrayList<EncontroInscricaoPagamento>());
-			
+
 			dadosPagamentoComponent.setEncontroInscricaoVO(entidadeEditada);
 			dadosPagamentoComponent.setUsuario(presenter.getDadosLoginVO().getUsuario());
 			dadosPagamentoComponent.setCasal(presenter.getDadosLoginVO().getCasal());
-			
+
 			tipoListBoxChangeHandler(null);
-			
+
 			editaDialogBox.center();
 			editaDialogBox.show();
 			codigoNumberTextBox.setFocus(true);
@@ -325,7 +325,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			presenter.getVO(encontroInscricao);
 		}
 	}
-	
+
 	public void limpaCampos(){
 		pessoaSuggestBox.setValue(null);
 		casalSuggestBox.setValue(null);
@@ -341,13 +341,13 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		valorLabel.setText(null);
 		detalheTableUtil.clearData();
 		confirmacaoListBox.setSelectedIndex(0);
-		
-		
+
+
 		dataFichaEnviadaAfilhadoDateBox.setValue(null);
 		dataFichaRecebidaAfilhadoDateBox.setValue(null);
 		dataFichaAtualizadaAfilhadoDateBox.setValue(null);
 		dataLimiteHTMLPanel.setVisible(false);
-		
+
 		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 			dataLimiteHTMLPanel.setVisible(true);
 			tipoLabel.setVisible(false);
@@ -384,6 +384,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			casalHTMLPanel.setVisible(false);
 		}
 		codigoNumberTextBox.setNumber(encontroInscricaoVO.getEncontroInscricao().getCodigo());
+		if (presenter.getEncontroSelecionado().getUsaFichaPagamento().equals(1))
+			codigoNumberTextBox.setEnabled(false);
 		if(encontroInscricaoVO.getEncontroInscricao().getTipo()!=null){
 			tipoLabel.setText(encontroInscricaoVO.getEncontroInscricao().getTipo().getNome());
 			ListBoxUtil.setItemSelected(tipoListBox, encontroInscricaoVO.getEncontroInscricao().getTipo().getNome());
@@ -396,15 +398,15 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			encontroInscricaoVO.getEncontroInscricao().setEsconderPlanoPagamento(false);
 		}
 		esconderPagamentoCheckBox.setValue(encontroInscricaoVO.getEncontroInscricao().getEsconderPlanoPagamento());
-		
+
 		//iniciando componente
 		dadosPagamentoComponent.setUsuario(presenter.getDadosLoginVO().getUsuario());
 		dadosPagamentoComponent.setCasal(presenter.getDadosLoginVO().getCasal());
 		dadosPagamentoComponent.setEncontroInscricaoVO(encontroInscricaoVO);
-		
+
 		setDadosFicha(encontroInscricaoVO.getEncontroInscricao());
 		esconderPagamentoCheckBoxClickHandler(null);
-		
+
 		if(entidadeEditada.getEncontroInscricao().getValorEncontro()!=null){
 			valorLabel.setText(dfCurrency.format(entidadeEditada.getEncontroInscricao().getValorEncontro()));
 		}
@@ -413,12 +415,12 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		}
 		populaDetalhes(encontroInscricaoVO.getListaPagamentoDetalhe());
 	}
-	
+
 	@UiHandler("exibeDesistenciaCheckBox")
 	public void exibeDesistenciaCheckBoxClickHandler(ClickEvent event){
 		populaEntidades(listaEncontro);
 	}
-	
+
 	@Override
 	public void setDadosFicha(EncontroInscricao encontroInscricao) {
 		entidadeEditada.setEncontroInscricao(encontroInscricao);
@@ -430,7 +432,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			dataFichaAtualizadaAfilhadoDateBox.setValue(entidadeEditada.getEncontroInscricao().getDataPrenchimentoFichaStr());
 		}
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Inscrição ao encontro";
@@ -468,12 +470,12 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				return s1.compareTo(s2);
 			}
 		});
-		
+
 		boolean podeEditar = false;
 		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 			podeEditar = true;
 		}
-		
+
 		LabelTotalUtil.setTotal(itemTotal, lista.size(), "inscrição", "inscrições", "a");
 		encontroInscricaoTableUtil.clearData();
 		int row = 0;
@@ -486,7 +488,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
-			
+
 			ok = false;
 			if(encontroInscricao.getCasal()!=null){
 				if(presenter.getDadosLoginVO().getCasal().getId().equals(encontroInscricao.getCasal().getId())){
@@ -509,7 +511,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				});
 				hp.add(editar);
 			}
-			
+
 			if(podeEditar){
 				excluir = new Image("images/delete.png");
 				excluir.setTitle("Excluir esta inscrição");
@@ -524,25 +526,25 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				});
 				hp.add(excluir);
 			}
-			
+
 			dados[0] = hp;
 			dados[1] = encontroInscricao.getCodigo();
 			dados[2] = encontroInscricao.getTipo().getNome();
 			dados[3] = encontroInscricao.getCasal()==null?encontroInscricao.getPessoa().getNome():encontroInscricao.getCasal().toString();
-			
+
 			if(encontroInscricao.getMensagemDestinatario()!=null){
 			   dados[4] = encontroInscricao.getMensagemDestinatario().getDataEnvioStr();
 			   dados[5] = encontroInscricao.getMensagemDestinatario().getDataConfirmacaoStr();
 			}
 			dataFichaAtualizadaAfilhadoDateBox.setValue(encontroInscricao.getDataPrenchimentoFichaStr());
 			dados[6] = encontroInscricao.getDataPrenchimentoFichaStr();
-			
+
 			if(encontroInscricao.getTipoConfirmacao()!=null){
 				dados[7] = encontroInscricao.getTipoConfirmacao().getNome();
 			} else {
 				dados[7] = TipoConfirmacaoEnum.CONFIRMADO.getNome();
 			}
-			
+
 			exibeLinha = true;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
 				exibeLinha = false;
@@ -632,7 +634,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		if(dataFichaEnviadaAfilhadoDateBox.getValue()!=null && !dataFichaEnviadaAfilhadoDateBox.getValue().equals("")){
 			if(!Window.confirm("A ficha já foi enviada anteriormente.\nDeseja re-enviar a ficha ?")){
 				return;
-			}	
+			}
 		}
 		if(!entidadeEditada.getEncontroInscricao().getTipo().equals(ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values()))){
 			if(Window.confirm("O tipo selecionado é diferente do tipo salvo. Deseja alterar o tipo desta inscrição?")){
@@ -643,7 +645,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		}
 		presenter.enviaFicha(mensagem, entidadeEditada.getEncontroInscricao());
 	}
-	
+
 	@UiHandler("tipoListBox")
 	public void tipoListBoxChangeHandler(ChangeEvent event) {
 		TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values());
@@ -669,7 +671,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	public void populaMensagem(List<Mensagem> result) {
 		this.listaMensagem = result;
 	}
-	
+
 	@UiHandler("esconderPagamentoCheckBox")
 	public void esconderPagamentoCheckBoxClickHandler(ClickEvent event){
 		entidadeEditada.getEncontroInscricao().setEsconderPlanoPagamento(esconderPagamentoCheckBox.getValue());
@@ -683,7 +685,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		}
 		dadosPagamentoComponent.setValorEncontro(entidadeEditada.getEncontroInscricao().getValorEncontro());
 	}
-	
+
 	public void populaDetalhes(List<EncontroInscricaoPagamentoDetalhe> lista) {
 		boolean podeEditar = false;
 		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
@@ -699,7 +701,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
-			
+
 			if(podeEditar){
 				editar = new Image("images/edit.png");
 				editar.setTitle("Editar este detalhe");
@@ -712,7 +714,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				});
 				hp.add(editar);
 			}
-			
+
 			if(podeEditar){
 				excluir = new Image("images/delete.png");
 				excluir.setTitle("Excluir este detalhe");
@@ -728,14 +730,14 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				});
 				hp.add(excluir);
 			}
-			
+
 			dados[0] = hp;
 			dados[1] = detalhe.getDescricao();
 			if( detalhe.getValor()!=null){
 				dados[2] = dfCurrency.format(detalhe.getValor());
 				valor += detalhe.getValor().doubleValue();
 			}
-			
+
 			detalheTableUtil.addRow(dados,row+1);
 			row++;
 		}
@@ -744,7 +746,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		dadosPagamentoComponent.setValorEncontro(entidadeEditada.getEncontroInscricao().getValorEncontro());
 		valorLabel.setText(dfCurrency.format(entidadeEditada.getEncontroInscricao().getValorEncontro()));
 	}
-	
+
 	public void limpaCamposDetalhe(){
 		descricaoDetalheTextBox.setValue(null);
 		valorDetalheNumberTextBox.setValue(null);
@@ -753,7 +755,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		descricaoDetalheTextBox.setValue(detalhe.getDescricao());
 		valorDetalheNumberTextBox.setNumber(detalhe.getValor());
 	}
-	
+
 	public void editaDetalhe(EncontroInscricaoPagamentoDetalhe detalhe) {
 		limpaCamposDetalhe();
 		if(detalhe == null){
