@@ -100,8 +100,41 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	}
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
+		TipoInscricaoFichaStatusEnum status = (TipoInscricaoFichaStatusEnum) ListBoxUtil.getItemSelected(statusListBox, TipoInscricaoFichaStatusEnum.values());
+		TipoInscricaoFichaEnum tipo = (TipoInscricaoFichaEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoFichaEnum.values());
+		if (tipo == null){
+			Window.alert("Escolha o Tipo!");
+			return;
+		}
+		if (status == null){
+			Window.alert("Escolha o Status!");
+			return;
+		}
+		if (fichaTextBox.getText()!= null && !fichaTextBox.getText().equals("")){
+			EncontroInscricaoFichaPagamento ficha = getEncontroInscricaoFichaPagamento(presenter.getListaFichas(),Integer.parseInt(fichaTextBox.getText()));
+			if (  ficha != null && !ficha.getId().equals(entidadeEditada.getId()) && !status.equals(TipoInscricaoFichaStatusEnum.LIBERADO) ){
+				Window.alert("Ficha já cadastrada!");
+				return;
+			}else
+				entidadeEditada.setFicha(Integer.parseInt(fichaTextBox.getText()));
+		}else{
+			Window.alert("Defina o número da Ficha!");
+			return;
+		}
+		entidadeEditada.setTipo(tipo);
+		entidadeEditada.setStatus(status);
+		entidadeEditada.setObservacao(observacaoTextBox.getText());
 		presenter.salvar(entidadeEditada);
 	}
+	private EncontroInscricaoFichaPagamento getEncontroInscricaoFichaPagamento(
+			List<EncontroInscricaoFichaPagamento> lista, int i) {
+		for (EncontroInscricaoFichaPagamento encontroInscricaoFichaPagamento : lista) {
+			if (encontroInscricaoFichaPagamento.getFicha().equals(i) && !encontroInscricaoFichaPagamento.getStatus().equals(TipoInscricaoFichaStatusEnum.LIBERADO))
+				return encontroInscricaoFichaPagamento;
+		}
+		return null;
+	}
+
 	@UiHandler("exibeLiberadosCheckBox")
 	public void exibeLiberadosCheckBoxClickHandler(ClickEvent event){
 		populaEntidades(presenter.getListaFichas());
@@ -161,7 +194,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	public void populaEntidades(List<EncontroInscricaoFichaPagamento> lista) {
 		fichaTableUtil.clearData();
 		int row = 0;
-		Image editar, excluir;
+		Image editar;
 		HorizontalPanel hp;
 		for (final EncontroInscricaoFichaPagamento ficha: lista) {
 			if((ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.LIBERADO) && exibeLiberadosCheckBox.getValue()) ||
@@ -178,21 +211,10 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 						edita(ficha);
 					}
 				});
-				excluir = new Image("images/delete.png");
-				excluir.setStyleName("portal-ImageCursor");
-				excluir.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent arg0) {
-						if(Window.confirm("Deseja excluir esta Ficha ?")){
-							presenter.salvar(ficha);
-						}
-					}
-				});
 				hp = new HorizontalPanel();
 				hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				hp.setSpacing(1);
 				hp.add(editar);
-				hp.add(excluir);
 
 				dados[0] = hp;
 				dados[1] = ficha.getFicha();

@@ -10,7 +10,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("encontroInscricaoFichaPagamento")
 public interface EncontroInscricaoFichaPagamentoService extends RemoteService {
-	public void exclui(EncontroInscricaoFichaPagamento encontroInscricaoFichaPagamento) throws Exception;
 	public List<EncontroInscricaoFichaPagamento> listaFichas(Encontro encontroSelecionado) throws Exception;
 	public void salvaFicha(EncontroInscricaoFichaPagamento ficha) throws Exception;
 	public void geraFichasVagas(Encontro encontroSelecionado) throws Exception;

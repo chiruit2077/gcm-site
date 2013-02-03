@@ -6,11 +6,9 @@ import java.util.List;
 import br.com.ecc.client.service.encontro.EncontroInscricaoFichaPagamentoService;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricaoFichaPagamento;
-import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
 import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 import br.com.ecc.server.SecureRemoteServiceServlet;
-import br.com.ecc.server.auth.Permissao;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 import br.com.ecc.server.command.basico.SaveEntityCommand;
 
@@ -23,36 +21,6 @@ public class EncontroInscricaoFichaPagamentoServiceImpl extends SecureRemoteServ
 
 	private static final long serialVersionUID = 3763111944496091407L;
 	@Inject Injector injector;
-
-
-
-	@Override
-	@Permissao(nomeOperacao="Excluir encontroInscricaoFichaPagamento", operacao=Operacao.EXCLUIR)
-	public void exclui(EncontroInscricaoFichaPagamento encontroInscricaoFichaPagamento) throws Exception {
-		/*//removendo atividades no encontro
-		ExecuteUpdateCommand cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
-		cmdDelete.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
-		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
-		cmdDelete.call();
-
-		//exclusão
-		cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
-		cmdDelete.setNamedQuery("encontroInscricaoPagamento.deletePorEncontroInscricao");
-		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
-		cmdDelete.call();
-
-		cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
-		cmdDelete.setNamedQuery("encontroInscricaoPagamentoDetalhe.deletePorEncontroInscricao");
-		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
-		cmdDelete.call();
-
-		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
-		cmd.setBaseEntity(encontroInscricao);
-		cmd.call();
-
-		*/
-	}
-
 
 
 
@@ -71,9 +39,6 @@ public class EncontroInscricaoFichaPagamentoServiceImpl extends SecureRemoteServ
 		cmd.setBaseEntity(ficha);
 		cmd.call();
 	}
-
-
-
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -118,7 +83,6 @@ public class EncontroInscricaoFichaPagamentoServiceImpl extends SecureRemoteServ
 				return encontroInscricaoFichaPagamento;
 		}
 		return null;
-
 	}
 
 }
