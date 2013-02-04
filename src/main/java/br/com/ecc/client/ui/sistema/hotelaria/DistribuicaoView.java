@@ -1,10 +1,10 @@
-package br.com.ecc.client.ui.sistema.tesouraria;
+package br.com.ecc.client.ui.sistema.hotelaria;
 
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
+import br.com.ecc.client.core.resource.QuartoHtmlResource;
 import br.com.ecc.client.util.FlexTableUtil;
-import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.EncontroInscricaoFichaPagamento;
 import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
@@ -12,32 +12,25 @@ import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FichasView extends BaseView<FichasPresenter> implements FichasPresenter.Display {
+public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements DistribuicaoPresenter.Display {
 
-	@UiTemplate("FichasView.ui.xml")
-	interface FichasViewUiBinder extends UiBinder<Widget, FichasView> {}
-	private FichasViewUiBinder uiBinder = GWT.create(FichasViewUiBinder.class);
+	@UiTemplate("DistribuicaoView.ui.xml")
+	interface DistribucaoViewUiBinder extends UiBinder<Widget, DistribuicaoView> {}
+	private DistribucaoViewUiBinder uiBinder = GWT.create(DistribucaoViewUiBinder.class);
 
 	@UiField Label tituloFormularioLabel;
-	@UiField Label itemTotal;
 
 	@UiField Label nomeLabel;
 	@UiField TextBox fichaTextBox;
@@ -48,51 +41,26 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
-	@UiField Button novoButton;
-	@UiField Button gerarButton;
+	@UiField HTMLPanel centralPanel;
 
-	@UiField CheckBox exibeLiberadosCheckBox;
-	@UiField CheckBox exibeReservadasCheckBox;
 
-	@UiField(provided=true) FlexTable fichaFlexTable;
 	private FlexTableUtil fichaTableUtil = new FlexTableUtil();
 
 	private EncontroInscricaoFichaPagamento entidadeEditada;
 
-	public FichasView() {
-		criaTabela();
+	public DistribuicaoView() {
 
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoFichaEnum.values());
 		ListBoxUtil.populate(statusListBox, false, TipoInscricaoFichaStatusEnum.values());
-	}
-
-	private void criaTabela() {
-		fichaFlexTable = new FlexTable();
-		fichaFlexTable.setStyleName("portal-formSmall");
-		fichaTableUtil.initialize(fichaFlexTable);
-
-		fichaTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
-		fichaTableUtil.addColumn("Ficha", "50", HasHorizontalAlignment.ALIGN_CENTER);
-		fichaTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
-		fichaTableUtil.addColumn("Status", "50", HasHorizontalAlignment.ALIGN_CENTER);
-		fichaTableUtil.addColumn("Observação", "200", HasHorizontalAlignment.ALIGN_LEFT);
-		fichaTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_CENTER);
+		centralPanel.getElement().setInnerHTML(QuartoHtmlResource.INSTANCE.getModeloDistribuicao1().getText());
 	}
 
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
-	}
-	@UiHandler("novoButton")
-	public void novoButtonClickHandler(ClickEvent event){
-		edita(null);
-	}
-	@UiHandler("gerarButton")
-	public void gerarButtonClickHandler(ClickEvent event){
-		presenter.geraFichasVagas();
 	}
 	@UiHandler("fecharImage")
 	public void fecharImageClickHandler(ClickEvent event){
@@ -100,7 +68,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	}
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
-		TipoInscricaoFichaStatusEnum status = (TipoInscricaoFichaStatusEnum) ListBoxUtil.getItemSelected(statusListBox, TipoInscricaoFichaStatusEnum.values());
+		/*TipoInscricaoFichaStatusEnum status = (TipoInscricaoFichaStatusEnum) ListBoxUtil.getItemSelected(statusListBox, TipoInscricaoFichaStatusEnum.values());
 		TipoInscricaoFichaEnum tipo = (TipoInscricaoFichaEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoFichaEnum.values());
 		if (tipo == null){
 			Window.alert("Escolha o Tipo!");
@@ -124,28 +92,28 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		entidadeEditada.setTipo(tipo);
 		entidadeEditada.setStatus(status);
 		entidadeEditada.setObservacao(observacaoTextBox.getText());
-		presenter.salvar(entidadeEditada);
+		presenter.salvar(entidadeEditada);*/
 	}
-	private EncontroInscricaoFichaPagamento getEncontroInscricaoFichaPagamento(
+	/*private EncontroInscricaoFichaPagamento getEncontroInscricaoFichaPagamento(
 			List<EncontroInscricaoFichaPagamento> lista, int i) {
 		for (EncontroInscricaoFichaPagamento encontroInscricaoFichaPagamento : lista) {
 			if (encontroInscricaoFichaPagamento.getFicha().equals(i) && !encontroInscricaoFichaPagamento.getStatus().equals(TipoInscricaoFichaStatusEnum.LIBERADO))
 				return encontroInscricaoFichaPagamento;
 		}
 		return null;
-	}
+	}*/
 
-	@UiHandler("exibeLiberadosCheckBox")
+	/*@UiHandler("exibeLiberadosCheckBox")
 	public void exibeLiberadosCheckBoxClickHandler(ClickEvent event){
 		populaEntidades(presenter.getListaFichas());
 	}
 	@UiHandler("exibeReservadasCheckBox")
 	public void exibeReservadasCheckBoxClickHandler(ClickEvent event){
 		populaEntidades(presenter.getListaFichas());
-	}
+	}*/
 
 	private void edita(EncontroInscricaoFichaPagamento ficha) {
-		limpaCampos();
+		/*limpaCampos();
 		if(ficha == null){
 			entidadeEditada = new EncontroInscricaoFichaPagamento();
 		} else {
@@ -154,17 +122,17 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		}
 		editaDialogBox.center();
 		editaDialogBox.show();
-		tipoListBox.setFocus(true);
+		tipoListBox.setFocus(true);*/
 	}
 
 	public void limpaCampos(){
-		nomeLabel.setText(null);
+		/*nomeLabel.setText(null);
 		observacaoTextBox.setText(null);
-		fichaTextBox.setText(null);
+		fichaTextBox.setText(null);*/
 	}
 
 	public void defineCampos(EncontroInscricaoFichaPagamento ficha, boolean combos){
-		fichaTextBox.setText(ficha.getFicha().toString());
+		/*fichaTextBox.setText(ficha.getFicha().toString());
 		observacaoTextBox.setText(ficha.getObservacao());
 		if (ficha.getEncontroInscricao()!=null){
 			if(ficha.getEncontroInscricao().getCasal()!=null){
@@ -177,12 +145,12 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		if(combos){
 			ListBoxUtil.setItemSelected(tipoListBox, ficha.getTipo().getNome());
 			ListBoxUtil.setItemSelected(statusListBox, ficha.getStatus().getNome());
-		}
+		}*/
 	}
 
 	@Override
 	public String getDisplayTitle() {
-		return "Controle de Fichas";
+		return "Distribuição de Quartos";
 	}
 
 	@Override
@@ -192,7 +160,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	}
 	@Override
 	public void populaEntidades(List<EncontroInscricaoFichaPagamento> lista) {
-		LabelTotalUtil.setTotal(itemTotal, lista.size(), "ficha", "fichas", "");
+		/*LabelTotalUtil.setTotal(itemTotal, lista.size(), "ficha", "fichas", "");
 		fichaTableUtil.clearData();
 		int row = 0;
 		Image editar;
@@ -290,7 +258,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 			} else {
 				itemTotal.setText(itemTotal.getText() +  " / " + reservados + " liberadas");
 			}
-		}
+		}*/
 	}
 
 }

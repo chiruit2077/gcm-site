@@ -37,46 +37,46 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 	@UiTemplate("QuartoView.ui.xml")
 	interface QuartoViewUiBinder extends UiBinder<Widget, QuartoView> {}
 	private QuartoViewUiBinder uiBinder = GWT.create(QuartoViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
-	
+
 	@UiField CheckBox carpeteCheckBox;
 	@UiField CheckBox suporteCheckBox;
 	@UiField TextBox numeroQuartoTextBox;
 	@UiField TextBox corQuartoTextBox;
-	
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
-	
-	
+
+
 	@UiField(provided=true) FlexTable quartoFlexTable;
 	private FlexTableUtil quartoTableUtil = new FlexTableUtil();
 
 	DateTimeFormat dfGlobal = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
-	
+
 	private Quarto entidadeEditada;
-	
+
 	public QuartoView() {
 		criaTabela();
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 	}
-	
+
 	private void criaTabela() {
 		quartoFlexTable = new FlexTable();
 		quartoFlexTable.setStyleName("portal-formSmall");
 		quartoTableUtil.initialize(quartoFlexTable);
-		
+
 		quartoTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		quartoTableUtil.addColumn("Número", "50", HasHorizontalAlignment.ALIGN_CENTER);
 		quartoTableUtil.addColumn("Suporte TV", null, HasHorizontalAlignment.ALIGN_LEFT);
 		quartoTableUtil.addColumn("Carpete", "30", HasHorizontalAlignment.ALIGN_LEFT);
 		quartoTableUtil.addColumn("Cor", "30", HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -92,7 +92,7 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		entidadeEditada.setNumeroQuarto(numeroQuartoTextBox.getValue());
-		entidadeEditada.setGrupo(presenter.getGrupoSelecionado());
+		//entidadeEditada.setGrupo(presenter.getGrupoSelecionado());
 		entidadeEditada.setCarpete(carpeteCheckBox.getValue());
 		entidadeEditada.setSuporteTV(suporteCheckBox.getValue());
 		entidadeEditada.setCor(corQuartoTextBox.getValue());
@@ -110,7 +110,7 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 		editaDialogBox.show();
 		numeroQuartoTextBox.setFocus(true);
 	}
-	
+
 	public void limpaCampos(){
 		numeroQuartoTextBox.setValue(null);
 		carpeteCheckBox.setValue(null);
@@ -124,15 +124,15 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 		carpeteCheckBox.setValue(quarto.getCarpete());
 		suporteCheckBox.setValue(quarto.getSuporteTV());
 		corQuartoTextBox.setValue(quarto.getCor());
-		
+
 		if( quarto.getCor().equals("")){
 			setColor("ffffff");
 		} else {
 			setColor(quarto.getCor());
 		}
-		
+
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Cadastro de Quartos";
@@ -154,7 +154,7 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 		String cor="";
 		for (final Quarto quarto: lista) {
 			Object dados[] = new Object[5];
-			
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -178,7 +178,7 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 			hp.setSpacing(1);
 			hp.add(editar);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
 			dados[1] = quarto.getNumeroQuarto();
 			if(quarto.getSuporteTV()!=null){
@@ -199,7 +199,7 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 		}
 		quartoTableUtil.applyDataRowStyles();
 	}
-	
+
 	private void pickColor() {
 		final ColorPickerDialog dlg = new ColorPickerDialog();
 		dlg.setColor(corQuartoTextBox.getText());
@@ -216,12 +216,12 @@ public class QuartoView extends BaseView<QuartoPresenter> implements QuartoPrese
 		corQuartoTextBox.setValue(color);
 		setCorFundo(color);
 	}
-	
+
 	private native void setCorFundo(String cor) /*-{
 		$wnd.changecss('ECCWeb.css', '.portal-corFundo', 'background-color', "#"+cor);
 		$wnd.changecss('ECCWeb.css', '.portal-corFundo', 'color', "#"+cor);
 	}-*/;
-	
+
 	@UiHandler("selecionaCorButton")
 	public void selecionaCorButtonClickHandler(ClickEvent event){
 		pickColor();

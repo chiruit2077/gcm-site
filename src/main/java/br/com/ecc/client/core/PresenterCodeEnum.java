@@ -8,11 +8,12 @@ import br.com.ecc.client.ui.sistema.cadastro.AtividadePresenter;
 import br.com.ecc.client.ui.sistema.cadastro.CasalPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.EncontroPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.GrupoPresenter;
+import br.com.ecc.client.ui.sistema.cadastro.HotelPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.PapelPresenter;
-import br.com.ecc.client.ui.sistema.cadastro.QuartoPresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroConvitePresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroInscricaoPresenter;
 import br.com.ecc.client.ui.sistema.encontro.PlanilhaPresenter;
+import br.com.ecc.client.ui.sistema.hotelaria.DistribuicaoPresenter;
 import br.com.ecc.client.ui.sistema.patrimonio.ItemPatrimonioPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.ListagemPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.MensagemPresenter;
@@ -33,7 +34,8 @@ public enum PresenterCodeEnum  {
 	ENCONTRO(2,3, EncontroPresenter.class, "Cadastro de encontros", true),
 	ATIVIDADE(2,4, AtividadePresenter.class, "Cadastro de atividades de encontros", true),
 	PAPEL(2,5, PapelPresenter.class, "Cadastro de papeis", true),
-	QUARTO(2,11, QuartoPresenter.class, "Cadastro de quartos", true),
+	//QUARTO(2,11, QuartoPresenter.class, "Cadastro de quartos", true),
+	HOTEL(2,17, HotelPresenter.class, "Cadastro de Hoteis", true),
 
 	ENCONTRO_CONVITE(2,8, EncontroConvitePresenter.class, "Convites ao encontro", true),
 	ENCONTRO_INSCRICAO(2,6, EncontroInscricaoPresenter.class, "Inscrição ao encontro", true),
@@ -46,7 +48,10 @@ public enum PresenterCodeEnum  {
 	ITEM_PATRIMONIO(2,12, ItemPatrimonioPresenter.class, "Itens do patrimonio", true),
 
 	TESOURARIA_PAGAMENTOS(2,13, PagamentosPresenter.class, "Pagamentos", true),
-	TESOURARIA_FICHAS(2,15, FichasPresenter.class, "Fichas", true)
+	TESOURARIA_FICHAS(2,15, FichasPresenter.class, "Fichas", true),
+
+	HOTELARIA_ENCONTRO_HOTEL(2,18, FichasPresenter.class, "Quartos", true),
+	HOTELARIA_DISTRIBUICAO(2,19, DistribuicaoPresenter.class, "Distribuição", true)
 	;
 
 

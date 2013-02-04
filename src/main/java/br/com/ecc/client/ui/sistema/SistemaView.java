@@ -70,7 +70,8 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 			menuItem.getSubMenu().addItem("Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO); } });
 			menuItem.getSubMenu().addItem("Atividade", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ATIVIDADE); } });
 			menuItem.getSubMenu().addItem("Papel", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.PAPEL); } });
-			menuItem.getSubMenu().addItem("Quarto", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.QUARTO); } });
+			menuItem.getSubMenu().addItem("Hoteis", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTEL); } });
+			//menuItem.getSubMenu().addItem("Quarto", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.QUARTO); } });
 		}
 
 		//Secretaria
@@ -84,6 +85,14 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 
 		}
 
+
+		//Hotelaria
+		if(administrador){
+			menuItem = new MenuItem("Hotelaria", new MenuBar(true));
+			sistemaMenuBar.addItem(menuItem);
+			menuItem.getSubMenu().addItem("Encontro Hoteis", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTELARIA_ENCONTRO_HOTEL); } });
+			menuItem.getSubMenu().addItem("Distribuição dos Quartos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTELARIA_DISTRIBUICAO); } });
+		}
 		//Patrimonio
 		if(administrador){
 			menuItem = new MenuItem("Patrimônio", new MenuBar(true));

@@ -9,6 +9,8 @@ import java.io.InputStream;
 
 public abstract class FileUtil {
 
+	private static FileOutputStream fos;
+
 	public static void write(File target, byte[] bytes) throws IOException {
 		BufferedInputStream input = new BufferedInputStream(
 				new ByteArrayInputStream(bytes));
@@ -17,7 +19,7 @@ public abstract class FileUtil {
 	}
 
 	public static void write(File target, InputStream input) throws IOException {
-		FileOutputStream fos = new FileOutputStream(target);
+		fos = new FileOutputStream(target);
 		byte[] buff = new byte[1024];
 		int bytesRead = 0;
 

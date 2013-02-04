@@ -42,13 +42,13 @@ public class EncontroInscricaoFichaPagamento extends _WebBaseEntity {
 	private Encontro encontro;
 
 	@Enumerated(EnumType.STRING)
-	@Column(length=20)
+	@Column(length=30)
 	private TipoInscricaoFichaEnum tipo;
 
 	private Integer ficha;
 
 	@Enumerated(EnumType.STRING)
-	@Column(length=20)
+	@Column(length=30)
 	private TipoInscricaoFichaStatusEnum status;
 
 	@Column(length=254)
