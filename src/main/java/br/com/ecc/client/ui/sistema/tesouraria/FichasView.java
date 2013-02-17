@@ -148,6 +148,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		limpaCampos();
 		if(ficha == null){
 			entidadeEditada = new EncontroInscricaoFichaPagamento();
+			entidadeEditada.setEncontro(presenter.getEncontroSelecionado());
 		} else {
 			entidadeEditada = ficha;
 			defineCampos(ficha, true);
@@ -286,9 +287,9 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		}
 		if(liberados>0){
 			if(liberados==1){
-				itemTotal.setText(itemTotal.getText() +  " / " + reservados + " liberada");
+				itemTotal.setText(itemTotal.getText() +  " / " + liberados + " liberada");
 			} else {
-				itemTotal.setText(itemTotal.getText() +  " / " + reservados + " liberadas");
+				itemTotal.setText(itemTotal.getText() +  " / " + liberados + " liberadas");
 			}
 		}
 	}
