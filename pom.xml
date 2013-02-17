@@ -177,7 +177,7 @@
 	    <dependency>
 		    <groupId>printit</groupId>
 		    <artifactId>printit</artifactId>
-		    <version>0.1</version>
+		    <version>1.11</version>
 		</dependency>
 	</dependencies>
 
