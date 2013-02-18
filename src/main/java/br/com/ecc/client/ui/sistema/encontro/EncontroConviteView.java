@@ -559,8 +559,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 
 				if(encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
-				}
-				if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
+				} else if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
 					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
 				} else {
 					if(filaAnterior.getQuantidadeVagas()!=null && contaFila > filaAnterior.getQuantidadeVagas()){
@@ -578,7 +577,6 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 						convidar<=presenter.getEncontroSelecionado().getQuantidadeAfilhados()){
 					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalBlue");
 				}
-				row++;
 			}
 		}
 		encontroConviteTableUtil.applyDataRowStyles();
