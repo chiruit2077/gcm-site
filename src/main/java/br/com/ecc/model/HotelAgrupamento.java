@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -28,6 +30,10 @@ public class HotelAgrupamento extends _WebBaseEntity {
 
 	@Column(length=254)
 	private String obs;
+
+	@ManyToOne
+	@JoinColumn(name="hotel")
+	private Hotel hotel;
 
 	private Integer quantidadeLados;
 
@@ -86,6 +92,14 @@ public class HotelAgrupamento extends _WebBaseEntity {
 
 	public void setObs(String obs) {
 		this.obs = obs;
+	}
+
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
 	}
 
 }

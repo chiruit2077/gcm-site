@@ -20,8 +20,8 @@ import br.com.ecc.model.tipo.TipoQuartoEnum;
 @Entity
 @SequenceGenerator(name="SQ_QUARTO", sequenceName="SQ_QUARTO")
 @NamedQueries({
-	@NamedQuery(name="quarto.porHotel", query="select u from Quarto u where u.hotelagrupamento.hotel = :hotel order by u.tipoquarto, u.numeroQuarto"),
-	@NamedQuery(name="quarto.porHotelAgrupamento", query="select u from Quarto u where u.hotelagrupamento = :hotelagrupamento order by u.ordem ")
+	@NamedQuery(name="quarto.porHotel", query="select u from Quarto u where u.hotelAgrupamento.hotel = :hotel order by u.tipoQuarto, u.numeroQuarto"),
+	@NamedQuery(name="quarto.porHotelAgrupamento", query="select u from Quarto u where u.hotelAgrupamento = :hotelagrupamento order by u.ordem ")
 })
 public class Quarto extends _WebBaseEntity {
 
