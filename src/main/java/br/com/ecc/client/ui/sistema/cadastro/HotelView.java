@@ -6,10 +6,7 @@ import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.LabelTotalUtil;
-import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.Hotel;
-import br.com.ecc.model.tipo.TipoHotelDistribuicaoEnum;
-import br.com.ecc.model.tipo.TipoHotelEnum;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,7 +23,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,8 +35,6 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 
-	@UiField ListBox tipoListBox;
-	@UiField ListBox distribuicaoListBox;
 	@UiField NumberTextBox quantidadeQuartos;
 	@UiField TextBox nomeTextBox;
 
@@ -60,9 +54,6 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 		criaTabela();
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
-
-		ListBoxUtil.populate(tipoListBox, false, TipoHotelEnum.values());
-		ListBoxUtil.populate(distribuicaoListBox, false, TipoHotelDistribuicaoEnum.values());
 	}
 
 	private void criaTabela() {
@@ -73,8 +64,6 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 		hotelTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		hotelTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
 		hotelTableUtil.addColumn("Qtde Quartos", null, HasHorizontalAlignment.ALIGN_LEFT);
-		hotelTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_LEFT);
-		hotelTableUtil.addColumn("Distribuição", "100", HasHorizontalAlignment.ALIGN_LEFT);
 	}
 
 	@UiHandler("fecharButton")
@@ -91,21 +80,8 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 	}
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
-		TipoHotelEnum tipo = (TipoHotelEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoHotelEnum.values());
-		TipoHotelDistribuicaoEnum distribuicao = (TipoHotelDistribuicaoEnum) ListBoxUtil.getItemSelected(distribuicaoListBox, TipoHotelDistribuicaoEnum.values());
-		if (tipo == null){
-			Window.alert("Escolha o Tipo!");
-			return;
-		}
-		if (distribuicao == null){
-			Window.alert("Escolha a distribuicao!");
-			return;
-		}
 		entidadeEditada.setNome(nomeTextBox.getValue());
-		entidadeEditada.setGrupo(presenter.getGrupoSelecionado());
-		entidadeEditada.setTipo(tipo);
 		entidadeEditada.setQuantidadeQuartos(Integer.parseInt(quantidadeQuartos.getText()));
-		entidadeEditada.setDistribuicaoHotel(distribuicao);
 		presenter.salvar(entidadeEditada);
 	}
 	private void edita(Hotel hotel) {
@@ -129,8 +105,6 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 	public void defineCampos(Hotel hotel){
 		nomeTextBox.setValue(hotel.getNome());
 		quantidadeQuartos.setValue(hotel.getQuantidadeQuartos().toString());
-		ListBoxUtil.setItemSelected(tipoListBox, hotel.getTipo().getNome());
-		ListBoxUtil.setItemSelected(distribuicaoListBox, hotel.getDistribuicaoHotel().getNome());
 
 	}
 
@@ -152,7 +126,7 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 		Image editar, excluir;
 		HorizontalPanel hp;
 		for (final Hotel hotel: lista) {
-			Object dados[] = new Object[5];
+			Object dados[] = new Object[3];
 
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
@@ -181,8 +155,6 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 			dados[0] = hp;
 			dados[1] = hotel.getNome();
 			dados[2] = hotel.getQuantidadeQuartos().toString();
-			dados[3] = hotel.getTipo().getNome();
-			dados[4] = hotel.getDistribuicaoHotel().getNome();
 			hotelTableUtil.addRow(dados,row+1);
 			row++;
 		}

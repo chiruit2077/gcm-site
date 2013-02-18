@@ -1,13 +1,13 @@
 package br.com.ecc.model.tipo;
 
-public enum TipoHotelEnum {
+public enum TipoEncontroHotelEnum {
 	EVENTO("Local do Evento", 0),
 	EXTERNO("Externo", 1);
 
 	private String nome;
 	private Integer codigo;
 
-	private TipoHotelEnum(String nome, Integer codigo) {
+	private TipoEncontroHotelEnum(String nome, Integer codigo) {
 		this.setCodigo(codigo);
 		this.nome = nome;
 	}

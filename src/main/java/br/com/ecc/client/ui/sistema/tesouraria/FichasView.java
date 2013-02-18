@@ -38,6 +38,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
+	@UiField Label totalLabel;
 
 	@UiField Label nomeLabel;
 	@UiField TextBox fichaTextBox;
@@ -193,7 +194,6 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	}
 	@Override
 	public void populaEntidades(List<EncontroInscricaoFichaPagamento> lista) {
-		LabelTotalUtil.setTotal(itemTotal, lista.size(), "ficha", "fichas", "");
 		fichaTableUtil.clearData();
 		int row = 0;
 		Image editar;
@@ -263,35 +263,31 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 				fichaTableUtil.addRow(dados,row);
 			}
 		}
+		LabelTotalUtil.setTotal(itemTotal, row, "ficha", "fichas", "");
+		String totais = "";
+		if(row==1 || row==0){
+			totais += row + " ficha";
+		} else {
+			totais += row + " fichas";
+		}
+		if(vagas==1 || vagas==0){
+			totais += " / " + vagas + " vaga";
+		} else {
+			totais += " / " + vagas + " vagas";
+		}
+		if(reservados==1 || reservados==0){
+			totais += " / " + reservados + " reservada";
+		} else {
+			totais += " / " + reservados + " reservadas";
+		}
+		if(liberados==1 || liberados==0){
+			totais += " / " + liberados + " liberada";
+		} else {
+			totais += " / " + liberados + " liberadas";
+		}
+		totalLabel.setText(totais);
 		fichaTableUtil.applyDataRowStyles();
-		if(row>0){
-			if(row==1){
-				itemTotal.setText(itemTotal.getText() +  " / " + row + " ficha");
-			} else {
-				itemTotal.setText(itemTotal.getText() +  " / " + row + " fichas");
-			}
-		}
-		if(vagas>0){
-			if(vagas==1){
-				itemTotal.setText(itemTotal.getText() +  " / " + vagas + " vaga");
-			} else {
-				itemTotal.setText(itemTotal.getText() +  " / " + vagas + " vagas");
-			}
-		}
-		if(reservados>0){
-			if(reservados==1){
-				itemTotal.setText(itemTotal.getText() +  " / " + reservados + " reservada");
-			} else {
-				itemTotal.setText(itemTotal.getText() +  " / " + reservados + " reservadas");
-			}
-		}
-		if(liberados>0){
-			if(liberados==1){
-				itemTotal.setText(itemTotal.getText() +  " / " + liberados + " liberada");
-			} else {
-				itemTotal.setText(itemTotal.getText() +  " / " + liberados + " liberadas");
-			}
-		}
+		showWaitMessage(false);
 	}
 
 }

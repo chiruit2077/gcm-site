@@ -476,7 +476,6 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			podeEditar = true;
 		}
 
-		LabelTotalUtil.setTotal(itemTotal, lista.size(), "inscrição", "inscrições", "a");
 		encontroInscricaoTableUtil.clearData();
 		int row = 0;
 		Image editar, excluir;
@@ -570,25 +569,32 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 			}
 		}
+		LabelTotalUtil.setTotal(itemTotal, row, "inscrição", "inscrições", "a");
 		String totais = "";
-		if(coordenador>0){
-			totais += " Coordenadores: " + coordenador;
+		if(coordenador==1 || coordenador==0){
+			totais += coordenador + " coordenador";
+		} else {
+			totais += coordenador + " coordenadores";
 		}
-		if(padrinho>0) {
-			if(!totais.equals("")) totais += "  /  ";
-			totais += " Padrinhos: " + padrinho;
+		if(padrinho==1 || padrinho==0){
+			totais += " / " + padrinho + " padrinho";
+		} else {
+			totais += " / " + padrinho + " padrinhos";
 		}
-		if(apoio>0){
-			if(!totais.equals("")) totais += "  /  ";
-			totais += " Apoios: " + apoio;
+		if(apoio==1 || apoio==0){
+			totais += " / " + apoio + " apoio";
+		} else {
+			totais += " / " + apoio + " apoios";
 		}
-		if(afilhado>0){
-			if(!totais.equals("")) totais += "  /  ";
-			totais += " Afilhados: " + afilhado;
+		if(afilhado==1 || afilhado==0){
+			totais += " / " + afilhado + " afilhado";
+		} else {
+			totais += " / " + afilhado + " afilhados";
 		}
-		if(desistencia>0){
-			if(!totais.equals("")) totais += "  /  ";
-			totais += " Desistências: " + desistencia;
+		if(desistencia==1 || desistencia==0){
+			totais += " / " + desistencia + " desistencia";
+		} else {
+			totais += " / " + desistencia + " desistencias";
 		}
 		totalLabel.setText(totais);
 		encontroInscricaoTableUtil.applyDataRowStyles();

@@ -1,6 +1,9 @@
 package br.com.ecc.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,10 +14,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import br.com.ecc.model.tipo.TipoEncontroHotelEnum;
+
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROHOTEL", sequenceName="SQ_ENCONTROHOTEL")
 @NamedQueries({
-	@NamedQuery(name="encontroHotel.porEncontro", query="select u from EncontroHotel u where u.encontro = :encontro order by u.hotel.tipo")
+	@NamedQuery(name="encontroHotel.porEncontro", query="select u from EncontroHotel u where u.encontro = :encontro order by u.tipo")
 })
 public class EncontroHotel extends _WebBaseEntity {
 
@@ -31,6 +36,10 @@ public class EncontroHotel extends _WebBaseEntity {
 	@ManyToOne
 	@JoinColumn(name="hotel")
 	private Hotel hotel;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length=30)
+	private TipoEncontroHotelEnum tipo;
 
 	@Version
 	private Integer version;
@@ -63,5 +72,10 @@ public class EncontroHotel extends _WebBaseEntity {
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
 	}
-
+	public TipoEncontroHotelEnum getTipo() {
+		return tipo;
+	}
+	public void setTipo(TipoEncontroHotelEnum tipo) {
+		this.tipo = tipo;
+	}
 }

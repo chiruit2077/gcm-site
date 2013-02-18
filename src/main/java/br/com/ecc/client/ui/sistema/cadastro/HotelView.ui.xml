@@ -52,18 +52,6 @@
 										<cn:NumberTextBox ui:field="quantidadeQuartos" width="80px" textAlignment="center"/>
 									</td>
 								</tr>
-								<tr>
-									<td class="portal-formLabel">Tipo:</td>
-									<td>
-										<g:ListBox ui:field="tipoListBox" width="200px"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Distribucao Hotel:</td>
-									<td>
-										<g:ListBox ui:field="distribuicaoListBox" width="200px"/>
-									</td>
-								</tr>
 							</table>
 						</g:HTMLPanel>
 					</g:VerticalPanel>

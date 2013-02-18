@@ -5,6 +5,16 @@
   xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
   xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
   xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox"  >
+  	<ui:style>
+  		.total{
+			font-style: italic;
+			color: blue;
+			text-align: left;
+		}
+		.ficha {
+			border: 1px solid gray;
+		}
+  	</ui:style>
   	<g:VerticalPanel horizontalAlignment="center">
 		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
 			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
@@ -36,7 +46,10 @@
 			<g:HorizontalPanel spacing="2" width="100%">
 				<g:CheckBox ui:field="exibeLiberadosCheckBox" text="Exibir ficha Liberadas"/>
 				<g:CheckBox ui:field="exibeReservadasCheckBox" text="Exibir ficha Reservadas"/>
-				<g:Label ui:field="itemTotal" width="100%" styleName="portal-rowCountLabel" text="Nenhum Ficha adicionada" horizontalAlignment="right"/>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel spacing="2" width="100%">
+				<g:Label ui:field="totalLabel" styleName="{style.total}" />
+				<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
 			</g:HorizontalPanel>
 			<g:FlexTable ui:field="fichaFlexTable" cellPadding="0" cellSpacing="0" />
 		</g:VerticalPanel>

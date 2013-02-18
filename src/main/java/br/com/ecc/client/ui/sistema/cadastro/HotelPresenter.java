@@ -6,16 +6,12 @@ import br.com.ecc.client.core.event.ExecutaMenuEvent;
 import br.com.ecc.client.core.mvp.WebAsyncCallback;
 import br.com.ecc.client.core.mvp.presenter.BasePresenter;
 import br.com.ecc.client.core.mvp.view.BaseDisplay;
-import br.com.ecc.client.service.cadastro.GrupoService;
-import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
 import br.com.ecc.client.service.cadastro.HotelService;
 import br.com.ecc.client.service.cadastro.HotelServiceAsync;
 import br.com.ecc.core.mvp.WebResource;
-import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Hotel;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Cookies;
 
 public class HotelPresenter extends BasePresenter<HotelPresenter.Display> {
 
@@ -28,7 +24,6 @@ public class HotelPresenter extends BasePresenter<HotelPresenter.Display> {
 	}
 
 	HotelServiceAsync service = GWT.create(HotelService.class);
-	private Grupo grupoSelecionado;
 
 	@Override
 	public void bind() {
@@ -41,25 +36,12 @@ public class HotelPresenter extends BasePresenter<HotelPresenter.Display> {
 
 	@Override
 	public void init() {
-		GrupoServiceAsync serviceGrupo = GWT.create(GrupoService.class);
-		serviceGrupo.lista(new WebAsyncCallback<List<Grupo>>(getDisplay()) {
-			@Override
-			protected void success(List<Grupo> listaGrupo) {
-				String cookie = Cookies.getCookie("grupoSelecionado");
-				for (Grupo grupo : listaGrupo) {
-					if(grupo.getNome().equals(cookie)){
-						setGrupoSelecionado(grupo);
-						break;
-					}
-				}
-				buscaHoteis(grupoSelecionado);
-			}
-		});
+		buscaHoteis();
 	}
 
-	public void buscaHoteis(Grupo grupo){
+	public void buscaHoteis(){
 		getDisplay().showWaitMessage(true);
-		service.lista(grupo, new WebAsyncCallback<List<Hotel>>(getDisplay()) {
+		service.lista(new WebAsyncCallback<List<Hotel>>(getDisplay()) {
 			@Override
 			protected void success(List<Hotel> lista) {
 				getDisplay().populaHoteis(lista);
@@ -73,7 +55,7 @@ public class HotelPresenter extends BasePresenter<HotelPresenter.Display> {
 			@Override
 			public void success(Hotel hotel) {
 				getDisplay().reset();
-				buscaHoteis(grupoSelecionado);
+				buscaHoteis();
 			}
 		});
 	}
@@ -84,16 +66,9 @@ public class HotelPresenter extends BasePresenter<HotelPresenter.Display> {
 			@Override
 			public void success(Void resposta) {
 				getDisplay().reset();
-				buscaHoteis(grupoSelecionado);
+				buscaHoteis();
 			}
 		});
 	}
 
-	public Grupo getGrupoSelecionado() {
-		return grupoSelecionado;
-	}
-
-	public void setGrupoSelecionado(Grupo grupoSelecionado) {
-		this.grupoSelecionado = grupoSelecionado;
-	}
 }

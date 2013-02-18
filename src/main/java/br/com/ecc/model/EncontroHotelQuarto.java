@@ -6,17 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROHOTELQUARTO", sequenceName="SQ_ENCONTROHOTELQUARTO")
-@NamedQueries({
-	@NamedQuery(name="encontroHotelQuarto.porEncontro", query="select u from EncontroHotelQuarto u where u.encontroHotel.encontro = :encontro order by u.encontroHotel.hotel.tipo"),
-	@NamedQuery(name="encontroHotelQuarto.porEncontroHotel", query="select u from EncontroHotelQuarto u where u.encontroHotel.encontro = :encontro and u.encontroHotel.hotel = :hotel ")
-})
 public class EncontroHotelQuarto extends _WebBaseEntity {
 
 	private static final long serialVersionUID = -8313244441055727258L;
