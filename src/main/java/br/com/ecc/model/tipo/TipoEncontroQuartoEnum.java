@@ -1,13 +1,19 @@
 package br.com.ecc.model.tipo;
 
-public enum TipoQuartoEnum {
-	APARTAMENTO("Apartamento", 0),
-	CHALE("Chalé", 1);
+public enum TipoEncontroQuartoEnum {
+	AFILHADO("Afilhado", 0),
+	PADRINHO("Padrinho", 1),
+	APOIO("Apoio", 2),
+	MEDICO("Médico", 3),
+	SECRETARIA("Secretaria", 4),
+	CAMARIM("Camarim", 5),
+	RESERVADO("Reservado", 6),
+	SOLTEIROS("Reservado", 7);
 
 	private String nome;
 	private Integer codigo;
 
-	private TipoQuartoEnum(String nome, Integer codigo) {
+	private TipoEncontroQuartoEnum(String nome, Integer codigo) {
 		this.setCodigo(codigo);
 		this.nome = nome;
 	}
