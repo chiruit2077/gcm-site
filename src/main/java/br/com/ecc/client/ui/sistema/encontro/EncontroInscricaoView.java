@@ -484,79 +484,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		boolean ok = false, exibeLinha;
 		int coordenador = 0, padrinho=0, apoio=0, afilhado=0, desistencia=0;
 		for (final EncontroInscricao encontroInscricao: lista) {
-			Object dados[] = new Object[8];
-			hp = new HorizontalPanel();
-			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			hp.setSpacing(1);
-
-			ok = false;
-			if(encontroInscricao.getCasal()!=null){
-				if(presenter.getDadosLoginVO().getCasal().getId().equals(encontroInscricao.getCasal().getId())){
-					ok = true;
-				}
-			} else {
-				if(presenter.getDadosLoginVO().getUsuario().getPessoa().getId().equals(encontroInscricao.getPessoa().getId())){
-					ok = true;
-				}
-			}
-			if(podeEditar || ok){
-				editar = new Image("images/edit.png");
-				editar.setTitle("Editar as informações da inscrição");
-				editar.setStyleName("portal-ImageCursor");
-				editar.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent arg0) {
-						edita(encontroInscricao);
-					}
-				});
-				hp.add(editar);
-			}
-
-			if(podeEditar){
-				excluir = new Image("images/delete.png");
-				excluir.setTitle("Excluir esta inscrição");
-				excluir.setStyleName("portal-ImageCursor");
-				excluir.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent arg0) {
-						if(Window.confirm("Deseja excluir esta inscrição ?\n(Todas as informações de pagamento\n e das atividades adicionadas na planilha serão removidas)")){
-							presenter.excluir(encontroInscricao);
-						}
-					}
-				});
-				hp.add(excluir);
-			}
-
-			dados[0] = hp;
-			dados[1] = encontroInscricao.getCodigo();
-			dados[2] = encontroInscricao.getTipo().getNome();
-			dados[3] = encontroInscricao.getCasal()==null?encontroInscricao.getPessoa().getNome():encontroInscricao.getCasal().toString();
-
-			if(encontroInscricao.getMensagemDestinatario()!=null){
-			   dados[4] = encontroInscricao.getMensagemDestinatario().getDataEnvioStr();
-			   dados[5] = encontroInscricao.getMensagemDestinatario().getDataConfirmacaoStr();
-			}
-			dataFichaAtualizadaAfilhadoDateBox.setValue(encontroInscricao.getDataPrenchimentoFichaStr());
-			dados[6] = encontroInscricao.getDataPrenchimentoFichaStr();
-
-			if(encontroInscricao.getTipoConfirmacao()!=null){
-				dados[7] = encontroInscricao.getTipoConfirmacao().getNome();
-			} else {
-				dados[7] = TipoConfirmacaoEnum.CONFIRMADO.getNome();
-			}
-
 			exibeLinha = true;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
 				exibeLinha = false;
 			}
-			if(exibeLinha){
-				encontroInscricaoTableUtil.addRow(dados,row+1);
-				if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
-					encontroInscricaoTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalGrayLineThrough");
-				}
-
-			}
-			row++;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 				desistencia++;
 			} else {
@@ -569,6 +500,74 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
 					afilhado++;
 				}
+			}
+			if(exibeLinha){
+				row++;
+				Object dados[] = new Object[8];
+				hp = new HorizontalPanel();
+				hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				hp.setSpacing(1);
+
+				ok = false;
+				if(encontroInscricao.getCasal()!=null){
+					if(presenter.getDadosLoginVO().getCasal().getId().equals(encontroInscricao.getCasal().getId())){
+						ok = true;
+					}
+				} else {
+					if(presenter.getDadosLoginVO().getUsuario().getPessoa().getId().equals(encontroInscricao.getPessoa().getId())){
+						ok = true;
+					}
+				}
+				if(podeEditar || ok){
+					editar = new Image("images/edit.png");
+					editar.setTitle("Editar as informações da inscrição");
+					editar.setStyleName("portal-ImageCursor");
+					editar.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent arg0) {
+							edita(encontroInscricao);
+						}
+					});
+					hp.add(editar);
+				}
+
+				if(podeEditar){
+					excluir = new Image("images/delete.png");
+					excluir.setTitle("Excluir esta inscrição");
+					excluir.setStyleName("portal-ImageCursor");
+					excluir.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent arg0) {
+							if(Window.confirm("Deseja excluir esta inscrição ?\n(Todas as informações de pagamento\n e das atividades adicionadas na planilha serão removidas)")){
+								presenter.excluir(encontroInscricao);
+							}
+						}
+					});
+					hp.add(excluir);
+				}
+
+				dados[0] = hp;
+				dados[1] = encontroInscricao.getCodigo();
+				dados[2] = encontroInscricao.getTipo().getNome();
+				dados[3] = encontroInscricao.getCasal()==null?encontroInscricao.getPessoa().getNome():encontroInscricao.getCasal().toString();
+
+				if(encontroInscricao.getMensagemDestinatario()!=null){
+				   dados[4] = encontroInscricao.getMensagemDestinatario().getDataEnvioStr();
+				   dados[5] = encontroInscricao.getMensagemDestinatario().getDataConfirmacaoStr();
+				}
+				dataFichaAtualizadaAfilhadoDateBox.setValue(encontroInscricao.getDataPrenchimentoFichaStr());
+				dados[6] = encontroInscricao.getDataPrenchimentoFichaStr();
+
+				if(encontroInscricao.getTipoConfirmacao()!=null){
+					dados[7] = encontroInscricao.getTipoConfirmacao().getNome();
+				} else {
+					dados[7] = TipoConfirmacaoEnum.CONFIRMADO.getNome();
+				}
+				encontroInscricaoTableUtil.addRow(dados,row);
+				if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
+					encontroInscricaoTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
+				}
+
 			}
 		}
 		String totais = "";
