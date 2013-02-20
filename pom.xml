@@ -227,6 +227,7 @@
 					<encoding>UTF-8</encoding>
 					<meminitial>512m</meminitial>
 					<maxmem>1024m</maxmem>
+          			<compilerArgument>-XDignore.symbol.file</compilerArgument>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -257,7 +258,7 @@
 					<style>OBF</style>
 					<extraJvmArgs>-Xmx1024m</extraJvmArgs>
 					<draftCompile>true</draftCompile>
-					<localWorkers>4</localWorkers>
+					<localWorkers>2</localWorkers>
 				</configuration>
 			</plugin>
 			<plugin>
