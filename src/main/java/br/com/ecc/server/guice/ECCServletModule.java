@@ -20,6 +20,7 @@ import br.com.ecc.server.service.encontro.EncontroAtividadeServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroConviteResponsavelServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroConviteServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroFilaServiceImpl;
+import br.com.ecc.server.service.encontro.EncontroHotelServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroInscricaoFichaPagamentoServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroInscricaoServiceImpl;
 import br.com.ecc.server.service.patrimonio.ItemPatrimonioServiceImpl;
@@ -59,6 +60,7 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "encontroAtividade").with(EncontroAtividadeServiceImpl.class);
 		this.serve(contextPath + "encontroAtividadeInscricao").with(EncontroAtividadeInscricaoServiceImpl.class);
 		this.serve(contextPath + "encontroInscricaoFichaPagamento").with(EncontroInscricaoFichaPagamentoServiceImpl.class);
+		this.serve(contextPath + "encontroHotel").with(EncontroHotelServiceImpl.class);
 
 		this.serve(contextPath + "encontroConvite").with(EncontroConviteServiceImpl.class);
 		this.serve(contextPath + "encontroFila").with(EncontroFilaServiceImpl.class);

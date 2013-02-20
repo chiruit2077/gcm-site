@@ -46,7 +46,7 @@ public class EncontroHotel extends _WebBaseEntity {
 
 	@Override
 	public String toString() {
-		return hotel.getNome();
+		return hotel.getNome() + " - " + tipo.getNome();
 	}
 	public Integer getId() {
 		return id;

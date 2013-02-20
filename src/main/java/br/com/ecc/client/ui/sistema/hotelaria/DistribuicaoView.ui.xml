@@ -5,6 +5,16 @@
   xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
   xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
   xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox"  >
+  	<ui:style>
+  		.total{
+			font-style: italic;
+			color: blue;
+			text-align: left;
+		}
+		.ficha {
+			border: 1px solid gray;
+		}
+  	</ui:style>
   	<g:VerticalPanel horizontalAlignment="center">
 		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
 			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
@@ -18,56 +28,15 @@
 				</tr>
 			</table>
 		</g:HTMLPanel>
-		<g:HTMLPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" >
-		</g:HTMLPanel>
-		<g:VerticalPanel visible="false">
-			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="350px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Ficha">
-				<g:VerticalPanel width="100%">
-					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
-						<g:HTMLPanel >
-							<table cellpadding="3" align="center">
-								<tr>
-									<td class="portal-formLabel">Ficha:</td>
-									<td>
-										<cn:NumberTextBox ui:field="fichaTextBox" width="80px" textAlignment="center"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Tipo:</td>
-									<td>
-										<g:ListBox ui:field="tipoListBox" width="100px"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Status:</td>
-									<td>
-										<g:ListBox ui:field="statusListBox" width="100px"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Observação:</td>
-									<td>
-										<g:TextBox ui:field="observacaoTextBox" width="300px" />
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Nome:</td>
-									<td>
-										<g:Label ui:field="nomeLabel" width="300px"/>
-									</td>
-								</tr>
-						</table>
-						</g:HTMLPanel>
-					</g:VerticalPanel>
-					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
-						<g:HorizontalPanel spacing="3">
-							<g:Button ui:field="salvarButton">Salvar</g:Button>
-							<g:Button ui:field="fecharButton">Cancelar</g:Button>
-						</g:HorizontalPanel>
-					</g:VerticalPanel>
-				</g:VerticalPanel>
-			</g:DialogBox>
+		<g:VerticalPanel ui:field="centralPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center">
+			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center" >
+				<g:ListBox ui:field="hotelListBox" width="400px"/>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel spacing="2" width="100%">
+				<g:Label ui:field="totalLabel" styleName="{style.total}" />
+			</g:HorizontalPanel>
+			<g:VerticalPanel ui:field="distribuicaoPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
+			</g:VerticalPanel>
 		</g:VerticalPanel>
 	</g:VerticalPanel>
  </ui:UiBinder>

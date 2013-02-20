@@ -2,7 +2,7 @@ package br.com.ecc.model.tipo;
 
 public enum TipoAgrupamentoLadoEnum {
 	DIREITO("Direito", 0),
-	ESQUEDO("Esquedo", 1),
+	ESQUERDO("Esquedo", 1),
 	UNICO("Único", 2);
 
 	private String nome;

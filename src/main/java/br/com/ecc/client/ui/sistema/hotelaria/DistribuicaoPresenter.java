@@ -10,10 +10,14 @@ import br.com.ecc.client.service.cadastro.EncontroService;
 import br.com.ecc.client.service.cadastro.EncontroServiceAsync;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
+import br.com.ecc.client.service.encontro.EncontroHotelService;
+import br.com.ecc.client.service.encontro.EncontroHotelServiceAsync;
 import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Encontro;
+import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroInscricaoFichaPagamento;
 import br.com.ecc.model.Grupo;
+import br.com.ecc.model.vo.EncontroHotelVO;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
@@ -21,17 +25,20 @@ import com.google.gwt.user.client.Cookies;
 public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
-		void populaEntidades(List<EncontroInscricaoFichaPagamento> lista);
+		void populaEntidades(EncontroHotelVO encontroHotelVO);
+		void populaHoteis(List<EncontroHotel> lista);
 	}
 
 	public DistribuicaoPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
 
-	//EncontroInscricaoFichaPagamentoServiceAsync service = GWT.create(EncontroInscricaoFichaPagamentoService.class);
+	EncontroHotelServiceAsync service = GWT.create(EncontroHotelService.class);
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
-	private List<EncontroInscricaoFichaPagamento> listaFichas;
+	private EncontroHotel encontroHotelSelecionado;
+	private List<EncontroHotel> listaHotel;
+	private EncontroHotelVO encontroHotelVO;
 
 	@Override
 	public void bind() {
@@ -72,21 +79,35 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 						break;
 					}
 				}
-				buscaFichas();
+				buscaHoteis();
 			}
 		});
 	}
 
-	public void buscaFichas(){
-		/*getDisplay().showWaitMessage(true);
-		service.listaFichas(encontroSelecionado, new WebAsyncCallback<List<EncontroInscricaoFichaPagamento>>(getDisplay()) {
+	public void buscaHoteis(){
+		getDisplay().showWaitMessage(true);
+		service.lista(encontroSelecionado, new WebAsyncCallback<List<EncontroHotel>>(getDisplay()) {
 			@Override
-			protected void success(List<EncontroInscricaoFichaPagamento> lista) {
-				setListaFichas(lista);
-				getDisplay().populaEntidades(lista);
-				getDisplay().showWaitMessage(false);
+			protected void success(List<EncontroHotel> lista) {
+				setListaHotel(lista);
+				getDisplay().populaHoteis(lista);
 			}
-		});*/
+		});
+		getDisplay().showWaitMessage(false);
+	}
+
+	public void buscaVO(){
+		if (encontroHotelSelecionado != null){
+			getDisplay().showWaitMessage(true);
+			service.getVO(encontroHotelSelecionado, new WebAsyncCallback<EncontroHotelVO>(getDisplay()) {
+				@Override
+				protected void success(EncontroHotelVO vo) {
+					setEncontroHotelVO(vo);
+					getDisplay().populaEntidades(vo);
+					getDisplay().showWaitMessage(false);
+				}
+			});
+		}
 		getDisplay().showWaitMessage(false);
 	}
 	public void salvar(EncontroInscricaoFichaPagamento ficha) {
@@ -113,12 +134,28 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 		this.encontroSelecionado = encontroSelecionado;
 	}
 
-	public List<EncontroInscricaoFichaPagamento> getListaFichas() {
-		return listaFichas;
+	public EncontroHotelVO getEncontroHotelVO() {
+		return encontroHotelVO;
 	}
 
-	public void setListaFichas(List<EncontroInscricaoFichaPagamento> listaFichas) {
-		this.listaFichas = listaFichas;
+	public void setEncontroHotelVO(EncontroHotelVO encontroHotelVO) {
+		this.encontroHotelVO = encontroHotelVO;
+	}
+
+	public List<EncontroHotel> getListaHotel() {
+		return listaHotel;
+	}
+
+	public void setListaHotel(List<EncontroHotel> listaHotel) {
+		this.listaHotel = listaHotel;
+	}
+
+	public EncontroHotel getEncontroHotelSelecionado() {
+		return encontroHotelSelecionado;
+	}
+
+	public void setEncontroHotelSelecionado(EncontroHotel encontroHotelSelecionado) {
+		this.encontroHotelSelecionado = encontroHotelSelecionado;
 	}
 
 }

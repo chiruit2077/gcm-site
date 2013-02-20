@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
@@ -16,6 +18,10 @@ import br.com.ecc.model.tipo.TipoEncontroQuartoEnum;
 
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROHOTELQUARTO", sequenceName="SQ_ENCONTROHOTELQUARTO")
+@NamedQueries(
+		@NamedQuery(name="encontroHotelQuarto.porEncontroHotel", query="select u from EncontroHotelQuarto u where u.encontroHotel = :encontrohotel order by u.quarto.hotelAgrupamento.ordem, u.quarto.ordem ")
+)
+
 public class EncontroHotelQuarto extends _WebBaseEntity {
 
 	private static final long serialVersionUID = -8313244441055727258L;
@@ -23,6 +29,10 @@ public class EncontroHotelQuarto extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTROHOTELQUARTO", strategy=GenerationType.AUTO)
 	private Integer id;
+
+	@ManyToOne
+	@JoinColumn(name="encontroHotel")
+	private EncontroHotel encontroHotel;
 
 	@ManyToOne
 	@JoinColumn(name="encontroInscricao")
@@ -102,6 +112,12 @@ public class EncontroHotelQuarto extends _WebBaseEntity {
 	}
 	public void setEncontroInscricao4(EncontroInscricao encontroInscricao4) {
 		this.encontroInscricao4 = encontroInscricao4;
+	}
+	public EncontroHotel getEncontroHotel() {
+		return encontroHotel;
+	}
+	public void setEncontroHotel(EncontroHotel encontroHotel) {
+		this.encontroHotel = encontroHotel;
 	}
 
 }

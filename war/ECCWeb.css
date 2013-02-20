@@ -927,3 +927,53 @@ html>body .gwt-DecoratedTabBar {
 	padding: 5px;
 	padding-bottom: 10px;
 }
+
+.agrupamento {
+	border: 2px solid black;
+}
+
+.agrupamento-Titulo {
+	background: silver;
+	color: black;
+	border: 1px solid gray;
+}
+.agrupamento-Lado {
+	background: yellow;
+	color: black;
+	border: 1px solid gray;
+}
+.agrupamento-Quartos {
+	color: black;
+}
+.agrupamento-Quarto {
+	background: #FFFF99;
+	color: black;
+	border: 1px solid black;
+}
+
+.agrupamento-QuartoAfilhado {
+	background: #FFCC99;
+	color: black;
+	border: 1px solid black;
+}
+.agrupamento-QuartoPadrinho {
+	background: #CCFFCC;
+	color: black;
+	border: 1px solid black;
+}
+.agrupamento-QuartoMedico {
+	background: red;
+	color: black;
+	border: 1px solid black;
+}
+.agrupamento-QuartoReservado {
+	background: silver;
+	color: black;
+	border: 1px solid black;
+}
+
+.agrupamento-QuartoNumero {
+	background: gray;
+	color: black;
+	border: 1px solid black;
+}
