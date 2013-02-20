@@ -14,6 +14,7 @@ import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
+import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
 
 import com.google.inject.Inject;
@@ -57,7 +58,8 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 				encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(new Date());
 			}
 		} else {
-			encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(null);
+			if (!usuarioAtual.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR))
+				encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(null);
 		}
 
 		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));
