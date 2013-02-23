@@ -9,19 +9,32 @@ import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.richtext.RichTextToolbar;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
+import br.com.ecc.model.Agenda;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Recado;
 import br.com.ecc.model._WebBaseEntity;
+import br.com.ecc.model.tipo.TipoAgendaEventoEnum;
 import br.com.ecc.model.tipo.TipoCasalEnum;
+import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.tipo.TipoRecadoEnum;
 import br.com.ecc.model.tipo.TipoSituacaoEnum;
 import br.com.ecc.model.vo.AniversarianteVO;
 
+import com.bradrydzewski.gwt.calendar.client.Appointment;
+import com.bradrydzewski.gwt.calendar.client.Calendar;
+import com.bradrydzewski.gwt.calendar.client.CalendarSettings;
+import com.bradrydzewski.gwt.calendar.client.CalendarViews;
+import com.bradrydzewski.gwt.calendar.client.event.DateRequestEvent;
+import com.bradrydzewski.gwt.calendar.client.event.DateRequestHandler;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -31,8 +44,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -47,6 +63,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implements InicioSistemaPresenter.Display {
 
@@ -54,7 +71,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	interface InicioSistemaViewUiBinder extends UiBinder<Widget, InicioSistemaView> {}
 	private InicioSistemaViewUiBinder uiBinder = GWT.create(InicioSistemaViewUiBinder.class);
 
-	
+
 	@UiField Image logoImage;
 	@UiField Image casalImage;
 	@UiField Label casalLabel;
@@ -63,49 +80,58 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField Anchor verLidosAnchor;
 	@UiField Anchor esconderLidosAnchor;
 	@UiField VerticalPanel areaRecadoVerticalPanel;
+	@UiField VerticalPanel areaAgendaVerticalPanel;
+	@UiField VerticalPanel areaInfoVerticalPanel;
 	@UiField HorizontalPanel areaAniversarioHorizontalPanel;
-	
+	@UiField Calendar agendaCalendar;
+	@UiField Button semanalButton;
+	@UiField Button mensalButton;
+	@UiField Button addEventoButton;
+	@UiField DateBox dateBox;
+
 	@UiField DialogBox editaDialogBox;
 	@UiField HTMLPanel tipoHTMLPanel;
 	@UiField(provided=true) RichTextArea mensagemRichTextArea;
 	@UiField(provided=true) RichTextToolbar mensagemRichTextToolbar;
-	
+
 	@UiField Image casalRecadoImage;
 	@UiField(provided = true) SuggestBox casalSuggestBox;
 	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
 	@UiField Label casalRecadoLabel;
 	@UiField ListBox tipoLitBox;
-	
-	@UiField DialogBox todosDialogBox; 
+
+	@UiField DialogBox todosDialogBox;
 	@UiField FlowPanel formularioFlowPanel;
 	@UiField VerticalPanel recadosTodosVerticalPanel;
-	
+
 	@UiField VerticalPanel aniversarioPessoaVerticalPanel;
 	@UiField VerticalPanel aniversarioCasalVerticalPanel;
 	@UiField FlowPanel aniversarioPessoaFlowPanel;
 	@UiField FlowPanel aniversarioCasalFlowPanel;
-	
+
 	@UiField VerticalPanel areaConvidadosVerticalPanel;
 	@UiField FlowPanel convidadosFlowPanel;
 	@UiField VerticalPanel convidadosVerticalPanel;
-	
+
 	private Recado entidadeEditada;
 	DateTimeFormat dfRecado = DateTimeFormat.getFormat("dd-MMM HH:mm");
 	DateTimeFormat dfNiver = DateTimeFormat.getFormat("E, dd-MMM");
 	Date ultimoRecado = null;
 	Boolean imagemLida=false, aniversariantesLidos=false;
-	
+
+	@SuppressWarnings("deprecation")
 	public InicioSistemaView() {
 		casalSuggest.setMinimoCaracteres(2);
 		casalSuggest.setSuggestQuery("casal.porNomeLike");
 		casalSuggestBox = new SuggestBox(casalSuggest);
-		
+
 		mensagemRichTextArea = new RichTextArea();
 		mensagemRichTextToolbar = new RichTextToolbar(mensagemRichTextArea);
-		
+
 		initWidget(uiBinder.createAndBindUi(this));
+
 		ListBoxUtil.populate(tipoLitBox, false, TipoRecadoEnum.values());
-		
+
 		casalSuggestBox.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
@@ -141,17 +167,87 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				defineTamanho();
 			}
 		});
-		
+
 		formularioFlowPanel.setHeight((this.getWindowHeight() - 150) + "px");
+
+		Date hoje = new Date();
+
+		DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd-MM-yyyy");
+		dateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
+		dateBox.setValue(hoje);
+		dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+            public void onValueChange(ValueChangeEvent<Date> event) {
+            	agendaCalendar.setDate(event.getValue());
+            }
+        });
+
+		agendaCalendar.addDateRequestHandler(new DateRequestHandler<Date>(){
+			public void onDateRequested(DateRequestEvent<Date> event) {
+				Window.alert("requested: " + event.getTarget() + " " + ((Element)event.getClicked()).getInnerText());
+			}
+        });
+
+		agendaCalendar.setSize("100%","600px");
+		agendaCalendar.setView(CalendarViews.MONTH);
+		CalendarSettings settings = new CalendarSettings();
+		settings.setIntervalsPerHour(4);
+		settings.setEnableDragDrop(false);
+		agendaCalendar.setSettings(settings);
+		agendaCalendar.scrollToHour(hoje.getHours());
+
+		agendaCalendar.setDate(hoje);
+
+		Window.addResizeHandler(new ResizeHandler() {
+            public void onResize(ResizeEvent event) {
+                resizeTimer.schedule(500);
+            }
+        });
+
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            public void execute() {
+            	agendaCalendar.setHeight(areaAgendaVerticalPanel.getElement().getClientHeight() - 85 + "px");
+            }
+		});
 	}
-	
+
+	private int height = -1;
+
+	private Timer resizeTimer = new Timer() {
+        @Override
+        public void run() {
+            int newHeight = Window.getClientHeight();
+            if (newHeight != height) {
+                height = newHeight;
+                agendaCalendar.setHeight(height - 85 + "px");
+                agendaCalendar.doSizing();
+                agendaCalendar.doLayout();
+            }
+        }
+    };
+
+
+	@UiHandler("semanalButton")
+	public void semanalButtonClickHandler(ClickEvent event){
+		agendaCalendar.setView(CalendarViews.DAY, 7);
+	}
+
+	@UiHandler("mensalButton")
+	public void mensalButtonClickHandler(ClickEvent event){
+		agendaCalendar.setView(CalendarViews.MONTH);
+	}
+
 	@Override
 	public void createScroll() {
 		if(imagemLida && aniversariantesLidos){
 			if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
+				areaInfoVerticalPanel.setVisible(true);
+				areaAgendaVerticalPanel.setVisible(true);
 				areaRecadoVerticalPanel.setVisible(true);
 				areaAniversarioHorizontalPanel.setVisible(true);
 				areaConvidadosVerticalPanel.setVisible(true);
+			}
+			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+				addEventoButton.setVisible(true);
 			}
 			try {
 				iniciaScroll();
@@ -163,12 +259,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			$wnd.createScroll();
 		} catch(e){}
 	}-*/;
-	
+
 	@Override
 	public void adjustWindowSize() {
 		defineTamanho();
 	}
-	
+
 	protected void defineTamanho() {
 		int h = this.getWindowHeight();
 		if(presenter!=null && presenter.getDadosLoginVO()!=null && presenter.getDadosLoginVO().getCasal()!=null){
@@ -181,7 +277,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			aniversarioPessoaFlowPanel.setHeight((h-128) + "px");
 			aniversarioCasalFlowPanel.setHeight((h-128) + "px");
 		}
-		
+
 		imagemLida = true;
 		createScroll();
 	}
@@ -198,7 +294,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@Override
 	public void init() {
 		if(presenter.getDadosLoginVO().getCasal()!=null){
-			if(presenter.getDadosLoginVO().getCasal().getGrupo()!=null && 
+			if(presenter.getDadosLoginVO().getCasal().getGrupo()!=null &&
 			   presenter.getDadosLoginVO().getCasal().getGrupo().getIdArquivoDigital()!=null){
 				logoImage.setUrl("eccweb/downloadArquivoDigital?id="+presenter.getDadosLoginVO().getCasal().getGrupo().getIdArquivoDigital());
 			}
@@ -217,7 +313,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 //			aniversarioPessoaFlowPanel.setHeight(((this.getWindowHeight() - 120)/2)-2 + "px");
 //			aniversarioCasalFlowPanel.setHeight(((this.getWindowHeight() - 120)/2)-2 + "px");
 		}
-		recadosFlowPanel.setHeight((this.getWindowHeight() - 94) + "px");
+		recadosFlowPanel.setHeight(((this.getWindowHeight() - 600 ) - 94) + "px");
 		convidadosFlowPanel.setHeight((this.getWindowHeight() - 94) + "px");
 	}
 
@@ -225,7 +321,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	public void populaRecados(List<Recado> listaRecados) {
 		populaObjetoRecados(listaRecados, recadosVerticalPanel, true);
 	}
-	
+
 	@UiHandler("addRecadoAnchor")
 	public void addRecadoAnchorClickHandler(ClickEvent event){
 		if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
@@ -239,7 +335,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		presenter.setVerTodos(true);
 		presenter.lista(false);
 	}
-	
+
 	@UiHandler("esconderLidosAnchor")
 	public void esconderLidosAnchorClickHandler(ClickEvent event){
 		esconderLidosAnchor.setVisible(false);
@@ -247,7 +343,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		presenter.setVerTodos(false);
 		presenter.lista(false);
 	}
-	
+
 	public void edita(Recado recado){
 		limpaCampos();
 		if(recado==null){
@@ -273,14 +369,14 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		mensagemRichTextArea.setFocus(true);
 		casalSuggestBox.setFocus(true);
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
 	}
 	@UiHandler("enviarButton")
 	public void enviarButtonClickHandler(ClickEvent event){
-		Casal casal = null; 
+		Casal casal = null;
 		if(!casalSuggestBox.getValue().equals("")){
 			casal = (Casal)ListUtil.getEntidadePorNome(casalSuggest.getListaEntidades(), casalSuggestBox.getValue());
 		}
@@ -296,12 +392,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		entidadeEditada.setTipo((TipoRecadoEnum)ListBoxUtil.getItemSelected(tipoLitBox, TipoRecadoEnum.values()));
 		presenter.salvar(entidadeEditada);
 	}
-	
+
 	public void limpaCampos(){
 		casalSuggestBox.setValue(null);
 		mensagemRichTextArea.setText(null);
 		casalRecadoImage.setUrl("");
-		ListBoxUtil.setItemSelected(tipoLitBox, TipoRecadoEnum.ENCONTRISTA.getNome());		
+		ListBoxUtil.setItemSelected(tipoLitBox, TipoRecadoEnum.ENCONTRISTA.getNome());
 	}
 
 	@Override
@@ -403,11 +499,11 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				}
 			});
 		}
-		
+
 		VerticalPanel recadoVP = new VerticalPanel();
 		recadoVP.setWidth("100%");
 		mainHP.add(recadoVP);
-		
+
 		String origem="";
 		if(recado.getCasalOrigem().getSituacao().equals(TipoSituacaoEnum.ATIVO)){
 			origem = recado.getCasalOrigem().getApelidos("e");
@@ -416,45 +512,45 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		}
 
 		HorizontalPanel hpSpacer;
-		
+
 		//linea 1
 		HorizontalPanel dadosHP = new HorizontalPanel();
 		dadosHP.setWidth("100%");
-		
+
 		HorizontalPanel hp2 = new HorizontalPanel();
-		
+
 		Label label = new Label(origem);
 		label.setStyleName("label-boldRed");
 		hp2.add(label);
-		
+
 		hpSpacer = new HorizontalPanel();
 		hpSpacer.setWidth("3px");
 		hp2.add(hpSpacer);
-		
+
 		label = new Label(" > ");
 		label.setStyleName("label-bold");
 		hp2.add(label);
-		
+
 		hpSpacer = new HorizontalPanel();
 		hpSpacer.setWidth("3px");
 		hp2.add(hpSpacer);
-		
+
 		label = new Label(recado.getCasal().getApelidos("e"));
 		label.setStyleName("label-boldBlue");
 		hp2.add(label);
-		
+
 		dadosHP.add(hp2);
-		
+
 		label = new Label(dfRecado.format(recado.getData()).toUpperCase());
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		dadosHP.add(label);
 		dadosHP.setCellWidth(label, "100px");
-		
+
 		recadoVP.add(dadosHP);
-		
+
 		//linea 2
 		recadoVP.add(new HTML(String.valueOf(recado.getMensagem())));
-		
+
 		//linea 3
 		if(original || presenter.getDadosLoginVO().getCasal().getId().equals(recado.getCasal().getId())){
 			hp2 = new HorizontalPanel();
@@ -495,12 +591,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			recadoVP.add(hp2);
 		}
 		mainHP.add(recadoVP);
-		
+
 		hpSpacer = new HorizontalPanel();
 		hpSpacer.setWidth("8px");
 		mainHP.add(hpSpacer);
 		mainHP.setCellWidth(hpSpacer, "8px");
-		
+
 		recadosVerticalPanel.add(mainHP);
 		return ok;
 	}
@@ -549,11 +645,11 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				}
 			});
 		}
-		
+
 		VerticalPanel aniversarianteVP = new VerticalPanel();
 		aniversarianteVP.setWidth("100%");
 		mainHP.add(aniversarianteVP);
-		
+
 		String origem="", data="";
 		if(niver.getPessoa()!=null){
 			if(niver.getPessoa().getId().equals(niver.getCasal().getEle().getId())){
@@ -571,12 +667,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		HorizontalPanel dadosHP = new HorizontalPanel();
 		dadosHP.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		dadosHP.setWidth("100%");
-		
+
 		Label label = new Label(origem);
 		label.setStyleName("label-boldRed");
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dadosHP.add(label);
-		
+
 		label = new Label();
 		if(niver.getCasal().getGrupo()!=null){
 			label.setText(niver.getCasal().getGrupo().getNome());
@@ -585,18 +681,18 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		}
 		label.setStyleName("label-italicBlue");
 		dadosHP.add(label);
-		
+
 		aniversarianteVP.add(dadosHP);
-		
+
 		//linea 2
 		dadosHP = new HorizontalPanel();
 		dadosHP.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		dadosHP.setWidth("100%");
-		
+
 		label = new Label(data);
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dadosHP.add(label);
-		
+
 		if(niver.getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
 			Anchor recado = new Anchor("Enviar recado");
 			recado.setStyleName("portal-anchor");
@@ -614,12 +710,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		hpSpacer.setWidth("8px");
 		mainHP.add(hpSpacer);
 		mainHP.setCellWidth(hpSpacer, "8px");
-		
+
 		aniversarianteVP.add(dadosHP);
-		
+
 		niverVerticalPanel.add(mainHP);
 	}
-	
+
 	@Override
 	public void populaConvidados(List<Casal> listaConvidados) {
 		int i=0;
@@ -629,7 +725,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			i++;
 		}
 	}
-	
+
 	private void insereConvidado(VerticalPanel convidadoVerticalPanel, Casal convidado, boolean par){
 		VerticalPanel mainVP = new VerticalPanel();
 		if(par){
@@ -652,16 +748,16 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				}
 			});
 		}
-		
+
 		HorizontalPanel hpNomes = new HorizontalPanel();
 		hpNomes.setWidth("100%");
-		
+
 		Label label = new Label(convidado.getApelidos("e"));
 		label.setStyleName("label-boldRed");
 		label.setWidth("100%");
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		hpNomes.add(label);
-		
+
 		if(convidado.getCasalPadrinho()!=null){
 			label = new Label(convidado.getCasalPadrinho().getApelidos("e"));
 			label.setStyleName("label-italicBlue");
@@ -669,17 +765,44 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 			hpNomes.add(label);
 		}
-		
+
 		HorizontalPanel hpSpacer = new HorizontalPanel();
 		hpSpacer.setWidth("8px");
 		hpNomes.add(hpSpacer);
 		hpNomes.setCellWidth(hpSpacer, "8px");
 
-		
+
 		mainVP.add(hpNomes);
-		
+
 		convidadoVerticalPanel.add(mainVP);
 		createScroll();
 	}
-	
+
+	@Override
+	public void populaAgenda(List<Agenda> listaAgenda) {
+		agendaCalendar.suspendLayout();
+		for (Agenda agenda : listaAgenda) {
+			if (agenda.getTipo().equals(TipoAgendaEventoEnum.ENCONTRO)){
+				Appointment appt = new Appointment();
+				appt.setStart(agenda.getDataInicio());
+				appt.setEnd(agenda.getDataFim());
+				appt.setAllDay(true);
+				appt.setTitle(agenda.getDescricao());
+				appt.setStyle(agenda.getTipo().getCor());
+				agendaCalendar.addAppointment(appt);
+			}else{
+				Appointment appt = new Appointment();
+				appt.setStart(agenda.getDataInicio());
+				appt.setEnd(agenda.getDataFim());
+				appt.setTitle(agenda.getDescricao());
+				appt.setStyle(agenda.getTipo().getCor());
+				appt.setDescription(agenda.getDescricao());
+				appt.setLocation(agenda.getEnderecoFull());
+				agendaCalendar.addAppointment(appt);
+			}
+		}
+		agendaCalendar.resumeLayout();
+
+	}
+
 }

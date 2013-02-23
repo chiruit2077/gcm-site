@@ -7,10 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.service.RecadoService;
+import br.com.ecc.model.Agenda;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Recado;
+import br.com.ecc.model.tipo.TipoAgendaEventoEnum;
 import br.com.ecc.model.vo.InicioVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.AniversarianteCasalCommand;
@@ -28,9 +30,9 @@ import com.google.inject.persist.Transactional;
 @Transactional
 public class RecadoServiceImpl extends SecureRemoteServiceServlet implements RecadoService {
 	private static final long serialVersionUID = 914822776313399007L;
-	
+
 	@Inject Injector injector;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Recado> listaPorCasal(Casal casal, Boolean lido) throws Exception {
@@ -58,7 +60,7 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 		cmd.setMaxResults(10);
 		return cmd.call();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Recado> listaTodosCasal(Casal casal, Date inicio) throws Exception {
@@ -84,7 +86,7 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(recado);
 		recado = (Recado) cmd.call();
-		
+
 		if(novo){
 			String destinatario = "";
 			if(recado.getCasal().getEle().getEmail()!=null){
@@ -107,7 +109,7 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 				texto.append("<b>"+recado.getCasalOrigem().getApelidos("e") + "</b>");
 				texto.append("</td></tr></table>");
 			} else {
-				texto.append("<b>"+recado.getCasalOrigem().getApelidos("e") + "</b>");	
+				texto.append("<b>"+recado.getCasalOrigem().getApelidos("e") + "</b>");
 			}
 			// style='border:1px solid lightgray; padding: 5px; background-color:#dbedff;'
 			texto.append("</td><td style='vertical-align:top;'>");
@@ -118,7 +120,7 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 			texto.append("Clique no endereço a seguir para visualizar, responder ou enviar novos recados.<br>");
 			texto.append("<a href='http://www.eccbrasil.com.br'>www.eccbrasil.com.br</a><br><br>");
 			texto.append("<img width='100px' src='http://www.eccbrasil.com.br/eccweb/downloadArquivoDigital?thumb=true&id=" +recado.getCasal().getGrupo().getIdArquivoDigital() + "'/>");
-	
+
 			EnviaEmailCommand cmdEmail = injector.getInstance(EnviaEmailCommand.class);
 			cmdEmail.setAssunto(recado.getCasal().getGrupo().getNome() + " - Notificação de recado");
 			cmdEmail.setDestinatario(destinatario);
@@ -126,7 +128,7 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 			cmdEmail.setNaoEsperar(true);
 			cmdEmail.call();
 		}
-		
+
 		return recado;
 	}
 
@@ -134,15 +136,15 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 	@Override
 	public InicioVO listaInicial(Casal casal, Encontro encontro) throws Exception {
 		InicioVO vo = new InicioVO();
-		
+
 		vo.setListaRecados(listaPorCasal(casal, false));
-		
+
 		AniversariantePessoaCommand cmdA = injector.getInstance(AniversariantePessoaCommand.class);
 		vo.setListaAniversarioPessoa(cmdA.call());
-		
+
 		AniversarianteCasalCommand cmdC = injector.getInstance(AniversarianteCasalCommand.class);
 		vo.setListaAniversarioCasal(cmdC.call());
-		
+
 		if(encontro!=null){
 			GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 			cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
@@ -157,7 +159,28 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 				return o1.getApelidos("e").compareTo(o2.getApelidos("e"));
 			}
 		});
-		
+
+		if(encontro!=null){
+			GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+			cmd.setNamedQuery("agenda.porEncontro");
+			cmd.addParameter("encontro", encontro);
+			List<Agenda> agenda = cmd.call();
+			Agenda evento = new Agenda();
+			evento.setTitulo("ECC");
+			Date inicio = new Date(encontro.getInicio().getTime());
+			inicio.setHours(0);
+			evento.setDataInicio(inicio);
+			Date fim = new Date(encontro.getFim().getTime());
+			fim.setHours(23);
+			fim.setMinutes(59);
+			evento.setDataFim(fim);
+			evento.setTipo(TipoAgendaEventoEnum.ENCONTRO);
+			agenda.add(evento);
+			vo.setListaAgenda(agenda);
+		} else {
+			vo.setListaAgenda(new ArrayList<Agenda>());
+		}
+
 		return vo;
 	}
 

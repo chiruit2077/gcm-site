@@ -17,6 +17,7 @@ import br.com.ecc.client.service.cadastro.EncontroServiceAsync;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
 import br.com.ecc.core.mvp.WebResource;
+import br.com.ecc.model.Agenda;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
@@ -43,15 +44,16 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 		void createScroll();
 		void populaAniversariantes(List<AniversarianteVO> listaAniversarioPessoa, List<AniversarianteVO> listaAniversarioCasal);
 		void populaConvidados(List<Casal> listaConvidados);
+		void populaAgenda(List<Agenda> listaAgenda);
 	}
-	
+
 	RecadoServiceAsync recadoService = GWT.create(RecadoService.class);
 	AdministracaoServiceAsync serviceAdm = GWT.create(AdministracaoService.class);
 	private DadosLoginVO dadosLoginVO;
 	private Boolean verTodos = false;
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
-	
+
 	@Override
 	public void bind() {
 	}
@@ -95,7 +97,7 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 			}
 		});
 	}
-	
+
 	public void buscaEncontros() {
 		EncontroServiceAsync serviceEncontro = GWT.create(EncontroService.class);
 		serviceEncontro.lista(grupoSelecionado, new WebAsyncCallback<List<Encontro>>(getDisplay()) {
@@ -115,6 +117,7 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 						getDisplay().populaRecados(vo.getListaRecados());
 						getDisplay().populaAniversariantes(vo.getListaAniversarioPessoa(), vo.getListaAniversarioCasal());
 						getDisplay().populaConvidados(vo.getListaConvidados());
+						getDisplay().populaAgenda(vo.getListaAgenda());
 						getDisplay().createScroll();
 						getDisplay().showWaitMessage(false);
 					}
@@ -122,7 +125,7 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 			}
 		});
 	}
-	
+
 	public void listaRecadosPorCasal(Casal casal, Boolean lido, final Boolean carregaAniversarios){
 		getDisplay().showWaitMessage(true);
 		if(dadosLoginVO.getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){

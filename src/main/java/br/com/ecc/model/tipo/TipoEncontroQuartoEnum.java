@@ -8,15 +8,16 @@ public enum TipoEncontroQuartoEnum {
 	SECRETARIA("Secretaria", "agrupamento-Quarto", 4),
 	CAMARIM("Camarim", "agrupamento-Quarto", 5),
 	RESERVADO("Reservado","agrupamento-QuartoReservado", 6),
-	SOLTEIROS("Solteiros","agrupamento-Quarto", 7);
+	SOLTEIROS("Solteiros","agrupamento-Quarto", 7),
+	SPAM("Spam","agrupamento-Quarto", 7);
 
 	private String nome;
 	private Integer codigo;
 	private String style;
 
-	private TipoEncontroQuartoEnum(String nome, String cor, Integer codigo) {
+	private TipoEncontroQuartoEnum(String nome, String style, Integer codigo) {
 		this.setCodigo(codigo);
-		this.setStyle(cor);
+		this.setStyle(style);
 		this.setNome(nome);
 	}
 	@Override
