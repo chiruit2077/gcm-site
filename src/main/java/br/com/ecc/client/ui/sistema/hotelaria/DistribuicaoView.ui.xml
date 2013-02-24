@@ -11,8 +11,8 @@
 			color: blue;
 			text-align: left;
 		}
-		.ficha {
-			border: 1px solid gray;
+		.casal {
+			background-color: lightgray;
 		}
   	</ui:style>
   	<g:VerticalPanel horizontalAlignment="center">
@@ -31,12 +31,53 @@
 		<g:VerticalPanel ui:field="centralPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center">
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center" >
 				<g:ListBox ui:field="hotelListBox" width="400px"/>
+				<g:Button ui:field="salvarButton">Salvar</g:Button>
+				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
 			<g:HorizontalPanel spacing="2" width="100%">
-				<g:Label ui:field="totalLabel" styleName="{style.total}" />
+				<g:VerticalPanel ui:field="legendaPanel" styleName="portal-portlet-content" width="100px" horizontalAlignment="center">
+				</g:VerticalPanel>
+				<g:VerticalPanel ui:field="distribuicaoPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
+				</g:VerticalPanel>
 			</g:HorizontalPanel>
-			<g:VerticalPanel ui:field="distribuicaoPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
-			</g:VerticalPanel>
+		</g:VerticalPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaDialogBox" visible="false"
+				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Reserva">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
+					    <g:HorizontalPanel>
+					    	<g:Label ui:field="quartoNumberLabel" width="50px" horizontalAlignment="center"/>
+					    </g:HorizontalPanel>
+					    <g:HorizontalPanel>
+					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Tipo Quarto:" />
+					    	<g:ListBox ui:field="tipoEncontroQuartoListBox" width="150px"/>
+					    </g:HorizontalPanel>
+					    <g:HorizontalPanel ui:field="inscricaoPanel1">
+					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 1:" />
+					    	<g:SuggestBox ui:field="inscricaoSuggestBox1" width="350px"/>
+					    </g:HorizontalPanel>
+					    <g:HorizontalPanel ui:field="inscricaoPanel2" visible="false">
+					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 2:" />
+					    	<g:SuggestBox ui:field="inscricaoSuggestBox2" width="350px"/>
+					    </g:HorizontalPanel>
+					    <g:HorizontalPanel ui:field="inscricaoPanel3" visible="false">
+					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 3:" />
+					    	<g:SuggestBox ui:field="inscricaoSuggestBox3" width="350px"/>
+					    </g:HorizontalPanel>
+					    <g:HorizontalPanel ui:field="inscricaoPanel4" visible="false">
+					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 4:" />
+					    	<g:SuggestBox ui:field="inscricaoSuggestBox4" width="350px"/>
+					    </g:HorizontalPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarQuartoButton">Salvar</g:Button>
+							<g:Button ui:field="fecharQuartoButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
 		</g:VerticalPanel>
 	</g:VerticalPanel>
  </ui:UiBinder>

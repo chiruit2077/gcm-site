@@ -27,6 +27,7 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 	public interface Display extends BaseDisplay {
 		void populaEntidades(EncontroHotelVO encontroHotelVO);
 		void populaHoteis(List<EncontroHotel> lista);
+		void setSuggests(Encontro encontro);
 	}
 
 	public DistribuicaoPresenter(Display display, WebResource portalResource) {
@@ -79,6 +80,7 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 						break;
 					}
 				}
+				getDisplay().setSuggests(getEncontroSelecionado());
 				buscaHoteis();
 			}
 		});
@@ -93,7 +95,6 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 				getDisplay().populaHoteis(lista);
 			}
 		});
-		getDisplay().showWaitMessage(false);
 	}
 
 	public void buscaVO(){

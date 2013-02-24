@@ -11,7 +11,7 @@ public enum TipoAgendaEventoEnum {
 	REUNIAOPADRINHO("Reunião Padrinhos", AppointmentStyle.BROWN, 5),
 	REUNIAOAPOIO("Reunião Apoio",AppointmentStyle.BROWN, 6),
 	SANTACEIA("Santa Ceia",AppointmentStyle.GREEN, 7),
-	MULTIRAO("Solteiros",AppointmentStyle.PURPLE, 8);
+	MULTIRAO("Multirão",AppointmentStyle.PURPLE, 8);
 
 	private String nome;
 	private Integer codigo;

@@ -99,6 +99,7 @@
 										</td>
 										<td><g:Label text="Agenda" styleName="{style.titulo}"/></td>
 										<td><d:DateBox ui:field="dateBox"/></td>
+										<td><g:Button ui:field="hojeButton">Hoje</g:Button></td>
 										<td><g:Button ui:field="mensalButton">Mensal</g:Button></td>
 										<td><g:Button ui:field="semanalButton">Semanal</g:Button></td>
 									    <td width="100px" align="right">

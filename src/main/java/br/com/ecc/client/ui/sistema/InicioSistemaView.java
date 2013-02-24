@@ -205,7 +205,8 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             public void execute() {
-            	agendaCalendar.setHeight(areaAgendaVerticalPanel.getElement().getClientHeight() - 85 + "px");
+            	if (areaAgendaVerticalPanel.getElement().getClientHeight() > 0 )
+            		agendaCalendar.setHeight(areaAgendaVerticalPanel.getElement().getClientHeight() - 85 + "px");
             }
 		});
 	}
@@ -234,6 +235,13 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiHandler("mensalButton")
 	public void mensalButtonClickHandler(ClickEvent event){
 		agendaCalendar.setView(CalendarViews.MONTH);
+	}
+
+	@UiHandler("hojeButton")
+	public void hojeButtonClickHandler(ClickEvent event){
+		Date hoje = new Date();
+		dateBox.setValue(hoje);
+		agendaCalendar.setDate(hoje);
 	}
 
 	@Override

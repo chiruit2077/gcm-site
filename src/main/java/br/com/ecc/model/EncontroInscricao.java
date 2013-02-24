@@ -38,7 +38,29 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 			  "      u.tipo = 'AFILHADO' and " +
 				"	( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " ),
 	@NamedQuery(name="encontroInscricao.porEncontroCasal",
-		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal order by u.id desc")
+		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal order by u.id desc"),
+	/*@NamedQuery(name="encontroInscricao.porEncontroNomeLike",
+		query="select u from EncontroInscricao u " +
+			  " LEFT JOIN FETCH u.casal ( " +
+			  "        upper(u.casal.ele.nome) like upper(:key) or " +
+			  "        upper(u.casal.ele.apelido) like upper(:key) or " +
+			  "        upper(u.casal.ela.nome) like upper(:key) or" +
+			  "        upper(u.casal.ela.apelido) like upper(:key) ) " +
+			  " LEFT JOIN FETCH u.pessoa ( " +
+			  "        upper(u.pessoa.nome) like upper(:key) or" +
+			  "        upper(u.pessoa.apelido) like upper(:key) ) " +
+			  " where u.encontro = :encontro " +
+			  "order by u.casal.ele.apelido, u.casal.ela.apelido, u.casal.ele.nome, u.casal.ela.nome, u.pessoa.apelido, u.pessoa.nome" )*/
+	@NamedQuery(name="encontroInscricao.porEncontroNomeLike",
+	query="select u from EncontroInscricao u LEFT JOIN FETCH u.casal as c LEFT JOIN FETCH u.pessoa as p " +
+		  "where u.encontro = :encontro and " +
+		  "       ( upper(c.ele.nome) like upper(:key) or " +
+		  "        upper(c.ele.apelido) like upper(:key) or " +
+		  "        upper(c.ela.nome) like upper(:key) or" +
+		  "        upper(c.ela.apelido) like upper(:key) or  " +
+		  "        upper(p.nome) like upper(:key) or" +
+		  "        upper(p.apelido) like upper(:key) ) " +
+		  "order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome, p.apelido, p.nome" )
 })
 public class EncontroInscricao extends _WebBaseEntity {
 	private static final long serialVersionUID = 7982370030939310990L;
@@ -52,11 +74,11 @@ public class EncontroInscricao extends _WebBaseEntity {
 	private Encontro encontro;
 
 	@ManyToOne
-	@JoinColumn(name="casal")
+	@JoinColumn(name="casal", nullable=true)
 	private Casal casal;
 
 	@ManyToOne
-	@JoinColumn(name="pessoa")
+	@JoinColumn(name="pessoa", nullable=true)
 	private Pessoa pessoa;
 
 	@Enumerated(EnumType.STRING)

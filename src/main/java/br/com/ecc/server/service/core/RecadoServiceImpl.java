@@ -168,11 +168,8 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 			Agenda evento = new Agenda();
 			evento.setTitulo("ECC");
 			Date inicio = new Date(encontro.getInicio().getTime());
-			inicio.setHours(0);
 			evento.setDataInicio(inicio);
 			Date fim = new Date(encontro.getFim().getTime());
-			fim.setHours(23);
-			fim.setMinutes(59);
 			evento.setDataFim(fim);
 			evento.setTipo(TipoAgendaEventoEnum.ENCONTRO);
 			agenda.add(evento);

@@ -45,7 +45,7 @@ public class EntidadeGenericaServiceImpl extends SecureRemoteServiceServlet impl
 		cmd.call();
 	}
 
-	
+
 	@Override
 	@Permissao(nomeOperacao="Salvar entidade", operacao=Operacao.SALVAR)
 	public _WebBaseEntity salvaEntidade(_WebBaseEntity entidade) throws Exception {
@@ -53,7 +53,7 @@ public class EntidadeGenericaServiceImpl extends SecureRemoteServiceServlet impl
 		cmd.setBaseEntity(entidade);
 		return cmd.call();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> listaObjetos(String queryName, Map<String, Object> params) throws Exception {

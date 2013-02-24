@@ -2,7 +2,8 @@ package br.com.ecc.model.tipo;
 
 public enum TipoQuartoEnum {
 	APARTAMENTO("Apartamento", 0),
-	CHALE("Chalé", 1);
+	CHALE("Chalé", 1),
+	SPAM("Spam", 2);
 
 	private String nome;
 	private Integer codigo;
