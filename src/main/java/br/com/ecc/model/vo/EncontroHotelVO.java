@@ -5,7 +5,9 @@ import java.util.List;
 
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroHotelQuarto;
+import br.com.ecc.model.EncontroRestauranteGarcon;
 import br.com.ecc.model.HotelAgrupamento;
+import br.com.ecc.model.Mesa;
 import br.com.ecc.model.Quarto;
 
 public class EncontroHotelVO implements Serializable {
@@ -15,7 +17,10 @@ public class EncontroHotelVO implements Serializable {
 	private EncontroHotel encontroHotel;
 	private List<HotelAgrupamento> listaAgrupamentos;
 	private List<Quarto> listaQuartos;
+	private List<Mesa> listaMesas;
 	private List<EncontroHotelQuarto> listaEncontroQuartos;
+	private List<EncontroRestauranteGarcon> listaEncontroRestauranteGarcon;
+
 	public EncontroHotel getEncontroHotel() {
 		return encontroHotel;
 	}
@@ -40,5 +45,17 @@ public class EncontroHotelVO implements Serializable {
 	public void setListaEncontroQuartos(List<EncontroHotelQuarto> listaEncontroQuartos) {
 		this.listaEncontroQuartos = listaEncontroQuartos;
 	}
-
+	public List<EncontroRestauranteGarcon> getListaEncontroRestauranteGarcon() {
+		return listaEncontroRestauranteGarcon;
+	}
+	public void setListaEncontroRestauranteGarcon(
+			List<EncontroRestauranteGarcon> listaEncontroRestauranteGarcon) {
+		this.listaEncontroRestauranteGarcon = listaEncontroRestauranteGarcon;
+	}
+	public List<Mesa> getListaMesas() {
+		return listaMesas;
+	}
+	public void setListaMesas(List<Mesa> listaMesas) {
+		this.listaMesas = listaMesas;
+	}
 }

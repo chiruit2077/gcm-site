@@ -19,7 +19,8 @@ import br.com.ecc.model.tipo.TipoEncontroHotelEnum;
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROHOTEL", sequenceName="SQ_ENCONTROHOTEL")
 @NamedQueries({
-	@NamedQuery(name="encontroHotel.porEncontro", query="select u from EncontroHotel u where u.encontro = :encontro order by u.tipo")
+	@NamedQuery(name="encontroHotel.porEncontro", query="select u from EncontroHotel u where u.encontro = :encontro order by u.tipo"),
+	@NamedQuery(name="encontroHotel.porEncontroEvento", query="select u from EncontroHotel u where u.encontro = :encontro and u.tipo = 'EVENTO' ")
 })
 public class EncontroHotel extends _WebBaseEntity {
 

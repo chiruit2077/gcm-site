@@ -60,6 +60,16 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 		cmbEncontroHotelQuarto.addParameter("encontrohotel", vo.getEncontroHotel());
 		vo.setListaEncontroQuartos(cmbEncontroHotelQuarto.call());
 
+		GetEntityListCommand cmbEncontroRestauranteGarcon = injector.getInstance(GetEntityListCommand.class);
+		cmbEncontroRestauranteGarcon.setNamedQuery("encontroRestauranteGarcon.porEncontroHotel");
+		cmbEncontroRestauranteGarcon.addParameter("encontrohotel", vo.getEncontroHotel());
+		vo.setListaEncontroRestauranteGarcon(cmbEncontroRestauranteGarcon.call());
+
+		GetEntityListCommand cmbMesa = injector.getInstance(GetEntityListCommand.class);
+		cmbMesa.setNamedQuery("mesa.porHotel");
+		cmbMesa.addParameter("hotel", vo.getEncontroHotel().getHotel());
+		vo.setListaMesas(cmbMesa.call());
+
 		return vo;
 	}
 
@@ -70,5 +80,24 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 		EncontroHotelQuartoSalvarCommand cmd = injector.getInstance(EncontroHotelQuartoSalvarCommand.class);
 		cmd.setEncontroHotelVO(encontroHotel);
 		return cmd.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public EncontroHotel getEncontroHotelEvento(Encontro encontro)
+			throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroHotel.porEncontroEvento");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroHotel> call = cmd.call();
+		if (call.size() == 1)
+			return call.get(0);
+		return null;
+	}
+
+	@Override
+	public EncontroHotelVO salvaRestaurante(EncontroHotelVO encontroHotelVO)
+			throws Exception {
+		return encontroHotelVO;
 	}
 }

@@ -996,3 +996,32 @@ html>body .gwt-DecoratedTabBar {
 	color: black;
 	border: 1px solid black;
 }
+
+.mesa-Panel {
+	border: 1px solid gray;
+}
+
+.mesa-Titulo {
+	background: #DDD9C4;
+	color: black;
+	font-weight: bold;
+	border: 1px solid gray;
+}
+
+.mesa-Nomes {
+	border: 1px solid gray;
+}
+
+.mesa-Afilhado {
+	background: #DCE6F1;
+	color: black;
+	font-weight: bold;
+	border: 1px solid gray;
+}
+
+.mesa-Garcon {
+	background: #E4DFEC;
+	color: black;
+	font-weight: bold;
+	border: 1px solid gray;
+}

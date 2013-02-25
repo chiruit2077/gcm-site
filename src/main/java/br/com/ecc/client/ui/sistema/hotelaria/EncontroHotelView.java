@@ -6,6 +6,7 @@ import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.LabelTotalUtil;
+import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.Hotel;
 
 import com.google.gwt.core.client.GWT;
@@ -28,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implements EncontroHotelPresenter.Display {
 
-	@UiTemplate("HotelView.ui.xml")
+	@UiTemplate("EncontroHotelView.ui.xml")
 	interface HotelViewUiBinder extends UiBinder<Widget, EncontroHotelView> {}
 	private HotelViewUiBinder uiBinder = GWT.create(HotelViewUiBinder.class);
 
@@ -47,8 +48,7 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 	@UiField(provided=true) FlexTable hotelFlexTable;
 	private FlexTableUtil hotelTableUtil = new FlexTableUtil();
 
-
-	private Hotel entidadeEditada;
+	private EncontroHotel entidadeEditada;
 
 	public EncontroHotelView() {
 		criaTabela();
@@ -80,13 +80,13 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 	}
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
-		entidadeEditada.setNome(nomeTextBox.getValue());
+		/*entidadeEditada.setNome(nomeTextBox.getValue());
 		entidadeEditada.setQuantidadeQuartos(Integer.parseInt(quantidadeQuartos.getText()));
-		presenter.salvar(entidadeEditada);
+		presenter.salvar(entidadeEditada);*/
 	}
 	private void edita(Hotel hotel) {
 		limpaCampos();
-		if(hotel == null){
+		/*if(hotel == null){
 			entidadeEditada = new Hotel();
 		} else {
 			entidadeEditada = hotel;
@@ -94,7 +94,7 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 		}
 		editaDialogBox.center();
 		editaDialogBox.show();
-		nomeTextBox.setFocus(true);
+		nomeTextBox.setFocus(true);*/
 	}
 
 	public void limpaCampos(){

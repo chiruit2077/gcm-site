@@ -15,7 +15,7 @@
 			background-color: lightgray;
 		}
   	</ui:style>
-  	<g:VerticalPanel horizontalAlignment="center" width="100%">
+  	<g:VerticalPanel horizontalAlignment="center">
 		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
 			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
 				<tr>
@@ -30,15 +30,15 @@
 		</g:HTMLPanel>
 		<g:VerticalPanel ui:field="centralPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center">
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center" >
-				<g:ListBox ui:field="hotelListBox" width="400px"/>
+				<g:ListBox ui:field="restauranteListBox" width="400px"/>
 				<g:Button ui:field="salvarButton">Salvar</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
 			<g:HorizontalPanel spacing="2" width="100%">
 				<g:VerticalPanel ui:field="legendaPanel" styleName="portal-portlet-content" width="100px" horizontalAlignment="center">
 				</g:VerticalPanel>
-				<g:VerticalPanel ui:field="distribuicaoPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
-				</g:VerticalPanel>
+				<g:HorizontalPanel ui:field="distribuicaoPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
+				</g:HorizontalPanel>
 			</g:HorizontalPanel>
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
@@ -49,18 +49,14 @@
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" align="center">
 								<tr>
-									<td class="portal-formLabel" width="150px">Tipo Quarto:</td>
+									<td colspan="3" class="portal-formLabel">Número Mesa:</td>
 									<td>
-										<g:ListBox ui:field="tipoEncontroQuartoListBox" width="150px"/>
-									</td>
-									<td class="portal-formLabel">Número Quarto:</td>
-									<td>
-										<g:Label ui:field="quartoNumberLabel" width="50px" horizontalAlignment="center"/>
+										<g:Label ui:field="mesaNumberLabel" width="50px" horizontalAlignment="center"/>
 									</td>
 								</tr>
 								<tr>
 									<td>
-					    				<g:Label ui:field="labelInscricao1" styleName="portal-formLabel" text="Casal:" />
+					    				<g:Label ui:field="labelInscricao1" styleName="portal-formLabel" text="Afilhado1:" />
 					    			</td>
 									<td colspan="3" >
 				    					<g:SuggestBox ui:field="inscricaoSuggestBox1" width="350px"/>
@@ -68,7 +64,7 @@
 								</tr>
 								<tr>
 									<td>
-					    				<g:Label ui:field="labelInscricao2" styleName="portal-formLabel" text="Pessoa 2:" />
+					    				<g:Label ui:field="labelInscricao2" styleName="portal-formLabel" text="Afilhado 2:" />
 					    			</td>
 									<td colspan="3" >
 				    					<g:SuggestBox ui:field="inscricaoSuggestBox2" width="350px"/>
@@ -76,18 +72,10 @@
 								</tr>
 								<tr>
 									<td>
-					    				<g:Label ui:field="labelInscricao3" styleName="portal-formLabel" text="Pessoa 3:" />
+					    				<g:Label ui:field="labelInscricao3" styleName="portal-formLabel" text="Garçon:" />
 					    			</td>
 									<td colspan="3" >
 				    					<g:SuggestBox ui:field="inscricaoSuggestBox3" width="350px"/>
-									</td>
-								</tr>
-								<tr>
-									<td>
-					    				<g:Label ui:field="labelInscricao4" styleName="portal-formLabel" text="Pessoa 4:" />
-					    			</td>
-									<td colspan="3" >
-				    					<g:SuggestBox ui:field="inscricaoSuggestBox4" width="350px"/>
 									</td>
 								</tr>
 							</table>
@@ -95,8 +83,8 @@
 					</g:VerticalPanel>
 					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
 						<g:HorizontalPanel spacing="3">
-							<g:Button ui:field="salvarQuartoButton">Salvar</g:Button>
-							<g:Button ui:field="fecharQuartoButton">Cancelar</g:Button>
+							<g:Button ui:field="salvarMesaButton">Salvar</g:Button>
+							<g:Button ui:field="fecharMesaButton">Cancelar</g:Button>
 						</g:HorizontalPanel>
 					</g:VerticalPanel>
 				</g:VerticalPanel>

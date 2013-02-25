@@ -449,6 +449,7 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 		titulo.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 		titulo.setStyleName("agrupamento-Titulo");
 		titulo.add(new Label("Legenda dos Quartos"));
+		legendaPanel.add(titulo);
 
 		TipoEncontroQuartoEnum[] values = TipoEncontroQuartoEnum.values();
 		for (TipoEncontroQuartoEnum tipoEncontroQuartoEnum : values) {
