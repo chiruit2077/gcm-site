@@ -10,7 +10,6 @@ import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
-import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroHotelQuarto;
 import br.com.ecc.model.EncontroInscricao;
@@ -19,6 +18,7 @@ import br.com.ecc.model.Quarto;
 import br.com.ecc.model._WebBaseEntity;
 import br.com.ecc.model.tipo.TipoAgrupamentoLadoEnum;
 import br.com.ecc.model.tipo.TipoEncontroQuartoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoQuartoEnum;
 import br.com.ecc.model.vo.EncontroHotelVO;
 
@@ -58,10 +58,10 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 	@UiField ListBox hotelListBox;
 	@UiField Label totalLabel;
 	@UiField DialogBox editaDialogBox;
-	@UiField HorizontalPanel inscricaoPanel1;
-	@UiField HorizontalPanel inscricaoPanel2;
-	@UiField HorizontalPanel inscricaoPanel3;
-	@UiField HorizontalPanel inscricaoPanel4;
+	@UiField Label labelInscricao1;
+	@UiField Label labelInscricao2;
+	@UiField Label labelInscricao3;
+	@UiField Label labelInscricao4;
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox1;
 	private final GenericEntitySuggestOracle inscricaoSuggest1 = new GenericEntitySuggestOracle();
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox2;
@@ -80,17 +80,13 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 
 	private EncontroHotelQuarto entidadeEditada;
 
-	protected VerticalPanel quartoNomeWidgetEditado;
+	protected VerticalPanel quartoWidgetEditado;
 
 	public DistribuicaoView() {
 		inscricaoSuggest1.setMinimoCaracteres(2);
-		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroNomeLike");
 		inscricaoSuggest2.setMinimoCaracteres(2);
-		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroNomeLike");
 		inscricaoSuggest3.setMinimoCaracteres(2);
-		inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroNomeLike");
 		inscricaoSuggest4.setMinimoCaracteres(2);
-		inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroNomeLike");
 
 		inscricaoSuggestBox1 = new SuggestBox(inscricaoSuggest1);
 		inscricaoSuggestBox2 = new SuggestBox(inscricaoSuggest2);
@@ -144,6 +140,11 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 		presenter.fechar();
 	}
 
+	@UiHandler("salvarButton")
+	public void salvarButtonClickHandler(ClickEvent event){
+		presenter.salvar();
+	}
+
 	@UiHandler("fecharQuartoButton")
 	public void fecharQuartoButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -169,22 +170,41 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 		}
 		if (tipoQuarto.equals(TipoEncontroQuartoEnum.SOLTEIROS)){
 			if(!inscricaoSuggestBox2.getValue().equals("")){
-				entidadeEditada.setEncontroInscricao1((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
+				entidadeEditada.setEncontroInscricao2((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
 			}
 			if(!inscricaoSuggestBox3.getValue().equals("")){
-				entidadeEditada.setEncontroInscricao1((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest3.getListaEntidades(), inscricaoSuggestBox3.getValue()));
+				entidadeEditada.setEncontroInscricao3((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest3.getListaEntidades(), inscricaoSuggestBox3.getValue()));
 			}
 			if(!inscricaoSuggestBox4.getValue().equals("")){
-				entidadeEditada.setEncontroInscricao1((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest4.getListaEntidades(), inscricaoSuggestBox4.getValue()));
+				entidadeEditada.setEncontroInscricao4((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest4.getListaEntidades(), inscricaoSuggestBox4.getValue()));
 			}
 		}
-		quartoNomeWidgetEditado.clear();
-		if (entidadeEditada.getEncontroInscricao1()!= null){
-			quartoNomeWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getCasal().getEle().getApelido()));
-			quartoNomeWidgetEditado.add(new Label("e"));
-			quartoNomeWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getCasal().getEla().getApelido()));
-		}
+
 		editaDialogBox.hide();
+		totalLabel.setText(geraTotaisQuartos(presenter.getEncontroHotelVO(), null));
+
+		quartoWidgetEditado.clear();
+		quartoWidgetEditado.setStyleName(entidadeEditada.getTipo().getStyle());
+		if (entidadeEditada.getTipo().equals(TipoEncontroQuartoEnum.SOLTEIROS)){
+			if (entidadeEditada.getEncontroInscricao1()!= null){
+				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao1().getPessoa().getApelido():entidadeEditada.getEncontroInscricao1().getPessoa().getNome()));
+			}
+			if (entidadeEditada.getEncontroInscricao2()!= null){
+				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao2().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao2().getPessoa().getApelido():entidadeEditada.getEncontroInscricao2().getPessoa().getNome()));
+			}
+			if (entidadeEditada.getEncontroInscricao3()!= null){
+				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao3().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao3().getPessoa().getApelido():entidadeEditada.getEncontroInscricao3().getPessoa().getNome()));
+			}
+			if (entidadeEditada.getEncontroInscricao4()!= null){
+				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao4().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao4().getPessoa().getApelido():entidadeEditada.getEncontroInscricao4().getPessoa().getNome()));
+			}
+		}else{
+			if (entidadeEditada.getEncontroInscricao1()!= null){
+				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getCasal().getEle().getApelido()!=null?entidadeEditada.getEncontroInscricao1().getCasal().getEle().getApelido():entidadeEditada.getEncontroInscricao1().getCasal().getEle().getNome()));
+				quartoWidgetEditado.add(new Label("e"));
+				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getCasal().getEla().getApelido()!=null?entidadeEditada.getEncontroInscricao1().getCasal().getEla().getApelido():entidadeEditada.getEncontroInscricao1().getCasal().getEla().getNome()));
+			}
+		}
 	}
 	private void edita(EncontroHotelQuarto encontroHotelQuarto) {
 		limpaCampos();
@@ -194,20 +214,151 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 		tipoEncontroQuartoListBox.setFocus(true);
 	}
 
+	@UiHandler("tipoEncontroQuartoListBox")
+	public void tipoEncontroQuartoListBoxChangeHandler(ChangeEvent event) {
+		TipoEncontroQuartoEnum tipoQuarto = (TipoEncontroQuartoEnum) ListBoxUtil.getItemSelected(tipoEncontroQuartoListBox, TipoEncontroQuartoEnum.values());
+		if (tipoQuarto != null){
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			if (tipoQuarto.equals(TipoEncontroQuartoEnum.SOLTEIROS)){
+				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				params.put("encontro", presenter.getEncontroSelecionado());
+				inscricaoSuggest1.setQueryParams(params);
+				inscricaoSuggest2.setQueryParams(params);
+				inscricaoSuggest3.setQueryParams(params);
+				inscricaoSuggest4.setQueryParams(params);
+				labelInscricao1.setText("Pessoa 1:");
+				labelInscricao1.setVisible(true);
+				labelInscricao2.setVisible(true);
+				labelInscricao3.setVisible(true);
+				labelInscricao4.setVisible(true);
+				inscricaoSuggestBox1.setVisible(true);
+				inscricaoSuggestBox2.setVisible(true);
+				inscricaoSuggestBox3.setVisible(true);
+				inscricaoSuggestBox4.setVisible(true);
+				entidadeEditada.setEncontroInscricao1(null);
+				entidadeEditada.setEncontroInscricao2(null);
+				entidadeEditada.setEncontroInscricao3(null);
+				entidadeEditada.setEncontroInscricao4(null);
+				inscricaoSuggestBox1.setValue(null);
+				inscricaoSuggestBox2.setValue(null);
+				inscricaoSuggestBox3.setValue(null);
+				inscricaoSuggestBox4.setValue(null);
+			}else if (tipoQuarto.equals(TipoEncontroQuartoEnum.RESERVADO)) {
+				labelInscricao1.setText("Casal:");
+				labelInscricao1.setVisible(false);
+				labelInscricao2.setVisible(false);
+				labelInscricao3.setVisible(false);
+				labelInscricao4.setVisible(false);
+				inscricaoSuggestBox1.setVisible(false);
+				inscricaoSuggestBox2.setVisible(false);
+				inscricaoSuggestBox3.setVisible(false);
+				inscricaoSuggestBox4.setVisible(false);
+				entidadeEditada.setEncontroInscricao1(null);
+				entidadeEditada.setEncontroInscricao2(null);
+				entidadeEditada.setEncontroInscricao3(null);
+				entidadeEditada.setEncontroInscricao4(null);
+				inscricaoSuggestBox1.setValue(null);
+				inscricaoSuggestBox2.setValue(null);
+				inscricaoSuggestBox3.setValue(null);
+				inscricaoSuggestBox4.setValue(null);
+
+			}else{
+				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				params.put("encontro", presenter.getEncontroSelecionado());
+				params.put("tipo", TipoInscricaoEnum.getPorEncontroQuarto(tipoQuarto));
+				inscricaoSuggest1.setQueryParams(params);
+				inscricaoSuggest2.setQueryParams(params);
+				inscricaoSuggest3.setQueryParams(params);
+				inscricaoSuggest4.setQueryParams(params);
+				labelInscricao1.setText("Casal:");
+				labelInscricao1.setVisible(true);
+				labelInscricao2.setVisible(false);
+				labelInscricao3.setVisible(false);
+				labelInscricao4.setVisible(false);
+				inscricaoSuggestBox1.setVisible(true);
+				inscricaoSuggestBox2.setVisible(false);
+				inscricaoSuggestBox3.setVisible(false);
+				inscricaoSuggestBox4.setVisible(false);
+				entidadeEditada.setEncontroInscricao1(null);
+				entidadeEditada.setEncontroInscricao2(null);
+				entidadeEditada.setEncontroInscricao3(null);
+				entidadeEditada.setEncontroInscricao4(null);
+				inscricaoSuggestBox1.setValue(null);
+				inscricaoSuggestBox2.setValue(null);
+				inscricaoSuggestBox3.setValue(null);
+				inscricaoSuggestBox4.setValue(null);
+			}
+		}
+	}
+
 	public void defineCampos(EncontroHotelQuarto encontroHotelQuarto){
 		entidadeEditada = encontroHotelQuarto;
 		quartoNumberLabel.setText(encontroHotelQuarto.getQuarto().getNumeroQuarto());
 		if(encontroHotelQuarto.getTipo() !=null ){
 			ListBoxUtil.setItemSelected(tipoEncontroQuartoListBox, encontroHotelQuarto.getTipo().getNome());
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			if (encontroHotelQuarto.getTipo().equals(TipoEncontroQuartoEnum.SOLTEIROS)){
+				labelInscricao1.setText("Pessoa 1:");
+				labelInscricao1.setVisible(true);
+				labelInscricao2.setVisible(true);
+				labelInscricao3.setVisible(true);
+				labelInscricao4.setVisible(true);
+				inscricaoSuggestBox1.setVisible(true);
+				inscricaoSuggestBox2.setVisible(true);
+				inscricaoSuggestBox3.setVisible(true);
+				inscricaoSuggestBox4.setVisible(true);
+				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+				params.put("encontro", presenter.getEncontroSelecionado());
+				inscricaoSuggest1.setQueryParams(params);
+				inscricaoSuggest2.setQueryParams(params);
+				inscricaoSuggest3.setQueryParams(params);
+				inscricaoSuggest4.setQueryParams(params);
+			}else if (encontroHotelQuarto.getTipo().equals(TipoEncontroQuartoEnum.RESERVADO)){
+				labelInscricao1.setVisible(false);
+				labelInscricao2.setVisible(false);
+				labelInscricao3.setVisible(false);
+				labelInscricao4.setVisible(false);
+				inscricaoSuggestBox1.setVisible(false);
+				inscricaoSuggestBox2.setVisible(false);
+				inscricaoSuggestBox3.setVisible(false);
+				inscricaoSuggestBox4.setVisible(false);
+			}else{
+				labelInscricao1.setText("Casal:");
+				labelInscricao1.setVisible(true);
+				labelInscricao2.setVisible(false);
+				labelInscricao3.setVisible(false);
+				labelInscricao4.setVisible(false);
+				inscricaoSuggestBox1.setVisible(true);
+				inscricaoSuggestBox2.setVisible(false);
+				inscricaoSuggestBox3.setVisible(false);
+				inscricaoSuggestBox4.setVisible(false);
+				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				params.put("encontro", presenter.getEncontroSelecionado());
+				params.put("tipo", TipoInscricaoEnum.getPorEncontroQuarto(entidadeEditada.getTipo()));
+				inscricaoSuggest1.setQueryParams(params);
+				inscricaoSuggest2.setQueryParams(params);
+				inscricaoSuggest3.setQueryParams(params);
+				inscricaoSuggest4.setQueryParams(params);
+			}
+
 			if(encontroHotelQuarto.getEncontroInscricao1() != null){
 				inscricaoSuggestBox1.setValue(encontroHotelQuarto.getEncontroInscricao1().toString());
 				inscricaoSuggest1.setListaEntidades(new ArrayList<_WebBaseEntity>());
 				inscricaoSuggest1.getListaEntidades().add(encontroHotelQuarto.getEncontroInscricao1());
 			}
 			if (encontroHotelQuarto.getTipo().equals(TipoEncontroQuartoEnum.SOLTEIROS)){
-				inscricaoPanel2.setVisible(true);
-				inscricaoPanel3.setVisible(true);
-				inscricaoPanel4.setVisible(true);
 				if(encontroHotelQuarto.getEncontroInscricao2() != null){
 					inscricaoSuggestBox2.setValue(encontroHotelQuarto.getEncontroInscricao2().toString());
 					inscricaoSuggest2.setListaEntidades(new ArrayList<_WebBaseEntity>());
@@ -265,9 +416,15 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 		inscricaoSuggestBox2.setValue(null);
 		inscricaoSuggestBox3.setValue(null);
 		inscricaoSuggestBox4.setValue(null);
-		inscricaoPanel2.setVisible(false);
-		inscricaoPanel3.setVisible(false);
-		inscricaoPanel4.setVisible(false);
+		labelInscricao1.setText("Casal:");
+		labelInscricao1.setVisible(false);
+		labelInscricao2.setVisible(false);
+		labelInscricao3.setVisible(false);
+		labelInscricao4.setVisible(false);
+		inscricaoSuggestBox1.setVisible(false);
+		inscricaoSuggestBox2.setVisible(false);
+		inscricaoSuggestBox3.setVisible(false);
+		inscricaoSuggestBox4.setVisible(false);
 		tipoEncontroQuartoListBox.setSelectedIndex(0);
 	}
 
@@ -278,6 +435,8 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 
 	@Override
 	public void reset() {
+		legendaPanel.clear();
+		distribuicaoPanel.clear();
 	}
 
 	@Override
@@ -297,8 +456,12 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 			legenda.setStyleName(tipoEncontroQuartoEnum.getStyle());
 			legenda.setSize("80px", "30px");
 			legenda.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+			legenda.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 			legenda.add(new Label(tipoEncontroQuartoEnum.getNome()));
 			legendaPanel.add(legenda);
+			HorizontalPanel separador = new HorizontalPanel();
+			separador.setSize("100%", "20px");
+			legendaPanel.add(separador);
 		}
 		totalLabel.setText(geraTotaisQuartos(vo, null));
 
@@ -489,46 +652,63 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 					quartoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
 					quartosPanel.add(quartoWidget);
 				}else{
+					final FocusPanel focusPanel = new FocusPanel();
 					VerticalPanel quartoWidget = new VerticalPanel();
+					focusPanel.add(quartoWidget);
 					final EncontroHotelQuarto encontroHotelQuarto = getEncontroHotelQuarto(vo,quarto);
-					quartoWidget.setStyleName(encontroHotelQuarto.getTipo().getStyle());
 					quartoWidget.setSize("80px", "100px");
 					quartoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 					quartoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_TOP);
-					HorizontalPanel numquarto = new HorizontalPanel();
-					numquarto.setSize("100%", "20px");
-					numquarto.setStyleName("agrupamento-QuartoNumero");
-					numquarto.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-					numquarto.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-					numquarto.add(new Label(quarto.getNumeroQuarto()));
 
-					final FocusPanel focusPanel = new FocusPanel();
-					VerticalPanel quartoNomeWidget = new VerticalPanel();
+					HorizontalPanel numquartoWidget = new HorizontalPanel();
+					numquartoWidget.setSize("100%", "20px");
+					numquartoWidget.setStyleName("agrupamento-QuartoNumero");
+					numquartoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+					numquartoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+					numquartoWidget.add(new Label(quarto.getNumeroQuarto()));
+
+					final VerticalPanel quartoNomeWidget = new VerticalPanel();
+					quartoNomeWidget.setStyleName(encontroHotelQuarto.getTipo().getStyle());
 					quartoNomeWidget.setSize("100%", "80px");
 					quartoNomeWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 					quartoNomeWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-					if (encontroHotelQuarto.getEncontroInscricao1()!= null){
-						quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao1().getCasal().getEle().getApelido()));
-						quartoNomeWidget.add(new Label("e"));
-						quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao1().getCasal().getEla().getApelido()));
+					if (encontroHotelQuarto.getTipo().equals(TipoEncontroQuartoEnum.SOLTEIROS)){
+						if (encontroHotelQuarto.getEncontroInscricao1()!= null){
+							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao1().getPessoa().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao1().getPessoa().getApelido():encontroHotelQuarto.getEncontroInscricao1().getPessoa().getNome()));
+						}
+						if (encontroHotelQuarto.getEncontroInscricao2()!= null){
+							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao2().getPessoa().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao2().getPessoa().getApelido():encontroHotelQuarto.getEncontroInscricao2().getPessoa().getNome()));
+						}
+						if (encontroHotelQuarto.getEncontroInscricao3()!= null){
+							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao3().getPessoa().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao3().getPessoa().getApelido():encontroHotelQuarto.getEncontroInscricao3().getPessoa().getNome()));
+						}
+						if (encontroHotelQuarto.getEncontroInscricao4()!= null){
+							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao4().getPessoa().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao4().getPessoa().getApelido():encontroHotelQuarto.getEncontroInscricao4().getPessoa().getNome()));
+						}
+					}else{
+						if (encontroHotelQuarto.getEncontroInscricao1()!= null){
+							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao1().getCasal().getEle().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao1().getCasal().getEle().getApelido():encontroHotelQuarto.getEncontroInscricao1().getCasal().getEle().getNome()));
+							quartoNomeWidget.add(new Label("e"));
+							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao1().getCasal().getEla().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao1().getCasal().getEla().getApelido():encontroHotelQuarto.getEncontroInscricao1().getCasal().getEla().getNome()));
+						}
+					}
+					quartoWidget.add(quartoNomeWidget);
+					if (quarto.getLado().equals(TipoAgrupamentoLadoEnum.DIREITO)){
+						quartoWidget.add(quartoNomeWidget);
+						quartoWidget.add(numquartoWidget);
+						quartoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_BOTTOM);
+					}else{
+						quartoWidget.add(numquartoWidget);
+						quartoWidget.add(quartoNomeWidget);
 					}
 					focusPanel.addClickHandler(new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent event) {
 							edita(encontroHotelQuarto);
-							quartoNomeWidgetEditado = (VerticalPanel) focusPanel.getWidget();
+							quartoWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(quartoNomeWidget)));
 						}
 					});
-					focusPanel.add(quartoNomeWidget);
-					if (quarto.getLado().equals(TipoAgrupamentoLadoEnum.DIREITO)){
-						quartoWidget.add(focusPanel);
-						quartoWidget.add(numquarto);
-						quartoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_BOTTOM);
-					}else{
-						quartoWidget.add(numquarto);
-						quartoWidget.add(focusPanel);
-					}
-					quartosPanel.add(quartoWidget);
+					quartosPanel.add(focusPanel);
 				}
 			}
 			HorizontalPanel separador = new HorizontalPanel();
@@ -560,16 +740,6 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 
 	public void setListaHotel(List<EncontroHotel> listaHotel) {
 		this.listaHotel = listaHotel;
-	}
-
-	@Override
-	public void setSuggests(Encontro encontro) {
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("encontro", encontro);
-		inscricaoSuggest1.setQueryParams(params);
-		inscricaoSuggest2.setQueryParams(params);
-		inscricaoSuggest3.setQueryParams(params);
-		inscricaoSuggest4.setQueryParams(params);
 	}
 
 }

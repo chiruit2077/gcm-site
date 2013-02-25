@@ -39,28 +39,21 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 				"	( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " ),
 	@NamedQuery(name="encontroInscricao.porEncontroCasal",
 		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal order by u.id desc"),
-	/*@NamedQuery(name="encontroInscricao.porEncontroNomeLike",
-		query="select u from EncontroInscricao u " +
-			  " LEFT JOIN FETCH u.casal ( " +
-			  "        upper(u.casal.ele.nome) like upper(:key) or " +
-			  "        upper(u.casal.ele.apelido) like upper(:key) or " +
-			  "        upper(u.casal.ela.nome) like upper(:key) or" +
-			  "        upper(u.casal.ela.apelido) like upper(:key) ) " +
-			  " LEFT JOIN FETCH u.pessoa ( " +
-			  "        upper(u.pessoa.nome) like upper(:key) or" +
-			  "        upper(u.pessoa.apelido) like upper(:key) ) " +
-			  " where u.encontro = :encontro " +
-			  "order by u.casal.ele.apelido, u.casal.ela.apelido, u.casal.ele.nome, u.casal.ela.nome, u.pessoa.apelido, u.pessoa.nome" )*/
-	@NamedQuery(name="encontroInscricao.porEncontroNomeLike",
-	query="select u from EncontroInscricao u LEFT JOIN FETCH u.casal as c LEFT JOIN FETCH u.pessoa as p " +
-		  "where u.encontro = :encontro and " +
-		  "       ( upper(c.ele.nome) like upper(:key) or " +
-		  "        upper(c.ele.apelido) like upper(:key) or " +
-		  "        upper(c.ela.nome) like upper(:key) or" +
-		  "        upper(c.ela.apelido) like upper(:key) or  " +
-		  "        upper(p.nome) like upper(:key) or" +
-		  "        upper(p.apelido) like upper(:key) ) " +
-		  "order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome, p.apelido, p.nome" )
+	@NamedQuery(name="encontroInscricao.porEncontroPessoaNomeLike",
+	query="select up from EncontroInscricao up LEFT OUTER JOIN FETCH up.pessoa as p " +
+	  "   where up.encontro = :encontro and " +
+	  "       ( upper(p.nome) like upper(:key) or" +
+	  "        upper(p.apelido) like upper(:key) ) " +
+	  "   order by p.apelido, p.nome  " ),
+	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLike",
+	query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
+	  "   where uc.encontro = :encontro and " +
+	  "        uc.tipo = :tipo and " +
+	  "       ( upper(c.ele.nome) like upper(:key) or " +
+	  "        upper(c.ele.apelido) like upper(:key) or " +
+	  "        upper(c.ela.nome) like upper(:key) or" +
+	  "        upper(c.ela.apelido) like upper(:key) )  " +
+	  "   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " )
 })
 public class EncontroInscricao extends _WebBaseEntity {
 	private static final long serialVersionUID = 7982370030939310990L;

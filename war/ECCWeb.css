@@ -950,7 +950,21 @@ html>body .gwt-DecoratedTabBar {
 	color: black;
 	border: 1px solid black;
 }
-
+.agrupamento-QuartoCoordenador {
+	background: lime;
+	color: black;
+	border: 1px solid black;
+}
+.agrupamento-QuartoCamarim {
+	background: #FF9900;
+	color: black;
+	border: 1px solid black;
+}
+.agrupamento-QuartoSecretaria {
+	background: #FF99CC;
+	color: black;
+	border: 1px solid black;
+}
 .agrupamento-QuartoAfilhado {
 	background: #FFCC99;
 	color: black;
@@ -958,6 +972,11 @@ html>body .gwt-DecoratedTabBar {
 }
 .agrupamento-QuartoPadrinho {
 	background: #CCFFCC;
+	color: black;
+	border: 1px solid black;
+}
+.agrupamento-QuartoSolteiro {
+	background: teal;
 	color: black;
 	border: 1px solid black;
 }

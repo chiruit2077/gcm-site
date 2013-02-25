@@ -9,6 +9,7 @@ import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.model.vo.EncontroHotelVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
+import br.com.ecc.server.command.EncontroHotelQuartoSalvarCommand;
 import br.com.ecc.server.command.basico.GetEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 
@@ -66,10 +67,8 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 	@Override
 	@Permissao(nomeOperacao="Salvar encontroInscricao", operacao=Operacao.SALVAR)
 	public EncontroHotelVO salva(EncontroHotelVO encontroHotel) throws Exception {
-		/*EncontroInscricaoSalvarCommand cmd = injector.getInstance(EncontroInscricaoSalvarCommand.class);
-		cmd.setEncontroInscricaoVO(encontroHotel);
-		cmd.setUsuarioAtual(SessionHelper.getUsuario(getThreadLocalRequest().getSession()));
-		return cmd.call();*/
-		return encontroHotel;
+		EncontroHotelQuartoSalvarCommand cmd = injector.getInstance(EncontroHotelQuartoSalvarCommand.class);
+		cmd.setEncontroHotelVO(encontroHotel);
+		return cmd.call();
 	}
 }

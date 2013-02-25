@@ -28,6 +28,21 @@ public class Hotel extends _WebBaseEntity {
 
 	private Integer quantidadeQuartos;
 
+	@Column(length=254)
+	private String endereco;
+
+	@Column(length=100)
+	private String bairro;
+
+	@Column(length=100)
+	private String cidade;
+
+	@Column(length=2)
+	private String estado;
+
+	@Column(length=15)
+	private String cep;
+
 	@Version
 	private Integer version;
 
@@ -65,6 +80,46 @@ public class Hotel extends _WebBaseEntity {
 
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
 	}
 
 }

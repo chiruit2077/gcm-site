@@ -15,7 +15,6 @@ import br.com.ecc.client.service.encontro.EncontroHotelServiceAsync;
 import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
-import br.com.ecc.model.EncontroInscricaoFichaPagamento;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.vo.EncontroHotelVO;
 
@@ -27,7 +26,6 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 	public interface Display extends BaseDisplay {
 		void populaEntidades(EncontroHotelVO encontroHotelVO);
 		void populaHoteis(List<EncontroHotel> lista);
-		void setSuggests(Encontro encontro);
 	}
 
 	public DistribuicaoPresenter(Display display, WebResource portalResource) {
@@ -80,7 +78,6 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 						break;
 					}
 				}
-				getDisplay().setSuggests(getEncontroSelecionado());
 				buscaHoteis();
 			}
 		});
@@ -111,15 +108,17 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 		}
 		getDisplay().showWaitMessage(false);
 	}
-	public void salvar(EncontroInscricaoFichaPagamento ficha) {
-		/*getDisplay().showWaitMessage(true);
-		service.salvaFicha(ficha, new WebAsyncCallback<Void>(getDisplay()) {
+	public void salvar() {
+		getDisplay().showWaitMessage(true);
+		service.salva(getEncontroHotelVO(), new WebAsyncCallback<EncontroHotelVO>(getDisplay()) {
 			@Override
-			public void success(Void result) {
+			public void success(EncontroHotelVO vo) {
 				getDisplay().reset();
-				buscaFichas();
+				setEncontroHotelVO(vo);
+				getDisplay().populaEntidades(vo);
+				getDisplay().showWaitMessage(false);
 			}
-		});*/
+		});
 	}
 
 	public Grupo getGrupoSelecionado() {

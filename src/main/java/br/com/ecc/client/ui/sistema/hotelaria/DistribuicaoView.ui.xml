@@ -46,29 +46,52 @@
 				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Reserva">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
-					    <g:HorizontalPanel>
-					    	<g:Label ui:field="quartoNumberLabel" width="50px" horizontalAlignment="center"/>
-					    </g:HorizontalPanel>
-					    <g:HorizontalPanel>
-					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Tipo Quarto:" />
-					    	<g:ListBox ui:field="tipoEncontroQuartoListBox" width="150px"/>
-					    </g:HorizontalPanel>
-					    <g:HorizontalPanel ui:field="inscricaoPanel1">
-					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 1:" />
-					    	<g:SuggestBox ui:field="inscricaoSuggestBox1" width="350px"/>
-					    </g:HorizontalPanel>
-					    <g:HorizontalPanel ui:field="inscricaoPanel2" visible="false">
-					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 2:" />
-					    	<g:SuggestBox ui:field="inscricaoSuggestBox2" width="350px"/>
-					    </g:HorizontalPanel>
-					    <g:HorizontalPanel ui:field="inscricaoPanel3" visible="false">
-					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 3:" />
-					    	<g:SuggestBox ui:field="inscricaoSuggestBox3" width="350px"/>
-					    </g:HorizontalPanel>
-					    <g:HorizontalPanel ui:field="inscricaoPanel4" visible="false">
-					    	<g:Label styleName="portal-formLabel" horizontalAlignment="right" text="Inscrição 4:" />
-					    	<g:SuggestBox ui:field="inscricaoSuggestBox4" width="350px"/>
-					    </g:HorizontalPanel>
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel" width="150px">Tipo Quarto:</td>
+									<td>
+										<g:ListBox ui:field="tipoEncontroQuartoListBox" width="150px"/>
+									</td>
+									<td class="portal-formLabel">Número Quarto:</td>
+									<td>
+										<g:Label ui:field="quartoNumberLabel" width="50px" horizontalAlignment="center"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+					    				<g:Label ui:field="labelInscricao1" styleName="portal-formLabel" text="Casal:" />
+					    			</td>
+									<td colspan="3" >
+				    					<g:SuggestBox ui:field="inscricaoSuggestBox1" width="350px"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+					    				<g:Label ui:field="labelInscricao2" styleName="portal-formLabel" text="Pessoa 2:" />
+					    			</td>
+									<td colspan="3" >
+				    					<g:SuggestBox ui:field="inscricaoSuggestBox2" width="350px"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+					    				<g:Label ui:field="labelInscricao3" styleName="portal-formLabel" text="Pessoa 3:" />
+					    			</td>
+									<td colspan="3" >
+				    					<g:SuggestBox ui:field="inscricaoSuggestBox3" width="350px"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+					    				<g:Label ui:field="labelInscricao4" styleName="portal-formLabel" text="Pessoa 4:" />
+					    			</td>
+									<td colspan="3" >
+				    					<g:SuggestBox ui:field="inscricaoSuggestBox4" width="350px"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
 					</g:VerticalPanel>
 					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
 						<g:HorizontalPanel spacing="3">
