@@ -27,6 +27,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoMensagemEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
+import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -99,6 +100,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
+	@UiField Button printButton;
 	@UiField Image addDetalheImage;
 
 	@UiField(provided=true) FlexTable encontroInscricaoFlexTable;
@@ -234,6 +236,12 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			addDetalheImage.setVisible(true);
 		}
 	}
+
+	@UiHandler("printButton")
+	public void printButtonClickHandler(ClickEvent event){
+		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",encontroInscricaoFlexTable.getElement());
+	}
+
 
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
