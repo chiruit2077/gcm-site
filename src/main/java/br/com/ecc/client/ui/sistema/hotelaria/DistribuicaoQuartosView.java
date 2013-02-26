@@ -21,6 +21,7 @@ import br.com.ecc.model.tipo.TipoEncontroQuartoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoQuartoEnum;
 import br.com.ecc.model.vo.EncontroHotelVO;
+import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -75,6 +76,7 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 	@UiField Button salvarButton;
 	@UiField Button salvarQuartoButton;
 	@UiField Button fecharQuartoButton;
+	@UiField Button printButton;
 
 	private List<EncontroHotel> listaHotel;
 
@@ -143,6 +145,11 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		presenter.salvar();
+	}
+
+	@UiHandler("printButton")
+	public void printButtonClickHandler(ClickEvent event){
+		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",distribuicaoPanel.getElement());
 	}
 
 	@UiHandler("fecharQuartoButton")
@@ -341,10 +348,10 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 				inscricaoSuggestBox2.setVisible(false);
 				inscricaoSuggestBox3.setVisible(false);
 				inscricaoSuggestBox4.setVisible(false);
-				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
-				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
-				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
-				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
 				params.put("encontro", presenter.getEncontroSelecionado());
 				params.put("tipo", TipoInscricaoEnum.getPorEncontroQuarto(entidadeEditada.getTipo()));
 				inscricaoSuggest1.setQueryParams(params);

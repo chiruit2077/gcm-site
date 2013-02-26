@@ -33,6 +33,7 @@
 				<g:Label styleName="portal-formLabel" text="Restaurante Selecionado: " horizontalAlignment="right" />
 				<g:ListBox ui:field="restauranteListBox" width="400px" />
 				<g:Button ui:field="salvarButton">Salvar</g:Button>
+				<g:Button ui:field="printButton">Imprimir</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
 			<g:HorizontalPanel spacing="2" width="100%">
@@ -44,15 +45,15 @@
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Reserva">
+				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Mesa">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" align="center">
 								<tr>
-									<td colspan="3" class="portal-formLabel">Número Mesa:</td>
+									<td colspan="3" class="portal-formLabel">Número Mesa: </td>
 									<td>
-										<g:Label ui:field="mesaNumberLabel" width="50px" horizontalAlignment="center"/>
+										<g:Label ui:field="mesaNumberLabel" styleName="portal-formLabel" width="50px" horizontalAlignment="center"/>
 									</td>
 								</tr>
 								<tr>

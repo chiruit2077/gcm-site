@@ -11,10 +11,10 @@ import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroRestauranteGarcon;
 import br.com.ecc.model.Mesa;
 import br.com.ecc.model._WebBaseEntity;
-import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoMesaLadoEnum;
 import br.com.ecc.model.tipo.TipoRestauranteEnum;
 import br.com.ecc.model.vo.EncontroHotelVO;
+import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -64,6 +64,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	@UiField Button salvarButton;
 	@UiField Button salvarMesaButton;
 	@UiField Button fecharMesaButton;
+	@UiField Button printButton;
 
 	private TipoRestauranteEnum restauranteSelecionado;
 	private EncontroRestauranteGarcon entidadeEditada;
@@ -117,6 +118,12 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	public void fecharImageClickHandler(ClickEvent event){
 		presenter.fechar();
 	}
+
+	@UiHandler("printButton")
+	public void printButtonClickHandler(ClickEvent event){
+		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",distribuicaoPanel.getElement());
+	}
+
 
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
@@ -242,7 +249,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 		VerticalPanel panelEsquerdo = new VerticalPanel();
 		panelEsquerdo.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		panelEsquerdo.setSize("560px", "100%");
+		panelEsquerdo.setSize("600px", "100%");
 		panelEsquerdo.setStyleName("mesa-Panel");
 		VerticalPanel tituloLado = new VerticalPanel();
 		tituloLado.setSize("100%", "30px");
@@ -257,7 +264,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 		VerticalPanel panelDireito = new VerticalPanel();
 		panelDireito.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		panelDireito.setSize("560px", "100%");
+		panelDireito.setSize("600px", "100%");
 		panelDireito.setStyleName("mesa-Panel");
 		tituloLado = new VerticalPanel();
 		tituloLado.setSize("100%", "30px");
@@ -279,7 +286,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		if (vo.getListaMesas().size()>0){
 			for (Mesa mesa : vo.getListaMesas()) {
 				HorizontalPanel mesaPanel = new HorizontalPanel();
-				mesaPanel.setSize("520px", "92px");
+				mesaPanel.setSize("580px", "92px");
 				FocusPanel focusPanel = new FocusPanel();
 				VerticalPanel tituloMesa = new VerticalPanel();
 				tituloMesa.setSize("80px", "92px");
@@ -296,7 +303,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 				VerticalPanel nomesMesaPanel = new VerticalPanel();
 				nomesMesaPanel.setStyleName("mesa-Nomes");
 				nomesMesaPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-				nomesMesaPanel.setSize("420px", "90px");
+				nomesMesaPanel.setSize("500px", "90px");
 				final Label afilhado1 = new Label("VAGO");
 				afilhado1.setStyleName("mesa-Afilhado");
 				afilhado1.setSize("100%", "28px");
@@ -365,27 +372,19 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	}
 
 	public void setRestauranteSelecionado(TipoRestauranteEnum restauranteSelecionado) {
-		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
-		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
-		inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
-		HashMap<String, Object> paramsAfilhados = new HashMap<String, Object>();
-		paramsAfilhados.put("encontro", presenter.getEncontroSelecionado());
-		ArrayList<TipoInscricaoEnum> listaTipoAfilhado = new ArrayList<TipoInscricaoEnum>();
-		listaTipoAfilhado.add(TipoInscricaoEnum.AFILHADO);
-		paramsAfilhados.put("listatipo", listaTipoAfilhado);
-		inscricaoSuggest1.setQueryParams(paramsAfilhados);
-		inscricaoSuggest2.setQueryParams(paramsAfilhados);
-		HashMap<String, Object> paramGarcon = new HashMap<String, Object>();
-		paramGarcon.put("encontro", presenter.getEncontroSelecionado());
-		ArrayList<TipoInscricaoEnum> listTipoGarcon = new ArrayList<TipoInscricaoEnum>();
-		listTipoGarcon.add(TipoInscricaoEnum.APOIO);
-		listTipoGarcon.add(TipoInscricaoEnum.PADRINHO);
-		listTipoGarcon.add(TipoInscricaoEnum.COORDENADOR);
-		paramGarcon.put("listatipo", listTipoGarcon );
-		inscricaoSuggest3.setQueryParams(paramGarcon);
-
 		this.restauranteSelecionado = restauranteSelecionado;
 		ListBoxUtil.setItemSelected(restauranteListBox, restauranteSelecionado.getNome());
+
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeAfilhadoLike");
+		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeAfilhadoLike");
+		inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest2.setQueryParams(params);
+		inscricaoSuggest3.setQueryParams(params);
+
 		populaEntidades(presenter.getEncontroHotelVO());
+
 	}
 }

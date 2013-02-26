@@ -45,7 +45,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 	  "       ( upper(p.nome) like upper(:key) or" +
 	  "        upper(p.apelido) like upper(:key) ) " +
 	  "   order by p.apelido, p.nome  " ),
-	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLike",
+	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLikeTipo",
 	query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
 	  "   where uc.encontro = :encontro and " +
 	  "        uc.tipo = :tipo and " +
@@ -54,15 +54,24 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 	  "        upper(c.ela.nome) like upper(:key) or" +
 	  "        upper(c.ela.apelido) like upper(:key) )  " +
 	  "   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
-	  @NamedQuery(name="encontroInscricao.porEncontroCasalNomeLikeTipo",
+	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeEncontristaLike",
 		query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
 		  "   where uc.encontro = :encontro and " +
-		  "        uc.tipo in ( :listatipo ) and " +
+		  "        uc.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR' ) and " +
 		  "       ( upper(c.ele.nome) like upper(:key) or " +
 		  "        upper(c.ele.apelido) like upper(:key) or " +
 		  "        upper(c.ela.nome) like upper(:key) or" +
 		  "        upper(c.ela.apelido) like upper(:key) )  " +
-		  "   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " )
+		  "   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
+    @NamedQuery(name="encontroInscricao.porEncontroCasalNomeAfilhadoLike",
+			query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
+			  "   where uc.encontro = :encontro and " +
+			  "        uc.tipo in ( 'AFILHADO' ) and " +
+			  "       ( upper(c.ele.nome) like upper(:key) or " +
+			  "        upper(c.ele.apelido) like upper(:key) or " +
+			  "        upper(c.ela.nome) like upper(:key) or" +
+			  "        upper(c.ela.apelido) like upper(:key) )  " +
+			  "   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " )
 })
 public class EncontroInscricao extends _WebBaseEntity {
 	private static final long serialVersionUID = 7982370030939310990L;
