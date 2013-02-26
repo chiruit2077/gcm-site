@@ -29,8 +29,9 @@
 			</table>
 		</g:HTMLPanel>
 		<g:VerticalPanel ui:field="centralPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center">
-			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center" >
-				<g:ListBox ui:field="restauranteListBox" width="400px"/>
+			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="left" >
+				<g:Label styleName="portal-formLabel" text="Restaurante Selecionado: " horizontalAlignment="right" />
+				<g:ListBox ui:field="restauranteListBox" width="400px" />
 				<g:Button ui:field="salvarButton">Salvar</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
@@ -56,7 +57,7 @@
 								</tr>
 								<tr>
 									<td>
-					    				<g:Label ui:field="labelInscricao1" styleName="portal-formLabel" text="Afilhado1:" />
+					    				<g:Label ui:field="labelInscricao1" styleName="portal-formLabel" text="Afilhado 1:" />
 					    			</td>
 									<td colspan="3" >
 				    					<g:SuggestBox ui:field="inscricaoSuggestBox1" width="350px"/>

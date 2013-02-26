@@ -21,14 +21,14 @@ import br.com.ecc.model.vo.EncontroHotelVO;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
-public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.Display> {
+public class DistribuicaoQuartosPresenter extends BasePresenter<DistribuicaoQuartosPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
 		void populaEntidades(EncontroHotelVO encontroHotelVO);
 		void populaHoteis(List<EncontroHotel> lista);
 	}
 
-	public DistribuicaoPresenter(Display display, WebResource portalResource) {
+	public DistribuicaoQuartosPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
 
@@ -110,7 +110,7 @@ public class DistribuicaoPresenter extends BasePresenter<DistribuicaoPresenter.D
 	}
 	public void salvar() {
 		getDisplay().showWaitMessage(true);
-		service.salva(getEncontroHotelVO(), new WebAsyncCallback<EncontroHotelVO>(getDisplay()) {
+		service.salvaEncontroHotelQuarto(getEncontroHotelVO(), new WebAsyncCallback<EncontroHotelVO>(getDisplay()) {
 			@Override
 			public void success(EncontroHotelVO vo) {
 				getDisplay().reset();

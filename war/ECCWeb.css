@@ -1006,10 +1006,12 @@ html>body .gwt-DecoratedTabBar {
 	color: black;
 	font-weight: bold;
 	border: 1px solid gray;
+	font-size: large;
 }
 
 .mesa-Nomes {
 	border: 1px solid gray;
+	vertical-align: middle;
 }
 
 .mesa-Afilhado {
@@ -1017,6 +1019,8 @@ html>body .gwt-DecoratedTabBar {
 	color: black;
 	font-weight: bold;
 	border: 1px solid gray;
+	vertical-align: middle;
+	text-indent: 5px;
 }
 
 .mesa-Garcon {
@@ -1024,4 +1028,6 @@ html>body .gwt-DecoratedTabBar {
 	color: black;
 	font-weight: bold;
 	border: 1px solid gray;
+	vertical-align: middle;
+	text-indent: 5px;
 }

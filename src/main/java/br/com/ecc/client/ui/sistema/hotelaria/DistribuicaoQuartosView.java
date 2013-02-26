@@ -44,10 +44,10 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements DistribuicaoPresenter.Display {
+public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresenter> implements DistribuicaoQuartosPresenter.Display {
 
-	@UiTemplate("DistribuicaoView.ui.xml")
-	interface DistribucaoViewUiBinder extends UiBinder<Widget, DistribuicaoView> {}
+	@UiTemplate("DistribuicaoQuartosView.ui.xml")
+	interface DistribucaoViewUiBinder extends UiBinder<Widget, DistribuicaoQuartosView> {}
 	private DistribucaoViewUiBinder uiBinder = GWT.create(DistribucaoViewUiBinder.class);
 
 	@UiField Label tituloFormularioLabel;
@@ -82,7 +82,7 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 
 	protected VerticalPanel quartoWidgetEditado;
 
-	public DistribuicaoView() {
+	public DistribuicaoQuartosView() {
 		inscricaoSuggest1.setMinimoCaracteres(2);
 		inscricaoSuggest2.setMinimoCaracteres(2);
 		inscricaoSuggest3.setMinimoCaracteres(2);
@@ -132,7 +132,7 @@ public class DistribuicaoView extends BaseView<DistribuicaoPresenter> implements
 			}
 		});
 		tituloFormularioLabel.setText(getDisplayTitle());
-		ListBoxUtil.populate(tipoEncontroQuartoListBox, true, TipoEncontroQuartoEnum.values());
+		ListBoxUtil.populate(tipoEncontroQuartoListBox, false, TipoEncontroQuartoEnum.values());
 	}
 
 	@UiHandler("fecharImage")

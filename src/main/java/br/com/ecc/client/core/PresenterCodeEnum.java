@@ -13,7 +13,7 @@ import br.com.ecc.client.ui.sistema.cadastro.PapelPresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroConvitePresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroInscricaoPresenter;
 import br.com.ecc.client.ui.sistema.encontro.PlanilhaPresenter;
-import br.com.ecc.client.ui.sistema.hotelaria.DistribuicaoPresenter;
+import br.com.ecc.client.ui.sistema.hotelaria.DistribuicaoQuartosPresenter;
 import br.com.ecc.client.ui.sistema.patrimonio.ItemPatrimonioPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.DistribuicaoRestaurantePresenter;
 import br.com.ecc.client.ui.sistema.secretaria.ListagemPresenter;
@@ -53,7 +53,7 @@ public enum PresenterCodeEnum  {
 	TESOURARIA_FICHAS(2,15, FichasPresenter.class, "Fichas", true),
 
 	HOTELARIA_ENCONTRO_HOTEL(2,18, FichasPresenter.class, "Quartos", true),
-	HOTELARIA_DISTRIBUICAO(2,19, DistribuicaoPresenter.class, "Distribuição", true)
+	HOTELARIA_DISTRIBUICAO(2,19, DistribuicaoQuartosPresenter.class, "Distribuição", true)
 	;
 
 

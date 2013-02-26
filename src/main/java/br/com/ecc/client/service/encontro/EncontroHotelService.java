@@ -12,7 +12,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("encontroHotel")
 public interface EncontroHotelService extends RemoteService {
 	public List<EncontroHotel> lista(Encontro encontro) throws Exception;
-	public EncontroHotelVO salva(EncontroHotelVO encontroHotelVO) throws Exception;
+	public EncontroHotelVO salvaEncontroHotelQuarto(EncontroHotelVO encontroHotelVO) throws Exception;
 	public EncontroHotelVO getVO(EncontroHotel encontroHotel) throws Exception;
 	public EncontroHotel getEncontroHotelEvento(Encontro encontroSelecionado) throws Exception;
 	public EncontroHotelVO salvaRestaurante(EncontroHotelVO encontroHotelVO) throws Exception;
