@@ -13,6 +13,8 @@
 
 	<extend-property name="locale" values="en_US"/>
 	<extend-property name="locale" values="pt_BR"/>
+	<set-property name='locale' value='pt_BR'/>
+	<set-property-fallback name='locale' value='pt_BR'/>
 
 	<entry-point class="br.com.ecc.client.ECCWeb"/>
 	<generate-with class="br.com.ecc.core.generator.presenter.PresenterServiceGenerator">
