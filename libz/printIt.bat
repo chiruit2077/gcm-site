@@ -1,0 +1,1 @@
+mvn install:install-file -DgroupId=printit -DartifactId=printit -Dversion=1.11 -Dpackaging=jar -Dfile=printit.jar
