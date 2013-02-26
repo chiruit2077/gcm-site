@@ -17,6 +17,7 @@ import br.com.ecc.model.EncontroConviteResponsavel;
 import br.com.ecc.model.EncontroFila;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model._WebBaseEntity;
+import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoFilaEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
@@ -706,6 +707,8 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			entidadeEditada.setCasalConvidado(new Casal());
 			entidadeEditada.getCasalConvidado().setEle(new Pessoa());
 			entidadeEditada.getCasalConvidado().setEla(new Pessoa());
+			entidadeEditada.getCasalConvidado().setGrupo(presenter.getGrupoSelecionado());;
+			entidadeEditada.getCasalConvidado().setTipoCasal(TipoCasalEnum.CONVIDADO);
 		} else {
 			defineCamposCasal(casal);
 		}

@@ -661,6 +661,7 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 					quartosPanel.add(quartoWidget);
 				}else{
 					final FocusPanel focusPanel = new FocusPanel();
+					focusPanel.setSize("80px", "100px");
 					VerticalPanel quartoWidget = new VerticalPanel();
 					focusPanel.add(quartoWidget);
 					final EncontroHotelQuarto encontroHotelQuarto = getEncontroHotelQuarto(vo,quarto);

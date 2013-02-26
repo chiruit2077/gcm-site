@@ -8,11 +8,14 @@ import java.util.concurrent.Callable;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricaoFichaPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
 import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
@@ -62,23 +65,41 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 				encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(null);
 		}
 
-		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));
+		EncontroInscricaoFichaPagamento ficha = null;
+
 		if(encontroInscricaoVO.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 			q = em.createNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
 			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
 			q.executeUpdate();
 			if (encontroInscricaoVO.getEncontroInscricao().getFichaPagamento()!=null){
-				EncontroInscricaoFichaPagamento ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
+				ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
 				ficha.setStatus(TipoInscricaoFichaStatusEnum.LIBERADO);
 				ficha.setObservacao(TipoConfirmacaoEnum.DESISTENCIA.getNome());
-				ficha = em.merge(ficha);
 				EncontroInscricaoFichaPagamento vaga = new EncontroInscricaoFichaPagamento();
-				vaga.setFicha(vaga.getFicha());
-				vaga.setEncontro(vaga.getEncontro());
+				vaga.setFicha(ficha.getFicha());
+				vaga.setEncontro(ficha.getEncontro());
 				vaga.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
-				vaga.setTipo(vaga.getTipo());
+				vaga.setTipo(ficha.getTipo());
 				vaga = em.merge(vaga);
 			}
+		}else{
+			ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
+			if (ficha==null){
+				if (encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.AFILHADO) ){
+					ficha = getFichaVaga(TipoInscricaoFichaEnum.AFILHADO,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+				}else{
+					ficha = getFichaVaga(TipoInscricaoFichaEnum.ENCONTRISTA,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+				}
+			}
+			if (ficha!=null){
+				encontroInscricaoVO.getEncontroInscricao().setFichaPagamento(ficha);
+				encontroInscricaoVO.getEncontroInscricao().setCodigo(ficha.getFicha());
+			}
+		}
+		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));
+		if (ficha!=null){
+			ficha.setEncontroInscricao(encontroInscricaoVO.getEncontroInscricao());
+			ficha = em.merge(ficha);
 		}
 
 		//pagamentos
@@ -139,6 +160,22 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 
 		return encontroInscricaoVO;
 	}
+
+	@SuppressWarnings("unchecked")
+	private EncontroInscricaoFichaPagamento getFichaVaga(
+			TipoInscricaoFichaEnum tipo, Encontro encontro) {
+		if (encontro.getUsaFichaPagamento()!= null && encontro.getUsaFichaPagamento().equals(1)){
+			Query q = em.createNamedQuery("encontroInscricaoFichaPagamento.porVagalLivre");
+			q.setParameter("encontro", encontro);
+			q.setParameter("tipo", tipo);
+			q.setParameter("status", TipoInscricaoFichaStatusEnum.NORMAL);
+			List<EncontroInscricaoFichaPagamento> fichas = q.getResultList();
+			if (fichas.size()>0)
+				return fichas.get(0);
+		}
+		return null;
+	}
+
 	public EncontroInscricaoVO getEncontroInscricaoVO() {
 		return encontroInscricaoVO;
 	}

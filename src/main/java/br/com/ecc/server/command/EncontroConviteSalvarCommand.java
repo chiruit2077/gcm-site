@@ -94,6 +94,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 			if(q.getResultList().size()==0){
 				Casal casalConvidado = encontroConvite.getCasalConvidado();
 				casalConvidado.setSituacao(TipoSituacaoEnum.ATIVO);
+				casalConvidado.setGrupo(encontroConvite.getEncontro().getGrupo());
 				casalConvidado = em.merge(casalConvidado);
 
 				ei = new EncontroInscricao();

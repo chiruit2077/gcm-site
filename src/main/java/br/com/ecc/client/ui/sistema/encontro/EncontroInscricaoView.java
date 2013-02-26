@@ -328,7 +328,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 			editaDialogBox.center();
 			editaDialogBox.show();
-			codigoNumberTextBox.setFocus(true);
+			if (presenter.getEncontroSelecionado().getUsaFichaPagamento().equals(1))
+				casalSuggestBox.setFocus(true);
+			else
+				codigoNumberTextBox.setFocus(true);
 		} else {
 			presenter.getVO(encontroInscricao);
 		}
@@ -364,6 +367,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			pessoaHTMLPanel.setVisible(true);
 			fichaHTMLPanel.setVisible(true);
 			codigoNumberTextBox.setEnabled(true);
+			if (presenter.getEncontroSelecionado().getUsaFichaPagamento().equals(1))
+				codigoNumberTextBox.setEnabled(false);
 		} else {
 			participanteHTMLPanel.setVisible(true);
 			casalHTMLPanel.setVisible(false);
@@ -392,8 +397,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			casalHTMLPanel.setVisible(false);
 		}
 		codigoNumberTextBox.setNumber(encontroInscricaoVO.getEncontroInscricao().getCodigo());
-		if (presenter.getEncontroSelecionado().getUsaFichaPagamento().equals(1))
-			codigoNumberTextBox.setEnabled(false);
+		//if (presenter.getEncontroSelecionado().getUsaFichaPagamento().equals(1))
+			//codigoNumberTextBox.setEnabled(false);
 		if(encontroInscricaoVO.getEncontroInscricao().getTipo()!=null){
 			tipoLabel.setText(encontroInscricaoVO.getEncontroInscricao().getTipo().getNome());
 			ListBoxUtil.setItemSelected(tipoListBox, encontroInscricaoVO.getEncontroInscricao().getTipo().getNome());
@@ -614,7 +619,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		defineCampos(vo);
 		editaDialogBox.center();
 		editaDialogBox.show();
-		codigoNumberTextBox.setFocus(true);
+		if (presenter.getEncontroSelecionado().getUsaFichaPagamento().equals(1))
+			casalSuggestBox.setFocus(true);
+		else
+			codigoNumberTextBox.setFocus(true);
 	}
 
 	@UiHandler("enviarFichaButton")
