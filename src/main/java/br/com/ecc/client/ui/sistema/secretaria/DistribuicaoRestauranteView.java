@@ -40,8 +40,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurantePresenter> implements DistribuicaoRestaurantePresenter.Display {
 
 	@UiTemplate("DistribuicaoRestauranteView.ui.xml")
-	interface DistribucaoViewUiBinder extends UiBinder<Widget, DistribuicaoRestauranteView> {}
-	private DistribucaoViewUiBinder uiBinder = GWT.create(DistribucaoViewUiBinder.class);
+	interface DistribucaoRestauranteViewUiBinder extends UiBinder<Widget, DistribuicaoRestauranteView> {}
+	private DistribucaoRestauranteViewUiBinder uiBinder = GWT.create(DistribucaoRestauranteViewUiBinder.class);
 
 	@UiField Label tituloFormularioLabel;
 

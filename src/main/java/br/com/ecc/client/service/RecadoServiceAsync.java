@@ -3,6 +3,7 @@ package br.com.ecc.client.service;
 import java.util.Date;
 import java.util.List;
 
+import br.com.ecc.model.Agenda;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
@@ -17,4 +18,6 @@ public interface RecadoServiceAsync {
 	void listaPorGrupo(Grupo grupo, Casal casal, Date inicio, AsyncCallback<List<Recado>> callback);
 	void salvar(Recado recado, AsyncCallback<Recado> callback);
 	void listaTodosCasal(Casal casal, Date inicio, AsyncCallback<List<Recado>> callback);
+	void salvarAgenda(Agenda agenda, Encontro encontro, AsyncCallback<List<Agenda>> webAsyncCallback);
+	void excluiAgenda(Agenda agenda, Encontro encontro, AsyncCallback<List<Agenda>> webAsyncCallback);
 }

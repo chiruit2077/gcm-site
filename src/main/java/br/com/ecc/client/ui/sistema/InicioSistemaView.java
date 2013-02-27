@@ -61,6 +61,8 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -83,11 +85,22 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField VerticalPanel areaAgendaVerticalPanel;
 	@UiField VerticalPanel areaInfoVerticalPanel;
 	@UiField HorizontalPanel areaAniversarioHorizontalPanel;
+
+	@UiField DialogBox editaAgendaDialogBox;
 	@UiField Calendar agendaCalendar;
 	@UiField Button semanalButton;
 	@UiField Button mensalButton;
-	@UiField Button addEventoButton;
+	@UiField Button addAgendaButton;
 	@UiField DateBox dateBox;
+	@UiField DateBox dataInicioDateBox;
+	@UiField DateBox dataFimDateBox;
+	@UiField Button salvarAgendaButton;
+	@UiField Button excluirAgendaButton;
+	@UiField ListBox tipoAgendaLitBox;
+	@UiField TextBox tituloAgendaTextBox;
+	@UiField(provided = true) SuggestBox casalResponsavelSuggestBox;
+	private final GenericEntitySuggestOracle casalResponsavelSuggest = new GenericEntitySuggestOracle();
+
 
 	@UiField DialogBox editaDialogBox;
 	@UiField HTMLPanel tipoHTMLPanel;
@@ -114,6 +127,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField VerticalPanel convidadosVerticalPanel;
 
 	private Recado entidadeEditada;
+	private Agenda entidadeAgendaEditada;
 	DateTimeFormat dfRecado = DateTimeFormat.getFormat("dd-MMM HH:mm");
 	DateTimeFormat dfNiver = DateTimeFormat.getFormat("E, dd-MMM");
 	Date ultimoRecado = null;
@@ -125,12 +139,17 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		casalSuggest.setSuggestQuery("casal.porNomeLike");
 		casalSuggestBox = new SuggestBox(casalSuggest);
 
+		casalResponsavelSuggest.setMinimoCaracteres(2);
+		casalResponsavelSuggest.setSuggestQuery("casal.porNomeLike");
+		casalResponsavelSuggestBox = new SuggestBox(casalResponsavelSuggest);
+
 		mensagemRichTextArea = new RichTextArea();
 		mensagemRichTextToolbar = new RichTextToolbar(mensagemRichTextArea);
 
 		initWidget(uiBinder.createAndBindUi(this));
 
 		ListBoxUtil.populate(tipoLitBox, false, TipoRecadoEnum.values());
+		ListBoxUtil.populate(tipoAgendaLitBox, false, TipoAgendaEventoEnum.values());
 
 		casalSuggestBox.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
 			@Override
@@ -172,8 +191,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 		Date hoje = new Date();
 
-		DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd-MM-yyyy");
-		dateBox.setFormat(new DateBox.DefaultFormat(dateFormat));
+		dataInicioDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
+		dataInicioDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
+		dataFimDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
+		dataFimDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
+
+		dateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy")));
 		dateBox.setValue(hoje);
 		dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
             public void onValueChange(ValueChangeEvent<Date> event) {
@@ -243,6 +266,71 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		dateBox.setValue(hoje);
 		agendaCalendar.setDate(hoje);
 	}
+	@UiHandler("addAgendaButton")
+	public void addAgendaButtonClickHandler(ClickEvent event){
+		if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
+			editaAgenda(null);
+		}
+	}
+
+	public void editaAgenda(Agenda agenda){
+		limpaCamposAgenda();
+		if(agenda==null){
+			entidadeAgendaEditada = new Agenda();
+			entidadeAgendaEditada.setEncontro(presenter.getEncontroSelecionado());
+		} else {
+			entidadeAgendaEditada = agenda;
+			casalResponsavelSuggestBox.setText(agenda.getCasalResponsavel().toString());
+			casalResponsavelSuggest.setListaEntidades(new ArrayList<_WebBaseEntity>());
+			casalResponsavelSuggest.getListaEntidades().add(agenda.getCasalResponsavel());
+			dataInicioDateBox.setValue(agenda.getDataInicio());
+			dataFimDateBox.setValue(agenda.getDataFim());
+			tituloAgendaTextBox.setText(agenda.getTitulo());
+			ListBoxUtil.setItemSelected(tipoAgendaLitBox, agenda.getTipo().getNome());
+		}
+		editaAgendaDialogBox.center();
+		editaAgendaDialogBox.show();
+		dataInicioDateBox.setFocus(true);
+	}
+
+	@UiHandler("fecharAgendaButton")
+	public void fecharAgendaButtonClickHandler(ClickEvent event){
+		editaAgendaDialogBox.hide();
+	}
+
+	@UiHandler("excluirAgendaButton")
+	public void excluirAgendaButtonClickHandler(ClickEvent event){
+		editaAgendaDialogBox.hide();
+		presenter.excluiAgenda(entidadeAgendaEditada);
+	}
+
+	@UiHandler("salvarAgendaButton")
+	public void salvarAgendaButtonClickHandler(ClickEvent event){
+		Casal casal = null;
+		if(!casalResponsavelSuggestBox.getValue().equals("")){
+			casal = (Casal)ListUtil.getEntidadePorNome(casalResponsavelSuggest.getListaEntidades(), casalResponsavelSuggestBox.getValue());
+		}
+		if(casal==null){
+			Window.alert("Informe o nome do casal responsavel pela Agenda");
+			casalResponsavelSuggestBox.setFocus(true);
+			return;
+		}
+		entidadeAgendaEditada.setCasalResponsavel(casal);
+		entidadeAgendaEditada.setDataInicio(dataInicioDateBox.getValue());
+		entidadeAgendaEditada.setDataFim(dataFimDateBox.getValue());
+		entidadeAgendaEditada.setTitulo(tituloAgendaTextBox.getText());
+		entidadeAgendaEditada.setTipo((TipoAgendaEventoEnum)ListBoxUtil.getItemSelected(tipoAgendaLitBox, TipoAgendaEventoEnum.values()));
+		editaAgendaDialogBox.hide();
+		presenter.salvarAgenda(entidadeAgendaEditada);
+	}
+
+	public void limpaCamposAgenda(){
+		casalResponsavelSuggestBox.setValue(null);
+		tituloAgendaTextBox.setText(null);
+		dataInicioDateBox.setValue(null);
+		dataFimDateBox.setValue(null);
+		ListBoxUtil.setItemSelected(tipoAgendaLitBox, TipoAgendaEventoEnum.REUNIAOORACAO.getNome());
+	}
 
 	@Override
 	public void createScroll() {
@@ -255,7 +343,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				areaConvidadosVerticalPanel.setVisible(true);
 			}
 			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
-				addEventoButton.setVisible(true);
+				addAgendaButton.setVisible(true);
 			}
 			try {
 				iniciaScroll();
@@ -789,6 +877,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@Override
 	public void populaAgenda(List<Agenda> listaAgenda) {
 		agendaCalendar.suspendLayout();
+		agendaCalendar.clearAppointments();
 		for (Agenda agenda : listaAgenda) {
 			if (agenda.getTipo().equals(TipoAgendaEventoEnum.ENCONTRO)){
 				Appointment appt = new Appointment();
@@ -810,7 +899,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			}
 		}
 		agendaCalendar.resumeLayout();
-
 	}
 
 }

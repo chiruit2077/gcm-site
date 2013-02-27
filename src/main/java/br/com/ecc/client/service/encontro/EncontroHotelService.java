@@ -16,4 +16,6 @@ public interface EncontroHotelService extends RemoteService {
 	public EncontroHotelVO getVO(EncontroHotel encontroHotel) throws Exception;
 	public EncontroHotel getEncontroHotelEvento(Encontro encontroSelecionado) throws Exception;
 	public EncontroHotelVO salvaRestaurante(EncontroHotelVO encontroHotelVO) throws Exception;
+	public EncontroHotel salva(EncontroHotel hotelEditado);
+	public void exclui(EncontroHotel hotelEditado) throws Exception;
 }

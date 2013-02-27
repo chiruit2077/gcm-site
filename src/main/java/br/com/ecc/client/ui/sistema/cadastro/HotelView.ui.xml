@@ -35,7 +35,7 @@
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="350px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do Quarto">
+				         width="350px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do Hotel">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
 						<g:HTMLPanel width="100%">

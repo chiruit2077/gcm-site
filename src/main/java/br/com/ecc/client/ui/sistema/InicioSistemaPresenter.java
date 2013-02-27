@@ -186,4 +186,21 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 	public void setEncontroSelecionado(Encontro encontroSelecionado) {
 		this.encontroSelecionado = encontroSelecionado;
 	}
+
+	public void salvarAgenda(Agenda agenda) {
+		recadoService.salvarAgenda(agenda, getEncontroSelecionado(), new WebAsyncCallback<List<Agenda>>(getDisplay()) {
+			@Override
+			protected void success(List<Agenda> agenda) {
+				getDisplay().populaAgenda(agenda);
+			}
+		});
+	}
+	public void excluiAgenda(Agenda agenda) {
+		recadoService.excluiAgenda(agenda, getEncontroSelecionado(), new WebAsyncCallback<List<Agenda>>(getDisplay()) {
+			@Override
+			protected void success(List<Agenda> agenda) {
+				getDisplay().populaAgenda(agenda);
+			}
+		});
+	}
 }

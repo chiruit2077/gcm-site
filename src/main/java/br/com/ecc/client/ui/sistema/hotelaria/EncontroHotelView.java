@@ -3,11 +3,12 @@ package br.com.ecc.client.ui.sistema.hotelaria;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
-import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.LabelTotalUtil;
+import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.Hotel;
+import br.com.ecc.model.tipo.TipoEncontroHotelEnum;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,20 +25,20 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implements EncontroHotelPresenter.Display {
 
 	@UiTemplate("EncontroHotelView.ui.xml")
-	interface HotelViewUiBinder extends UiBinder<Widget, EncontroHotelView> {}
-	private HotelViewUiBinder uiBinder = GWT.create(HotelViewUiBinder.class);
+	interface EncontroHotelViewUiBinder extends UiBinder<Widget, EncontroHotelView> {}
+	private EncontroHotelViewUiBinder uiBinder = GWT.create(EncontroHotelViewUiBinder.class);
 
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 
-	@UiField NumberTextBox quantidadeQuartos;
-	@UiField TextBox nomeTextBox;
+	@UiField ListBox hotelListBox;
+	@UiField ListBox tipoListBox;
 
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
@@ -54,6 +55,7 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 		criaTabela();
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
+		ListBoxUtil.populate(tipoListBox, false, TipoEncontroHotelEnum.values());
 	}
 
 	private void criaTabela() {
@@ -63,7 +65,8 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 
 		hotelTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		hotelTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
-		hotelTableUtil.addColumn("Qtde Quartos", null, HasHorizontalAlignment.ALIGN_LEFT);
+		hotelTableUtil.addColumn("Qtde Quartos", "100", HasHorizontalAlignment.ALIGN_LEFT);
+		hotelTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_LEFT);
 	}
 
 	@UiHandler("fecharButton")
@@ -80,37 +83,40 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 	}
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
-		/*entidadeEditada.setNome(nomeTextBox.getValue());
-		entidadeEditada.setQuantidadeQuartos(Integer.parseInt(quantidadeQuartos.getText()));
-		presenter.salvar(entidadeEditada);*/
+		TipoEncontroHotelEnum tipo = (TipoEncontroHotelEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoEncontroHotelEnum.values());
+		Hotel hotel = (Hotel) ListBoxUtil.getItemSelected(hotelListBox, presenter.getListaHoteis());
+		entidadeEditada.setHotel(hotel);
+		entidadeEditada.setTipo(tipo);
+		presenter.salvar(entidadeEditada);
 	}
-	private void edita(Hotel hotel) {
+	private void edita(EncontroHotel hotel) {
 		limpaCampos();
-		/*if(hotel == null){
-			entidadeEditada = new Hotel();
+		if(hotel == null){
+			entidadeEditada = new EncontroHotel();
+			entidadeEditada.setEncontro(presenter.getEncontroSelecionado());
 		} else {
 			entidadeEditada = hotel;
 			defineCampos(hotel);
 		}
 		editaDialogBox.center();
 		editaDialogBox.show();
-		nomeTextBox.setFocus(true);*/
+		hotelListBox.setFocus(true);
 	}
 
 	public void limpaCampos(){
-		nomeTextBox.setValue(null);
-		quantidadeQuartos.setValue(null);
+		hotelListBox.setSelectedIndex(-1);
+		tipoListBox.setSelectedIndex(0);
 	}
 
-	public void defineCampos(Hotel hotel){
-		nomeTextBox.setValue(hotel.getNome());
-		quantidadeQuartos.setValue(hotel.getQuantidadeQuartos().toString());
+	public void defineCampos(EncontroHotel hotel){
+		ListBoxUtil.setItemSelected(hotelListBox, hotel.getHotel().getNome());
+		ListBoxUtil.setItemSelected(tipoListBox, hotel.getTipo().getNome());
 
 	}
 
 	@Override
 	public String getDisplayTitle() {
-		return "Cadastro de Hoteis";
+		return "Hoteis do Encontro";
 	}
 
 	@Override
@@ -119,14 +125,14 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 		hotelTableUtil.clearData();
 	}
 	@Override
-	public void populaHoteis(List<Hotel> lista) {
+	public void populaEncontroHoteis(List<EncontroHotel> lista) {
 		LabelTotalUtil.setTotal(itemTotal, lista.size(), "hotel", "hoteis", "");
 		hotelTableUtil.clearData();
 		int row = 0;
 		Image editar, excluir;
 		HorizontalPanel hp;
-		for (final Hotel hotel: lista) {
-			Object dados[] = new Object[3];
+		for (final EncontroHotel hotel: lista) {
+			Object dados[] = new Object[4];
 
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
@@ -153,12 +159,27 @@ public class EncontroHotelView extends BaseView<EncontroHotelPresenter> implemen
 			hp.add(excluir);
 
 			dados[0] = hp;
-			dados[1] = hotel.getNome();
-			dados[2] = hotel.getQuantidadeQuartos().toString();
+			dados[1] = hotel.getHotel().getNome();
+			dados[2] = hotel.getHotel().getQuantidadeQuartos().toString();
+			dados[3] = hotel.getTipo().getNome();
 			hotelTableUtil.addRow(dados,row+1);
 			row++;
 		}
 		hotelTableUtil.applyDataRowStyles();
+	}
+
+	public EncontroHotel getEntidadeEditada() {
+		return entidadeEditada;
+	}
+
+	public void setEntidadeEditada(EncontroHotel entidadeEditada) {
+		this.entidadeEditada = entidadeEditada;
+	}
+
+	@Override
+	public void populaHoteis(List<Hotel> lista) {
+		ListBoxUtil.populate(hotelListBox, false, lista);
+
 	}
 
 }

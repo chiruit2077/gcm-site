@@ -457,6 +457,9 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 		titulo.setStyleName("agrupamento-Titulo");
 		titulo.add(new Label("Legenda dos Quartos"));
 		legendaPanel.add(titulo);
+		HorizontalPanel separador = new HorizontalPanel();
+		separador.setSize("100%", "20px");
+		legendaPanel.add(separador);
 
 		TipoEncontroQuartoEnum[] values = TipoEncontroQuartoEnum.values();
 		for (TipoEncontroQuartoEnum tipoEncontroQuartoEnum : values) {
@@ -467,7 +470,7 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 			legenda.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 			legenda.add(new Label(tipoEncontroQuartoEnum.getNome()));
 			legendaPanel.add(legenda);
-			HorizontalPanel separador = new HorizontalPanel();
+			separador = new HorizontalPanel();
 			separador.setSize("100%", "20px");
 			legendaPanel.add(separador);
 		}
@@ -521,7 +524,7 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 					ladodireito.add(quartos);
 					agrupamentoPanel.add(ladodireito);
 
-					HorizontalPanel separador = new HorizontalPanel();
+					separador = new HorizontalPanel();
 					separador.setSize("100%", "20px");
 					agrupamentoPanel.add(separador);
 
@@ -558,7 +561,7 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 				}
 				panel.add(agrupamentoPanel);
 
-				HorizontalPanel separador = new HorizontalPanel();
+				separador = new HorizontalPanel();
 				separador.setSize("100%", "20px");
 				panel.add(separador);
 			}
@@ -694,11 +697,16 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 						if (encontroHotelQuarto.getEncontroInscricao4()!= null){
 							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao4().getPessoa().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao4().getPessoa().getApelido():encontroHotelQuarto.getEncontroInscricao4().getPessoa().getNome()));
 						}
+						if (encontroHotelQuarto.getEncontroInscricao4()== null && encontroHotelQuarto.getEncontroInscricao4()== null && encontroHotelQuarto.getEncontroInscricao4()== null && encontroHotelQuarto.getEncontroInscricao4()== null ){
+							quartoNomeWidget.add(new Label("VAGO"));
+						}
 					}else{
 						if (encontroHotelQuarto.getEncontroInscricao1()!= null){
 							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao1().getCasal().getEle().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao1().getCasal().getEle().getApelido():encontroHotelQuarto.getEncontroInscricao1().getCasal().getEle().getNome()));
 							quartoNomeWidget.add(new Label("e"));
 							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao1().getCasal().getEla().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao1().getCasal().getEla().getApelido():encontroHotelQuarto.getEncontroInscricao1().getCasal().getEla().getNome()));
+						}else{
+							quartoNomeWidget.add(new Label("VAGO"));
 						}
 					}
 					quartoWidget.add(quartoNomeWidget);

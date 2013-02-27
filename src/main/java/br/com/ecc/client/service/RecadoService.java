@@ -3,6 +3,7 @@ package br.com.ecc.client.service;
 import java.util.Date;
 import java.util.List;
 
+import br.com.ecc.model.Agenda;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
@@ -19,4 +20,6 @@ public interface RecadoService extends RemoteService {
 	public List<Recado> listaPorGrupo(Grupo grupo, Casal casal, Date inicio) throws Exception;
 	public List<Recado> listaTodosCasal(Casal casal, Date inicio) throws Exception;
 	public Recado salvar(Recado recado) throws Exception;
+	public List<Agenda> salvarAgenda(Agenda agenda, Encontro encontro) throws Exception;
+	public List<Agenda> excluiAgenda(Agenda agenda, Encontro encontro) throws Exception;
 }

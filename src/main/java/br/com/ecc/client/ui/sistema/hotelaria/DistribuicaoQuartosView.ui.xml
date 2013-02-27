@@ -30,6 +30,7 @@
 		</g:HTMLPanel>
 		<g:VerticalPanel ui:field="centralPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center">
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center" >
+				<g:Label styleName="portal-formLabel" text="Hotel Selecionado: " horizontalAlignment="right" />
 				<g:ListBox ui:field="hotelListBox" width="400px"/>
 				<g:Button ui:field="salvarButton">Salvar</g:Button>
 				<g:Button ui:field="printButton">Imprimir</g:Button>

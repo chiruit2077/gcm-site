@@ -11,8 +11,10 @@ import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
 import br.com.ecc.server.command.EncontroHotelQuartoSalvarCommand;
 import br.com.ecc.server.command.EncontroHotelRestauranteSalvarCommand;
+import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
+import br.com.ecc.server.command.basico.SaveEntityCommand;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -102,5 +104,19 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 		EncontroHotelRestauranteSalvarCommand cmd = injector.getInstance(EncontroHotelRestauranteSalvarCommand.class);
 		cmd.setEncontroHotelVO(encontroHotelVO);
 		return cmd.call();
+	}
+
+	@Override
+	public EncontroHotel salva(EncontroHotel hotelEditado) {
+		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
+		cmd.setBaseEntity(hotelEditado);
+		return (EncontroHotel)cmd.call();
+	}
+
+	@Override
+	public void exclui(EncontroHotel hotelEditado) throws Exception {
+		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
+		cmd.setBaseEntity(hotelEditado);
+		cmd.call();
 	}
 }

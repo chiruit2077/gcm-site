@@ -3,7 +3,7 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:rt="urn:import:br.com.ecc.client.ui.component.richtext"
-  xmlns:d="urn:import:com.google.gwt.user.datepicker.client"
+  xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
   xmlns:c="urn:import:com.bradrydzewski.gwt.calendar.client">
   	<ui:style>
 	  	.formulario{
@@ -98,12 +98,12 @@
 											<g:Image url="images/email.png" width="16px" height="auto"/>
 										</td>
 										<td><g:Label text="Agenda" styleName="{style.titulo}"/></td>
-										<td><d:DateBox ui:field="dateBox"/></td>
+										<td><dp:DateBox ui:field="dateBox" width="80px" styleName="portal-formField"/></td>
 										<td><g:Button ui:field="hojeButton">Hoje</g:Button></td>
 										<td><g:Button ui:field="mensalButton">Mensal</g:Button></td>
 										<td><g:Button ui:field="semanalButton">Semanal</g:Button></td>
 									    <td width="100px" align="right">
-									    	<g:Button ui:field="addEventoButton" visible="false">Adicionar Evento</g:Button>
+									    	<g:Button ui:field="addAgendaButton" visible="false">Adicionar Agenda</g:Button>
 									    </td>
 									</tr>
 								</table>
@@ -267,5 +267,59 @@
 				</g:VerticalPanel>
 			</g:DialogBox>
 		</g:VerticalPanel>
+	</g:VerticalPanel>
+	<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaAgendaDialogBox" visible="false"
+				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Agenda">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+						<g:HTMLPanel ui:field="tipoAgendaHTMLPanel" width="100%">
+							<table cellpadding="3" cellspacing="0" width="100%">
+								<tr style="background-color:#fcfdbb;">
+									<td class="portal-formLabel">Tipo Agenda:</td>
+									<td>
+										<g:ListBox ui:field="tipoAgendaLitBox" width="200px"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel >
+							<table cellpadding="3" align="center">
+								<tr>
+									<td class="portal-formLabel">Responsável:</td>
+									<td>
+										<g:SuggestBox ui:field="casalResponsavelSuggestBox" width="400px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Data/Hora Início:</td>
+									<td>
+										<dp:DateBox ui:field="dataInicioDateBox" width="100px" styleName="portal-formField"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Data/Hora Fim:</td>
+									<td>
+										<dp:DateBox ui:field="dataFimDateBox" width="100px" styleName="portal-formField"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Titulo:</td>
+									<td>
+										<g:TextBox ui:field="tituloAgendaTextBox" width="400px" />
+									</td>
+								</tr>
+						</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarAgendaButton">Salvar</g:Button>
+							<g:Button ui:field="excluirAgendaButton">Salvar</g:Button>
+							<g:Button ui:field="fecharAgendaButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
 	</g:VerticalPanel>
 </ui:UiBinder>

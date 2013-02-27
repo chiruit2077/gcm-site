@@ -18,6 +18,7 @@ import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.AniversarianteCasalCommand;
 import br.com.ecc.server.command.AniversariantePessoaCommand;
 import br.com.ecc.server.command.EnviaEmailCommand;
+import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 import br.com.ecc.server.command.basico.SaveEntityCommand;
 
@@ -179,6 +180,56 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 		}
 
 		return vo;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Agenda> salvarAgenda(Agenda agenda, Encontro encontro) throws Exception {
+		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
+		cmd.setBaseEntity(agenda);
+		cmd.call();
+		if(encontro!=null){
+			GetEntityListCommand cmdList = injector.getInstance(GetEntityListCommand.class);
+			cmdList.setNamedQuery("agenda.porEncontro");
+			cmdList.addParameter("encontro", encontro);
+			List<Agenda> list = cmdList.call();
+			Agenda evento = new Agenda();
+			evento.setTitulo("ECC");
+			Date inicio = new Date(encontro.getInicio().getTime());
+			evento.setDataInicio(inicio);
+			Date fim = new Date(encontro.getFim().getTime());
+			evento.setDataFim(fim);
+			evento.setTipo(TipoAgendaEventoEnum.ENCONTRO);
+			list.add(evento);
+			return list;
+		} else {
+			return new ArrayList<Agenda>();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Agenda> excluiAgenda(Agenda agenda, Encontro encontro) throws Exception {
+		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
+		cmd.setBaseEntity(agenda);
+		cmd.call();
+		if(encontro!=null){
+			GetEntityListCommand cmdList = injector.getInstance(GetEntityListCommand.class);
+			cmdList.setNamedQuery("agenda.porEncontro");
+			cmdList.addParameter("encontro", encontro);
+			List<Agenda> list = cmdList.call();
+			Agenda evento = new Agenda();
+			evento.setTitulo("ECC");
+			Date inicio = new Date(encontro.getInicio().getTime());
+			evento.setDataInicio(inicio);
+			Date fim = new Date(encontro.getFim().getTime());
+			evento.setDataFim(fim);
+			evento.setTipo(TipoAgendaEventoEnum.ENCONTRO);
+			list.add(evento);
+			return list;
+		} else {
+			return new ArrayList<Agenda>();
+		}
 	}
 
 }

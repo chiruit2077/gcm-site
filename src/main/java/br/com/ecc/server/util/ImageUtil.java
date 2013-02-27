@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+@SuppressWarnings("restriction")
 public class ImageUtil {
 
 	public static final Integer TAMANHO_IMAGEM = 1024;
