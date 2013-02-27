@@ -267,59 +267,59 @@
 				</g:VerticalPanel>
 			</g:DialogBox>
 		</g:VerticalPanel>
-	</g:VerticalPanel>
-	<g:VerticalPanel visible="false">
-			<g:DialogBox ui:field="editaAgendaDialogBox" visible="false"
-				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Agenda">
-				<g:VerticalPanel width="100%">
-					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
-						<g:HTMLPanel ui:field="tipoAgendaHTMLPanel" width="100%">
-							<table cellpadding="3" cellspacing="0" width="100%">
-								<tr style="background-color:#fcfdbb;">
-									<td class="portal-formLabel">Tipo Agenda:</td>
-									<td>
-										<g:ListBox ui:field="tipoAgendaLitBox" width="200px"/>
-									</td>
-								</tr>
+		<g:VerticalPanel visible="false">
+				<g:DialogBox ui:field="editaAgendaDialogBox" visible="false"
+					         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Agenda">
+					<g:VerticalPanel width="100%">
+						<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+							<g:HTMLPanel ui:field="tipoAgendaHTMLPanel" width="100%">
+								<table cellpadding="3" cellspacing="0" width="100%">
+									<tr style="background-color:#fcfdbb;">
+										<td class="portal-formLabel">Tipo Agenda:</td>
+										<td>
+											<g:ListBox ui:field="tipoAgendaLitBox" width="200px"/>
+										</td>
+									</tr>
+								</table>
+							</g:HTMLPanel>
+							<g:HTMLPanel >
+								<table cellpadding="3" align="center">
+									<tr>
+										<td class="portal-formLabel">Responsável:</td>
+										<td>
+											<g:SuggestBox ui:field="casalResponsavelSuggestBox" width="400px"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Data/Hora Início:</td>
+										<td>
+											<dp:DateBox ui:field="dataInicioDateBox" width="100px" styleName="portal-formField"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Data/Hora Fim:</td>
+										<td>
+											<dp:DateBox ui:field="dataFimDateBox" width="100px" styleName="portal-formField"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Titulo:</td>
+										<td>
+											<g:TextBox ui:field="tituloAgendaTextBox" width="400px" />
+										</td>
+									</tr>
 							</table>
-						</g:HTMLPanel>
-						<g:HTMLPanel >
-							<table cellpadding="3" align="center">
-								<tr>
-									<td class="portal-formLabel">Responsável:</td>
-									<td>
-										<g:SuggestBox ui:field="casalResponsavelSuggestBox" width="400px"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Data/Hora Início:</td>
-									<td>
-										<dp:DateBox ui:field="dataInicioDateBox" width="100px" styleName="portal-formField"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Data/Hora Fim:</td>
-									<td>
-										<dp:DateBox ui:field="dataFimDateBox" width="100px" styleName="portal-formField"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Titulo:</td>
-									<td>
-										<g:TextBox ui:field="tituloAgendaTextBox" width="400px" />
-									</td>
-								</tr>
-						</table>
-						</g:HTMLPanel>
+							</g:HTMLPanel>
+						</g:VerticalPanel>
+						<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+							<g:HorizontalPanel spacing="3">
+								<g:Button ui:field="salvarAgendaButton">Salvar</g:Button>
+								<g:Button ui:field="excluirAgendaButton">Excluir</g:Button>
+								<g:Button ui:field="fecharAgendaButton">Cancelar</g:Button>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
 					</g:VerticalPanel>
-					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
-						<g:HorizontalPanel spacing="3">
-							<g:Button ui:field="salvarAgendaButton">Salvar</g:Button>
-							<g:Button ui:field="excluirAgendaButton">Salvar</g:Button>
-							<g:Button ui:field="fecharAgendaButton">Cancelar</g:Button>
-						</g:HorizontalPanel>
-					</g:VerticalPanel>
-				</g:VerticalPanel>
-			</g:DialogBox>
+				</g:DialogBox>
+		</g:VerticalPanel>
 	</g:VerticalPanel>
 </ui:UiBinder>

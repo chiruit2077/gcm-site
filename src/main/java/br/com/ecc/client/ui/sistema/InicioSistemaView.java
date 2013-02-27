@@ -7,6 +7,7 @@ import java.util.List;
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.richtext.RichTextToolbar;
+import br.com.ecc.client.util.DateUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.model.Agenda;
@@ -23,9 +24,8 @@ import br.com.ecc.model.vo.AniversarianteVO;
 import com.bradrydzewski.gwt.calendar.client.Appointment;
 import com.bradrydzewski.gwt.calendar.client.Calendar;
 import com.bradrydzewski.gwt.calendar.client.CalendarSettings;
+import com.bradrydzewski.gwt.calendar.client.CalendarSettings.Click;
 import com.bradrydzewski.gwt.calendar.client.CalendarViews;
-import com.bradrydzewski.gwt.calendar.client.event.DateRequestEvent;
-import com.bradrydzewski.gwt.calendar.client.event.DateRequestHandler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -33,6 +33,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -44,7 +46,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
@@ -73,6 +74,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	interface InicioSistemaViewUiBinder extends UiBinder<Widget, InicioSistemaView> {}
 	private InicioSistemaViewUiBinder uiBinder = GWT.create(InicioSistemaViewUiBinder.class);
 
+	private List<Agenda> listaAgenda;
 
 	@UiField Image logoImage;
 	@UiField Image casalImage;
@@ -193,6 +195,11 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 		dataInicioDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataInicioDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
+		dataInicioDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+            public void onValueChange(ValueChangeEvent<Date> event) {
+            	dataFimDateBox.setValue(DateUtil.addHoras(event.getValue(), 1));
+            }
+        });
 		dataFimDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataFimDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 
@@ -204,21 +211,24 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
             }
         });
 
-		agendaCalendar.addDateRequestHandler(new DateRequestHandler<Date>(){
-			public void onDateRequested(DateRequestEvent<Date> event) {
-				Window.alert("requested: " + event.getTarget() + " " + ((Element)event.getClicked()).getInnerText());
-			}
-        });
+		agendaCalendar.addOpenHandler(new OpenHandler<Appointment>(){
+			  @Override
+			  public void onOpen(OpenEvent<Appointment> event) {
+			     Agenda agenda = getAgenda(event.getTarget().getId());
+			     if( agenda != null ) editaAgenda(agenda);
+			  }
+		});
 
 		agendaCalendar.setSize("100%","600px");
 		agendaCalendar.setView(CalendarViews.MONTH);
 		CalendarSettings settings = new CalendarSettings();
 		settings.setIntervalsPerHour(4);
 		settings.setEnableDragDrop(false);
+		settings.setTimeBlockClickNumber(Click.Double);
 		agendaCalendar.setSettings(settings);
+		agendaCalendar.setDate(hoje);
 		agendaCalendar.scrollToHour(hoje.getHours());
 
-		agendaCalendar.setDate(hoje);
 
 		Window.addResizeHandler(new ResizeHandler() {
             public void onResize(ResizeEvent event) {
@@ -232,6 +242,14 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
             		agendaCalendar.setHeight(areaAgendaVerticalPanel.getElement().getClientHeight() - 85 + "px");
             }
 		});
+	}
+
+	public Agenda getAgenda(String id) {
+		for (Agenda agenda : getListaAgenda()) {
+			if( agenda.getId() != null && agenda.getId().toString().equals(id))
+				return agenda;
+		}
+		return null;
 	}
 
 	private int height = -1;
@@ -278,6 +296,9 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		if(agenda==null){
 			entidadeAgendaEditada = new Agenda();
 			entidadeAgendaEditada.setEncontro(presenter.getEncontroSelecionado());
+			editaAgendaDialogBox.center();
+			editaAgendaDialogBox.show();
+			dataInicioDateBox.setFocus(true);
 		} else {
 			entidadeAgendaEditada = agenda;
 			casalResponsavelSuggestBox.setText(agenda.getCasalResponsavel().toString());
@@ -287,10 +308,10 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			dataFimDateBox.setValue(agenda.getDataFim());
 			tituloAgendaTextBox.setText(agenda.getTitulo());
 			ListBoxUtil.setItemSelected(tipoAgendaLitBox, agenda.getTipo().getNome());
+			editaAgendaDialogBox.center();
+			editaAgendaDialogBox.show();
+			tituloAgendaTextBox.setFocus(true);
 		}
-		editaAgendaDialogBox.center();
-		editaAgendaDialogBox.show();
-		dataInicioDateBox.setFocus(true);
 	}
 
 	@UiHandler("fecharAgendaButton")
@@ -876,6 +897,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	@Override
 	public void populaAgenda(List<Agenda> listaAgenda) {
+		setListaAgenda(listaAgenda);
 		agendaCalendar.suspendLayout();
 		agendaCalendar.clearAppointments();
 		for (Agenda agenda : listaAgenda) {
@@ -886,6 +908,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				appt.setAllDay(true);
 				appt.setTitle(agenda.getDescricao());
 				appt.setStyle(agenda.getTipo().getCor());
+				appt.setId("0");
 				agendaCalendar.addAppointment(appt);
 			}else{
 				Appointment appt = new Appointment();
@@ -895,10 +918,19 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				appt.setStyle(agenda.getTipo().getCor());
 				appt.setDescription(agenda.getDescricao());
 				appt.setLocation(agenda.getEnderecoFull());
+				appt.setId(agenda.getId().toString());
 				agendaCalendar.addAppointment(appt);
 			}
 		}
 		agendaCalendar.resumeLayout();
+	}
+
+	public List<Agenda> getListaAgenda() {
+		return listaAgenda;
+	}
+
+	public void setListaAgenda(List<Agenda> listaAgenda) {
+		this.listaAgenda = listaAgenda;
 	}
 
 }
