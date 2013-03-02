@@ -14,7 +14,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
+import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 
 @Entity
@@ -43,7 +43,7 @@ public class EncontroInscricaoFichaPagamento extends _WebBaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(length=30)
-	private TipoInscricaoFichaEnum tipo;
+	private TipoInscricaoCasalEnum tipo;
 
 	private Integer ficha;
 
@@ -67,10 +67,10 @@ public class EncontroInscricaoFichaPagamento extends _WebBaseEntity {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public TipoInscricaoFichaEnum getTipo() {
+	public TipoInscricaoCasalEnum getTipo() {
 		return tipo;
 	}
-	public void setTipo(TipoInscricaoFichaEnum tipo) {
+	public void setTipo(TipoInscricaoCasalEnum tipo) {
 		this.tipo = tipo;
 	}
 	public Integer getVersion() {

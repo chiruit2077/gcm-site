@@ -16,14 +16,18 @@ import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Pessoa;
+import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -50,59 +54,60 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 	@UiTemplate("AgrupamentoView.ui.xml")
 	interface AgrupamentoViewUiBinder extends UiBinder<Widget, AgrupamentoView> {}
 	private AgrupamentoViewUiBinder uiBinder = GWT.create(AgrupamentoViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
-	
+
 	@UiField TextBox nomeTextBox;
-	
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
-	
+
 	@UiField CheckBox completoCheckBox;
-	
+
 	@UiField(provided=true) FlexTable agrupamentoFlexTable;
 	private FlexTableUtil agrupamentoTableUtil = new FlexTableUtil();
-	
+
 	@UiField Label itemMembroTotal;
 	@UiField(provided=true) FlexTable membroFlexTable;
 	private FlexTableUtil membroTableUtil = new FlexTableUtil();
 
 	@UiField(provided = true) SuggestBox casalSuggestBox;
 	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField(provided = true) SuggestBox pessoaSuggestBox;
 	private final GenericEntitySuggestOracle pessoaSuggest = new GenericEntitySuggestOracle();
-	
+
 	@UiField ListBox tipoListBox;
-	
+	@UiField ListBox tipoInscricaoListBox;
+
 	@UiField RadioButton grupoRadioButton;
 	@UiField RadioButton encontroRadioButton;
 	@UiField HTMLPanel encontroMembroHTMLPanel;
-	
+
 	private Casal casalEditado;
 	private Pessoa pessoaEditada;
-	
+
 	public AgrupamentoView() {
 		criaTabela();
 		criaTabelaMembro();
-		
+
 		casalSuggest.setMinimoCaracteres(2);
 		casalSuggest.setSuggestQuery("casal.porNomeLike");
 		casalSuggestBox = new SuggestBox(casalSuggest);
-		
+
 		pessoaSuggest.setMinimoCaracteres(2);
 		pessoaSuggest.setSuggestQuery("pessoa.porNomeLike");
 		pessoaSuggestBox = new SuggestBox(pessoaSuggest);
-		
+
 		casalSuggestBox.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
 				casalEditado = null;
 				pessoaEditada = null;
-				tipoListBox.setSelectedIndex(0);
+				tipoInscricaoListBox.setSelectedIndex(0);
 				if(!casalSuggestBox.getValue().equals("")){
 					casalEditado = (Casal)ListUtil.getEntidadePorNome(casalSuggest.getListaEntidades(), casalSuggestBox.getValue());
 					pessoaSuggestBox.setValue(null);
@@ -114,42 +119,40 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			public void onSelection(SelectionEvent<Suggestion> event) {
 				pessoaEditada = null;
 				casalEditado = null;
-				tipoListBox.setSelectedIndex(0);
+				tipoInscricaoListBox.setSelectedIndex(0);
 				if(!pessoaSuggestBox.getValue().equals("")){
 					pessoaEditada = (Pessoa)ListUtil.getEntidadePorNome(pessoaSuggest.getListaEntidades(), pessoaSuggestBox.getValue());
 					casalSuggestBox.setValue(null);
 				}
 			}
 		});
-		
+
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
-		
-		tipoListBox.addItem("");
-		tipoListBox.addItem("Todos os inscritos no encontro");
-		for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
-			tipoListBox.addItem(tipo.getNome());
-		}
+
+		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoCasalEnum.values());
 	}
-	
+
 	private void criaTabela() {
 		agrupamentoFlexTable = new FlexTable();
 		agrupamentoFlexTable.setStyleName("portal-formSmall");
 		agrupamentoTableUtil.initialize(agrupamentoFlexTable);
-		
+
 		agrupamentoTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		agrupamentoTableUtil.addColumn("Nome", "200", HasHorizontalAlignment.ALIGN_LEFT);
+		agrupamentoTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	private void criaTabelaMembro() {
 		membroFlexTable = new FlexTable();
 		membroFlexTable.setStyleName("portal-formSmall");
 		membroTableUtil.initialize(membroFlexTable);
-		
+
 		membroTableUtil.addColumn("", "20", HasHorizontalAlignment.ALIGN_CENTER);
 		membroTableUtil.addColumn("Nome", null, HasHorizontalAlignment.ALIGN_LEFT);
+		membroTableUtil.addColumn("Rotulo", "50", HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -168,6 +171,11 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 	}
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
+		TipoInscricaoCasalEnum tipo = (TipoInscricaoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoCasalEnum.values());
+		if (tipo == null){
+			Window.alert("Escolha o Tipo!");
+			return;
+		}
 		presenter.getAgrupamentoVO().getAgrupamento().setGrupo(null);
 		presenter.getAgrupamentoVO().getAgrupamento().setEncontro(null);
 		if(grupoRadioButton.getValue()){
@@ -176,6 +184,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			presenter.getAgrupamentoVO().getAgrupamento().setEncontro(presenter.getEncontroSelecionado());
 		}
 		presenter.getAgrupamentoVO().getAgrupamento().setNome(nomeTextBox.getValue());
+		presenter.getAgrupamentoVO().getAgrupamento().setTipo(tipo);
 		presenter.salvar();
 	}
 	private void edita(Agrupamento agrupamento) {
@@ -184,6 +193,13 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			presenter.setAgrupamentoVO(new AgrupamentoVO());
 			presenter.getAgrupamentoVO().setAgrupamento(new Agrupamento());
 			presenter.getAgrupamentoVO().setListaMembros(new ArrayList<AgrupamentoMembro>());
+			presenter.getAgrupamentoVO().getAgrupamento().setTipo(TipoInscricaoCasalEnum.ENCONTRISTA);
+			for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
+				if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(TipoInscricaoCasalEnum.ENCONTRISTA))
+					tipoInscricaoListBox.addItem(tipo.getNome());
+			}
+			ListBoxUtil.setItemSelected(tipoListBox, TipoInscricaoCasalEnum.ENCONTRISTA.getNome());
+			LabelTotalUtil.setTotal(itemMembroTotal, 0, "membro", "membros", "");
 		} else {
 			presenter.getVO(agrupamento);
 		}
@@ -191,17 +207,46 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		editaDialogBox.show();
 		nomeTextBox.setFocus(true);
 	}
-	
+
 	public void limpaCampos(){
+		tipoInscricaoListBox.clear();
+		tipoInscricaoListBox.addItem("");
+		tipoListBox.addItem("Todos os inscritos pelo Tipo");
 		nomeTextBox.setValue(null);
 		membroTableUtil.clearData();
 	}
 
+	@UiHandler("tipoListBox")
+	public void tipoListBoxChangeHandler(ChangeEvent event){
+		TipoInscricaoCasalEnum tipoCasal = (TipoInscricaoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoCasalEnum.values());
+		tipoInscricaoListBox.clear();
+		tipoInscricaoListBox.addItem("");
+		tipoListBox.addItem("Todos os inscritos pelo Tipo");
+		for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
+			if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(tipoCasal))
+				tipoInscricaoListBox.addItem(tipo.getNome());
+		}
+	}
+
+	/*@UiHandler("membroFlexTable")
+	public void membroFlexTableClickEvent(ClickEvent event){
+		int cellIndex = membroFlexTable.getCellForEvent(event).getCellIndex();
+        int rowIndex = membroFlexTable.getCellForEvent(event).getRowIndex();
+	}*/
+
 	public void defineCampos(AgrupamentoVO agrupamentoVO){
 		nomeTextBox.setValue(agrupamentoVO.getAgrupamento().getNome());
+		if (agrupamentoVO.getAgrupamento().getTipo() != null){
+			ListBoxUtil.setItemSelected(tipoListBox, agrupamentoVO.getAgrupamento().getTipo().getNome());
+			for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
+				if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(agrupamentoVO.getAgrupamento().getTipo()))
+					tipoInscricaoListBox.addItem(tipo.getNome());
+			}
+
+		}
 		populaMembros();
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Cadastro de Agrupamentos";
@@ -220,8 +265,8 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		Image editar, excluir;
 		HorizontalPanel hp;
 		for (final Agrupamento agrupamento: lista) {
-			Object dados[] = new Object[2];
-			
+			Object dados[] = new Object[3];
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -245,16 +290,19 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			hp.setSpacing(1);
 			hp.add(editar);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
 			dados[1] = agrupamento.getNome();
+			if (agrupamento.getTipo()!= null)
+				dados[2] = agrupamento.getTipo().getNome();
+			else
+				dados[2] = "";
 			agrupamentoTableUtil.addRow(dados,row+1);
 			row++;
 		}
 		agrupamentoTableUtil.applyDataRowStyles();
 	}
 	public void populaMembros() {
-		LabelTotalUtil.setTotal(itemMembroTotal, presenter.getAgrupamentoVO().getListaMembros().size(), "membro", "membros", "");
 		final boolean completo = completoCheckBox.getValue();
 		Collections.sort(presenter.getAgrupamentoVO().getListaMembros(), new Comparator<AgrupamentoMembro>() {
 			@Override
@@ -294,8 +342,8 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		Image excluir;
 		HorizontalPanel hp;
 		for (final AgrupamentoMembro membro: presenter.getAgrupamentoVO().getListaMembros()) {
-			Object dados[] = new Object[2];
-			
+			Object dados[] = new Object[3];
+
 			excluir = new Image("images/delete.png");
 			excluir.setStyleName("portal-ImageCursor");
 			excluir.addClickHandler(new ClickHandler() {
@@ -307,21 +355,33 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 					}
 				}
 			});
-			
+
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
 			if(completo){
 				dados[1] = membro.getCasal()==null?membro.getPessoa().toString():membro.getCasal().toString();
 			} else {
 				dados[1] = membro.getCasal()==null?membro.getPessoa().getApelido():membro.getCasal().getApelidos("e");
 			}
+			TextBox textBox = new TextBox();
+			textBox.setSize("195px", "100%");
+			textBox.setMaxLength(50);
+			textBox.setText(membro.getRotulo());
+			textBox.addValueChangeHandler(new ValueChangeHandler<String>() {
+				@Override
+				public void onValueChange(ValueChangeEvent<String> event) {
+					membro.setRotulo(event.getValue());
+				}
+			});
+			dados[2] = textBox;
 			membroTableUtil.addRow(dados,row+1);
 			row++;
 		}
+		LabelTotalUtil.setTotal(itemMembroTotal, row, "membro", "membros", "");
 		membroTableUtil.applyDataRowStyles();
 	}
 
@@ -330,31 +390,10 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		defineCampos(vo);
 	}
 
-//	@Override
-//	public void populaEncontro(List<Encontro> lista) {
-//		this.listaEncontro = lista;
-//		ListBoxUtil.populate(encontroListBox, true, lista);
-//	}
-//	
-//	public Encontro getEncontroSelecionado(){
-//		return (Encontro) ListBoxUtil.getItemSelected(encontroListBox, listaEncontro);
-//	}
-//	@UiHandler("encontroListBox")
-//	public void encontroListBoxChangeHandler(ChangeEvent event) {
-//		presenter.setListaInscricoes(new ArrayList<EncontroInscricao>());
-//		pessoaEditada = null;
-//		casalEditado = null;
-//		pessoaSuggestBox.setValue(null);
-//		casalSuggestBox.setValue(null);
-//		if(getEncontroSelecionado()!=null){
-//			presenter.buscaAgrupamentos(getEncontroSelecionado());
-//			presenter.buscaInscricoes(getEncontroSelecionado());
-//		}
-//	}
-	
 	@UiHandler("adicionarMembroButton")
 	public void adicionarMembroButtonClickHandler(ClickEvent event){
-		TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values());
+		TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoInscricaoListBox, TipoInscricaoEnum.values());
+		TipoInscricaoCasalEnum tipoCasal = (TipoInscricaoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoCasalEnum.values());
 		AgrupamentoMembro membro = null;
 		if(pessoaEditada!=null){
 			membro = new AgrupamentoMembro();
@@ -372,7 +411,8 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			casalSuggestBox.setValue(null);
 		} else if (presenter.getListaInscricoes().size()>0){
 			for (EncontroInscricao ei : presenter.getListaInscricoes()) {
-				if(tipoListBox.getSelectedIndex()==1 || (tipo!=null && ei.getTipo().equals(tipo))){
+				if((tipoInscricaoListBox.getSelectedIndex()==1 && TipoInscricaoCasalEnum.getPorInscricaoCasal(ei.getTipo()).equals(tipoCasal) ) ||
+						(tipo!=null && ei.getTipo().equals(tipo))){
 					membro = new AgrupamentoMembro();
 					if(ei.getCasal()!=null){
 						membro.setCasal(ei.getCasal());
@@ -389,7 +429,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			populaMembros();
 		}
 	}
-	
+
 	private boolean buscaMembro(AgrupamentoMembro membro){
 		for (AgrupamentoMembro m : presenter.getAgrupamentoVO().getListaMembros()) {
 			if(m.getCasal()!=null && membro.getCasal()!=null && m.getCasal().getId().equals(membro.getCasal().getId())){
@@ -401,12 +441,12 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		}
 		return false;
 	}
-	
+
 	@UiHandler("completoCheckBox")
 	public void completoCheckBoxClickHandler(ClickEvent event){
 		populaMembros();
 	}
-	
+
 	@UiHandler("excluirMembroButton")
 	public void excluirMembroButtonClickHandler(ClickEvent event){
 		if(Window.confirm("Deseja excluir todos os membros deste agrupamento?")){
@@ -426,7 +466,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			presenter.buscaAgrupamentos(presenter.getEncontroSelecionado());
 		}
 	}
-	
+
 	@UiHandler("encontroRadioButton")
 	public void encontroRadioButtonClickHandler(ClickEvent event){
 		grupoRadioButtonClickHandler(null);
@@ -439,7 +479,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		} else {
 			presenter.buscaAgrupamentos(presenter.getEncontroSelecionado());
 		}
-		
+
 	}
-	
+
 }

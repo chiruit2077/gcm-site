@@ -15,7 +15,7 @@ import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
-import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
+import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
@@ -86,9 +86,9 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
 			if (ficha==null){
 				if (encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.AFILHADO) ){
-					ficha = getFichaVaga(TipoInscricaoFichaEnum.AFILHADO,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+					ficha = getFichaVaga(TipoInscricaoCasalEnum.AFILHADO,encontroInscricaoVO.getEncontroInscricao().getEncontro());
 				}else{
-					ficha = getFichaVaga(TipoInscricaoFichaEnum.ENCONTRISTA,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+					ficha = getFichaVaga(TipoInscricaoCasalEnum.ENCONTRISTA,encontroInscricaoVO.getEncontroInscricao().getEncontro());
 				}
 			}
 			if (ficha!=null){
@@ -163,7 +163,7 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 
 	@SuppressWarnings("unchecked")
 	private EncontroInscricaoFichaPagamento getFichaVaga(
-			TipoInscricaoFichaEnum tipo, Encontro encontro) {
+			TipoInscricaoCasalEnum tipo, Encontro encontro) {
 		if (encontro.getUsaFichaPagamento()!= null && encontro.getUsaFichaPagamento().equals(1)){
 			Query q = em.createNamedQuery("encontroInscricaoFichaPagamento.porVagalLivre");
 			q.setParameter("encontro", encontro);

@@ -123,11 +123,10 @@
 										<g:TextBox ui:field="eleNomeTextBox" width="250px"/>
 										<g:SuggestBox ui:field="eleSuggestBox" width="250px" visible="false"/>
 									</td>
-									<td class="portal-formLabelNormal">Apelido:</td>
+									<td class="portal-formLabelNormal">Como Gosta de ser Chamado:</td>
 									<td width="150px">
 										<g:TextBox ui:field="eleApelidoTextBox" width="150px" />
 									</td>
-									<td style="font-style: italic;">[Como teus amigos te chamam]</td>
 								</tr>
 							</table>
 						</g:HTMLPanel>
@@ -219,11 +218,10 @@
 										<g:TextBox ui:field="elaNomeTextBox" width="250px"/>
 										<g:SuggestBox ui:field="elaSuggestBox" width="250px" visible="false"/>
 									</td>
-									<td class="portal-formLabelNormal">Apelido:</td>
+									<td class="portal-formLabelNormal">Como Gosta de ser Chamado:</td>
 									<td width="150px">
 										<g:TextBox ui:field="elaApelidoTextBox" width="150px" />
 									</td>
-									<td style="font-style: italic;">[Como teus amigos te chamam]</td>
 								</tr>
 							</table>
 						</g:HTMLPanel>

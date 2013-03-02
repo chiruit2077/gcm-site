@@ -7,7 +7,7 @@ import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.EncontroInscricaoFichaPagamento;
-import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
+import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 
 import com.google.gwt.core.client.GWT;
@@ -66,7 +66,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 
-		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoFichaEnum.values());
+		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoCasalEnum.values());
 		ListBoxUtil.populate(statusListBox, false, TipoInscricaoFichaStatusEnum.values());
 	}
 
@@ -102,7 +102,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		TipoInscricaoFichaStatusEnum status = (TipoInscricaoFichaStatusEnum) ListBoxUtil.getItemSelected(statusListBox, TipoInscricaoFichaStatusEnum.values());
-		TipoInscricaoFichaEnum tipo = (TipoInscricaoFichaEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoFichaEnum.values());
+		TipoInscricaoCasalEnum tipo = (TipoInscricaoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoCasalEnum.values());
 		if (tipo == null){
 			Window.alert("Escolha o Tipo!");
 			return;

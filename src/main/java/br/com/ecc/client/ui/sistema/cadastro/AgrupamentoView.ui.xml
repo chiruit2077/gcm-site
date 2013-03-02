@@ -1,5 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder 
+<ui:UiBinder
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
@@ -42,9 +42,15 @@
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" width="100%">
 								<tr>
-									<td class="portal-formLabel" width="100px">Nome:</td>
+									<td class="portal-formLabel" width="200px">Nome:</td>
 									<td>
 										<g:TextBox ui:field="nomeTextBox" width="300px" maxLength="150"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="200px">Tipo:</td>
+									<td>
+										<g:ListBox ui:field="tipoListBox" width="250px"/>
 									</td>
 								</tr>
 								<tr>
@@ -71,9 +77,9 @@
 						<g:HTMLPanel ui:field="encontroMembroHTMLPanel" width="100%" visible="false">
 							<table cellpadding="3" width="100%">
 								<tr>
-									<td class="portal-formLabel" width="100px">Tipo:</td>
+									<td class="portal-formLabel" width="200px">Filtro Tipo Inscrição:</td>
 									<td>
-										<g:ListBox ui:field="tipoListBox" width="250"/>
+										<g:ListBox ui:field="tipoInscricaoListBox" width="250px"/>
 									</td>
 								</tr>
 							</table>

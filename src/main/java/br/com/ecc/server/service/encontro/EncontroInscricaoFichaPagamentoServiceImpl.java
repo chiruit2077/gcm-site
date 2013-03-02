@@ -6,7 +6,7 @@ import java.util.List;
 import br.com.ecc.client.service.encontro.EncontroInscricaoFichaPagamentoService;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricaoFichaPagamento;
-import br.com.ecc.model.tipo.TipoInscricaoFichaEnum;
+import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
@@ -57,9 +57,9 @@ public class EncontroInscricaoFichaPagamentoServiceImpl extends SecureRemoteServ
 				ficha.setEncontro(encontroSelecionado);
 				ficha.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
 				if (getQtdeAfilhados(listaaux) < encontroSelecionado.getQuantidadeAfilhados())
-					ficha.setTipo(TipoInscricaoFichaEnum.AFILHADO);
+					ficha.setTipo(TipoInscricaoCasalEnum.AFILHADO);
 				else
-					ficha.setTipo(TipoInscricaoFichaEnum.ENCONTRISTA);
+					ficha.setTipo(TipoInscricaoCasalEnum.ENCONTRISTA);
 				salvaFicha(ficha);
 				listaaux.add(ficha);
 			}
@@ -70,7 +70,7 @@ public class EncontroInscricaoFichaPagamentoServiceImpl extends SecureRemoteServ
 			List<EncontroInscricaoFichaPagamento> lista) {
 		int qtde = 0;
 		for (EncontroInscricaoFichaPagamento encontroInscricaoFichaPagamento : lista) {
-			if (encontroInscricaoFichaPagamento.getTipo().equals(TipoInscricaoFichaEnum.AFILHADO) && encontroInscricaoFichaPagamento.getStatus().equals(TipoInscricaoFichaStatusEnum.NORMAL))
+			if (encontroInscricaoFichaPagamento.getTipo().equals(TipoInscricaoCasalEnum.AFILHADO) && encontroInscricaoFichaPagamento.getStatus().equals(TipoInscricaoFichaStatusEnum.NORMAL))
 				qtde++;
 		}
 		return qtde;

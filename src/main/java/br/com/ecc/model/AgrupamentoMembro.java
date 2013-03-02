@@ -1,5 +1,6 @@
 package br.com.ecc.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,9 +16,9 @@ import javax.persistence.Version;
 @SequenceGenerator(name="SQ_AGRUPAMENTOMEMBRO", sequenceName="SQ_AGRUPAMENTOMEMBRO")
 @NamedQueries({
 	@NamedQuery(name="agrupamentoMembro.porAgrupamento", query="select u from AgrupamentoMembro u where u.agrupamento = :agrupamento"),
-	@NamedQuery(name="agrupamentoMembro.deletePorAgrupamento", 
+	@NamedQuery(name="agrupamentoMembro.deletePorAgrupamento",
 		query="delete from AgrupamentoMembro u where u.agrupamento = :agrupamento"),
-	@NamedQuery(name="agrupamentoMembro.deletePorAgrupamentoNotIn", 
+	@NamedQuery(name="agrupamentoMembro.deletePorAgrupamentoNotIn",
 		query="delete from AgrupamentoMembro u where u.agrupamento = :agrupamento and u not in (:lista)")
 })
 public class AgrupamentoMembro extends _WebBaseEntity {
@@ -26,19 +27,22 @@ public class AgrupamentoMembro extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_AGRUPAMENTOMEMBRO", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="agrupamento")
 	private Agrupamento agrupamento;
-	
+
 	@ManyToOne
 	@JoinColumn(name="casal")
 	private Casal casal;
-	
+
 	@ManyToOne
 	@JoinColumn(name="pessoa")
 	private Pessoa pessoa;
-	
+
+	@Column(length=50)
+	private String rotulo;
+
 	@Version
 	private Integer version;
 
@@ -71,5 +75,11 @@ public class AgrupamentoMembro extends _WebBaseEntity {
 	}
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+	public String getRotulo() {
+		return rotulo;
+	}
+	public void setRotulo(String rotulo) {
+		this.rotulo = rotulo;
 	}
 }
