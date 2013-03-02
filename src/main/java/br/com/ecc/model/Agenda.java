@@ -80,8 +80,12 @@ public class Agenda extends _WebBaseEntity {
 
 	@Override
 	public String toString() {
-		if (getTitulo()!=null)
-			return getTipo().getNome() + " - " + getTitulo();
+		if (getTitulo()!=null){
+			if (getTitulo() != null && !getTitulo().equals(""))
+				return getTipo().getNome() + " - " + getTitulo();
+			else
+				return getTipo().getNome();
+		}
 		return getTipo().getNome();
 	}
 
