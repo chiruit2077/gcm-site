@@ -44,7 +44,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 	public MainPresenter(Display display, WebResource ECCResource) {
 		super(display, ECCResource);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public interface Display extends BaseDisplay {
 		void showState(Presenter presenter, String title);
@@ -56,7 +56,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 		void defineGrupo();
 		void defineEncontro();
 	}
-	
+
 	AdministracaoServiceAsync service = GWT.create(AdministracaoService.class);
 	private Casal casal;
 	private List<Grupo> listaGrupos;
@@ -86,7 +86,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 							conectado(event.getPresenterCode(), dadosLoginVO.getUsuario());
 						}
 					}
-					
+
 				});
 			}
 		});
@@ -136,7 +136,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 			}
 		});
 	}
-	
+
 	private void verificaHistory() {
 		if(History.getToken() != null && !"".equals(History.getToken())) {
 			getWebResource().getPlaceManager().currentPlace();
@@ -151,7 +151,7 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 			protected void success(Void result) {
 				Cookies.removeCookie("ecc_conectado");
 				Cookies.removeCookie("ecc_userId");
-				
+
 				String url = Window.Location.getHref();
 				url = url.substring(0,url.indexOf("#"));
 				reload(url);
@@ -160,17 +160,19 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 			}
 		});
 	}
-	native void reload(String url)/*-{ 
-	    $wnd.location.replace(url); 
-	}-*/; 
-	
+	native void reload(String url)/*-{
+	    $wnd.location.replace(url);
+	}-*/;
+
 	public void conectar(final String email, final String senha, final Integer presenterCode) {
 		service.login(email, senha, new WebAsyncCallback<DadosLoginVO>(getDisplay()) {
 			@Override
 			protected void success(DadosLoginVO dadosLoginVO) {
 				if(dadosLoginVO.getUsuario()!=null){
 					setCasal(dadosLoginVO.getCasal());
-					Cookies.setCookie("ecc_email", dadosLoginVO.getUsuario().getEmail(), new Date(System.currentTimeMillis()+(1000L*3600L*24L*30L)));
+					Cookies.setCookie("ecc_email", email, new Date(System.currentTimeMillis()+(1000L*3600L*24L*30L)));
+					if (!GWT.isProdMode())
+						Cookies.setCookie("ecc_pass", senha, new Date(System.currentTimeMillis()+(1000L*3600L*24L*30L)));
 					conectado(presenterCode, dadosLoginVO.getUsuario());
 				}
 			}

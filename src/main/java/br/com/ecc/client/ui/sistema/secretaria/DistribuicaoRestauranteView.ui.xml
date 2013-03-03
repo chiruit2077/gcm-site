@@ -32,13 +32,13 @@
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="left" >
 				<g:Label styleName="portal-formLabel" text="Restaurante Selecionado: " horizontalAlignment="right" />
 				<g:ListBox ui:field="restauranteListBox" width="400px" />
+				<g:Button ui:field="gerarDistribuicaoButton">Gerar Distribuição Automática</g:Button>
+				<g:Button ui:field="limpaDistribuicaoButton">Limpa todas Distribuições</g:Button>
 				<g:Button ui:field="salvarButton">Salvar</g:Button>
 				<g:Button ui:field="printButton">Imprimir</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
 			<g:HorizontalPanel spacing="2" width="100%">
-				<g:VerticalPanel ui:field="legendaPanel" styleName="portal-portlet-content" width="100px" horizontalAlignment="center">
-				</g:VerticalPanel>
 				<g:HorizontalPanel ui:field="distribuicaoPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
 				</g:HorizontalPanel>
 			</g:HorizontalPanel>

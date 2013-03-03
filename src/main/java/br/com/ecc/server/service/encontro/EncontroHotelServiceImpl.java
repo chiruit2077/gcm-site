@@ -1,11 +1,15 @@
 package br.com.ecc.server.service.encontro;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.service.encontro.EncontroHotelService;
+import br.com.ecc.model.Agrupamento;
+import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.tipo.Operacao;
+import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.EncontroHotelVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
@@ -51,7 +55,7 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 		GetEntityListCommand cmdAgrupamentos = injector.getInstance(GetEntityListCommand.class);
 		cmdAgrupamentos.setNamedQuery("hotelAgrupamento.porHotel");
 		cmdAgrupamentos.addParameter("hotel", vo.getEncontroHotel().getHotel());
-		vo.setListaAgrupamentos(cmdAgrupamentos.call());
+		vo.setListaHotelAgrupamentos(cmdAgrupamentos.call());
 
 		GetEntityListCommand cmbQuarto = injector.getInstance(GetEntityListCommand.class);
 		cmbQuarto.setNamedQuery("quarto.porHotel");
@@ -72,6 +76,33 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 		cmbMesa.setNamedQuery("mesa.porHotel");
 		cmbMesa.addParameter("hotel", vo.getEncontroHotel().getHotel());
 		vo.setListaMesas(cmbMesa.call());
+
+		List<AgrupamentoVO> listaAgrupamentoVO = new ArrayList<AgrupamentoVO>();
+		GetEntityListCommand cmdAgrupamento = injector.getInstance(GetEntityListCommand.class);
+		cmdAgrupamento.setNamedQuery("agrupamento.porEncontro");
+		cmdAgrupamento.addParameter("encontro", vo.getEncontroHotel().getEncontro());
+		List<Agrupamento> listaAgrupamemto = (List<Agrupamento>) cmdAgrupamento.call();
+		for (Agrupamento agrupamento : listaAgrupamemto) {
+			AgrupamentoVO voagrup = new AgrupamentoVO();
+			voagrup.setAgrupamento(agrupamento);
+			GetEntityListCommand cmdMenbro = injector.getInstance(GetEntityListCommand.class);
+			cmdMenbro.setNamedQuery("agrupamentoMembro.porAgrupamento");
+			cmdMenbro.addParameter("agrupamento", agrupamento);
+			voagrup.setListaMembros((List<AgrupamentoMembro>) cmdMenbro.call());
+			listaAgrupamentoVO.add(voagrup);
+		}
+		vo.setListaAgrupamentosVO(listaAgrupamentoVO);
+
+
+		GetEntityListCommand cmdAfilhados = injector.getInstance(GetEntityListCommand.class);
+		cmdAfilhados.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmdAfilhados.addParameter("encontro", vo.getEncontroHotel().getEncontro());
+		vo.setListaAfilhados(cmdAfilhados.call());
+
+		GetEntityListCommand cmdEncontristas = injector.getInstance(GetEntityListCommand.class);
+		cmdEncontristas.setNamedQuery("encontroInscricao.porEncontroEncontristas");
+		cmdEncontristas.addParameter("encontro", vo.getEncontroHotel().getEncontro());
+		vo.setListaEncontristas(cmdEncontristas.call());
 
 		return vo;
 	}

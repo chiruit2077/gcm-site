@@ -116,6 +116,7 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 			@Override
 			public void success(EncontroHotelVO vo) {
 				getDisplay().reset();
+				setEncontroHotelVO(vo);
 				getDisplay().setRestauranteSelecionado(getTipoRestauranteSelecionado());
 				getDisplay().showWaitMessage(false);
 			}

@@ -33,10 +33,15 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 				"		( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " +
 				"order by u.tipo"),
 	@NamedQuery(name="encontroInscricao.porEncontroConvidados",
-		query="select u.casal from EncontroInscricao u " +
+		query="select u from EncontroInscricao u " +
 			  "where u.encontro = :encontro and " +
 			  "      u.tipo = 'AFILHADO' and " +
-				"	( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " ),
+			  "	     u.tipoConfirmacao = 'CONFIRMADO' " ),
+	@NamedQuery(name="encontroInscricao.porEncontroEncontristas",
+				query="select u from EncontroInscricao u " +
+					  "where u.encontro = :encontro and " +
+					  "      u.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR' ) and " +
+					  "	     u.tipoConfirmacao = 'CONFIRMADO' " ),
 	@NamedQuery(name="encontroInscricao.porEncontroCasal",
 		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal order by u.id desc"),
 	@NamedQuery(name="encontroInscricao.porEncontroPessoaNomeLike",
@@ -223,4 +228,22 @@ public class EncontroInscricao extends _WebBaseEntity {
 	public void setFichaPagamento(EncontroInscricaoFichaPagamento fichaPagamento) {
 		this.fichaPagamento = fichaPagamento;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EncontroInscricao other = (EncontroInscricao) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
 }

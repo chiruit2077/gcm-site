@@ -477,18 +477,18 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 		totalLabel.setText(geraTotaisQuartos(vo, null));
 
 		distribuicaoPanel.clear();
-		Collections.sort(vo.getListaAgrupamentos(), new Comparator<HotelAgrupamento>() {
+		Collections.sort(vo.getListaHotelAgrupamentos(), new Comparator<HotelAgrupamento>() {
 			@Override
 			public int compare(HotelAgrupamento o1, HotelAgrupamento o2) {
 				return o1.getOrdem().compareTo(o2.getOrdem());
 			}
 		});
 
-		if (vo.getListaAgrupamentos().size() > 0) {
+		if (vo.getListaHotelAgrupamentos().size() > 0) {
 			VerticalPanel panel = new VerticalPanel();
 			panel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 			panel.setSize("100%", "100%");
-			for (HotelAgrupamento agrupamento : vo.getListaAgrupamentos()) {
+			for (HotelAgrupamento agrupamento : vo.getListaHotelAgrupamentos()) {
 				VerticalPanel agrupamentoPanel = new VerticalPanel();
 				agrupamentoPanel.setSize("100%", "100%");
 				agrupamentoPanel.setStyleName("agrupamento");

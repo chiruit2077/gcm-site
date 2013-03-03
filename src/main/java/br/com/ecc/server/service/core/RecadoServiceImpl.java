@@ -10,6 +10,7 @@ import br.com.ecc.client.service.RecadoService;
 import br.com.ecc.model.Agenda;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
+import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Recado;
 import br.com.ecc.model.tipo.TipoAgendaEventoEnum;
@@ -150,7 +151,12 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 			GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 			cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
 			cmd.addParameter("encontro", encontro);
-			vo.setListaConvidados(cmd.call());
+			List<EncontroInscricao> listaInscricao = cmd.call();
+			List<Casal> casais = new ArrayList<Casal>();
+			for (EncontroInscricao encontroInscricao : listaInscricao) {
+				casais.add(encontroInscricao.getCasal());
+			}
+			vo.setListaConvidados(casais);
 		} else {
 			vo.setListaConvidados(new ArrayList<Casal>());
 		}

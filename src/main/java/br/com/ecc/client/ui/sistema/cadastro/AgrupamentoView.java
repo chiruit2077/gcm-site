@@ -18,6 +18,7 @@ import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.tipo.TipoRestauranteEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 
 import com.google.gwt.core.client.GWT;
@@ -81,11 +82,13 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 	private final GenericEntitySuggestOracle pessoaSuggest = new GenericEntitySuggestOracle();
 
 	@UiField ListBox tipoListBox;
+	@UiField ListBox tipoRestauranteListBox;
 	@UiField ListBox tipoInscricaoListBox;
 
 	@UiField RadioButton grupoRadioButton;
 	@UiField RadioButton encontroRadioButton;
 	@UiField HTMLPanel encontroMembroHTMLPanel;
+	@UiField HTMLPanel tipoRestauranteHTMLPanel;
 
 	private Casal casalEditado;
 	private Pessoa pessoaEditada;
@@ -131,6 +134,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		tituloFormularioLabel.setText(getDisplayTitle());
 
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoCasalEnum.values());
+		ListBoxUtil.populate(tipoRestauranteListBox, true, TipoRestauranteEnum.values());
 	}
 
 	private void criaTabela() {
@@ -176,6 +180,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			Window.alert("Escolha o Tipo!");
 			return;
 		}
+		TipoRestauranteEnum tipoRestaurante = (TipoRestauranteEnum) ListBoxUtil.getItemSelected(tipoRestauranteListBox, TipoRestauranteEnum.values());
 		presenter.getAgrupamentoVO().getAgrupamento().setGrupo(null);
 		presenter.getAgrupamentoVO().getAgrupamento().setEncontro(null);
 		if(grupoRadioButton.getValue()){
@@ -185,6 +190,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		}
 		presenter.getAgrupamentoVO().getAgrupamento().setNome(nomeTextBox.getValue());
 		presenter.getAgrupamentoVO().getAgrupamento().setTipo(tipo);
+		presenter.getAgrupamentoVO().getAgrupamento().setTipoRestaurante(tipoRestaurante);
 		presenter.salvar();
 	}
 	private void edita(Agrupamento agrupamento) {
@@ -200,6 +206,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			}
 			ListBoxUtil.setItemSelected(tipoListBox, TipoInscricaoCasalEnum.ENCONTRISTA.getNome());
 			LabelTotalUtil.setTotal(itemMembroTotal, 0, "membro", "membros", "");
+			tipoRestauranteHTMLPanel.setVisible(true);
 		} else {
 			presenter.getVO(agrupamento);
 		}
@@ -211,7 +218,8 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 	public void limpaCampos(){
 		tipoInscricaoListBox.clear();
 		tipoInscricaoListBox.addItem("");
-		tipoListBox.addItem("Todos os inscritos pelo Tipo");
+		tipoInscricaoListBox.addItem("Todos os inscritos pelo Tipo");
+		tipoRestauranteListBox.setSelectedIndex(0);
 		nomeTextBox.setValue(null);
 		membroTableUtil.clearData();
 	}
@@ -221,26 +229,31 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		TipoInscricaoCasalEnum tipoCasal = (TipoInscricaoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoCasalEnum.values());
 		tipoInscricaoListBox.clear();
 		tipoInscricaoListBox.addItem("");
-		tipoListBox.addItem("Todos os inscritos pelo Tipo");
+		tipoInscricaoListBox.addItem("Todos os inscritos pelo Tipo");
 		for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
 			if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(tipoCasal))
 				tipoInscricaoListBox.addItem(tipo.getNome());
 		}
+		if (tipoCasal.equals(TipoInscricaoCasalEnum.AFILHADO))
+			tipoRestauranteHTMLPanel.setVisible(false);
+		else
+			tipoRestauranteHTMLPanel.setVisible(true);
 	}
-
-	/*@UiHandler("membroFlexTable")
-	public void membroFlexTableClickEvent(ClickEvent event){
-		int cellIndex = membroFlexTable.getCellForEvent(event).getCellIndex();
-        int rowIndex = membroFlexTable.getCellForEvent(event).getRowIndex();
-	}*/
 
 	public void defineCampos(AgrupamentoVO agrupamentoVO){
 		nomeTextBox.setValue(agrupamentoVO.getAgrupamento().getNome());
 		if (agrupamentoVO.getAgrupamento().getTipo() != null){
 			ListBoxUtil.setItemSelected(tipoListBox, agrupamentoVO.getAgrupamento().getTipo().getNome());
-			for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
-				if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(agrupamentoVO.getAgrupamento().getTipo()))
-					tipoInscricaoListBox.addItem(tipo.getNome());
+			if (agrupamentoVO.getAgrupamento().getTipo().equals(TipoInscricaoCasalEnum.AFILHADO))
+				tipoRestauranteHTMLPanel.setVisible(false);
+			else{
+				tipoRestauranteHTMLPanel.setVisible(true);
+				if (agrupamentoVO.getAgrupamento().getTipoRestaurante()!=null)
+					ListBoxUtil.setItemSelected(tipoRestauranteListBox, agrupamentoVO.getAgrupamento().getTipoRestaurante().getNome());
+				for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
+					if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(agrupamentoVO.getAgrupamento().getTipo()))
+						tipoInscricaoListBox.addItem(tipo.getNome());
+				}
 			}
 
 		}
@@ -460,6 +473,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		itemTotal.setText("Nenhum item adicionado");
 		if(grupoRadioButton.getValue()){
 			encontroMembroHTMLPanel.setVisible(false);
+			tipoRestauranteHTMLPanel.setVisible(false);
 			presenter.buscaAgrupamentos(presenter.getGrupoSelecionado());
 		} else {
 			encontroMembroHTMLPanel.setVisible(true);

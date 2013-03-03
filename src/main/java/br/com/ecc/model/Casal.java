@@ -27,7 +27,7 @@ import br.com.ecc.model.tipo.TipoSituacaoEnum;
 	@NamedQuery(name="casal.todos", query="select u from Casal u order by u.ele.apelido, u.ela.apelido"),
 	@NamedQuery(name="casal.porGrupo", query="select u from Casal u where u.grupo = :grupo order by u.ele.apelido, u.ela.apelido"),
 	@NamedQuery(name="casal.porPessoa", query="select u from Casal u where u.ele = :pessoa or u.ela =:pessoa"),
-	@NamedQuery(name="casal.porGrupoNomeLike", 
+	@NamedQuery(name="casal.porGrupoNomeLike",
 	query="select u from Casal u " +
 		  "where u.grupo = :grupo and " +
 		  "      ( upper(u.ele.nome) like upper(:key) or " +
@@ -35,7 +35,7 @@ import br.com.ecc.model.tipo.TipoSituacaoEnum;
 		  "        upper(u.ela.nome) like upper(:key) or" +
 		  "        upper(u.ela.apelido) like upper(:key) ) " +
 		  "order by u.ele.apelido, u.ela.apelido, u.ele.nome, u.ela.nome" ),
-	@NamedQuery(name="casal.porNomeLike", 
+	@NamedQuery(name="casal.porNomeLike",
 		query="select u from Casal u " +
 			  "where u.situacao = 'ATIVO' and " +
 			  "      ( upper(u.ele.nome) like upper(:key) or " +
@@ -50,72 +50,72 @@ public class Casal extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_CASAL", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="grupo")
 	private Grupo grupo;
-	
+
 	@ManyToOne
 	@JoinColumn(name="ele")
 	private Pessoa ele;
-	
+
 	@ManyToOne
 	@JoinColumn(name="ela")
 	private Pessoa ela;
-	
+
 	@Column(length=254)
 	private String endereco;
-	
+
 	@Column(length=100)
 	private String bairro;
-	
+
 	@Column(length=100)
 	private String cidade;
-	
+
 	@Column(length=2)
 	private String estado;
-	
+
 	@Column(length=15)
 	private String cep;
-	
+
 	@Column(length=50)
 	private String telefone;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date casamento;
-	
+
 	@Column(length=50)
 	private String cor;
-	
+
 	@Column(length=250)
 	private String lugar;
-	
+
 	@Column(length=250)
 	private String atividade;
-	
+
 	@Column(length=250)
 	private String musica;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoSituacaoEnum situacao;
-	
+
 	private Integer idArquivoDigital;
-	
+
 	@ManyToOne
 	@JoinColumn(name="casalPadrinho")
 	private Casal casalPadrinho;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date atualizacaoCadastro;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoCasalEnum tipoCasal;
-	
+
 	@Version
 	private Integer version;
-	
+
 	@Override
 	public String toString() {
 		String r = "";
@@ -160,8 +160,8 @@ public class Casal extends _WebBaseEntity {
 		}
 		return em + r + am;
 	}
-	
-	
+
+
 	public Date getCasamento() {
 		return casamento;
 	}
@@ -287,5 +287,22 @@ public class Casal extends _WebBaseEntity {
 	}
 	public void setTipoCasal(TipoCasalEnum tipoCasal) {
 		this.tipoCasal = tipoCasal;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Casal other = (Casal) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }

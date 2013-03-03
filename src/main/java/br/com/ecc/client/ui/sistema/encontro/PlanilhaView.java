@@ -837,24 +837,24 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			if(opcao.equals("1")){
 				adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
 							(EncontroInscricao)ListBoxUtil.getItemSelected(inscricaoListBox, presenter.getEncontroVO().getListaInscricao()),
-							 encontroAtividadeEditada);
+							 encontroAtividadeEditada,true);
 			} else if(opcao.equals("2")){
 				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
 					adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
-							ei, encontroAtividadeEditada);
+							ei, encontroAtividadeEditada,false);
 				}
 			} else if(opcao.equals("3")){
 				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
 					if(ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
 						adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
-								ei, encontroAtividadeEditada);
+								ei, encontroAtividadeEditada,false);
 					}
 				}
 			} else if(opcao.equals("4")){
 				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
 					if(ei.getTipo().equals(TipoInscricaoEnum.APOIO)){
 						adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
-								ei, encontroAtividadeEditada);
+								ei, encontroAtividadeEditada,false);
 					}
 				}
 			} else {
@@ -862,7 +862,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					if(agrupamentoVO.getAgrupamento().getNome().equals(opcao)){
 						for (AgrupamentoMembro membro : agrupamentoVO.getListaMembros()) {
 							adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
-									buscaInscricao(membro), encontroAtividadeEditada);
+									buscaInscricao(membro), encontroAtividadeEditada,false);
 						}
 						break;
 					}
@@ -873,7 +873,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			if(opcao.equals("1")){
 				adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
 							         encontroInscricaoEditada,
-							         (EncontroAtividade)ListBoxUtil.getItemSelected(atividadeEditaListBox, presenter.getEncontroVO().getListaEncontroAtividade()));
+							         (EncontroAtividade)ListBoxUtil.getItemSelected(atividadeEditaListBox, presenter.getEncontroVO().getListaEncontroAtividade()),true);
 			}
 			populaAtividadesPorParticipante();
 		}
@@ -897,19 +897,22 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		return null;
 	}
 
-	private void adicionaParticipante(Papel papel, EncontroInscricao ei, EncontroAtividade atividade){
+	private void adicionaParticipante(Papel papel, EncontroInscricao ei, EncontroAtividade atividade, boolean mensagem){
 		boolean achou = false;
+		EncontroAtividadeInscricao eaiEncontrada = null;
 		for (EncontroAtividadeInscricao eai : listaParticipantesInscritos) {
 			if(encontroInscricaoFlexTable.isVisible()){
 				if(eai.getEncontroInscricao().getId().equals(ei.getId())){
 					achou = true;
-					Window.alert("Participante já adicionado para esta atividade\n" + eai.getEncontroInscricao().toString());
+					eaiEncontrada = eai;
+					if (mensagem) Window.alert("Participante já adicionado para esta atividade\n" + eai.getEncontroInscricao().toString());
 					break;
 				}
 			} else {
 				if(eai.getEncontroAtividade().getId().equals(atividade.getId())){
-					Window.alert("Atividade já adicionada para este participante\n" + eai.getEncontroAtividade().getAtividade().toString());
+					if (mensagem) Window.alert("Atividade já adicionada para este participante\n" + eai.getEncontroAtividade().getAtividade().toString());
 					achou = true;
+					eaiEncontrada = eai;
 					break;
 				}
 			}
@@ -920,6 +923,8 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			encontroAtividadeInscricaoEditada.setPapel(papel);
 			encontroAtividadeInscricaoEditada.setEncontroInscricao(ei);
 			listaParticipantesInscritos.add(encontroAtividadeInscricaoEditada);
+		}else{
+			eaiEncontrada.setPapel(papel);
 		}
 	}
 

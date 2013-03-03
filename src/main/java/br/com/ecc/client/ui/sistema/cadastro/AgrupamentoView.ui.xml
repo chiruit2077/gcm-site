@@ -53,6 +53,20 @@
 										<g:ListBox ui:field="tipoListBox" width="250px"/>
 									</td>
 								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel ui:field="tipoRestauranteHTMLPanel" width="100%" visible="false">
+							<table cellpadding="3" width="100%">
+								<tr>
+									<td class="portal-formLabel" width="200px">Tipo Restaurante:</td>
+									<td>
+										<g:ListBox ui:field="tipoRestauranteListBox" width="250px"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" width="100%">
 								<tr>
 									<td class="portal-formLabel">Adicionar:</td>
 									<td style="border: 1px solid lightgray;">

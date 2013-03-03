@@ -15,12 +15,13 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
+import br.com.ecc.model.tipo.TipoRestauranteEnum;
 
 @Entity
 @SequenceGenerator(name="SQ_AGRUPAMENTO", sequenceName="SQ_AGRUPAMENTO")
 @NamedQueries({
 	@NamedQuery(name="agrupamento.porGrupo", query="select u from Agrupamento u where u.grupo = :grupo order by u.nome"),
-	@NamedQuery(name="agrupamento.porEncontro", query="select u from Agrupamento u where u.encontro = :encontro order by u.nome")
+	@NamedQuery(name="agrupamento.porEncontro", query="select u from Agrupamento u where u.encontro = :encontro order by u.tipo, u.nome")
 })
 public class Agrupamento extends _WebBaseEntity {
 	private static final long serialVersionUID = -5803383402599264292L;
@@ -43,6 +44,10 @@ public class Agrupamento extends _WebBaseEntity {
 
 	@Column(length=250)
 	private String nome;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length=30)
+	private TipoRestauranteEnum tipoRestaurante;
 
 	@Version
 	private Integer version;
@@ -96,5 +101,13 @@ public class Agrupamento extends _WebBaseEntity {
 
 	public void setTipo(TipoInscricaoCasalEnum tipo) {
 		this.tipo = tipo;
+	}
+
+	public TipoRestauranteEnum getTipoRestaurante() {
+		return tipoRestaurante;
+	}
+
+	public void setTipoRestaurante(TipoRestauranteEnum tipoRestaurante) {
+		this.tipoRestaurante = tipoRestaurante;
 	}
 }
