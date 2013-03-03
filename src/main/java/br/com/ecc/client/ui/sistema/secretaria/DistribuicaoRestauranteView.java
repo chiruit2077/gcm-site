@@ -79,6 +79,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	private Label labelAfilhado1Editado;
 	private Label labelAfilhado2Editado;
 	private Label labelGarconEditado;
+	private VerticalPanel tituloPanelEditado;
+	private Mesa mesaEditada;
 
 	private List<EncontroInscricao> listaGarcons;
 
@@ -154,6 +156,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		entidadeEditada.setEncontroAfilhado1(null);
 		entidadeEditada.setEncontroAfilhado2(null);
 		entidadeEditada.setEncontroGarcon(null);
+
 		labelAfilhado1Editado.setText("VAGO");
 		labelAfilhado2Editado.setText("VAGO");
 		labelGarconEditado.setText("VAGO");
@@ -170,6 +173,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			entidadeEditada.setEncontroGarcon((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest3.getListaEntidades(), inscricaoSuggestBox3.getValue()));
 			labelGarconEditado.setText(inscricaoSuggestBox3.getValue());
 		}
+
+		populaMesa(mesaEditada, tituloPanelEditado, entidadeEditada, labelAfilhado1Editado, labelAfilhado2Editado, labelGarconEditado);
 
 		editaDialogBox.hide();
 
@@ -269,15 +274,14 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		distribuicaoPanel.add(panelDireito);
 
 		if (vo.getListaMesas().size()>0){
-			for (Mesa mesa : vo.getListaMesas()) {
+			for (final Mesa mesa : vo.getListaMesas()) {
 				HorizontalPanel mesaPanel = new HorizontalPanel();
 				mesaPanel.setSize("580px", "92px");
-				FocusPanel focusPanel = new FocusPanel();
-				VerticalPanel tituloMesa = new VerticalPanel();
+				final FocusPanel focusPanel = new FocusPanel();
+				final VerticalPanel tituloMesa = new VerticalPanel();
 				tituloMesa.setSize("80px", "92px");
 				tituloMesa.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 				tituloMesa.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-				tituloMesa.setStyleName("mesa-Titulo");
 				tituloMesa.add(new Label("MESA"));
 				tituloMesa.add(new Label(mesa.getNumero()));
 				focusPanel.add(tituloMesa);
@@ -299,12 +303,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 				garcon.setStyleName("mesa-Garcon");
 				garcon.setSize("100%", "28px");
 
-				if (encontroRestauranteGarcon.getEncontroAfilhado1() != null)
-					afilhado1.setText(encontroRestauranteGarcon.getEncontroAfilhado1().toString());
-				if (encontroRestauranteGarcon.getEncontroAfilhado2() != null)
-					afilhado2.setText(encontroRestauranteGarcon.getEncontroAfilhado2().toString());
-				if (encontroRestauranteGarcon.getEncontroGarcon() != null)
-					garcon.setText(encontroRestauranteGarcon.getEncontroGarcon().toString());
+				populaMesa(mesa, tituloMesa, encontroRestauranteGarcon, afilhado1, afilhado2, garcon);
+
 				nomesMesaPanel.add(afilhado1);
 				nomesMesaPanel.add(afilhado2);
 				nomesMesaPanel.add(garcon);
@@ -331,6 +331,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 						labelAfilhado1Editado = afilhado1;
 						labelAfilhado2Editado = afilhado2;
 						labelGarconEditado = garcon;
+						tituloPanelEditado = tituloMesa;
+						mesaEditada = mesa;
 						edita(encontroRestauranteGarcon);
 					}
 				});
@@ -338,6 +340,42 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 		}
 		showWaitMessage(false);
+	}
+
+	private void populaMesa(final Mesa mesa, final VerticalPanel tituloMesa, final EncontroRestauranteGarcon encontroRestauranteGarcon, final Label afilhado1, final Label afilhado2, final Label garcon) {
+		String erros = "";
+		if (encontroRestauranteGarcon.getEncontroAfilhado1() != null){
+			afilhado1.setText(encontroRestauranteGarcon.getEncontroAfilhado1().toString());
+			if (isSelecionadoRestaurante(encontroRestauranteGarcon.getEncontroAfilhado1(), getRestauranteSelecionado(), mesa, encontroRestauranteGarcon.getEncontroAfilhado2()))
+				erros+="Afilhado1 já selecionado neste Restaurante\n";
+			if (isSelecionadoOutroAfilhado(encontroRestauranteGarcon.getEncontroAfilhado1(), getRestauranteSelecionado(), encontroRestauranteGarcon.getEncontroAfilhado2()))
+				erros+="Afilhado1 já selecionado com Afilhado 2 em outro Restaurante\n";
+			if (isSelecionadoMesa(encontroRestauranteGarcon.getEncontroAfilhado1(), getRestauranteSelecionado(), mesa))
+				erros+="Afilhado1 já selecionado nesta mesa em outro restaurante\n";
+		}
+		if (encontroRestauranteGarcon.getEncontroAfilhado2() != null){
+			afilhado2.setText(encontroRestauranteGarcon.getEncontroAfilhado2().toString());
+			if (isSelecionadoRestaurante(encontroRestauranteGarcon.getEncontroAfilhado2(), getRestauranteSelecionado(), mesa, encontroRestauranteGarcon.getEncontroAfilhado1()))
+				erros+="Afilhado2 já selecionado neste Restaurante\n";
+			if (isSelecionadoOutroAfilhado(encontroRestauranteGarcon.getEncontroAfilhado2(), getRestauranteSelecionado(), encontroRestauranteGarcon.getEncontroAfilhado1()))
+				erros+="Afilhado2 já selecionado com Afilhado 1 em outro Restaurante\n";
+			if (isSelecionadoMesa(encontroRestauranteGarcon.getEncontroAfilhado2(), getRestauranteSelecionado(), mesa))
+				erros+="Afilhado2 já selecionado nesta mesa em outro Restaurante\n";
+		}
+		if (encontroRestauranteGarcon.getEncontroGarcon() != null){
+			garcon.setText(encontroRestauranteGarcon.getEncontroGarcon().toString());
+			if (isSelecionadoRestaurante(encontroRestauranteGarcon.getEncontroGarcon(), getRestauranteSelecionado(), mesa, null))
+				erros+="Garçon já selecionado neste Restaurante\n";
+			if (isSelecionadoAfilhado(encontroRestauranteGarcon.getEncontroGarcon(), getRestauranteSelecionado(), encontroRestauranteGarcon.getEncontroAfilhado1(),encontroRestauranteGarcon.getEncontroAfilhado2()))
+				erros+="Garçon selecionado com Afilhado\n";
+			if (isSelecionadoCasal(encontroRestauranteGarcon.getEncontroGarcon(), getRestauranteSelecionado(), encontroRestauranteGarcon.getEncontroAfilhado1(),encontroRestauranteGarcon.getEncontroAfilhado2()))
+				erros+="Garçon já selecionado para alguns dos Afilhados em outro Restaurante\n";
+		}
+		if (erros.length()>0){
+			tituloMesa.setStyleName("mesa-TituloErro");
+			tituloMesa.setTitle(erros);
+		}else
+			tituloMesa.setStyleName("mesa-Titulo");
 	}
 
 	private EncontroRestauranteGarcon getEncontroRestauranteGarcon(EncontroHotelVO vo, Mesa mesa, TipoRestauranteEnum tipoRestaurante) {
@@ -476,7 +514,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		do{
 			int randon = Random.nextInt(presenter.getEncontroSelecionado().getQuantidadeAfilhados());
 			encontroInscricao = presenter.getEncontroHotelVO().getListaAfilhados().get(randon);
-			if (isSelecionadoRestaurante(encontroInscricao,restauranteSelecionado,afilhado1))
+			if (isSelecionadoRestaurante(encontroInscricao,restauranteSelecionado,mesa,afilhado1))
 				encontroInscricao = null;
 			if (isSelecionadoMesa(encontroInscricao,restauranteSelecionado,mesa))
 				encontroInscricao = null;
@@ -533,22 +571,45 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		return false;
 	}
 
-	private boolean isSelecionadoRestaurante( EncontroInscricao encontroInscricao, TipoRestauranteEnum restaurante, EncontroInscricao outroAfilhado) {
+	private boolean isSelecionadoCasal(EncontroInscricao encontroInscricao, TipoRestauranteEnum restaurante, EncontroInscricao afilhado1, EncontroInscricao afilhado2) {
+		if( encontroInscricao==null) return false;
+		for (EncontroRestauranteGarcon encontroRestaurante : presenter.getEncontroHotelVO().getListaEncontroRestauranteGarcon()) {
+			if (!encontroRestaurante.getTipo().equals(restaurante)){
+				if (encontroRestaurante.getEncontroGarcon()!=null){
+					if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(afilhado1) &&
+							encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+						return true;
+					}
+					if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(afilhado2) &&
+							encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean isSelecionadoRestaurante( EncontroInscricao encontroInscricao, TipoRestauranteEnum restaurante, Mesa mesa, EncontroInscricao outroAfilhado) {
 		if( encontroInscricao==null) return false;
 		for (EncontroRestauranteGarcon encontroRestaurante : presenter.getEncontroHotelVO().getListaEncontroRestauranteGarcon()) {
 			if (encontroRestaurante.getTipo().equals(restaurante)){
 				if (encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
 					if (outroAfilhado != null && encontroInscricao.equals(outroAfilhado)) return true;
-					if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
-						return true;
-					}
-					if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
-						return true;
+					if (!encontroRestaurante.getMesa().equals(mesa)){
+						if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
+							return true;
+						}
+						if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
+							return true;
+						}
 					}
 				}
 				else {
-					if (encontroRestaurante.getEncontroGarcon()!=null && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
-						return true;
+					if (!encontroRestaurante.getMesa().equals(mesa)){
+						if (encontroRestaurante.getEncontroGarcon()!=null && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+							return true;
+						}
 					}
 				}
 			}
@@ -562,14 +623,14 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		do{
 			int randon = Random.nextInt(listaGarcons.size());
 			encontroInscricao = listaGarcons.get(randon);
-			if (isSelecionadoRestaurante(encontroInscricao,restauranteSelecionado,afilhado1))
+			if (isSelecionadoRestaurante(encontroInscricao,restauranteSelecionado,mesa,afilhado1))
 				encontroInscricao = null;
-			if (isSelecionadoMesa(encontroInscricao,restauranteSelecionado,mesa))
+			if (isSelecionadoCasal(encontroInscricao,restauranteSelecionado,afilhado1,afilhado2))
 				encontroInscricao = null;
 			if (isSelecionadoAfilhado(encontroInscricao,restauranteSelecionado,afilhado1,afilhado2))
 				encontroInscricao = null;
 			tentativa++;
-		}while(encontroInscricao == null && tentativa < 100);
+		}while(encontroInscricao == null && tentativa < 1000);
 		return encontroInscricao;
 	}
 

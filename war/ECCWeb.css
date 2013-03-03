@@ -1009,6 +1009,14 @@ html>body .gwt-DecoratedTabBar {
 	font-size: large;
 }
 
+.mesa-TituloErro {
+	background: red;
+	color: black;
+	font-weight: bold;
+	border: 1px solid gray;
+	font-size: large;
+}
+
 .mesa-Nomes {
 	border: 1px solid gray;
 	vertical-align: middle;
