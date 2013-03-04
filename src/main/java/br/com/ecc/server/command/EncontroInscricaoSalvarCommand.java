@@ -73,18 +73,20 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			q.executeUpdate();
 			if (encontroInscricaoVO.getEncontroInscricao().getFichaPagamento()!=null){
 				ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
-				ficha.setStatus(TipoInscricaoFichaStatusEnum.LIBERADO);
-				ficha.setObservacao(TipoConfirmacaoEnum.DESISTENCIA.getNome());
-				EncontroInscricaoFichaPagamento vaga = new EncontroInscricaoFichaPagamento();
-				vaga.setFicha(ficha.getFicha());
-				vaga.setEncontro(ficha.getEncontro());
-				vaga.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
-				vaga.setTipo(ficha.getTipo());
-				vaga = em.merge(vaga);
+				if (ficha!=null){
+					ficha.setStatus(TipoInscricaoFichaStatusEnum.LIBERADO);
+					ficha.setObservacao(TipoConfirmacaoEnum.DESISTENCIA.getNome());
+					EncontroInscricaoFichaPagamento vaga = new EncontroInscricaoFichaPagamento();
+					vaga.setFicha(ficha.getFicha());
+					vaga.setEncontro(ficha.getEncontro());
+					vaga.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
+					vaga.setTipo(ficha.getTipo());
+					vaga = em.merge(vaga);
+				}
 			}
 		}else{
 			ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
-			if (ficha==null){
+			if (ficha==null && !encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.EXTERNO)){
 				if (encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.AFILHADO) ){
 					ficha = getFichaVaga(TipoInscricaoCasalEnum.AFILHADO,encontroInscricaoVO.getEncontroInscricao().getEncontro());
 				}else{
@@ -94,6 +96,9 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			if (ficha!=null){
 				encontroInscricaoVO.getEncontroInscricao().setFichaPagamento(ficha);
 				encontroInscricaoVO.getEncontroInscricao().setCodigo(ficha.getFicha());
+			}else{
+				encontroInscricaoVO.getEncontroInscricao().setFichaPagamento(null);
+				encontroInscricaoVO.getEncontroInscricao().setCodigo(null);
 			}
 		}
 		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));

@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
+import br.com.ecc.client.ui.component.FlexTableHelper;
 import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroOrganograma;
@@ -14,6 +15,7 @@ import br.com.ecc.model.EncontroOrganogramaCoordenacao;
 import br.com.ecc.model.OrganogramaArea;
 import br.com.ecc.model.OrganogramaCoordenacao;
 import br.com.ecc.model._WebBaseEntity;
+import br.com.ecc.model.tipo.TipoAtividadeEnum;
 import br.com.ecc.model.vo.EncontroOrganogramaVO;
 import br.com.freller.tool.client.Print;
 
@@ -21,8 +23,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -34,8 +34,8 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -60,6 +60,8 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 	@UiField Button salvarCoordenacaoButton;
 	@UiField Button fecharCoordenacaoButton;
 	@UiField Button printButton;
+	@UiField(provided = true) RadioButton casalRadio;
+	@UiField(provided = true) RadioButton pessoaRadio;
 
 	private List<EncontroOrganograma> listaOrganograma;
 
@@ -68,6 +70,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 	private EncontroOrganogramaArea entidadeEditadaArea;
 
 	protected VerticalPanel coordenacaoWidgetEditado;
+	protected VerticalPanel coordenacaoAreaWidgetEditado;
 
 	public DistribuicaoOrganogramaView() {
 		inscricaoSuggest1.setMinimoCaracteres(2);
@@ -76,26 +79,10 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		inscricaoSuggestBox1 = new SuggestBox(inscricaoSuggest1);
 		inscricaoSuggestBox2 = new SuggestBox(inscricaoSuggest2);
 
-		initWidget(uiBinder.createAndBindUi(this));
+		casalRadio = new RadioButton("tipo", "Por Casal");
+		pessoaRadio = new RadioButton("tipo", "Por Pessoa");
 
-		inscricaoSuggestBox1.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
-			@Override
-			public void onSelection(SelectionEvent<Suggestion> event) {
-				if(!inscricaoSuggestBox1.getValue().equals("")){
-					EncontroInscricao encontroInscricao = (EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue());
-					entidadeEditadaCoordenacao.setEncontroInscricao1(encontroInscricao);
-				}
-			}
-		});
-		inscricaoSuggestBox2.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
-			@Override
-			public void onSelection(SelectionEvent<Suggestion> event) {
-				if(!inscricaoSuggestBox2.getValue().equals("")){
-					EncontroInscricao encontroInscricao = (EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue());
-					entidadeEditadaCoordenacao.setEncontroInscricao2(encontroInscricao);
-				}
-			}
-		});
+		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 	}
 
@@ -111,12 +98,33 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 
 	@UiHandler("printButton")
 	public void printButtonClickHandler(ClickEvent event){
-		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",distribuicaoPanel.getElement());
+		//Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",distribuicaoPanel.getElement());
+		Print.it("","<link rel=styleSheet type=text/css media=print href=/ECCWeb.css>",distribuicaoPanel.getElement());
 	}
 
 	@UiHandler("fecharCoordenacaoButton")
 	public void fecharCoordenacaoButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
+	}
+
+	@UiHandler("casalRadio")
+	public void casalRadioClickHandler(ClickEvent event){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest2.setQueryParams(params);
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+	}
+
+	@UiHandler("pessoaRadio")
+	public void pessoaRadioClickHandler(ClickEvent event){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest2.setQueryParams(params);
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
 	}
 
 	@UiHandler("salvarCoordenacaoButton")
@@ -133,6 +141,15 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 			if(!inscricaoSuggestBox2.getValue().equals("")){
 				entidadeEditadaArea.setEncontroInscricao2((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
 			}
+			coordenacaoAreaWidgetEditado.clear();
+			if (entidadeEditadaArea.getEncontroInscricao1()!= null){
+				coordenacaoAreaWidgetEditado.add(new Label(entidadeEditadaArea.getEncontroInscricao1().toStringApelidos()));
+				if (entidadeEditadaArea.getEncontroInscricao2()!= null){
+					coordenacaoAreaWidgetEditado.add(new Label(entidadeEditadaArea.getEncontroInscricao2().toStringApelidos()));
+				}
+			}else{
+				coordenacaoAreaWidgetEditado.add(new Label("VAGO"));
+			}
 
 		}else{
 			entidadeEditadaCoordenacao.setEncontroOrganograma(presenter.getEncontroOrganogramaSelecionado());
@@ -146,32 +163,21 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 			if(!inscricaoSuggestBox2.getValue().equals("")){
 				entidadeEditadaCoordenacao.setEncontroInscricao2((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
 			}
+			coordenacaoWidgetEditado.clear();
+			if (entidadeEditadaCoordenacao.getEncontroInscricao1()!= null){
+				coordenacaoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao1().toStringApelidos()));
+				if (entidadeEditadaCoordenacao.getEncontroInscricao2()!= null){
+					coordenacaoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao2().toStringApelidos()));
+				}
+				coordenacaoWidgetEditado.setVisible(true);
+			}else{
+				coordenacaoWidgetEditado.add(new Label("VAGO"));
+				coordenacaoWidgetEditado.setVisible(false);
+			}
 		}
 
 		editaDialogBox.hide();
 
-		/*quartoWidgetEditado.clear();
-		quartoWidgetEditado.setStyleName(entidadeEditadaCoordenacao.getTipo().getStyle());
-		if (entidadeEditadaCoordenacao.getTipo().equals(TipoEncontroQuartoEnum.SOLTEIROS)){
-			if (entidadeEditadaCoordenacao.getEncontroInscricao1()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao1().getPessoa().getApelido()!=null?entidadeEditadaCoordenacao.getEncontroInscricao1().getPessoa().getApelido():entidadeEditadaCoordenacao.getEncontroInscricao1().getPessoa().getNome()));
-			}
-			if (entidadeEditadaCoordenacao.getEncontroInscricao2()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao2().getPessoa().getApelido()!=null?entidadeEditadaCoordenacao.getEncontroInscricao2().getPessoa().getApelido():entidadeEditadaCoordenacao.getEncontroInscricao2().getPessoa().getNome()));
-			}
-			if (entidadeEditadaCoordenacao.getEncontroInscricao3()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao3().getPessoa().getApelido()!=null?entidadeEditadaCoordenacao.getEncontroInscricao3().getPessoa().getApelido():entidadeEditadaCoordenacao.getEncontroInscricao3().getPessoa().getNome()));
-			}
-			if (entidadeEditadaCoordenacao.getEncontroInscricao4()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao4().getPessoa().getApelido()!=null?entidadeEditadaCoordenacao.getEncontroInscricao4().getPessoa().getApelido():entidadeEditadaCoordenacao.getEncontroInscricao4().getPessoa().getNome()));
-			}
-		}else{
-			if (entidadeEditadaCoordenacao.getEncontroInscricao1()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao1().getCasal().getEle().getApelido()!=null?entidadeEditadaCoordenacao.getEncontroInscricao1().getCasal().getEle().getApelido():entidadeEditadaCoordenacao.getEncontroInscricao1().getCasal().getEle().getNome()));
-				quartoWidgetEditado.add(new Label("e"));
-				quartoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao1().getCasal().getEla().getApelido()!=null?entidadeEditadaCoordenacao.getEncontroInscricao1().getCasal().getEla().getApelido():entidadeEditadaCoordenacao.getEncontroInscricao1().getCasal().getEla().getNome()));
-			}
-		}*/
 	}
 	private void editaCoordenacao(EncontroOrganogramaCoordenacao encontroOrganogramaCoordenacao) {
 		editaArea=false;
@@ -179,6 +185,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		defineCamposCoordenacao(encontroOrganogramaCoordenacao);
 		editaDialogBox.center();
 		editaDialogBox.show();
+		inscricaoSuggestBox1.setFocus(true);
 	}
 
 	private void editaArea(EncontroOrganogramaArea encontroOrganogramaArea) {
@@ -187,6 +194,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		defineCamposArea(encontroOrganogramaArea);
 		editaDialogBox.center();
 		editaDialogBox.show();
+		inscricaoSuggestBox1.setFocus(true);
 	}
 
 	public void defineCamposCoordenacao(EncontroOrganogramaCoordenacao encontroOrganogramaCoordenacao){
@@ -195,8 +203,8 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		params.put("encontro", presenter.getEncontroSelecionado());
 		inscricaoSuggest1.setQueryParams(params);
 		inscricaoSuggest2.setQueryParams(params);
-		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
-		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
 
 		if(encontroOrganogramaCoordenacao.getEncontroInscricao1() != null){
 			inscricaoSuggestBox1.setValue(encontroOrganogramaCoordenacao.getEncontroInscricao1().toString());
@@ -217,8 +225,8 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		params.put("encontro", presenter.getEncontroSelecionado());
 		inscricaoSuggest1.setQueryParams(params);
 		inscricaoSuggest2.setQueryParams(params);
-		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
-		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+		inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
 
 		if(encontroOrganogramaArea.getEncontroInscricao1() != null){
 			inscricaoSuggestBox1.setValue(encontroOrganogramaArea.getEncontroInscricao1().toString());
@@ -266,6 +274,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 	}
 
 	public void limpaCamposCoordenacao(){
+		casalRadio.setValue(true);
 		inscricaoSuggestBox1.setValue(null);
 		inscricaoSuggestBox2.setValue(null);
 	}
@@ -282,38 +291,22 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 
 	@Override
 	public void populaEntidades(EncontroOrganogramaVO vo) {
-		distribuicaoPanel.clear();
+		distribuicaoPanel.clear(true);
 		distribuicaoPanel.setCellSpacing(5);
-		distribuicaoPanel.setCellPadding(2);
-/*		Collections.sort(vo.getListaOrganogramaArea(), new Comparator<OrganogramaArea>() {
-			@Override
-			public int compare(OrganogramaArea o1, OrganogramaArea o2) {
-				return o1.getOrdem().compareTo(o2.getOrdem());
-			}
-		});*/
 
 		if (vo.getListaOrganogramaArea().size() > 0) {
 			for (OrganogramaArea area : vo.getListaOrganogramaArea()) {
 				VerticalPanel areaPanel = new VerticalPanel();
 				areaPanel.setSize("100%", "100%");
-				areaPanel.setStyleName("agrupamento");
+				areaPanel.setStyleName("organograma");
 				HorizontalPanel tituloAgrupamento = new HorizontalPanel();
 				tituloAgrupamento.setSize("100%", "20px");
 				tituloAgrupamento.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 				tituloAgrupamento.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-				tituloAgrupamento.setStyleName("agrupamento-Titulo");
+				tituloAgrupamento.setStyleName("organograma-AreaTitulo");
 				tituloAgrupamento.add(new Label(area.getNome()));
 				areaPanel.add(tituloAgrupamento);
-				VerticalPanel coordenacaoPanel = new VerticalPanel();
-				coordenacaoPanel.setSize("100%", "100%");
-				HorizontalPanel coordenacoes = new HorizontalPanel();
-				coordenacoes.setSize("100%", "80px");
-				coordenacoes.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-				coordenacoes.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-				coordenacoes.setStyleName("agrupamento-Quartos");
-				coordenacoes.add(geraCoordenacoes(vo,area));
-				coordenacaoPanel.add(coordenacoes);
-				areaPanel.add(coordenacaoPanel);
+				areaPanel.add(geraCoordenacoes(vo,area));
 				if (area.getColunaSpam()!=null){
 					distribuicaoPanel.getFlexCellFormatter().setColSpan(area.getLinha(), area.getColuna(),area.getColunaSpam());
 				}
@@ -323,6 +316,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 				distribuicaoPanel.getFlexCellFormatter().setAlignment(area.getLinha(),area.getColuna(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_TOP);
 				distribuicaoPanel.setWidget(area.getLinha(), area.getColuna(), areaPanel);
 			}
+			FlexTableHelper.fixRowSpan(distribuicaoPanel);
 		}
 		showWaitMessage(false);
 	}
@@ -337,62 +331,112 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		if (coordenacoes.size()>0){
 			FlexTable coordenacoesPanel = new FlexTable();
 			coordenacoesPanel.setCellSpacing(5);
-			coordenacoesPanel.setCellPadding(2);
 			coordenacoesPanel.setSize("100%", "100%");
+			final FocusPanel focusPanelArea = geraWigetCoordenacaoArea(vo,area);
+			coordenacoesPanel.getFlexCellFormatter().setAlignment(area.getLinhaCoordenacao(),area.getColunaCoordenacao(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_MIDDLE);
+			if (area.getColunaSpamCoordenacao()!=null){
+				coordenacoesPanel.getFlexCellFormatter().setColSpan(area.getLinhaCoordenacao(), area.getColunaCoordenacao(),area.getColunaSpamCoordenacao());
+			}
+			if (area.getLinhaSpamCoordenacao()!=null){
+				coordenacoesPanel.getFlexCellFormatter().setRowSpan(area.getLinhaCoordenacao(), area.getColunaCoordenacao(),area.getLinhaSpamCoordenacao());
+			}
+			coordenacoesPanel.setWidget(area.getLinhaCoordenacao(), area.getColunaCoordenacao(), focusPanelArea);
 			for (OrganogramaCoordenacao  coordenacao : coordenacoes) {
-					final FocusPanel focusPanel = new FocusPanel();
-					focusPanel.setSize("140px", "80px");
-					VerticalPanel coordenacaoWidget = new VerticalPanel();
-					focusPanel.add(coordenacaoWidget);
-					final EncontroOrganogramaCoordenacao encontrocoordenacao = getEncontroOrganogramaCoordenacao(vo,coordenacao);
-					coordenacaoWidget.setSize("140px", "80px");
-					coordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-					coordenacaoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_BOTTOM);
-
-					HorizontalPanel tituloCoordenacaoWidget = new HorizontalPanel();
-					tituloCoordenacaoWidget.setSize("100%", "30px");
-					tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTitulo");
-					tituloCoordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-					tituloCoordenacaoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-					tituloCoordenacaoWidget.add(new Label(coordenacao.getDescricao()));
-
-					final VerticalPanel coordenacaoNomeWidget = new VerticalPanel();
-					coordenacaoNomeWidget.setStyleName("organograma-Coordenacao");
-					coordenacaoNomeWidget.setSize("100%", "50px");
-					coordenacaoNomeWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-					coordenacaoNomeWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-					if (encontrocoordenacao.getEncontroInscricao1()!= null){
-						coordenacaoNomeWidget.add(new Label(encontrocoordenacao.getEncontroInscricao1().toString()));
-						if (encontrocoordenacao.getEncontroInscricao2()!= null){
-							coordenacaoNomeWidget.add(new Label(encontrocoordenacao.getEncontroInscricao2().toString()));
-						}
-					}else
-						coordenacaoNomeWidget.add(new Label("VAGO"));
-					coordenacaoWidget.add(coordenacaoNomeWidget);
-					coordenacaoWidget.add(coordenacaoNomeWidget);
-					coordenacaoWidget.add(tituloCoordenacaoWidget);
-					focusPanel.addClickHandler(new ClickHandler() {
-						@Override
-						public void onClick(ClickEvent event) {
-							editaCoordenacao(encontrocoordenacao);
-							coordenacaoWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(coordenacaoNomeWidget)));
-						}
-					});
+					coordenacoesPanel.getFlexCellFormatter().setAlignment(coordenacao.getLinha(),coordenacao.getColuna(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_MIDDLE);
+					final FocusPanel focusPanel = geraWigetCoordenacao(vo,coordenacao);
 					if (coordenacao.getColunaSpam()!=null){
-						coordenacoesPanel.getFlexCellFormatter().setColSpan(coordenacao.getLinha(), coordenacao.getColuna(),coordenacao.getColunaSpam());
+						coordenacoesPanel.getFlexCellFormatter().setColSpan(coordenacao.getLinha(), coordenacao.getColuna(), coordenacao.getColunaSpam());
 					}
 					if (coordenacao.getLinhaSpam()!=null){
-						coordenacoesPanel.getFlexCellFormatter().setRowSpan(coordenacao.getLinha(), coordenacao.getColuna(),coordenacao.getLinhaSpam());
+						coordenacoesPanel.getFlexCellFormatter().setRowSpan(coordenacao.getLinha(), coordenacao.getColuna(), coordenacao.getLinhaSpam());
 					}
-					coordenacoesPanel.getFlexCellFormatter().setAlignment(coordenacao.getLinha(),coordenacao.getColuna(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_MIDDLE);
-					coordenacoesPanel.setWidget(coordenacao.getLinha(),coordenacao.getColuna(),focusPanel);
+					coordenacoesPanel.setWidget(coordenacao.getLinha(), coordenacao.getColuna(), focusPanel);
 			}
+			FlexTableHelper.fixRowSpan(coordenacoesPanel);
 			return coordenacoesPanel;
 		}
 		return new Label("ORGANOGRAMA - " + area.getNome());
 	}
 
+	private FocusPanel geraWigetCoordenacao(EncontroOrganogramaVO vo,
+			OrganogramaCoordenacao coordenacao) {
+		final FocusPanel focusPanel = new FocusPanel();
+		focusPanel.setSize("140px", "90px");
+		VerticalPanel coordenacaoWidget = new VerticalPanel();
+		focusPanel.add(coordenacaoWidget);
+		final EncontroOrganogramaCoordenacao encontrocoordenacao = getEncontroOrganogramaCoordenacao(vo,coordenacao);
+		coordenacaoWidget.setSize("140px", "90px");
+		coordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		coordenacaoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		coordenacaoWidget.setStyleName("organograma-Coordenacao");
 
+		HorizontalPanel tituloCoordenacaoWidget = new HorizontalPanel();
+		tituloCoordenacaoWidget.setSize("140px", "100%");
+		if (coordenacao.getOrganogramaArea().getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE))
+			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlue");
+		else
+			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloRed");
+		tituloCoordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		tituloCoordenacaoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		tituloCoordenacaoWidget.add(new Label(coordenacao.getDescricao()));
+
+		final VerticalPanel coordenacaoNomeWidget = new VerticalPanel();
+		coordenacaoNomeWidget.setSize("140px", "50px");
+		coordenacaoNomeWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		coordenacaoNomeWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		if (encontrocoordenacao.getEncontroInscricao1()!= null){
+			coordenacaoNomeWidget.setVisible(true);
+			coordenacaoNomeWidget.add(new Label(encontrocoordenacao.getEncontroInscricao1().toStringApelidos()));
+			if (encontrocoordenacao.getEncontroInscricao2()!= null){
+				coordenacaoNomeWidget.add(new Label(encontrocoordenacao.getEncontroInscricao2().toStringApelidos()));
+			}
+		}else{
+			coordenacaoNomeWidget.setVisible(false);
+			coordenacaoNomeWidget.add(new Label("VAGO"));
+		}
+		coordenacaoWidget.add(coordenacaoNomeWidget);
+		coordenacaoWidget.add(tituloCoordenacaoWidget);
+		focusPanel.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				editaCoordenacao(encontrocoordenacao);
+				coordenacaoWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(coordenacaoNomeWidget)));
+			}
+		});
+		return focusPanel;
+	}
+
+	private FocusPanel geraWigetCoordenacaoArea(EncontroOrganogramaVO vo, OrganogramaArea area) {
+		final FocusPanel focusPanel = new FocusPanel();
+		focusPanel.setSize("160px", "80px");
+		VerticalPanel coordenacaoWidget = new VerticalPanel();
+		focusPanel.add(coordenacaoWidget);
+		final EncontroOrganogramaArea encontrocoarea = getEncontroOrganogramaArea(vo,area);
+		coordenacaoWidget.setSize("160px", "80px");
+		coordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+
+		final VerticalPanel coordenacaoNomeWidget = new VerticalPanel();
+		coordenacaoWidget.setStyleName("organograma-CoordenacaoArea");
+		coordenacaoNomeWidget.setSize("160px", "100%");
+		coordenacaoNomeWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		coordenacaoNomeWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		if (encontrocoarea.getEncontroInscricao1()!= null){
+			coordenacaoNomeWidget.add(new Label(encontrocoarea.getEncontroInscricao1().toStringApelidos()));
+			if (encontrocoarea.getEncontroInscricao2()!= null){
+				coordenacaoNomeWidget.add(new Label(encontrocoarea.getEncontroInscricao2().toStringApelidos()));
+			}
+		}else
+			coordenacaoNomeWidget.add(new Label("VAGO"));
+		coordenacaoWidget.add(coordenacaoNomeWidget);
+		focusPanel.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				editaArea(encontrocoarea);
+				coordenacaoAreaWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(coordenacaoNomeWidget)));
+			}
+		});
+		return focusPanel;
+	}
 
 	private EncontroOrganogramaCoordenacao getEncontroOrganogramaCoordenacao(EncontroOrganogramaVO vo, OrganogramaCoordenacao coordenacao) {
 		for (EncontroOrganogramaCoordenacao encontroOrganogramaCoordenacao : vo.getListaEncontroOrganogramaCoordenacao()) {
@@ -403,6 +447,17 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		encontroOrganogramaCoordenacao.setOrganogramaCoordenacao(coordenacao);
 		vo.getListaEncontroOrganogramaCoordenacao().add(encontroOrganogramaCoordenacao);
 		return encontroOrganogramaCoordenacao;
+	}
+
+	private EncontroOrganogramaArea getEncontroOrganogramaArea(EncontroOrganogramaVO vo, OrganogramaArea area) {
+		for (EncontroOrganogramaArea encontroOrganogramaArea : vo.getListaEncontroOrganogramaArea()) {
+			if ( encontroOrganogramaArea.getOrganogramaArea().equals(area))
+				return encontroOrganogramaArea;
+		}
+		EncontroOrganogramaArea encontroOrganogramaArea = new EncontroOrganogramaArea();
+		encontroOrganogramaArea.setOrganogramaArea(area);
+		vo.getListaEncontroOrganogramaArea().add(encontroOrganogramaArea);
+		return encontroOrganogramaArea;
 	}
 
 	public List<EncontroOrganograma> getListaOrganograma() {

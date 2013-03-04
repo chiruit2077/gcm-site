@@ -29,7 +29,7 @@
 			</table>
 		</g:HTMLPanel>
 		<g:VerticalPanel ui:field="centralPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center">
-			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center" >
+			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="left" >
 				<g:Label styleName="portal-formLabel" text="Organograma Selecionado: " horizontalAlignment="right" />
 				<g:ListBox ui:field="organogramaListBox" width="400px"/>
 				<g:Button ui:field="salvarButton">Salvar</g:Button>
@@ -48,6 +48,12 @@
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="center">
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" align="center">
+							    <tr>
+							    	<td colspan="4">
+					    				<g:RadioButton ui:field="casalRadio"/>
+				    					<g:RadioButton ui:field="pessoaRadio"/>
+					    			</td>
+							    </tr>
 								<tr>
 									<td>
 					    				<g:Label ui:field="labelInscricao1" styleName="portal-formLabel" text="Inscrição 1:" />

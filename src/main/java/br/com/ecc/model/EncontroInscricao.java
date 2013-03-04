@@ -62,7 +62,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeEncontristaLike",
 		query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
 		  "   where uc.encontro = :encontro and " +
-		  "        uc.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR' ) and " +
+		  "        uc.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR', 'EXTERNO' ) and " +
 		  "       ( upper(c.ele.nome) like upper(:key) or " +
 		  "        upper(c.ele.apelido) like upper(:key) or " +
 		  "        upper(c.ela.nome) like upper(:key) or" +
@@ -136,6 +136,12 @@ public class EncontroInscricao extends _WebBaseEntity {
 	public String toString() {
 		if(casal!=null) return casal.toString();
 		return pessoa.toString();
+	}
+
+	@Transient
+	public String toStringApelidos() {
+		if(casal!=null) return casal.getApelidos("e");
+		return pessoa.getApelido();
 	}
 
 	public Integer getId() {

@@ -55,6 +55,14 @@ public class OrganogramaArea extends _WebBaseEntity {
 
 	private Integer linhaSpam;
 
+	private Integer linhaCoordenacao;
+
+	private Integer colunaCoordenacao;
+
+	private Integer colunaSpamCoordenacao;
+
+	private Integer linhaSpamCoordenacao;
+
 
 	@Version
 	private Integer version;
@@ -167,6 +175,38 @@ public class OrganogramaArea extends _WebBaseEntity {
 
 	public void setLinhaSpam(Integer linhaSpam) {
 		this.linhaSpam = linhaSpam;
+	}
+
+	public Integer getLinhaCoordenacao() {
+		return linhaCoordenacao;
+	}
+
+	public void setLinhaCoordenacao(Integer linhaCoordenacao) {
+		this.linhaCoordenacao = linhaCoordenacao;
+	}
+
+	public Integer getColunaCoordenacao() {
+		return colunaCoordenacao;
+	}
+
+	public void setColunaCoordenacao(Integer colunaCoordenacao) {
+		this.colunaCoordenacao = colunaCoordenacao;
+	}
+
+	public Integer getColunaSpamCoordenacao() {
+		return colunaSpamCoordenacao;
+	}
+
+	public void setColunaSpamCoordenacao(Integer colunaSpamCoordenacao) {
+		this.colunaSpamCoordenacao = colunaSpamCoordenacao;
+	}
+
+	public Integer getLinhaSpamCoordenacao() {
+		return linhaSpamCoordenacao;
+	}
+
+	public void setLinhaSpamCoordenacao(Integer linhaSpamCoordenacao) {
+		this.linhaSpamCoordenacao = linhaSpamCoordenacao;
 	}
 
 }
