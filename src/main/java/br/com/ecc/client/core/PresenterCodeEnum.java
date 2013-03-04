@@ -10,8 +10,10 @@ import br.com.ecc.client.ui.sistema.cadastro.EncontroPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.GrupoPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.HotelPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.PapelPresenter;
+import br.com.ecc.client.ui.sistema.encontro.DistribuicaoOrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroConvitePresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroInscricaoPresenter;
+import br.com.ecc.client.ui.sistema.encontro.EncontroOrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.encontro.PlanilhaPresenter;
 import br.com.ecc.client.ui.sistema.hotelaria.DistribuicaoQuartosPresenter;
 import br.com.ecc.client.ui.sistema.hotelaria.EncontroHotelPresenter;
@@ -53,7 +55,10 @@ public enum PresenterCodeEnum  {
 	TESOURARIA_FICHAS(2,15, FichasPresenter.class, "Fichas", true),
 
 	HOTELARIA_ENCONTRO_HOTEL(2,18, EncontroHotelPresenter.class, "Hoteis do Encontro", true),
-	HOTELARIA_DISTRIBUICAO(2,19, DistribuicaoQuartosPresenter.class, "Distribuição dos Quartos", true)
+	HOTELARIA_DISTRIBUICAO(2,19, DistribuicaoQuartosPresenter.class, "Distribuição dos Quartos", true),
+
+	ENCONTRO_ORGANOGRAMA(2,21, EncontroOrganogramaPresenter.class, "Organogramas do Encontro", true),
+	DISTRIBUICAOORGANOGRAMA(2,22, DistribuicaoOrganogramaPresenter.class, "Distribuição dos Organogramas", true)
 	;
 
 

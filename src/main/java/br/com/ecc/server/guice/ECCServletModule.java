@@ -6,6 +6,7 @@ import br.com.ecc.server.service.cadastro.CasalServiceImpl;
 import br.com.ecc.server.service.cadastro.EncontroServiceImpl;
 import br.com.ecc.server.service.cadastro.GrupoServiceImpl;
 import br.com.ecc.server.service.cadastro.HotelServiceImpl;
+import br.com.ecc.server.service.cadastro.OrganogramaServiceImpl;
 import br.com.ecc.server.service.cadastro.PapelServiceImpl;
 import br.com.ecc.server.service.cadastro.PessoaServiceImpl;
 import br.com.ecc.server.service.cadastro.QuartoServiceImpl;
@@ -23,6 +24,7 @@ import br.com.ecc.server.service.encontro.EncontroFilaServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroHotelServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroInscricaoFichaPagamentoServiceImpl;
 import br.com.ecc.server.service.encontro.EncontroInscricaoServiceImpl;
+import br.com.ecc.server.service.encontro.EncontroOrganogramaServiceImpl;
 import br.com.ecc.server.service.patrimonio.ItemPatrimonioServiceImpl;
 import br.com.ecc.server.service.redirecionamento.ConfirmacaoServlet;
 import br.com.ecc.server.service.redirecionamento.FichaServlet;
@@ -88,5 +90,9 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "confirmacao").with(ConfirmacaoServlet.class);
 		this.serve(contextPath + "inscricao").with(InscricaoServlet.class);
 		this.serve(contextPath + "planilha").with(PlanilhaServlet.class);
+
+		// organograma
+		this.serve(contextPath + "organograma").with(OrganogramaServiceImpl.class);
+		this.serve(contextPath + "encontroOrganograma").with(EncontroOrganogramaServiceImpl.class);
 	}
 }

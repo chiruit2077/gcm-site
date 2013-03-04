@@ -4,7 +4,8 @@ public enum TipoInscricaoEnum {
 	AFILHADO("Afilhado", 0),
 	COORDENADOR("Coordenador", 1),
 	PADRINHO("Padrinho", 2),
-	APOIO("Apoio", 3);
+	APOIO("Apoio", 3),
+	EXTERNO("Externo", 4);
 
 	private String nome;
 	private Integer codigo;

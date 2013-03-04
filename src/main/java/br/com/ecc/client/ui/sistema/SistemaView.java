@@ -91,9 +91,10 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		if(administrador){
 			menuItem = new MenuItem("Hotelaria", new MenuBar(true));
 			sistemaMenuBar.addItem(menuItem);
-			menuItem.getSubMenu().addItem("Encontro Hoteis", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTELARIA_ENCONTRO_HOTEL); } });
+			menuItem.getSubMenu().addItem("Hoteis do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTELARIA_ENCONTRO_HOTEL); } });
 			menuItem.getSubMenu().addItem("Distribuição dos Quartos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTELARIA_DISTRIBUICAO); } });
 		}
+
 		//Patrimonio
 		if(administrador){
 			menuItem = new MenuItem("Patrimônio", new MenuBar(true));
@@ -117,6 +118,11 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 			menuItem.getSubMenu().addItem("Convites ao encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_CONVITE); } });
 			menuItem.getSubMenu().addItem("Inscrição no encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_INSCRICAO); } });
 			menuItem.getSubMenu().addItem("Planilha de atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
+
+			if(administrador){
+				menuItem.getSubMenu().addItem("Organogramas do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_ORGANOGRAMA); } });
+				menuItem.getSubMenu().addItem("Distribuição dos Organogramas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.DISTRIBUICAOORGANOGRAMA); } });
+			}
 		}
 
 

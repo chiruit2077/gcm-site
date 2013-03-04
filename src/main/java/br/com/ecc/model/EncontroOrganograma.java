@@ -1,9 +1,6 @@
 package br.com.ecc.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,20 +11,17 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-import br.com.ecc.model.tipo.TipoEncontroHotelEnum;
-
 @Entity
-@SequenceGenerator(name="SQ_ENCONTROHOTEL", sequenceName="SQ_ENCONTROHOTEL")
+@SequenceGenerator(name="SQ_ENCONTROORGANOGRAMA", sequenceName="SQ_ENCONTROORGANOGRAMA")
 @NamedQueries({
-	@NamedQuery(name="encontroHotel.porEncontro", query="select u from EncontroHotel u where u.encontro = :encontro order by u.tipo"),
-	@NamedQuery(name="encontroHotel.porEncontroEvento", query="select u from EncontroHotel u where u.encontro = :encontro and u.tipo = 'EVENTO' ")
+	@NamedQuery(name="encontroOrganograma.porEncontro", query="select u from EncontroOrganograma u where u.encontro = :encontro order by u.organograma.nome")
 })
-public class EncontroHotel extends _WebBaseEntity {
+public class EncontroOrganograma extends _WebBaseEntity {
 
-	private static final long serialVersionUID = 631487464767102278L;
+	private static final long serialVersionUID = -2166155813154805917L;
 
 	@Id
-	@GeneratedValue(generator="SQ_ENCONTROHOTEL", strategy=GenerationType.AUTO)
+	@GeneratedValue(generator="SQ_ENCONTROORGANOGRAMA", strategy=GenerationType.AUTO)
 	private Integer id;
 
 	@ManyToOne
@@ -35,19 +29,15 @@ public class EncontroHotel extends _WebBaseEntity {
 	private Encontro encontro;
 
 	@ManyToOne
-	@JoinColumn(name="hotel")
-	private Hotel hotel;
-
-	@Enumerated(EnumType.STRING)
-	@Column(length=30)
-	private TipoEncontroHotelEnum tipo;
+	@JoinColumn(name="organograma")
+	private Organograma organograma;
 
 	@Version
 	private Integer version;
 
 	@Override
 	public String toString() {
-		return hotel.getNome() + " - " + tipo.getNome();
+		return organograma.getNome();
 	}
 	public Integer getId() {
 		return id;
@@ -67,18 +57,13 @@ public class EncontroHotel extends _WebBaseEntity {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	public Hotel getHotel() {
-		return hotel;
+	public Organograma getOrganograma() {
+		return organograma;
 	}
-	public void setHotel(Hotel hotel) {
-		this.hotel = hotel;
+	public void setOrganograma(Organograma organograma) {
+		this.organograma = organograma;
 	}
-	public TipoEncontroHotelEnum getTipo() {
-		return tipo;
-	}
-	public void setTipo(TipoEncontroHotelEnum tipo) {
-		this.tipo = tipo;
-	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -87,7 +72,7 @@ public class EncontroHotel extends _WebBaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EncontroHotel other = (EncontroHotel) obj;
+		EncontroOrganograma other = (EncontroOrganograma) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -1039,3 +1039,16 @@ html>body .gwt-DecoratedTabBar {
 	vertical-align: middle;
 	text-indent: 5px;
 }
+
+
+.organograma-Coordenacao {
+	background: gray;
+	color: black;
+	border: 1px solid black;
+}
+
+.organograma-CoordenacaoTitulo {
+	background: gray;
+	color: blue;
+	border: 1px solid black;
+}
