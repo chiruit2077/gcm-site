@@ -26,7 +26,7 @@ public class FlexTableUtil {
 		private Integer originalId;
 		private Object[] listaWidgets;
 		private List<String> listaEstilos;
-		
+
 		public Integer getId() {
 			return id;
 		}
@@ -52,30 +52,30 @@ public class FlexTableUtil {
 			this.originalId = originalId;
 		}
 	}
-	
+
 	private Integer HeaderRowIndex = 0;
 	private List<AutoHorizontalAlignmentConstant> listaAlinhamento = new ArrayList<AutoHorizontalAlignmentConstant>();
 	private List<Elemento> listaElementos = new ArrayList<Elemento>();
 	private List<Image> listaImagens = new ArrayList<Image>();
 	private List<TipoColuna> listaTipos = new ArrayList<TipoColuna>();
 	private List<String> listaFormatoData = new ArrayList<String>();
-	
+
 	public static enum TipoColuna { STRING, NUMBER, DATE };
-	
+
 	private enum Ordenacao { ASCENTENTE, DESCENDENTE };
 	private Ordenacao ordenacao;
 	private int ultimaColunaOrdenada = 0;
-	
+
 	private FlexTable tabela;
-	
+
 	public  void initialize(FlexTable tabela) {
 		tabela.insertRow(HeaderRowIndex);
 		tabela.getRowFormatter().addStyleName(HeaderRowIndex,"FlexTable-Header");
 		tabela.addStyleName("FlexTable");
 		this.tabela = tabela;
 	}
-	
-	public  void addColumn(final Object columnHeading, String width, 
+
+	public  void addColumn(final Object columnHeading, String width,
 						   AutoHorizontalAlignmentConstant alinhamento ) {
 		addColumn(columnHeading, width, alinhamento, TipoColuna.STRING, null);
 	}
@@ -113,13 +113,13 @@ public class FlexTableUtil {
 		listaImagens.add(img);
 		hp.add(widget, "one");
 		hp.add(img, "two");
-				
+
 		if(cell==0){
 			hp.addStyleName("FlexTable-ColumnLabel-FirstColumn");
 		} else {
 			hp.addStyleName("FlexTable-ColumnLabel");
 		}
-		
+
 		tabela.setWidget(HeaderRowIndex, cell, hp);
 		tabela.getCellFormatter().setWidth(HeaderRowIndex, cell, width);
 	}
@@ -148,7 +148,7 @@ public class FlexTableUtil {
 		elemento.setId(rowIndex);
 		elemento.setListaWidgets(cellObjects);
 		listaElementos.add(elemento);
-		
+
 		for (int cell = 0; cell < cellObjects.length; cell++) {
 			if(cellObjects[cell]==null){
 				cellObjects[cell]="";
@@ -195,7 +195,7 @@ public class FlexTableUtil {
 			tabela.removeRow(1);
 		}
 	}
-	
+
 	private void sort(final int cell){
 		for (Image img : listaImagens) {
 			img.setUrl("images/table/blank.png");
@@ -228,11 +228,11 @@ public class FlexTableUtil {
 			@Override
 			public int compare(Elemento o1, Elemento o2) {
 				if(o1.getListaWidgets()[cell]==null || o1.getListaWidgets()[cell].toString().equals("")){
-					if(ordenacao.equals(Ordenacao.ASCENTENTE)) return -1; 
+					if(ordenacao.equals(Ordenacao.ASCENTENTE)) return -1;
 					else return 1;
 				}
 				if(o2.getListaWidgets()[cell].toString()==null || o2.getListaWidgets()[cell].toString().equals("")){
-					if(ordenacao.equals(Ordenacao.ASCENTENTE)) return 1; 
+					if(ordenacao.equals(Ordenacao.ASCENTENTE)) return 1;
 					else return -1;
 				}
 				if(!(o1.getListaWidgets()[cell] instanceof Widget)){
@@ -273,7 +273,7 @@ public class FlexTableUtil {
 				return 0;
 			}
 		});
-		
+
 		clearData(false);
 		int rowIndex = 1;
 		for (Elemento element : novaListaElementos) {
@@ -307,7 +307,7 @@ public class FlexTableUtil {
 			}
 		}
 	}
-	
+
 	public Integer getRowById(Integer id){
 		for (Elemento elemento : listaElementos) {
 			if(elemento.getOriginalId().equals(id)){
@@ -315,5 +315,11 @@ public class FlexTableUtil {
 			}
 		}
 		return 0;
+	}
+
+	public void setColumnVisible(int Col, boolean b){
+		for(int i=0; i< tabela.getRowCount(); i++) {
+			tabela.getCellFormatter().setVisible(i, Col, b);
+		}
 	}
 }

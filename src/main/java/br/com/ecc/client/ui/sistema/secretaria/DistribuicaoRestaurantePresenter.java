@@ -10,14 +10,13 @@ import br.com.ecc.client.service.cadastro.EncontroService;
 import br.com.ecc.client.service.cadastro.EncontroServiceAsync;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
-import br.com.ecc.client.service.encontro.EncontroHotelService;
-import br.com.ecc.client.service.encontro.EncontroHotelServiceAsync;
+import br.com.ecc.client.service.encontro.EncontroRestauranteService;
+import br.com.ecc.client.service.encontro.EncontroRestauranteServiceAsync;
 import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Encontro;
-import br.com.ecc.model.EncontroHotel;
+import br.com.ecc.model.EncontroRestaurante;
 import br.com.ecc.model.Grupo;
-import br.com.ecc.model.tipo.TipoRestauranteEnum;
-import br.com.ecc.model.vo.EncontroHotelVO;
+import br.com.ecc.model.vo.EncontroRestauranteVO;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
@@ -25,20 +24,20 @@ import com.google.gwt.user.client.Cookies;
 public class DistribuicaoRestaurantePresenter extends BasePresenter<DistribuicaoRestaurantePresenter.Display> {
 
 	public interface Display extends BaseDisplay {
-		void setRestauranteSelecionado(TipoRestauranteEnum tipo);
-		void populaEntidades(EncontroHotelVO encontroHotelVO);
+		void setRestauranteSelecionado(EncontroRestaurante restaurante);
+		void setListaRestaurantes(List<EncontroRestaurante> lista);
+		void populaEntidades(EncontroRestauranteVO vo);
 	}
 
 	public DistribuicaoRestaurantePresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
 
-	EncontroHotelServiceAsync service = GWT.create(EncontroHotelService.class);
+	EncontroRestauranteServiceAsync service = GWT.create(EncontroRestauranteService.class);
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
-	private EncontroHotel encontroHotelSelecionado;
-	private TipoRestauranteEnum tipoRestauranteSelecionado;
-	private EncontroHotelVO encontroHotelVO;
+	private EncontroRestaurante encontroRestauranteSelecionado;
+	private EncontroRestauranteVO vo;
 
 	@Override
 	public void bind() {
@@ -79,31 +78,34 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 						break;
 					}
 				}
-				buscaHotelEvento();
+				buscaRestaurantes();
 			}
 		});
 	}
 
-	public void buscaHotelEvento(){
+	public void buscaRestaurantes(){
 		getDisplay().showWaitMessage(true);
-		service.getEncontroHotelEvento(encontroSelecionado, new WebAsyncCallback<EncontroHotel>(getDisplay()) {
+		service.lista(encontroSelecionado, new WebAsyncCallback<List<EncontroRestaurante>>(getDisplay()) {
 			@Override
-			protected void success(EncontroHotel encontroHotel) {
-				setEncontroHotelSelecionado(encontroHotel);
-				setTipoRestauranteSelecionado(TipoRestauranteEnum.JAPONES);
+			protected void success(List<EncontroRestaurante> lista) {
+				getDisplay().setListaRestaurantes(lista);
+				if (lista.size() > 0){
+					getDisplay().setRestauranteSelecionado(lista.get(0));
+					setEncontroRestauranteSelecionado(lista.get(0));
+				}
 				buscaVO();
 			}
 		});
 	}
 
 	public void buscaVO(){
-		if (encontroHotelSelecionado != null){
+		if (encontroRestauranteSelecionado != null){
 			getDisplay().showWaitMessage(true);
-			service.getVO(encontroHotelSelecionado, new WebAsyncCallback<EncontroHotelVO>(getDisplay()) {
+			service.getVO(encontroRestauranteSelecionado, new WebAsyncCallback<EncontroRestauranteVO>(getDisplay()) {
 				@Override
-				protected void success(EncontroHotelVO vo) {
-					setEncontroHotelVO(vo);
-					getDisplay().setRestauranteSelecionado(TipoRestauranteEnum.JAPONES);
+				protected void success(EncontroRestauranteVO vo) {
+					setVo(vo);
+					getDisplay().populaEntidades(vo);
 					getDisplay().showWaitMessage(false);
 				}
 			});
@@ -112,12 +114,12 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 	}
 	public void salvar() {
 		getDisplay().showWaitMessage(true);
-		service.salvaRestaurante(getEncontroHotelVO(), new WebAsyncCallback<EncontroHotelVO>(getDisplay()) {
+		service.salvaRestaurante(getVo(), new WebAsyncCallback<EncontroRestauranteVO>(getDisplay()) {
 			@Override
-			public void success(EncontroHotelVO vo) {
+			public void success(EncontroRestauranteVO vo) {
 				getDisplay().reset();
-				setEncontroHotelVO(vo);
-				getDisplay().setRestauranteSelecionado(getTipoRestauranteSelecionado());
+				setVo(vo);
+				getDisplay().populaEntidades(vo);
 				getDisplay().showWaitMessage(false);
 			}
 		});
@@ -136,28 +138,21 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 		this.encontroSelecionado = encontroSelecionado;
 	}
 
-	public EncontroHotelVO getEncontroHotelVO() {
-		return encontroHotelVO;
+	public EncontroRestaurante getEncontroRestauranteSelecionado() {
+		return encontroRestauranteSelecionado;
 	}
 
-	public void setEncontroHotelVO(EncontroHotelVO encontroHotelVO) {
-		this.encontroHotelVO = encontroHotelVO;
+	public void setEncontroRestauranteSelecionado(
+			EncontroRestaurante encontroRestauranteSelecionado) {
+		this.encontroRestauranteSelecionado = encontroRestauranteSelecionado;
 	}
 
-	public EncontroHotel getEncontroHotelSelecionado() {
-		return encontroHotelSelecionado;
+	public EncontroRestauranteVO getVo() {
+		return vo;
 	}
 
-	public void setEncontroHotelSelecionado(EncontroHotel encontroHotelSelecionado) {
-		this.encontroHotelSelecionado = encontroHotelSelecionado;
-	}
-
-	public TipoRestauranteEnum getTipoRestauranteSelecionado() {
-		return tipoRestauranteSelecionado;
-	}
-
-	public void setTipoRestauranteSelecionado(TipoRestauranteEnum tipoRestauranteSelecionado) {
-		this.tipoRestauranteSelecionado = tipoRestauranteSelecionado;
+	public void setVo(EncontroRestauranteVO vo) {
+		this.vo = vo;
 	}
 
 }

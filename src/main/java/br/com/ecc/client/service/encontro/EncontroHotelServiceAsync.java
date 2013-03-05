@@ -13,7 +13,6 @@ public interface EncontroHotelServiceAsync {
 	void lista(Encontro encontro, AsyncCallback<List<EncontroHotel>> callback);
 	void salvaEncontroHotelQuarto(EncontroHotelVO encontroHotelVO,	AsyncCallback<EncontroHotelVO> callback);
 	void getEncontroHotelEvento(Encontro encontroSelecionado, AsyncCallback<EncontroHotel> callback);
-	void salvaRestaurante(EncontroHotelVO encontroHotelVO, AsyncCallback<EncontroHotelVO> callback);
 	void salva(EncontroHotel hotelEditado, AsyncCallback<EncontroHotel> webAsyncCallback);
 	void exclui(EncontroHotel hotelEditado,AsyncCallback<Void> webAsyncCallback);
 }

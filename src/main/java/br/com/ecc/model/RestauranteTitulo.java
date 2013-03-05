@@ -1,6 +1,5 @@
 package br.com.ecc.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,26 +12,21 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
 @Entity
-@SequenceGenerator(name="SQ_MESA", sequenceName="SQ_MESA")
+@SequenceGenerator(name="SQ_RESTAURANTETITULO", sequenceName="SQ_RESTAURANTETITULO")
 @NamedQueries({
-	@NamedQuery(name="mesa.porRestaurante", query="select u from Mesa u where u.restaurante = :restaurante ")
+	@NamedQuery(name="restauranteTitulo.porRestaurante", query="select u from RestauranteTitulo u where u.restaurante = :restaurante ")
 })
-public class Mesa extends _WebBaseEntity {
+public class RestauranteTitulo extends _WebBaseEntity {
 
-	private static final long serialVersionUID = 8066467472547386774L;
+	private static final long serialVersionUID = 6396299988799121101L;
 
 	@Id
-	@GeneratedValue(generator="SQ_MESA", strategy=GenerationType.AUTO)
+	@GeneratedValue(generator="SQ_RESTAURANTETITULO", strategy=GenerationType.AUTO)
 	private Integer id;
 
 	@ManyToOne
 	@JoinColumn(name="restaurante")
 	private Restaurante restaurante;
-
-	private Integer quantidadeCasais;
-
-	@Column(length=30)
-	private String numero;
 
 	private Integer coluna;
 
@@ -42,12 +36,14 @@ public class Mesa extends _WebBaseEntity {
 
 	private Integer linhaSpam;
 
+	private String titulo;
+
 	@Version
 	private Integer version;
 
 	@Override
 	public String toString() {
-		return getNumero();
+		return getTitulo();
 	}
 
 	public Integer getId() {
@@ -66,14 +62,6 @@ public class Mesa extends _WebBaseEntity {
 		this.version = version;
 	}
 
-	public String getNumero() {
-		return numero;
-	}
-
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -82,37 +70,13 @@ public class Mesa extends _WebBaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Mesa other = (Mesa) obj;
+		RestauranteTitulo other = (RestauranteTitulo) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public boolean equalsNumero(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Mesa other = (Mesa) obj;
-		if (numero == null) {
-			if (other.numero != null)
-				return false;
-		} else if (!numero.equals(other.numero))
-			return false;
-		return true;
-	}
-
-	public Integer getQuantidadeCasais() {
-		return quantidadeCasais;
-	}
-
-	public void setQuantidadeCasais(Integer quantidadeCasais) {
-		this.quantidadeCasais = quantidadeCasais;
 	}
 
 	public Restaurante getRestaurante() {
@@ -153,6 +117,14 @@ public class Mesa extends _WebBaseEntity {
 
 	public void setLinhaSpam(Integer linhaSpam) {
 		this.linhaSpam = linhaSpam;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
 }

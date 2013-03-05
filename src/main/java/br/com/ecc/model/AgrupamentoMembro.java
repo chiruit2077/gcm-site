@@ -40,6 +40,10 @@ public class AgrupamentoMembro extends _WebBaseEntity {
 	@JoinColumn(name="pessoa")
 	private Pessoa pessoa;
 
+	@ManyToOne
+	@JoinColumn(name="papel")
+	private Papel papel;
+
 	@Column(length=50)
 	private String rotulo;
 
@@ -81,5 +85,11 @@ public class AgrupamentoMembro extends _WebBaseEntity {
 	}
 	public void setRotulo(String rotulo) {
 		this.rotulo = rotulo;
+	}
+	public Papel getPapel() {
+		return papel;
+	}
+	public void setPapel(Papel papel) {
+		this.papel = papel;
 	}
 }

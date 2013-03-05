@@ -55,12 +55,24 @@
 								</tr>
 							</table>
 						</g:HTMLPanel>
-						<g:HTMLPanel ui:field="tipoRestauranteHTMLPanel" width="100%" visible="false">
+						<g:HTMLPanel ui:field="tipoAtividadeHTMLPanel" width="100%" visible="false">
 							<table cellpadding="3" width="100%">
 								<tr>
-									<td class="portal-formLabel" width="200px">Tipo Restaurante:</td>
+									<td class="portal-formLabel" width="200px">Atividade:</td>
 									<td>
-										<g:ListBox ui:field="tipoRestauranteListBox" width="250px"/>
+										<g:ListBox ui:field="atividadeListBox" width="250px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="200px">Tipo Atividade:</td>
+									<td>
+										<g:ListBox ui:field="tipoAtividadeListBox" width="250px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="200px">Papel Padrão:</td>
+									<td>
+										<g:ListBox ui:field="papelPadraoListBox" width="250px"/>
 									</td>
 								</tr>
 							</table>

@@ -14,8 +14,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
+import br.com.ecc.model.tipo.TipoAtividadeEnum;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
-import br.com.ecc.model.tipo.TipoRestauranteEnum;
 
 @Entity
 @SequenceGenerator(name="SQ_AGRUPAMENTO", sequenceName="SQ_AGRUPAMENTO")
@@ -45,9 +45,13 @@ public class Agrupamento extends _WebBaseEntity {
 	@Column(length=250)
 	private String nome;
 
+	@ManyToOne
+	@JoinColumn(name="atividade")
+	private Atividade atividade;
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=30)
-	private TipoRestauranteEnum tipoRestaurante;
+	private TipoAtividadeEnum tipoAtividade;
 
 	@Version
 	private Integer version;
@@ -103,11 +107,37 @@ public class Agrupamento extends _WebBaseEntity {
 		this.tipo = tipo;
 	}
 
-	public TipoRestauranteEnum getTipoRestaurante() {
-		return tipoRestaurante;
+	public Atividade getAtividade() {
+		return atividade;
 	}
 
-	public void setTipoRestaurante(TipoRestauranteEnum tipoRestaurante) {
-		this.tipoRestaurante = tipoRestaurante;
+	public void setAtividade(Atividade atividade) {
+		this.atividade = atividade;
 	}
+
+	public TipoAtividadeEnum getTipoAtividade() {
+		return tipoAtividade;
+	}
+
+	public void setTipoAtividade(TipoAtividadeEnum tipoAtividade) {
+		this.tipoAtividade = tipoAtividade;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Agrupamento other = (Agrupamento) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
 }

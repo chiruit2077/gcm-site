@@ -194,6 +194,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		defineCamposArea(encontroOrganogramaArea);
 		editaDialogBox.center();
 		editaDialogBox.show();
+		casalRadio.setValue(true);
 		inscricaoSuggestBox1.setFocus(true);
 	}
 
@@ -274,7 +275,6 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 	}
 
 	public void limpaCamposCoordenacao(){
-		casalRadio.setValue(true);
 		inscricaoSuggestBox1.setValue(null);
 		inscricaoSuggestBox2.setValue(null);
 	}

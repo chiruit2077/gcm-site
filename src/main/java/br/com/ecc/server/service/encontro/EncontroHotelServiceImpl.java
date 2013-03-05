@@ -1,20 +1,15 @@
 package br.com.ecc.server.service.encontro;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.service.encontro.EncontroHotelService;
-import br.com.ecc.model.Agrupamento;
-import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.tipo.Operacao;
-import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.EncontroHotelVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
 import br.com.ecc.server.command.EncontroHotelQuartoSalvarCommand;
-import br.com.ecc.server.command.EncontroHotelRestauranteSalvarCommand;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
@@ -67,43 +62,6 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 		cmbEncontroHotelQuarto.addParameter("encontrohotel", vo.getEncontroHotel());
 		vo.setListaEncontroQuartos(cmbEncontroHotelQuarto.call());
 
-		GetEntityListCommand cmbEncontroRestauranteGarcon = injector.getInstance(GetEntityListCommand.class);
-		cmbEncontroRestauranteGarcon.setNamedQuery("encontroRestauranteGarcon.porEncontroHotel");
-		cmbEncontroRestauranteGarcon.addParameter("encontrohotel", vo.getEncontroHotel());
-		vo.setListaEncontroRestauranteGarcon(cmbEncontroRestauranteGarcon.call());
-
-		GetEntityListCommand cmbMesa = injector.getInstance(GetEntityListCommand.class);
-		cmbMesa.setNamedQuery("mesa.porHotel");
-		cmbMesa.addParameter("hotel", vo.getEncontroHotel().getHotel());
-		vo.setListaMesas(cmbMesa.call());
-
-		List<AgrupamentoVO> listaAgrupamentoVO = new ArrayList<AgrupamentoVO>();
-		GetEntityListCommand cmdAgrupamento = injector.getInstance(GetEntityListCommand.class);
-		cmdAgrupamento.setNamedQuery("agrupamento.porEncontro");
-		cmdAgrupamento.addParameter("encontro", vo.getEncontroHotel().getEncontro());
-		List<Agrupamento> listaAgrupamemto = (List<Agrupamento>) cmdAgrupamento.call();
-		for (Agrupamento agrupamento : listaAgrupamemto) {
-			AgrupamentoVO voagrup = new AgrupamentoVO();
-			voagrup.setAgrupamento(agrupamento);
-			GetEntityListCommand cmdMenbro = injector.getInstance(GetEntityListCommand.class);
-			cmdMenbro.setNamedQuery("agrupamentoMembro.porAgrupamento");
-			cmdMenbro.addParameter("agrupamento", agrupamento);
-			voagrup.setListaMembros((List<AgrupamentoMembro>) cmdMenbro.call());
-			listaAgrupamentoVO.add(voagrup);
-		}
-		vo.setListaAgrupamentosVO(listaAgrupamentoVO);
-
-
-		GetEntityListCommand cmdAfilhados = injector.getInstance(GetEntityListCommand.class);
-		cmdAfilhados.setNamedQuery("encontroInscricao.porEncontroConvidados");
-		cmdAfilhados.addParameter("encontro", vo.getEncontroHotel().getEncontro());
-		vo.setListaAfilhados(cmdAfilhados.call());
-
-		GetEntityListCommand cmdEncontristas = injector.getInstance(GetEntityListCommand.class);
-		cmdEncontristas.setNamedQuery("encontroInscricao.porEncontroEncontristas");
-		cmdEncontristas.addParameter("encontro", vo.getEncontroHotel().getEncontro());
-		vo.setListaEncontristas(cmdEncontristas.call());
-
 		return vo;
 	}
 
@@ -127,14 +85,6 @@ public class EncontroHotelServiceImpl extends SecureRemoteServiceServlet impleme
 		if (call.size() == 1)
 			return call.get(0);
 		return null;
-	}
-
-	@Override
-	public EncontroHotelVO salvaRestaurante(EncontroHotelVO encontroHotelVO)
-			throws Exception {
-		EncontroHotelRestauranteSalvarCommand cmd = injector.getInstance(EncontroHotelRestauranteSalvarCommand.class);
-		cmd.setEncontroHotelVO(encontroHotelVO);
-		return cmd.call();
 	}
 
 	@Override

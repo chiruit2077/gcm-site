@@ -5,10 +5,7 @@ import java.util.List;
 
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroHotelQuarto;
-import br.com.ecc.model.EncontroInscricao;
-import br.com.ecc.model.EncontroRestauranteGarcon;
 import br.com.ecc.model.HotelAgrupamento;
-import br.com.ecc.model.Mesa;
 import br.com.ecc.model.Quarto;
 
 public class EncontroHotelVO implements Serializable {
@@ -18,12 +15,7 @@ public class EncontroHotelVO implements Serializable {
 	private EncontroHotel encontroHotel;
 	private List<HotelAgrupamento> listaHotelAgrupamentos;
 	private List<Quarto> listaQuartos;
-	private List<Mesa> listaMesas;
 	private List<EncontroHotelQuarto> listaEncontroQuartos;
-	private List<EncontroRestauranteGarcon> listaEncontroRestauranteGarcon;
-	private List<AgrupamentoVO> listaAgrupamentosVO;
-	private List<EncontroInscricao> listaAfilhados;
-	private List<EncontroInscricao> listaEncontristas;
 
 	public EncontroHotel getEncontroHotel() {
 		return encontroHotel;
@@ -49,35 +41,5 @@ public class EncontroHotelVO implements Serializable {
 	public void setListaEncontroQuartos(List<EncontroHotelQuarto> listaEncontroQuartos) {
 		this.listaEncontroQuartos = listaEncontroQuartos;
 	}
-	public List<EncontroRestauranteGarcon> getListaEncontroRestauranteGarcon() {
-		return listaEncontroRestauranteGarcon;
-	}
-	public void setListaEncontroRestauranteGarcon(
-			List<EncontroRestauranteGarcon> listaEncontroRestauranteGarcon) {
-		this.listaEncontroRestauranteGarcon = listaEncontroRestauranteGarcon;
-	}
-	public List<Mesa> getListaMesas() {
-		return listaMesas;
-	}
-	public void setListaMesas(List<Mesa> listaMesas) {
-		this.listaMesas = listaMesas;
-	}
-	public List<AgrupamentoVO> getListaAgrupamentosVO() {
-		return listaAgrupamentosVO;
-	}
-	public void setListaAgrupamentosVO(List<AgrupamentoVO> listaAgrupamentosVO) {
-		this.listaAgrupamentosVO = listaAgrupamentosVO;
-	}
-	public List<EncontroInscricao> getListaAfilhados() {
-		return listaAfilhados;
-	}
-	public void setListaAfilhados(List<EncontroInscricao> listaAfilhados) {
-		this.listaAfilhados = listaAfilhados;
-	}
-	public List<EncontroInscricao> getListaEncontristas() {
-		return listaEncontristas;
-	}
-	public void setListaEncontristas(List<EncontroInscricao> listaEncontristas) {
-		this.listaEncontristas = listaEncontristas;
-	}
+
 }

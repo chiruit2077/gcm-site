@@ -13,16 +13,19 @@ import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.AgrupamentoMembro;
+import br.com.ecc.model.Atividade;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.Papel;
 import br.com.ecc.model.Pessoa;
+import br.com.ecc.model.tipo.TipoAtividadeEnum;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
-import br.com.ecc.model.tipo.TipoRestauranteEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -82,16 +85,20 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 	private final GenericEntitySuggestOracle pessoaSuggest = new GenericEntitySuggestOracle();
 
 	@UiField ListBox tipoListBox;
-	@UiField ListBox tipoRestauranteListBox;
+	@UiField ListBox tipoAtividadeListBox;
+	@UiField ListBox atividadeListBox;
+	@UiField ListBox papelPadraoListBox;
 	@UiField ListBox tipoInscricaoListBox;
 
 	@UiField RadioButton grupoRadioButton;
 	@UiField RadioButton encontroRadioButton;
 	@UiField HTMLPanel encontroMembroHTMLPanel;
-	@UiField HTMLPanel tipoRestauranteHTMLPanel;
+	@UiField HTMLPanel tipoAtividadeHTMLPanel;
 
 	private Casal casalEditado;
 	private Pessoa pessoaEditada;
+	private List<Atividade> listaAtividades;
+	private List<Papel> listaPapel;
 
 	public AgrupamentoView() {
 		criaTabela();
@@ -134,7 +141,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		tituloFormularioLabel.setText(getDisplayTitle());
 
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoCasalEnum.values());
-		ListBoxUtil.populate(tipoRestauranteListBox, true, TipoRestauranteEnum.values());
+		ListBoxUtil.populate(tipoAtividadeListBox, true, TipoAtividadeEnum.values());
 	}
 
 	private void criaTabela() {
@@ -154,6 +161,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 
 		membroTableUtil.addColumn("", "20", HasHorizontalAlignment.ALIGN_CENTER);
 		membroTableUtil.addColumn("Nome", null, HasHorizontalAlignment.ALIGN_LEFT);
+		membroTableUtil.addColumn("Papel", "100", HasHorizontalAlignment.ALIGN_LEFT);
 		membroTableUtil.addColumn("Rotulo", "50", HasHorizontalAlignment.ALIGN_LEFT);
 	}
 
@@ -180,7 +188,8 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			Window.alert("Escolha o Tipo!");
 			return;
 		}
-		TipoRestauranteEnum tipoRestaurante = (TipoRestauranteEnum) ListBoxUtil.getItemSelected(tipoRestauranteListBox, TipoRestauranteEnum.values());
+		TipoAtividadeEnum tipoAtividade = (TipoAtividadeEnum) ListBoxUtil.getItemSelected(atividadeListBox, TipoAtividadeEnum.values());
+		Atividade atividade = (Atividade) ListBoxUtil.getItemSelected(atividadeListBox, getListaAtividades());
 		presenter.getAgrupamentoVO().getAgrupamento().setGrupo(null);
 		presenter.getAgrupamentoVO().getAgrupamento().setEncontro(null);
 		if(grupoRadioButton.getValue()){
@@ -190,7 +199,8 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		}
 		presenter.getAgrupamentoVO().getAgrupamento().setNome(nomeTextBox.getValue());
 		presenter.getAgrupamentoVO().getAgrupamento().setTipo(tipo);
-		presenter.getAgrupamentoVO().getAgrupamento().setTipoRestaurante(tipoRestaurante);
+		presenter.getAgrupamentoVO().getAgrupamento().setAtividade(atividade);
+		presenter.getAgrupamentoVO().getAgrupamento().setTipoAtividade(tipoAtividade);
 		presenter.salvar();
 	}
 	private void edita(Agrupamento agrupamento) {
@@ -206,7 +216,10 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			}
 			ListBoxUtil.setItemSelected(tipoListBox, TipoInscricaoCasalEnum.ENCONTRISTA.getNome());
 			LabelTotalUtil.setTotal(itemMembroTotal, 0, "membro", "membros", "");
-			tipoRestauranteHTMLPanel.setVisible(true);
+			if (encontroRadioButton.getValue()){
+				tipoAtividadeHTMLPanel.setVisible(true);
+				membroTableUtil.setColumnVisible(2, true);
+			}
 		} else {
 			presenter.getVO(agrupamento);
 		}
@@ -219,7 +232,9 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		tipoInscricaoListBox.clear();
 		tipoInscricaoListBox.addItem("");
 		tipoInscricaoListBox.addItem("Todos os inscritos pelo Tipo");
-		tipoRestauranteListBox.setSelectedIndex(0);
+		tipoAtividadeListBox.setSelectedIndex(-1);
+		atividadeListBox.setSelectedIndex(-1);
+		papelPadraoListBox.setSelectedIndex(-1);
 		nomeTextBox.setValue(null);
 		membroTableUtil.clearData();
 	}
@@ -234,10 +249,31 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(tipoCasal))
 				tipoInscricaoListBox.addItem(tipo.getNome());
 		}
-		if (tipoCasal.equals(TipoInscricaoCasalEnum.AFILHADO))
-			tipoRestauranteHTMLPanel.setVisible(false);
-		else
-			tipoRestauranteHTMLPanel.setVisible(true);
+		if (tipoCasal.equals(TipoInscricaoCasalEnum.AFILHADO)){
+			tipoAtividadeHTMLPanel.setVisible(false);
+			membroTableUtil.setColumnVisible(2, false);
+			for (AgrupamentoMembro membro: presenter.getAgrupamentoVO().getListaMembros()) {
+				membro.setPapel(null);
+			}
+		}
+		else{
+			if (encontroRadioButton.getValue()){
+				tipoAtividadeHTMLPanel.setVisible(true);
+				membroTableUtil.setColumnVisible(2, true);
+			}
+		}
+	}
+
+	@UiHandler("papelPadraoListBox")
+	public void papelPadraoListBoxChangeHandler(ChangeEvent event){
+		Papel papel = (Papel) ListBoxUtil.getItemSelected(papelPadraoListBox, getListaPapel());
+		if (papel!=null){
+			for (AgrupamentoMembro membro: presenter.getAgrupamentoVO().getListaMembros()) {
+				membro.setPapel(papel);
+			}
+			populaMembros();
+		}
+		papelPadraoListBox.setSelectedIndex(0);
 	}
 
 	public void defineCampos(AgrupamentoVO agrupamentoVO){
@@ -245,11 +281,14 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		if (agrupamentoVO.getAgrupamento().getTipo() != null){
 			ListBoxUtil.setItemSelected(tipoListBox, agrupamentoVO.getAgrupamento().getTipo().getNome());
 			if (agrupamentoVO.getAgrupamento().getTipo().equals(TipoInscricaoCasalEnum.AFILHADO))
-				tipoRestauranteHTMLPanel.setVisible(false);
+				tipoAtividadeHTMLPanel.setVisible(false);
 			else{
-				tipoRestauranteHTMLPanel.setVisible(true);
-				if (agrupamentoVO.getAgrupamento().getTipoRestaurante()!=null)
-					ListBoxUtil.setItemSelected(tipoRestauranteListBox, agrupamentoVO.getAgrupamento().getTipoRestaurante().getNome());
+				if (encontroRadioButton.getValue())
+					tipoAtividadeHTMLPanel.setVisible(true);
+				if (agrupamentoVO.getAgrupamento().getTipoAtividade()!=null)
+					ListBoxUtil.setItemSelected(tipoAtividadeListBox, agrupamentoVO.getAgrupamento().getTipoAtividade().getNome());
+				if (agrupamentoVO.getAgrupamento().getAtividade()!=null)
+					ListBoxUtil.setItemSelected(atividadeListBox, agrupamentoVO.getAgrupamento().getAtividade().getNome());
 				for(TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
 					if (TipoInscricaoCasalEnum.getPorInscricaoCasal(tipo).equals(agrupamentoVO.getAgrupamento().getTipo()))
 						tipoInscricaoListBox.addItem(tipo.getNome());
@@ -355,7 +394,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		Image excluir;
 		HorizontalPanel hp;
 		for (final AgrupamentoMembro membro: presenter.getAgrupamentoVO().getListaMembros()) {
-			Object dados[] = new Object[3];
+			Object dados[] = new Object[4];
 
 			excluir = new Image("images/delete.png");
 			excluir.setStyleName("portal-ImageCursor");
@@ -380,6 +419,16 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			} else {
 				dados[1] = membro.getCasal()==null?membro.getPessoa().getApelido():membro.getCasal().getApelidos("e");
 			}
+			final ListBox listBox = new ListBox();
+			ListBoxUtil.populate(listBox, true, getListaPapel());
+			if (membro.getPapel()!=null)
+				ListBoxUtil.setItemSelected(listBox, membro.getPapel().toString());
+			listBox.addChangeHandler(new ChangeHandler() {
+				public void onChange(ChangeEvent event) {
+					membro.setPapel((Papel) ListBoxUtil.getItemSelected(listBox,getListaPapel()));
+				}
+			});
+			dados[2] = listBox;
 			TextBox textBox = new TextBox();
 			textBox.setSize("195px", "100%");
 			textBox.setMaxLength(50);
@@ -390,11 +439,14 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 					membro.setRotulo(event.getValue());
 				}
 			});
-			dados[2] = textBox;
+			dados[3] = textBox;
 			membroTableUtil.addRow(dados,row+1);
 			row++;
 		}
 		LabelTotalUtil.setTotal(itemMembroTotal, row, "membro", "membros", "");
+		membroTableUtil.setColumnVisible(2,false);
+		if (encontroRadioButton.getValue() && !presenter.getAgrupamentoVO().getAgrupamento().getTipo().equals(TipoInscricaoCasalEnum.AFILHADO))
+			membroTableUtil.setColumnVisible(2,true);
 		membroTableUtil.applyDataRowStyles();
 	}
 
@@ -473,7 +525,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		itemTotal.setText("Nenhum item adicionado");
 		if(grupoRadioButton.getValue()){
 			encontroMembroHTMLPanel.setVisible(false);
-			tipoRestauranteHTMLPanel.setVisible(false);
+			tipoAtividadeHTMLPanel.setVisible(false);
 			presenter.buscaAgrupamentos(presenter.getGrupoSelecionado());
 		} else {
 			encontroMembroHTMLPanel.setVisible(true);
@@ -494,6 +546,36 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			presenter.buscaAgrupamentos(presenter.getEncontroSelecionado());
 		}
 
+	}
+
+	@Override
+	public void populaAtividades(List<Atividade> lista) {
+		setListaAtividades(lista);
+		ListBoxUtil.populate(atividadeListBox, true, lista);
+
+	}
+
+	@Override
+	public void populaPapeis(List<Papel> lista) {
+		setListaPapel(lista);
+		ListBoxUtil.populate(papelPadraoListBox, true, lista);
+
+	}
+
+	public List<Papel> getListaPapel() {
+		return listaPapel;
+	}
+
+	public void setListaPapel(List<Papel> listaPapel) {
+		this.listaPapel = listaPapel;
+	}
+
+	public List<Atividade> getListaAtividades() {
+		return listaAtividades;
+	}
+
+	public void setListaAtividades(List<Atividade> listaAtividades) {
+		this.listaAtividades = listaAtividades;
 	}
 
 }

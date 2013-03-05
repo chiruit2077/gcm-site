@@ -1,9 +1,6 @@
 package br.com.ecc.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,27 +11,26 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-import br.com.ecc.model.tipo.TipoRestauranteEnum;
-
 @Entity
-@SequenceGenerator(name="SQ_ENCONTRORESTAURANTEGARCON", sequenceName="SQ_ENCONTRORESTAURANTEGARCON")
-@NamedQueries(
-		@NamedQuery(name="encontroRestauranteGarcon.porEncontroHotel", query="select u from EncontroRestauranteGarcon u " +
-				" where u.encontroHotel = :encontrohotel " +
-				" order by u.tipo, u.mesa.lado, u.mesa.ordem ")
-)
+@SequenceGenerator(name="SQ_ENCONTRORESTAURANTEMESA", sequenceName="SQ_ENCONTRORESTAURANTEMESA")
+@NamedQueries({
+		@NamedQuery(name="encontroRestauranteMesa.porEncontroRestaurante", query="select u from EncontroRestauranteMesa u " +
+					" where u.encontroRestaurante = :encontrorestaurante "),
+		@NamedQuery(name="encontroRestauranteMesa.porEncontroRestauranteOutro", query="select u from EncontroRestauranteMesa u " +
+						" where u.encontroRestaurante != :encontrorestaurante and u.encontroRestaurante.encontro = :encontro ")
+})
 
-public class EncontroRestauranteGarcon extends _WebBaseEntity {
+public class EncontroRestauranteMesa extends _WebBaseEntity {
 
 	private static final long serialVersionUID = 8564481583369974061L;
 
 	@Id
-	@GeneratedValue(generator="SQ_ENCONTRORESTAURANTEGARCON", strategy=GenerationType.AUTO)
+	@GeneratedValue(generator="SQ_ENCONTRORESTAURANTEMESA", strategy=GenerationType.AUTO)
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name="encontrohotel")
-	private EncontroHotel encontroHotel;
+	@JoinColumn(name="encontroRestaurante")
+	private EncontroRestaurante encontroRestaurante;
 
 	@ManyToOne
 	@JoinColumn(name="mesa")
@@ -51,10 +47,6 @@ public class EncontroRestauranteGarcon extends _WebBaseEntity {
 	@ManyToOne
 	@JoinColumn(name="encontroGarcon")
 	private EncontroInscricao encontroGarcon;
-
-	@Enumerated(EnumType.STRING)
-	@Column(length=30)
-	private TipoRestauranteEnum tipo;
 
 	@Version
 	private Integer version;
@@ -93,23 +85,11 @@ public class EncontroRestauranteGarcon extends _WebBaseEntity {
 	public void setEncontroGarcon(EncontroInscricao encontroGarcon) {
 		this.encontroGarcon = encontroGarcon;
 	}
-	public TipoRestauranteEnum getTipo() {
-		return tipo;
-	}
-	public void setTipo(TipoRestauranteEnum tipo) {
-		this.tipo = tipo;
-	}
 	public Mesa getMesa() {
 		return mesa;
 	}
 	public void setMesa(Mesa mesa) {
 		this.mesa = mesa;
-	}
-	public EncontroHotel getEncontroHotel() {
-		return encontroHotel;
-	}
-	public void setEncontroHotel(EncontroHotel encontroHotel) {
-		this.encontroHotel = encontroHotel;
 	}
 
 	@Override
@@ -120,7 +100,7 @@ public class EncontroRestauranteGarcon extends _WebBaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EncontroRestauranteGarcon other = (EncontroRestauranteGarcon) obj;
+		EncontroRestauranteMesa other = (EncontroRestauranteMesa) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -132,6 +112,12 @@ public class EncontroRestauranteGarcon extends _WebBaseEntity {
 		} else if (!mesa.equals(other.mesa))
 			return false;
 		return true;
+	}
+	public EncontroRestaurante getEncontroRestaurante() {
+		return encontroRestaurante;
+	}
+	public void setEncontroRestaurante(EncontroRestaurante encontroRestaurante) {
+		this.encontroRestaurante = encontroRestaurante;
 	}
 
 }
