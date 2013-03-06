@@ -29,6 +29,10 @@ public class Mesa extends _WebBaseEntity {
 	@JoinColumn(name="restaurante")
 	private Restaurante restaurante;
 
+	@ManyToOne
+	@JoinColumn(name="grupo")
+	private RestauranteGrupo grupo;
+
 	private Integer quantidadeCasais;
 
 	@Column(length=30)
@@ -153,6 +157,14 @@ public class Mesa extends _WebBaseEntity {
 
 	public void setLinhaSpam(Integer linhaSpam) {
 		this.linhaSpam = linhaSpam;
+	}
+
+	public RestauranteGrupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(RestauranteGrupo grupo) {
+		this.grupo = grupo;
 	}
 
 }

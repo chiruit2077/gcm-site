@@ -38,7 +38,7 @@
 				<g:Button ui:field="printButton">Imprimir</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
-			<g:HorizontalPanel spacing="2" width="100%">
+			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center">
 				<g:FlexTable ui:field="distribuicaoPanel" />
 			</g:HorizontalPanel>
 		</g:VerticalPanel>

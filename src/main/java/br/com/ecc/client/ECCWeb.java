@@ -1,7 +1,7 @@
 package br.com.ecc.client;
 
-import br.com.ecc.gin.WebGinjector;
 import br.com.ecc.gin.InjectorFactory;
+import br.com.ecc.gin.WebGinjector;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;

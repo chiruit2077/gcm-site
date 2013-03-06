@@ -38,6 +38,8 @@ public class Restaurante extends _WebBaseEntity {
 
 	private Integer quantidadeMesas;
 
+	private Integer quantidadeCasaisPorMesa;
+
 	@ManyToOne
 	@JoinColumn(name="atividade")
 	private Atividade atividade;
@@ -144,6 +146,14 @@ public class Restaurante extends _WebBaseEntity {
 
 	public void setCheckMesa(Boolean checaMesa) {
 		this.checkMesa = checaMesa;
+	}
+
+	public Integer getQuantidadeCasaisPorMesa() {
+		return quantidadeCasaisPorMesa;
+	}
+
+	public void setQuantidadeCasaisPorMesa(Integer quantidadeCasaisPorMesa) {
+		this.quantidadeCasaisPorMesa = quantidadeCasaisPorMesa;
 	}
 
 }

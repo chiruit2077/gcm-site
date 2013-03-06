@@ -13,58 +13,47 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
 @Entity
-@SequenceGenerator(name="SQ_ATIVIDADE", sequenceName="SQ_ATIVIDADE")
+@SequenceGenerator(name="SQ_RESTAURANTEGRUPO", sequenceName="SQ_RESTAURANTEGRUPO")
 @NamedQueries({
-	@NamedQuery(name="atividade.porGrupo", query="select u from Atividade u where u.grupo = :grupo order by u.nome")
+	@NamedQuery(name="restauranteGrupo.porRestaurante", query="select u from RestauranteGrupo u where u.restaurante = :restaurante ")
 })
-public class Atividade extends _WebBaseEntity {
-	private static final long serialVersionUID = 8016064080696278205L;
+public class RestauranteGrupo extends _WebBaseEntity {
+
+	private static final long serialVersionUID = 3149605858399670740L;
 
 	@Id
-	@GeneratedValue(generator="SQ_ATIVIDADE", strategy=GenerationType.AUTO)
+	@GeneratedValue(generator="SQ_RESTAURANTEGRUPO", strategy=GenerationType.AUTO)
 	private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name="grupo")
-	private Grupo grupo;
-
-	@Column(length=250)
+	@Column(length=100)
 	private String nome;
+
+	@ManyToOne
+	@JoinColumn(name="restaurante")
+	private Restaurante restaurante;
 
 	@Version
 	private Integer version;
 
-	@Override
 	public String toString() {
-		return getNome();
-	}
-
-
-	public String getNome() {
 		return nome;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Integer getVersion() {
 		return version;
 	}
+
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	public Grupo getGrupo() {
-		return grupo;
-	}
-	public void setGrupo(Grupo grupo) {
-		this.grupo = grupo;
-	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -74,7 +63,7 @@ public class Atividade extends _WebBaseEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Atividade other = (Atividade) obj;
+		RestauranteGrupo other = (RestauranteGrupo) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -83,5 +72,20 @@ public class Atividade extends _WebBaseEntity {
 		return true;
 	}
 
+	public Restaurante getRestaurante() {
+		return restaurante;
+	}
+
+	public void setRestaurante(Restaurante restaurante) {
+		this.restaurante = restaurante;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
 }

@@ -7,6 +7,8 @@ import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroRestaurante;
 import br.com.ecc.model.EncontroRestauranteMesa;
 import br.com.ecc.model.Mesa;
+import br.com.ecc.model.RestauranteGrupo;
+import br.com.ecc.model.RestauranteTitulo;
 
 public class EncontroRestauranteVO implements Serializable {
 
@@ -14,6 +16,8 @@ public class EncontroRestauranteVO implements Serializable {
 
 	private EncontroRestaurante encontroRestaurante;
 	private List<Mesa> listaMesas;
+	private List<RestauranteGrupo> listaGrupos;
+	private List<RestauranteTitulo> listaTitulos;
 	private List<EncontroRestauranteMesa> listaEncontroRestauranteMesa;
 	private List<EncontroRestauranteMesa> listaEncontroRestauranteMesaOutros;
 	private List<AgrupamentoVO> listaAgrupamentosVO;
@@ -62,6 +66,18 @@ public class EncontroRestauranteVO implements Serializable {
 	public void setListaEncontroRestauranteMesaOutros(
 			List<EncontroRestauranteMesa> listaEncontroRestauranteMesaOutros) {
 		this.listaEncontroRestauranteMesaOutros = listaEncontroRestauranteMesaOutros;
+	}
+	public List<RestauranteTitulo> getListaTitulos() {
+		return listaTitulos;
+	}
+	public void setListaTitulos(List<RestauranteTitulo> listaTitulos) {
+		this.listaTitulos = listaTitulos;
+	}
+	public List<RestauranteGrupo> getListaGrupos() {
+		return listaGrupos;
+	}
+	public void setListaGrupos(List<RestauranteGrupo> listaGrupos) {
+		this.listaGrupos = listaGrupos;
 	}
 
 

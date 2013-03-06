@@ -18,7 +18,7 @@ import javax.persistence.Version;
 @SequenceGenerator(name="SQ_PESSOA", sequenceName="SQ_PESSOA")
 @NamedQueries({
 	@NamedQuery(name="pessoa.porNomeLike", query="select u from Pessoa u where upper(u.nome) like upper(:key)"),
-	@NamedQuery(name="pessoa.semUsuario", 
+	@NamedQuery(name="pessoa.semUsuario",
 		query="select p from Pessoa p " +
 			  "where p.email is not null and " +
 			  "      p.email != '' and " +
@@ -31,43 +31,43 @@ public class Pessoa extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_PESSOA", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@Column(length=150)
 	private String nome;
-	
+
 	@Column(length=50)
 	private String apelido;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date nascimento;
 
 	@Column(length=150)
 	private String email;
-	
+
 	@Column(length=100)
 	private String telefoneCelular;
-	
+
 	@Column(length=50)
 	private String telefoneComercial;
-	
+
 	@Column(length=50)
 	private String telefone;
-	
+
 	@Column(length=30)
 	private String rg;
-	
+
 	@Column(length=30)
 	private String expedidor;
-	
+
 	@Column(length=30)
 	private String cpf;
-	
+
 	@Column(length=50)
 	private String naturalidade;
-	
+
 	@Column(length=50)
 	private String profissao;
-	
+
 	private Boolean alergico;
 	@Column(length=150)
 	private String alergia;
@@ -75,21 +75,21 @@ public class Pessoa extends _WebBaseEntity {
 	private Boolean vegetariano;
 	private Boolean diabetico;
 	private Boolean hipertenso;
-	
+
 	@Column(length=250)
 	private String necessidadesEspeciais;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date dataAtualizacao;
-	
+
 	@Version
 	private Integer version;
-	
+
 	@Override
 	public String toString() {
 		return getNome();
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -109,6 +109,14 @@ public class Pessoa extends _WebBaseEntity {
 		this.version = version;
 	}
 	public String getApelido() {
+		if (apelido!=null && !apelido.equals(""))
+			return apelido;
+		else{
+			String[] split = nome.trim().split(" ");
+			if (split.length>0){
+				return split[0];
+			}
+		}
 		return apelido;
 	}
 	public void setApelido(String apelido) {

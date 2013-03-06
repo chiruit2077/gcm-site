@@ -67,6 +67,16 @@ public class EncontroRestauranteServiceImpl extends SecureRemoteServiceServlet i
 		cmbMesa.addParameter("restaurante", vo.getEncontroRestaurante().getRestuarante());
 		vo.setListaMesas(cmbMesa.call());
 
+		GetEntityListCommand cmdGrupo = injector.getInstance(GetEntityListCommand.class);
+		cmdGrupo.setNamedQuery("restauranteGrupo.porRestaurante");
+		cmdGrupo.addParameter("restaurante", vo.getEncontroRestaurante().getRestuarante());
+		vo.setListaGrupos(cmdGrupo.call());
+
+		GetEntityListCommand cmbTitulos = injector.getInstance(GetEntityListCommand.class);
+		cmbTitulos.setNamedQuery("restauranteTitulo.porRestaurante");
+		cmbTitulos.addParameter("restaurante", vo.getEncontroRestaurante().getRestuarante());
+		vo.setListaTitulos(cmbTitulos.call());
+
 		List<AgrupamentoVO> listaAgrupamentoVO = new ArrayList<AgrupamentoVO>();
 		GetEntityListCommand cmdAgrupamento = injector.getInstance(GetEntityListCommand.class);
 		cmdAgrupamento.setNamedQuery("agrupamento.porEncontro");
