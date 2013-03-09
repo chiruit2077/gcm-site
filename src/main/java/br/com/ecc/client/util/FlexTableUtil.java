@@ -322,4 +322,22 @@ public class FlexTableUtil {
 			tabela.getCellFormatter().setVisible(i, Col, b);
 		}
 	}
+
+	 public static void copyCell(FlexTable sourceTable, FlexTable targetTable, int sourceRow, int sourceCol,
+		      int targetRow, int targetCol) {
+		    targetTable.insertRow(targetRow);
+		    HTML html = new HTML(sourceTable.getHTML(sourceRow, sourceCol));
+		    targetTable.setWidget(targetRow, sourceCol, html);
+		    /*for (int col = 0; col < sourceTable.getCellCount(sourceRow); col++) {
+
+		      targetTable.setWidget(targetRow, col, html);
+		    }*/
+		    copyRowStyle(sourceTable, targetTable, sourceRow, targetRow);
+		  }
+
+	 private static void copyRowStyle(FlexTable sourceTable, FlexTable targetTable, int sourceRow,
+		      int targetRow) {
+		    String rowStyle = sourceTable.getRowFormatter().getStyleName(sourceRow);
+		    targetTable.getRowFormatter().setStyleName(targetRow, rowStyle);
+		  }
 }

@@ -9,7 +9,7 @@ import br.com.ecc.server.service.cadastro.HotelServiceImpl;
 import br.com.ecc.server.service.cadastro.OrganogramaServiceImpl;
 import br.com.ecc.server.service.cadastro.PapelServiceImpl;
 import br.com.ecc.server.service.cadastro.PessoaServiceImpl;
-import br.com.ecc.server.service.cadastro.QuartoServiceImpl;
+import br.com.ecc.server.service.cadastro.RestauranteServiceImpl;
 import br.com.ecc.server.service.core.AdministracaoServiceImpl;
 import br.com.ecc.server.service.core.ArquivoDigitalServiceImpl;
 import br.com.ecc.server.service.core.EmailServiceImpl;
@@ -56,8 +56,8 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "mensagem").with(MensagemServiceImpl.class);
 		this.serve(contextPath + "itemPatrimonio").with(ItemPatrimonioServiceImpl.class);
 
-		this.serve(contextPath + "quarto").with(QuartoServiceImpl.class);
 		this.serve(contextPath + "hotel").with(HotelServiceImpl.class);
+		this.serve(contextPath + "restaurante").with(RestauranteServiceImpl.class);
 
 		this.serve(contextPath + "encontroInscricao").with(EncontroInscricaoServiceImpl.class);
 		this.serve(contextPath + "encontroAtividade").with(EncontroAtividadeServiceImpl.class);

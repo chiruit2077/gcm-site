@@ -1,4 +1,4 @@
-package br.com.ecc.client.ui.component;
+package br.com.ecc.client.util;
 
 import java.util.HashSet;
 import java.util.Set;

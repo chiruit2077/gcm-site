@@ -39,6 +39,32 @@
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center">
+				<g:HTMLPanel width="100%">
+							<table cellpadding="3" align="center">
+								<tr>
+									<td>
+										<g:Image url="images/ballred32.png" styleName="portal-ImageCursor" width="20px"/>
+									</td>
+									<td>
+										<g:Label styleName="portal-formLabel" text="Diabético"/>
+									</td>
+									<td>
+										<g:Image url="images/ballgreen32.png" styleName="portal-ImageCursor" width="20px"/>
+									</td>
+									<td>
+										<g:Label styleName="portal-formLabel" text="Vegetariano"/>
+									</td>
+									<td>
+										<g:Image url="images/ballyellow32.png" styleName="portal-ImageCursor" width="20px"/>
+									</td>
+									<td>
+										<g:Label styleName="portal-formLabel" text="Hipertenso"/>
+									</td>
+								</tr>
+							</table>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center">
 				<g:FlexTable ui:field="distribuicaoPanel" />
 			</g:HorizontalPanel>
 		</g:VerticalPanel>

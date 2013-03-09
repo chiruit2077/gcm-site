@@ -15,7 +15,11 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_RESTAURANTEGRUPO", sequenceName="SQ_RESTAURANTEGRUPO")
 @NamedQueries({
-	@NamedQuery(name="restauranteGrupo.porRestaurante", query="select u from RestauranteGrupo u where u.restaurante = :restaurante ")
+	@NamedQuery(name="restauranteGrupo.porRestaurante", query="select u from RestauranteGrupo u where u.restaurante = :restaurante "),
+	@NamedQuery(name="restauranteGrupo.deletePorRestaurante",
+		query="delete from RestauranteGrupo u where u.restaurante = :restaurante"),
+	@NamedQuery(name="restauranteGrupo.deletePorRestauranteNotIn",
+		query="delete from RestauranteGrupo u where u.restaurante = :restaurante and u not in (:lista)")
 })
 public class RestauranteGrupo extends _WebBaseEntity {
 

@@ -19,7 +19,7 @@ import br.com.ecc.model.tipo.TipoAtividadeEnum;
 @Entity
 @SequenceGenerator(name="SQ_RESTAURANTE", sequenceName="SQ_RESTAURANTE")
 @NamedQueries({
-	@NamedQuery(name="restaurante.todos", query="select u from Restaurante u order by u.nome")
+	@NamedQuery(name="restaurante.todos", query="select u from Restaurante u order by u.ordem ")
 })
 public class Restaurante extends _WebBaseEntity {
 

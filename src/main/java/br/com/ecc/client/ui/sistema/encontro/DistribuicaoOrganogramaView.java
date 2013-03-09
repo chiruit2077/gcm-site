@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
-import br.com.ecc.client.ui.component.FlexTableHelper;
+import br.com.ecc.client.util.FlexTableHelper;
 import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroOrganograma;

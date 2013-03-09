@@ -60,18 +60,16 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		menuItem = new MenuItem("Cadastro", new MenuBar(true));
 		sistemaMenuBar.addItem(menuItem);
 
-		if(administrador){
-			menuItem.getSubMenu().addItem("Grupo", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.GRUPO); } });
-		}
-
 		menuItem.getSubMenu().addItem("Casal", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.CASAL); } });
 
 		if(administrador){
+			menuItem.getSubMenu().addItem("Grupo", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.GRUPO); } });
 			menuItem.getSubMenu().addItem("Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO); } });
 			menuItem.getSubMenu().addItem("Atividade", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ATIVIDADE); } });
 			menuItem.getSubMenu().addItem("Papel", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.PAPEL); } });
-			menuItem.getSubMenu().addItem("Hoteis", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTEL); } });
-			//menuItem.getSubMenu().addItem("Quarto", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.QUARTO); } });
+			menuItem.getSubMenu().addItem("Hotel", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTEL); } });
+			menuItem.getSubMenu().addItem("Restaurante", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE); } });
+			menuItem.getSubMenu().addItem("Layout de Restaurante", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE_LAYOUTS); } });
 		}
 
 		//Secretaria
@@ -81,9 +79,9 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 
 			menuItem.getSubMenu().addItem("Agrupamento", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.AGRUPAMENTO); } });
 			menuItem.getSubMenu().addItem("Mensagens", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.MENSAGEM); } });
-			menuItem.getSubMenu().addItem("Listagem de casais", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.LISTAGEM); } });
-			menuItem.getSubMenu().addItem("Distribuição dos Restaurantes", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.DISTRIBUICAORESTAURANTE); } });
-
+			menuItem.getSubMenu().addItem("Listagem de Casais", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.LISTAGEM); } });
+			menuItem.getSubMenu().addItem("Restaurantes do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE_ENCONTRO); } });
+			menuItem.getSubMenu().addItem("Distribuição dos Restaurantes", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE_DISTRIBUICAO); } });
 		}
 
 
@@ -91,8 +89,8 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		if(administrador){
 			menuItem = new MenuItem("Hotelaria", new MenuBar(true));
 			sistemaMenuBar.addItem(menuItem);
-			menuItem.getSubMenu().addItem("Hoteis do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTELARIA_ENCONTRO_HOTEL); } });
-			menuItem.getSubMenu().addItem("Distribuição dos Quartos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTELARIA_DISTRIBUICAO); } });
+			menuItem.getSubMenu().addItem("Hoteis do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTEL_ENCONTRO); } });
+			menuItem.getSubMenu().addItem("Distribuição dos Quartos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTEL_DISTRIBUICAO); } });
 		}
 
 		//Patrimonio
@@ -109,19 +107,16 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 			menuItem.getSubMenu().addItem("Fichas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.TESOURARIA_FICHAS); } });
 		}
 
-		//if(!presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.CONVIDADO)){
 		if(!convidado){
 			//Encontro
 			menuItem = new MenuItem("Encontro", new MenuBar(true));
 			sistemaMenuBar.addItem(menuItem);
-
-			menuItem.getSubMenu().addItem("Convites ao encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_CONVITE); } });
-			menuItem.getSubMenu().addItem("Inscrição no encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_INSCRICAO); } });
-			menuItem.getSubMenu().addItem("Planilha de atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
-
+			menuItem.getSubMenu().addItem("Convites ao Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_CONVITE); } });
+			menuItem.getSubMenu().addItem("Inscrição no Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_INSCRICAO); } });
+			menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
 			if(administrador){
-				menuItem.getSubMenu().addItem("Organogramas do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_ORGANOGRAMA); } });
-				menuItem.getSubMenu().addItem("Distribuição dos Organogramas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.DISTRIBUICAOORGANOGRAMA); } });
+				menuItem.getSubMenu().addItem("Organogramas do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_ENCONTRO); } });
+				menuItem.getSubMenu().addItem("Distribuição dos Organogramas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_DISTRIBUICAO); } });
 			}
 		}
 

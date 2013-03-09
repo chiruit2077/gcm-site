@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
+import br.com.ecc.client.util.FlexTableHelper;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.model.AgrupamentoMembro;
@@ -261,7 +262,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		listaGarcons.clear();
 		for (AgrupamentoVO agrupamentoVO : presenter.getVo().getListaAgrupamentosVO()) {
 			if (agrupamentoVO.getAgrupamento().getAtividade() != null &&
-					agrupamentoVO.getAgrupamento().getAtividade().equals(restauranteSelecionado.getRestuarante().getAtividade())){
+					agrupamentoVO.getAgrupamento().getAtividade().equals(restauranteSelecionado.getRestaurante().getAtividade())){
 				for (AgrupamentoMembro menbro : agrupamentoVO.getListaMembros()) {
 					EncontroInscricao inscricao = getInscricaoCasal(menbro.getCasal());
 					if (inscricao!=null)
@@ -299,6 +300,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			}
 
 		}
+		FlexTableHelper.fixRowSpan(distribuicaoPanel);
 		showWaitMessage(false);
 	}
 
@@ -347,6 +349,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			tituloMesa.add(new Label("MESA " + mesa.getNumero()));
 			final Label garcon = new Label("VAGO");
 			tituloMesa.add(garcon);
+			if (mesa.getGrupo() != null)
+				tituloMesa.add(new Label(mesa.getGrupo().toString()));
 			focusPanel.add(tituloMesa);
 			mesaPanel.add(focusPanel);
 
@@ -400,6 +404,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			tituloMesa.add(new Label("MESA " + mesa.getNumero()));
 			final Label garcon = new Label("VAGO");
 			tituloMesa.add(garcon);
+			if (mesa.getGrupo() != null)
+				tituloMesa.add(new Label(mesa.getGrupo().toString()));
 			focusPanel.add(tituloMesa);
 			mesaPanel.add(focusPanel);
 
@@ -504,6 +510,9 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			}
 			if (p.getVegetariano()){
 				apelido+="<input type='image' src='images/ballgreen32.png' width='15' height='15'/>";
+			}
+			if (p.getHipertenso()){
+				apelido+="<input type='image' src='images/ballyellow32.png' width='15' height='15'/>";
 			}
 
 			return apelido;
@@ -667,18 +676,18 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			if (encontroRestaurante.getMesa().getRestaurante().isCheckMesa()){
 				if (encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
 					if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
-						if (encontroRestaurante.getMesa().equalsNumero(mesa)){
+						if (encontroRestaurante.getMesa().equals(mesa)){
 							return true;
 						}
 					}
 					if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
-						if (encontroRestaurante.getMesa().equalsNumero(mesa)){
+						if (encontroRestaurante.getMesa().equals(mesa)){
 							return true;
 						}
 					}
 				}else {
 					if (encontroRestaurante.getEncontroGarcon()!=null && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
-						if (encontroRestaurante.getMesa().equalsNumero(mesa)){
+						if (encontroRestaurante.getMesa().equals(mesa)){
 							return true;
 						}
 					}
@@ -690,7 +699,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	private boolean isSelecionadoMesaMesmaPosicao(EncontroInscricao encontroInscricao, EncontroRestaurante restaurante, int posicao) {
 		if ( getListaRestaurantes().size() == 1 ) return false;
-		if (!restaurante.getRestuarante().isCheckMesa()) return false;
+		if (!restaurante.getRestaurante().isCheckMesa()) return false;
 		if( encontroInscricao==null) return false;
 		int qtde=0;
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesaOutros()) {

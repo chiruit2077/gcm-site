@@ -10,6 +10,8 @@ import br.com.ecc.client.ui.sistema.cadastro.EncontroPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.GrupoPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.HotelPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.PapelPresenter;
+import br.com.ecc.client.ui.sistema.cadastro.RestauranteLayoutPresenter;
+import br.com.ecc.client.ui.sistema.cadastro.RestaurantePresenter;
 import br.com.ecc.client.ui.sistema.encontro.DistribuicaoOrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroConvitePresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroInscricaoPresenter;
@@ -32,13 +34,15 @@ public enum PresenterCodeEnum  {
 	SISTEMA(0,2, InicioSistemaPresenter.class, "Sistema", true),
 	MEUS_DADOS(0,3, MeusDadosPresenter.class, "Meus Dados", true),
 
-	GRUPO(2,1, GrupoPresenter.class, "Cadastro de grupos", true),
-	CASAL(2,2, CasalPresenter.class, "Cadastro de casais", true),
+	GRUPO(2,1, GrupoPresenter.class, "Cadastro de Grupos", true),
+	CASAL(2,2, CasalPresenter.class, "Cadastro de Casais", true),
 
-	ENCONTRO(2,3, EncontroPresenter.class, "Cadastro de encontros", true),
-	ATIVIDADE(2,4, AtividadePresenter.class, "Cadastro de atividades de encontros", true),
-	PAPEL(2,5, PapelPresenter.class, "Cadastro de papeis", true),
+	ENCONTRO(2,3, EncontroPresenter.class, "Cadastro de Encontros", true),
+	ATIVIDADE(2,4, AtividadePresenter.class, "Cadastro de Atividades de Encontros", true),
+	PAPEL(2,5, PapelPresenter.class, "Cadastro de Papeis", true),
 	HOTEL(2,17, HotelPresenter.class, "Cadastro de Hoteis", true),
+	RESTAURANTE(2,23, RestaurantePresenter.class, "Cadastro de Restaurantes", true),
+	RESTAURANTE_LAYOUTS(2,24, RestauranteLayoutPresenter.class, "Layouts de Restaurantes", true),
 
 	ENCONTRO_CONVITE(2,8, EncontroConvitePresenter.class, "Convites ao encontro", true),
 	ENCONTRO_INSCRICAO(2,6, EncontroInscricaoPresenter.class, "Inscrição ao encontro", true),
@@ -47,18 +51,19 @@ public enum PresenterCodeEnum  {
 	AGRUPAMENTO(2,9, AgrupamentoPresenter.class, "Agrupamentos", true),
 	MENSAGEM(2,10, MensagemPresenter.class, "Mensagens", true),
 	LISTAGEM(2,14, ListagemPresenter.class, "Listagem de casais", true),
-	DISTRIBUICAORESTAURANTE(2,20, DistribuicaoRestaurantePresenter.class, "Distribuição dos Restaurantes", true),
+	RESTAURANTE_ENCONTRO(2,25, EncontroHotelPresenter.class, "Restaurantes do Encontro", true),
+	RESTAURANTE_DISTRIBUICAO(2,20, DistribuicaoRestaurantePresenter.class, "Distribuição dos Restaurantes", true),
 
 	ITEM_PATRIMONIO(2,12, ItemPatrimonioPresenter.class, "Itens do patrimonio", true),
 
 	TESOURARIA_PAGAMENTOS(2,13, PagamentosPresenter.class, "Pagamentos", true),
 	TESOURARIA_FICHAS(2,15, FichasPresenter.class, "Fichas", true),
 
-	HOTELARIA_ENCONTRO_HOTEL(2,18, EncontroHotelPresenter.class, "Hoteis do Encontro", true),
-	HOTELARIA_DISTRIBUICAO(2,19, DistribuicaoQuartosPresenter.class, "Distribuição dos Quartos", true),
+	HOTEL_ENCONTRO(2,18, EncontroHotelPresenter.class, "Hoteis do Encontro", true),
+	HOTEL_DISTRIBUICAO(2,19, DistribuicaoQuartosPresenter.class, "Distribuição dos Quartos", true),
 
-	ENCONTRO_ORGANOGRAMA(2,21, EncontroOrganogramaPresenter.class, "Organogramas do Encontro", true),
-	DISTRIBUICAOORGANOGRAMA(2,22, DistribuicaoOrganogramaPresenter.class, "Distribuição dos Organogramas", true)
+	ORGANOGRAMA_ENCONTRO(2,21, EncontroOrganogramaPresenter.class, "Organogramas do Encontro", true),
+	ORGANOGRAMA_DISTRIBUICAO(2,22, DistribuicaoOrganogramaPresenter.class, "Distribuição dos Organogramas", true)
 	;
 
 

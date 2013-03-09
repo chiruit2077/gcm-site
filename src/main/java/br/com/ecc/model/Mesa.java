@@ -15,7 +15,11 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_MESA", sequenceName="SQ_MESA")
 @NamedQueries({
-	@NamedQuery(name="mesa.porRestaurante", query="select u from Mesa u where u.restaurante = :restaurante ")
+	@NamedQuery(name="mesa.porRestaurante", query="select u from Mesa u where u.restaurante = :restaurante "),
+	@NamedQuery(name="mesa.deletePorRestaurante",
+		query="delete from Mesa u where u.restaurante = :restaurante"),
+	@NamedQuery(name="mesa.deletePorRestauranteNotIn",
+		query="delete from Mesa u where u.restaurante = :restaurante and u not in (:lista)")
 })
 public class Mesa extends _WebBaseEntity {
 
@@ -78,39 +82,6 @@ public class Mesa extends _WebBaseEntity {
 		this.numero = numero;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Mesa other = (Mesa) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	public boolean equalsNumero(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Mesa other = (Mesa) obj;
-		if (numero == null) {
-			if (other.numero != null)
-				return false;
-		} else if (!numero.equals(other.numero))
-			return false;
-		return true;
-	}
-
 	public Integer getQuantidadeCasais() {
 		return quantidadeCasais;
 	}
@@ -165,6 +136,25 @@ public class Mesa extends _WebBaseEntity {
 
 	public void setGrupo(RestauranteGrupo grupo) {
 		this.grupo = grupo;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mesa other = (Mesa) obj;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}if (numero != null) {
+			if (numero.equals(other.numero))
+				return true;
+		}
+		return false;
 	}
 
 }

@@ -14,7 +14,11 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_RESTAURANTETITULO", sequenceName="SQ_RESTAURANTETITULO")
 @NamedQueries({
-	@NamedQuery(name="restauranteTitulo.porRestaurante", query="select u from RestauranteTitulo u where u.restaurante = :restaurante ")
+	@NamedQuery(name="restauranteTitulo.porRestaurante", query="select u from RestauranteTitulo u where u.restaurante = :restaurante "),
+	@NamedQuery(name="restauranteTitulo.deletePorRestaurante",
+		query="delete from RestauranteTitulo u where u.restaurante = :restaurante"),
+	@NamedQuery(name="restauranteTitulo.deletePorRestauranteNotIn",
+		query="delete from RestauranteTitulo u where u.restaurante = :restaurante and u not in (:lista)")
 })
 public class RestauranteTitulo extends _WebBaseEntity {
 
@@ -62,22 +66,7 @@ public class RestauranteTitulo extends _WebBaseEntity {
 		this.version = version;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RestauranteTitulo other = (RestauranteTitulo) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+
 
 	public Restaurante getRestaurante() {
 		return restaurante;
@@ -125,6 +114,26 @@ public class RestauranteTitulo extends _WebBaseEntity {
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RestauranteTitulo other = (RestauranteTitulo) obj;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}
+		if (titulo != null) {
+			if (titulo.equals(other.titulo))
+				return true;
+		}
+		return false;
 	}
 
 }

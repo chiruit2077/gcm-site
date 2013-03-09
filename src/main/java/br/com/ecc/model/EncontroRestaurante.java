@@ -14,7 +14,7 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_ENCONTRORESTAURANTE", sequenceName="SQ_ENCONTRORESTAURANTE")
 @NamedQueries({
-	@NamedQuery(name="encontroRestaurante.porEncontro", query="select u from EncontroRestaurante u where u.encontro = :encontro order by u.restuarante.ordem ")
+	@NamedQuery(name="encontroRestaurante.porEncontro", query="select u from EncontroRestaurante u where u.encontro = :encontro order by u.restaurante.ordem ")
 })
 public class EncontroRestaurante extends _WebBaseEntity {
 
@@ -29,15 +29,15 @@ public class EncontroRestaurante extends _WebBaseEntity {
 	private Encontro encontro;
 
 	@ManyToOne
-	@JoinColumn(name="restuarante")
-	private Restaurante restuarante;
+	@JoinColumn(name="restaurante")
+	private Restaurante restaurante;
 
 	@Version
 	private Integer version;
 
 	@Override
 	public String toString() {
-		return restuarante.getNome();
+		return restaurante.getNome();
 	}
 	public Integer getId() {
 		return id;
@@ -74,11 +74,11 @@ public class EncontroRestaurante extends _WebBaseEntity {
 			return false;
 		return true;
 	}
-	public Restaurante getRestuarante() {
-		return restuarante;
+	public Restaurante getRestaurante() {
+		return restaurante;
 	}
-	public void setRestuarante(Restaurante restuarante) {
-		this.restuarante = restuarante;
+	public void setRestuarante(Restaurante restaurante) {
+		this.restaurante = restaurante;
 	}
 
 }

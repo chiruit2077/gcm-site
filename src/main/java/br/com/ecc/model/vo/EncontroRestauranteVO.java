@@ -23,6 +23,7 @@ public class EncontroRestauranteVO implements Serializable {
 	private List<AgrupamentoVO> listaAgrupamentosVO;
 	private List<EncontroInscricao> listaAfilhados;
 	private List<EncontroInscricao> listaEncontristas;
+
 	public EncontroRestaurante getEncontroRestaurante() {
 		return encontroRestaurante;
 	}
