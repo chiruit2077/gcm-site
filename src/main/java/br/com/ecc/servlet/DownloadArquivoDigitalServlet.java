@@ -32,6 +32,7 @@ public class DownloadArquivoDigitalServlet extends DownloadFileServlet{
 				entityCmd.setClazz(ArquivoDigital.class);
 				entityCmd.setId(arquivoId);
 				ArquivoDigital arquivo = (ArquivoDigital) entityCmd.call();
+				if (arquivo==null) throw new Exception("arquivo nao encontrado!");
 				if(thumb && arquivo.getThumb()!=null){
 					writeResponse(resp, arquivo.getNomeArquivo(), arquivo.getTamanho(), arquivo.getMimeType(), arquivo.getThumb(), forceDownload);
 				} else {

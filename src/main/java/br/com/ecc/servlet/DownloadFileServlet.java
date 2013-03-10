@@ -21,23 +21,25 @@ public abstract class DownloadFileServlet extends HttpServlet{
 	protected Injector injector;
 
 	private static final long serialVersionUID = 5915431898806084080L;
-	
+
 	protected void writeResponse(HttpServletResponse resp, String fileName, Integer length, String contentType, byte[] content,boolean forceDownload) {
-		if(fileName == null || "".equals(fileName) || 
-			length == null || 
-				contentType == null || "".equals(contentType)||
-					content == null) {
-			throw new WebRuntimeException("Possíveis problemas: fileName=null, length=null, contentType=null, content=null");
+		if(fileName == null || "".equals(fileName) || length == null || content == null) {
+			throw new WebRuntimeException("Possíveis problemas: fileName=null, length=null, content=null");
 		}
-		
-		if(forceDownload)
-			resp.setHeader("content-disposition", "attachment; filename="+fileName);
-		
+
+		String disposition = fileName + "\nContent-Disposition: attachment; filename=" + fileName + "\n\n";
+		if(forceDownload){
+			resp.setHeader("Content-Disposition", "attachment;filename="+fileName+"\n\n");
+			resp.setContentType(((contentType != null && !"".equals(contentType)) ? contentType : "application/octet-stream") + "; name=" + disposition );
+		}else{
+			resp.setContentType(((contentType != null && !"".equals(contentType)) ? contentType : "application/octet-stream"));
+		}
+
+		resp.setContentLength( length );
+
 		ByteBuffer buff = ByteBuffer.allocate(length);
 		buff.put(content);
 
-		resp.setHeader("content-length", length.toString());
-		resp.setHeader("content-type", contentType);
 		try {
 			OutputStream out = resp.getOutputStream();
 			out.write(buff.array());
