@@ -45,7 +45,7 @@ public class EncontroRelatoriosServiceImpl extends SecureRemoteServiceServlet im
 			String dados = "Codigo;Ele;Ela;Ele Completo;Ela Completo;Padrinho;Madrinha;Quarto;";
 
 			for (EncontroInscricao encontroInscricao : lista) {
-				dados+= "\n\r" + encontroInscricao.getCodigo() + ";";
+				dados+= "\n" + encontroInscricao.getCodigo() + ";";
 				dados+= encontroInscricao.getCasal().getEle().getApelido().toUpperCase() + ";" ;
 				dados+= encontroInscricao.getCasal().getEla().getApelido().toUpperCase() + ";" ;
 				dados+= encontroInscricao.getCasal().getEle().getNome().toUpperCase() + ";" ;
@@ -67,7 +67,7 @@ public class EncontroRelatoriosServiceImpl extends SecureRemoteServiceServlet im
 			ArquivoDigital arquivoDigital = new ArquivoDigital();
 			arquivoDigital.setNomeArquivo(name);
 			arquivoDigital.setDados(dados.getBytes());
-			arquivoDigital.setMimeType("application/octet-stream");
+			arquivoDigital.setMimeType("text/csv");
 			arquivoDigital.setTipo(TipoArquivoEnum.ARQUIVO);
 			arquivoDigital.setTamanho(arquivoDigital.getDados().length);
 			cmdArquivo.setArquivoDigital(arquivoDigital);

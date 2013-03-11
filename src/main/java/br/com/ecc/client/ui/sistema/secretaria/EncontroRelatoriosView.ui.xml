@@ -54,7 +54,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td width="160px">
+								<td width="160px" align="center">
 									<g:Button ui:field="processaButton" width="160px" text="Processa Opção"/>
 								</td>
 							</tr>
