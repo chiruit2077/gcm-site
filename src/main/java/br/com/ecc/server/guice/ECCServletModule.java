@@ -66,7 +66,7 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "encontroInscricaoFichaPagamento").with(EncontroInscricaoFichaPagamentoServiceImpl.class);
 		this.serve(contextPath + "encontroHotel").with(EncontroHotelServiceImpl.class);
 		this.serve(contextPath + "encontroRestaurante").with(EncontroRestauranteServiceImpl.class);
-		this.serve(contextPath + "encontroRelatorios").with(EncontroRelatoriosSecretariaServiceImpl.class);
+		this.serve(contextPath + "encontroRelatoriosSecretaria").with(EncontroRelatoriosSecretariaServiceImpl.class);
 
 		this.serve(contextPath + "encontroConvite").with(EncontroConviteServiceImpl.class);
 		this.serve(contextPath + "encontroFila").with(EncontroFilaServiceImpl.class);
