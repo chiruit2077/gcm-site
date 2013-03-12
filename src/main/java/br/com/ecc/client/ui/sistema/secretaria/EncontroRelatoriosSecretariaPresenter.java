@@ -10,8 +10,8 @@ import br.com.ecc.client.service.cadastro.EncontroService;
 import br.com.ecc.client.service.cadastro.EncontroServiceAsync;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
-import br.com.ecc.client.service.secretaria.EncontroRelatoriosService;
-import br.com.ecc.client.service.secretaria.EncontroRelatoriosServiceAsync;
+import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaService;
+import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaServiceAsync;
 import br.com.ecc.client.util.DownloadResourceHelper;
 import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Encontro;
@@ -20,7 +20,7 @@ import br.com.ecc.model.Grupo;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
-public class EncontroRelatoriosPresenter extends BasePresenter<EncontroRelatoriosPresenter.Display> {
+public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<EncontroRelatoriosSecretariaPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
 		void init();
@@ -31,11 +31,11 @@ public class EncontroRelatoriosPresenter extends BasePresenter<EncontroRelatorio
 		RELATORIOROMATICO;
 	}
 
-	public EncontroRelatoriosPresenter(Display display, WebResource portalResource) {
+	public EncontroRelatoriosSecretariaPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
 
-	EncontroRelatoriosServiceAsync service = GWT.create(EncontroRelatoriosService.class);
+	EncontroRelatoriosSecretariaServiceAsync service = GWT.create(EncontroRelatoriosSecretariaService.class);
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
 

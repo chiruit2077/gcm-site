@@ -1,7 +1,7 @@
 package br.com.ecc.client.ui.sistema.secretaria;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
-import br.com.ecc.client.ui.sistema.secretaria.EncontroRelatoriosPresenter.ProcessaOpcao;
+import br.com.ecc.client.ui.sistema.secretaria.EncontroRelatoriosSecretariaPresenter.ProcessaOpcao;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -14,10 +14,10 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EncontroRelatoriosView extends BaseView<EncontroRelatoriosPresenter> implements EncontroRelatoriosPresenter.Display {
+public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatoriosSecretariaPresenter> implements EncontroRelatoriosSecretariaPresenter.Display {
 
-	@UiTemplate("EncontroRelatoriosView.ui.xml")
-	interface ViewUiBinder extends UiBinder<Widget, EncontroRelatoriosView> {}
+	@UiTemplate("EncontroRelatoriosSecretariaView.ui.xml")
+	interface ViewUiBinder extends UiBinder<Widget, EncontroRelatoriosSecretariaView> {}
 	private ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
 	@UiField Label tituloFormularioLabel;
@@ -25,7 +25,7 @@ public class EncontroRelatoriosView extends BaseView<EncontroRelatoriosPresenter
 	@UiField RadioButton geraCSVRadioButton;
 	@UiField RadioButton relatorioRomanticoRadioButton;
 
-	public EncontroRelatoriosView() {
+	public EncontroRelatoriosSecretariaView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 	}

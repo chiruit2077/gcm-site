@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("encontroRelatorios")
-public interface EncontroRelatoriosService extends RemoteService {
+public interface EncontroRelatoriosSecretariaService extends RemoteService {
 	public Integer imprimeRelatorioRomantico(Encontro encontro) throws Exception;
 	public Integer geraCSV(Encontro encontro, String name) throws Exception;
 }
