@@ -31,8 +31,8 @@
 		<groupHeader>
 			<band height="20">
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="58d6a2f7-44e5-433d-8d74-1b589a900bad" x="0" y="0" width="120" height="20"/>
-					<textElement>
+					<reportElement uuid="58d6a2f7-44e5-433d-8d74-1b589a900bad" x="199" y="0" width="157" height="20"/>
+					<textElement textAlignment="Center">
 						<font size="14" isBold="true" isItalic="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{rotulo}]]></textFieldExpression>
