@@ -32,6 +32,8 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton relatorioRomanticoRadioButton;
 	@UiField RadioButton relatorioAgrupamentoRadioButton;
 	@UiField RadioButton relatorioOnibusRadioButton;
+	@UiField RadioButton relatorioAlbumRadioButton;
+	@UiField RadioButton relatorioOracaoAmorRadioButton;
 	@UiField ListBox agrupamentosListBox;
 
 	private List<Agrupamento> agrupamentos;
@@ -56,6 +58,12 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMFILAROMANTICO);
 		else if (relatorioOnibusRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMONIBUS);
+		else if (relatorioAlbumRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMALBUM);
+		else if (relatorioOracaoAmorRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMORACAOAMOR);
+		else
+			Window.alert("Escolha uma Opção!");
 	}
 
 	@UiHandler("fecharImage")

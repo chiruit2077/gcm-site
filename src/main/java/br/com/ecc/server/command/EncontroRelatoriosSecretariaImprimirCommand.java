@@ -1,5 +1,6 @@
 package br.com.ecc.server.command;
 
+import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -10,6 +11,8 @@ import java.util.concurrent.Callable;
 import javax.persistence.EntityManager;
 
 import br.com.ecc.core.mvp.infra.exception.WebException;
+import br.com.ecc.model.ArquivoDigital;
+import br.com.ecc.model.Encontro;
 import br.com.ecc.server.command.basico.ImprimirCommand;
 
 import com.google.inject.Inject;
@@ -26,12 +29,16 @@ public class EncontroRelatoriosSecretariaImprimirCommand implements Callable<Int
 	private String titulo;
 	private String report;
 	private String nome;
+	private Encontro encontro;
 
 	@Override
 	@Transactional
 	public Integer call() throws Exception {
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("TITULO", getTitulo());
+		ArquivoDigital logo = null;
+		if (getEncontro() != null) logo = (ArquivoDigital)em.find(ArquivoDigital.class, getEncontro().getGrupo().getIdArquivoDigital());
+		if (logo != null) parametros.put("LOGO", new ByteArrayInputStream(logo.getDados()));
 		if(getListaObjects()!=null && getListaObjects().size()>0){
 			ImprimirCommand cmd = injector.getInstance(ImprimirCommand.class);
 			cmd.setDadosRelatorio(getListaObjects());
@@ -77,6 +84,14 @@ public class EncontroRelatoriosSecretariaImprimirCommand implements Callable<Int
 	@SuppressWarnings("rawtypes")
 	public void setListaObjects(List listaObjects) {
 		this.listaObjects = listaObjects;
+	}
+
+	public Encontro getEncontro() {
+		return encontro;
+	}
+
+	public void setEncontro(Encontro encontro) {
+		this.encontro = encontro;
 	}
 
 }

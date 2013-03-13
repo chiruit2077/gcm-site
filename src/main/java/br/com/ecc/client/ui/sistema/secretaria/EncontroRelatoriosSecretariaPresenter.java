@@ -37,7 +37,9 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		GERACSV,
 		LISTAGEMAGRUPAMENTO,
 		LISTAGEMFILAROMANTICO,
-		LISTAGEMONIBUS;
+		LISTAGEMONIBUS,
+		LISTAGEMALBUM,
+		LISTAGEMORACAOAMOR;
 	}
 
 	public EncontroRelatoriosSecretariaPresenter(Display display, WebResource portalResource) {
@@ -123,7 +125,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMAGRUPAMENTO)){
-			service.imprimeRelatorioAgrupamento(agrupamento, new WebAsyncCallback<Integer>(getDisplay()) {
+			service.imprimeRelatorioAgrupamento(encontro, agrupamento, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
@@ -140,6 +142,22 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMONIBUS)){
 			service.imprimeRelatorioOnibus(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, "_blank", "");
+				}
+			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMALBUM)){
+			service.imprimeRelatorioAlbum(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, "_blank", "");
+				}
+			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMORACAOAMOR)){
+			service.imprimeRelatorioOracaoAmor(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);

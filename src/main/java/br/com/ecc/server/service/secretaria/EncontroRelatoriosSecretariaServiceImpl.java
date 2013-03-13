@@ -50,9 +50,68 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
 		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setEncontro(encontro);
 		cmdRelatorio.setReport("listagemromantico.jrxml");
 		cmdRelatorio.setNome("listagemromantico");
 		cmdRelatorio.setTitulo("LISTAGEM FILA DO RESTAURANTE BISTRO DO AMOR");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer imprimeRelatorioAlbum(Encontro encontro) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		List<Casal> listaCasal = new ArrayList<Casal>();
+		for (EncontroInscricao encontroInscricao : lista) {
+			listaCasal.add(encontroInscricao.getCasal());
+		}
+		Collections.sort(listaCasal, new Comparator<Casal>() {
+			@Override
+			public int compare(Casal o1, Casal o2) {
+				return o1.getEle().getApelido().compareTo(o2.getEle().getApelido());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemalbum.jrxml");
+		cmdRelatorio.setNome("listagemalbum");
+		cmdRelatorio.setTitulo("LISTAGEM DE ENTREGA DOS ÁLBUNS");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer imprimeRelatorioOracaoAmor(Encontro encontro) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		GetEntityListCommand cmdQuarto = injector.getInstance(GetEntityListCommand.class);
+		cmdQuarto.setNamedQuery("encontroHotelQuarto.porEncontroHotelListaInscricao");
+		cmdQuarto.addParameter("encontroinscricao1", lista);
+		List<EncontroHotelQuarto> listaQuarto = cmdQuarto.call();
+
+		Collections.sort(listaQuarto, new Comparator<EncontroHotelQuarto>() {
+			@Override
+			public int compare(EncontroHotelQuarto o1, EncontroHotelQuarto o2) {
+				if (o1.getEncontroHotel().equals(o2.getEncontroHotel()))
+					return o1.getQuarto().getNumeroQuarto().compareTo(o2.getQuarto().getNumeroQuarto());
+				else
+					return o1.getEncontroHotel().getId().compareTo(o2.getEncontroHotel().getId());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaQuarto);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemoracaoamor.jrxml");
+		cmdRelatorio.setNome("listagemoracaoamor");
+		cmdRelatorio.setTitulo("LISTAGEM DA ORAÇÃO DO AMOR");
 		return cmdRelatorio.call();
 	}
 
@@ -77,6 +136,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
 		cmdRelatorio.setListaObjects(listaPessoa);
+		cmdRelatorio.setEncontro(encontro);
 		cmdRelatorio.setReport("listagemonibus.jrxml");
 		cmdRelatorio.setNome("listagemonibus");
 		cmdRelatorio.setTitulo("LISTAGEM EMPRESA DE ÔNIBUS");
@@ -85,7 +145,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Integer imprimeRelatorioAgrupamento(Agrupamento agrupamento) throws Exception {
+	public Integer imprimeRelatorioAgrupamento(Encontro encontro, Agrupamento agrupamento) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("agrupamentoMembro.porAgrupamento");
 		cmd.addParameter("agrupamento", agrupamento);
@@ -101,6 +161,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
 		cmdRelatorio.setListaObjects(lista);
+		cmdRelatorio.setEncontro(encontro);
 		cmdRelatorio.setReport("listagemagrupamento.jrxml");
 		cmdRelatorio.setNome("listagemagrupamento");
 		cmdRelatorio.setTitulo("LISTAGEM AGRUPAMENTOS - " + agrupamento.getNome() );

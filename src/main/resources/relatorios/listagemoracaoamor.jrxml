@@ -8,6 +8,7 @@
 	<import value="java.util.*"/>
 	<import value="br.com.ecc.model.*"/>
 	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -29,6 +30,13 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement uuid="b6839d18-7ee4-4261-a37e-7b2b790524ba" x="0" y="1" width="34" height="34">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -64,14 +72,14 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="21" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField>
 				<reportElement uuid="00755b14-25fc-4a62-a7aa-0ec7579749d1" x="67" y="0" width="76" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEa().getApelido()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="16463275-898b-42ad-a78b-aed9572d6924" x="0" y="1" width="67" height="20"/>
+				<reportElement uuid="16463275-898b-42ad-a78b-aed9572d6924" x="0" y="0" width="67" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getApelido()]]></textFieldExpression>
 			</textField>
