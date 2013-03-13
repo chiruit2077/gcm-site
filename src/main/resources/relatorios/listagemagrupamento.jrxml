@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listatemromantico" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3455ea0d-5ab8-41d5-b887-25104a61aa86">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
+	<import value="java.util.*"/>
+	<import value="br.com.ecc.model.*"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="casal" class="br.com.ecc.model.Casal">
+		<fieldDescription><![CDATA[casal]]></fieldDescription>
+	</field>
+	<field name="papel" class="br.com.ecc.model.Papel">
+		<fieldDescription><![CDATA[papel]]></fieldDescription>
+	</field>
+	<field name="pessoa" class="br.com.ecc.model.Pessoa">
+		<fieldDescription><![CDATA[pessoa]]></fieldDescription>
+	</field>
+	<field name="rotulo" class="java.lang.String">
+		<fieldDescription><![CDATA[rotulo]]></fieldDescription>
+	</field>
+	<group name="Rotulo">
+		<groupExpression><![CDATA[$F{rotulo}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="58d6a2f7-44e5-433d-8d74-1b589a900bad" x="0" y="0" width="120" height="20"/>
+					<textElement>
+						<font size="14" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{rotulo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="15" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2d40beb8-ab76-4e46-9357-42724286d2e1" mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0442e52c-24b7-4a9f-a6ba-a35a6e8c3a37" x="200" y="5" width="76" height="19"/>
+				<textElement/>
+				<text><![CDATA[Pessoa]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="79d995a9-7d79-4b8d-bb42-32f1443f3fac" x="0" y="25" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="f22f32fe-e805-448f-b991-f1413ea12d22" x="0" y="5" width="200" height="20"/>
+				<textElement/>
+				<text><![CDATA[Casal]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="16463275-898b-42ad-a78b-aed9572d6924" x="0" y="0" width="200" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{casal}.getApelidos( "e" )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1e667828-ae4c-4bc4-bad8-c0e0555d605f" x="200" y="0" width="110" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pessoa}.getApelido()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -10,8 +10,8 @@ import br.com.ecc.model.vo.AgrupamentoVO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface AgrupamentoServiceAsync {
-	void lista(Grupo grupo, AsyncCallback<List<Agrupamento>> callback);
-	void lista(Encontro encontro, AsyncCallback<List<Agrupamento>> callback);
+	void lista(Grupo grupo, AsyncCallback<List<AgrupamentoVO>> callback);
+	void lista(Encontro encontro, AsyncCallback<List<AgrupamentoVO>> callback);
 	void salva(AgrupamentoVO agrupamentoVO, AsyncCallback<Void> callback);
 	void exclui(Agrupamento agrupamento, AsyncCallback<Void> asyncCallback);
 	void getVO(Agrupamento agrupamento, AsyncCallback<AgrupamentoVO> callback);

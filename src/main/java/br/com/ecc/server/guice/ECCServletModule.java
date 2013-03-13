@@ -85,7 +85,6 @@ public class ECCServletModule extends ServletModule {
 		// servlets
 		this.serve(contextPath + "report").with(ReportServlet.class);
 		this.serve(contextPath + "dr").with(DownloadResourceServlet.class);
-
 		this.serve(contextPath + "uploadArquivo").with(UploadArquivoServlet.class);
 		this.serve(contextPath + "uploadprogress").with(UploadProgressServiceImpl.class);
 

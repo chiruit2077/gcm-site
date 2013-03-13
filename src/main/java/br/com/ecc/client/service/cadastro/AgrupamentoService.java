@@ -12,8 +12,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("agrupamento")
 public interface AgrupamentoService extends RemoteService {
-	public List<Agrupamento> lista(Grupo grupo) throws Exception;
-	public List<Agrupamento> lista(Encontro encontro) throws Exception;
+	public List<AgrupamentoVO> lista(Grupo grupo) throws Exception;
+	public List<AgrupamentoVO> lista(Encontro encontro) throws Exception;
 	public void exclui(Agrupamento agrupamento) throws Exception;
 	public void salva(AgrupamentoVO agrupamentoVO) throws Exception;
 	public AgrupamentoVO getVO(Agrupamento agrupamento) throws Exception;

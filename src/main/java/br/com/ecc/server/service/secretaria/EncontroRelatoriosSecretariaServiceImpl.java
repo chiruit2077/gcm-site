@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaService;
+import br.com.ecc.model.Agrupamento;
+import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.ArquivoDigital;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
@@ -46,7 +48,34 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		});
 
 		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
-		cmdRelatorio.setListaCasal(listaCasal);
+		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setReport("listagemromantico.jrxml");
+		cmdRelatorio.setNome("listagemromantico");
+		cmdRelatorio.setTitulo("LISTAGEM FILA DO RESTAURANTE BISTRO DO AMOR");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer imprimeRelatorioAgrupamento(Agrupamento agrupamento) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("agrupamentoMembro.porAgrupamento");
+		cmd.addParameter("agrupamento", agrupamento);
+		List<AgrupamentoMembro> lista = cmd.call();
+		Collections.sort(lista, new Comparator<AgrupamentoMembro>() {
+			@Override
+			public int compare(AgrupamentoMembro o1, AgrupamentoMembro o2) {
+				if (o1.getRotulo() != null && o2.getRotulo() != null ) return o1.getRotulo().compareTo(o2.getRotulo());
+				if (o1.getRotulo() == null && o2.getRotulo() != null && !o2.equals("") ) return -1;
+				return o1.getCasal().getApelidos("e").compareTo(o2.getCasal().getApelidos("e"));
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(lista);
+		cmdRelatorio.setReport("listagemagrupamento.jrxml");
+		cmdRelatorio.setNome("listagemagrupamento");
+		cmdRelatorio.setTitulo("LISTAGEM AGRUPAMENTOS - " + agrupamento.getNome() );
 		return cmdRelatorio.call();
 	}
 

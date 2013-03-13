@@ -103,9 +103,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		</dependency>
 
 		<dependency>
-			<groupId>jasperreports</groupId>
+			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>3.7.2</version>
+			<version>5.0.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>eclipse</groupId>

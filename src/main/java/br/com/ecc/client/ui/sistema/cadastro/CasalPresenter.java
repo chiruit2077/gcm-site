@@ -1,5 +1,6 @@
 package br.com.ecc.client.ui.sistema.cadastro;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.core.event.ExecutaMenuEvent;
@@ -28,6 +29,7 @@ import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.tipo.TipoCasalEnum;
+import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.CasalParamVO;
 import br.com.ecc.model.vo.CasalVO;
 import br.com.ecc.model.vo.DadosLoginVO;
@@ -39,7 +41,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
-	
+
 	public interface Display extends BaseDisplay {
 		void populaEntidades(List<Casal> lista);
 		//void defineFoto();
@@ -62,7 +64,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 	private Encontro encontroSelecionado;
 	private DadosLoginVO dadosLoginVO;
 	private CasalParamVO casalParamVO;
-	
+
 	@Override
 	public void bind() {
 		/*
@@ -79,7 +81,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 		getDisplay().showWaitMessage(true);
 		getWebResource().getEventBus().fireEvent(new ExecutaMenuEvent());
 	}
-	
+
 	@Override
 	public void init() {
 		AdministracaoServiceAsync serviceAdm = GWT.create(AdministracaoService.class);
@@ -100,9 +102,13 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 							}
 						}
 						AgrupamentoServiceAsync serviceAgrupamento = GWT.create(AgrupamentoService.class);
-						serviceAgrupamento.lista(grupoSelecionado, new WebAsyncCallback<List<Agrupamento>>(getDisplay()) {
+						serviceAgrupamento.lista(grupoSelecionado, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
 							@Override
-							protected void success(List<Agrupamento> lista) {
+							protected void success(List<AgrupamentoVO> listavo) {
+								ArrayList<Agrupamento> lista = new ArrayList<Agrupamento>();
+								for (AgrupamentoVO vo : listavo) {
+									lista.add(vo.getAgrupamento());
+								}
 								getDisplay().populaAgrupamento(lista);
 								buscaEncontros();
 							}
@@ -112,7 +118,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			}
 		});
 	}
-	
+
 	public void buscaEncontros(){
 		EncontroServiceAsync serviceEncontro = GWT.create(EncontroService.class);
 		serviceEncontro.lista(grupoSelecionado, new WebAsyncCallback<List<Encontro>>(getDisplay()) {
@@ -137,7 +143,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			}
 		});
 	}
-	
+
 	public void buscaCasais(CasalParamVO casalParamVO){
 		getDisplay().showWaitMessage(true);
 		this.casalParamVO = casalParamVO;
@@ -166,7 +172,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 							/*
 							Window.alert("Dados guardados com sucesso");
 							getDisplay().setVO(resposta);
-							if(result.getEncontroInscricao().getValorEncontro()!=null && 
+							if(result.getEncontroInscricao().getValorEncontro()!=null &&
 							   result.getEncontroInscricao().getValorEncontro().doubleValue()!=0){
 								getDisplay().setEncontroInscricaoVO(result);
 							} else {
@@ -201,7 +207,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			}
 		});
 	}
-	
+
 	public void getVO(Casal casal) {
 		getDisplay().showWaitMessage(true);
 		service.getVO(casal, new WebAsyncCallback<CasalVO>(getDisplay()) {
@@ -233,7 +239,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			}
 		});
 	}
-	
+
 	public void redimensiona(){
 		ArquivoDigitalServiceAsync serviceUpload = GWT.create(ArquivoDigitalService.class);
 		serviceUpload.redimensionaGeraThumb(new AsyncCallback<Void>() {
@@ -241,13 +247,13 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			public void onSuccess(Void arg0) {
 				Window.alert("Operação efetuada com sucesso");
 			}
-			
+
 			@Override
 			public void onFailure(Throwable arg0) {
 			}
 		});
 	}
-	
+
 	public void limpaLixo(){
 		ArquivoDigitalServiceAsync serviceUpload = GWT.create(ArquivoDigitalService.class);
 		serviceUpload.limpaLixo(new AsyncCallback<Void>() {
@@ -255,7 +261,7 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			public void onSuccess(Void arg0) {
 				Window.alert("Operação efetuada com sucesso");
 			}
-			
+
 			@Override
 			public void onFailure(Throwable arg0) {
 			}

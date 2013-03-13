@@ -150,8 +150,9 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		agrupamentoTableUtil.initialize(agrupamentoFlexTable);
 
 		agrupamentoTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
-		agrupamentoTableUtil.addColumn("Nome", "200", HasHorizontalAlignment.ALIGN_LEFT);
+		agrupamentoTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
 		agrupamentoTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_LEFT);
+		agrupamentoTableUtil.addColumn("Qtde", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
 	private void criaTabelaMembro() {
@@ -310,14 +311,16 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		agrupamentoTableUtil.clearData();
 	}
 	@Override
-	public void populaEntidades(List<Agrupamento> lista) {
+	public void populaEntidades(List<AgrupamentoVO> lista) {
 		LabelTotalUtil.setTotal(itemTotal, lista.size(), "agrupamento", "agrupamentos", "");
 		agrupamentoTableUtil.clearData();
 		int row = 0;
 		Image editar, excluir;
 		HorizontalPanel hp;
-		for (final Agrupamento agrupamento: lista) {
-			Object dados[] = new Object[3];
+		for (AgrupamentoVO vo: lista) {
+			final Agrupamento agrupamento = vo.getAgrupamento();
+
+			Object dados[] = new Object[4];
 
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
@@ -349,6 +352,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 				dados[2] = agrupamento.getTipo().getNome();
 			else
 				dados[2] = "";
+			dados[3] = vo.getListaMembros().size();
 			agrupamentoTableUtil.addRow(dados,row+1);
 			row++;
 		}

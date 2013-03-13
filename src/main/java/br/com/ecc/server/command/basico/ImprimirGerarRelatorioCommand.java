@@ -39,6 +39,7 @@ public class ImprimirGerarRelatorioCommand implements Callable<JasperPrint>{
 		
 		try {
 			JasperReport jasperReport = JasperCompileManager.compileReport(ResourceLoaderUtil.loadResourceToInputStream(reportPathName, reportFileName));
+			
 			jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, new JRBeanCollectionDataSource(dadosRelatorio));
 		} catch (Exception e) {
 			e.printStackTrace();

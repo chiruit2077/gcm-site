@@ -31,7 +31,7 @@ import com.google.gwt.user.client.Cookies;
 public class AgrupamentoPresenter extends BasePresenter<AgrupamentoPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
-		void populaEntidades(List<Agrupamento> lista);
+		void populaEntidades(List<AgrupamentoVO> lista);
 		void populaAtividades(List<Atividade> lista);
 		void setVO(AgrupamentoVO vo);
 		void repopula();
@@ -82,18 +82,18 @@ public class AgrupamentoPresenter extends BasePresenter<AgrupamentoPresenter.Dis
 		});
 	}
 	public void buscaAgrupamentos(Grupo grupo){
-		service.lista(grupo, new WebAsyncCallback<List<Agrupamento>>(getDisplay()) {
+		service.lista(grupo, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
 			@Override
-			protected void success(List<Agrupamento> lista) {
+			protected void success(List<AgrupamentoVO> lista) {
 				getDisplay().populaEntidades(lista);
 			}
 		});
 	}
 	public void buscaAgrupamentos(final Encontro encontro){
 		getDisplay().showWaitMessage(true);
-		service.lista(encontro, new WebAsyncCallback<List<Agrupamento>>(getDisplay()) {
+		service.lista(encontro, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
 			@Override
-			protected void success(List<Agrupamento> lista) {
+			protected void success(List<AgrupamentoVO> lista) {
 				getDisplay().populaEntidades(lista);
 				getDisplay().showWaitMessage(false);
 			}

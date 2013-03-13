@@ -1,5 +1,6 @@
 package br.com.ecc.server.service.cadastro;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.service.cadastro.AgrupamentoService;
@@ -27,21 +28,43 @@ public class AgrupamentoServiceImpl extends SecureRemoteServiceServlet implement
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Listar agrupamentos por grupo", operacao=Operacao.VISUALIZAR)
-	public List<Agrupamento> lista(Grupo grupo) throws Exception {
+	public List<AgrupamentoVO> lista(Grupo grupo) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("agrupamento.porGrupo");
 		cmd.addParameter("grupo", grupo);
-		return cmd.call();
+		List<Agrupamento> call = cmd.call();
+		List<AgrupamentoVO> listavo = new ArrayList<AgrupamentoVO>();
+		for (Agrupamento agrupamento : call) {
+			AgrupamentoVO vo = new AgrupamentoVO();
+			vo.setAgrupamento(agrupamento);
+			GetEntityListCommand cmdMembros = injector.getInstance(GetEntityListCommand.class);
+			cmdMembros.setNamedQuery("agrupamentoMembro.porAgrupamento");
+			cmdMembros.addParameter("agrupamento", agrupamento);
+			vo.setListaMembros(cmdMembros.call());
+			listavo.add(vo);
+		}
+		return listavo;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Listar agrupamentos por encontro", operacao=Operacao.VISUALIZAR)
-	public List<Agrupamento> lista(Encontro encontro) throws Exception {
+	public List<AgrupamentoVO> lista(Encontro encontro) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("agrupamento.porEncontro");
 		cmd.addParameter("encontro", encontro);
-		return cmd.call();
+		List<Agrupamento> call = cmd.call();
+		List<AgrupamentoVO> listavo = new ArrayList<AgrupamentoVO>();
+		for (Agrupamento agrupamento : call) {
+			AgrupamentoVO vo = new AgrupamentoVO();
+			vo.setAgrupamento(agrupamento);
+			GetEntityListCommand cmdMembros = injector.getInstance(GetEntityListCommand.class);
+			cmdMembros.setNamedQuery("agrupamentoMembro.porAgrupamento");
+			cmdMembros.addParameter("agrupamento", agrupamento);
+			vo.setListaMembros(cmdMembros.call());
+			listavo.add(vo);
+		}
+		return listavo;
 	}
 
 	@Override

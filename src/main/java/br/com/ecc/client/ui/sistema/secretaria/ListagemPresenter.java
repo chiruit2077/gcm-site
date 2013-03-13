@@ -25,6 +25,7 @@ import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
+import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.CasalOpcaoRelatorioVO;
 import br.com.ecc.model.vo.CasalParamVO;
 import br.com.ecc.model.vo.DadosLoginVO;
@@ -33,7 +34,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
 public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> {
-	
+
 	public interface Display extends BaseDisplay {
 		void populaEntidades(List<Casal> lista, Boolean listagem);
 		void init();
@@ -50,7 +51,7 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 	private Encontro encontroSelecionado;
 	private DadosLoginVO dadosLoginVO;
 	private List<Casal> listaCasal = new ArrayList<Casal>();
-	
+
 	@Override
 	public void bind() {
 	}
@@ -59,7 +60,7 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 		getDisplay().showWaitMessage(true);
 		getWebResource().getEventBus().fireEvent(new ExecutaMenuEvent());
 	}
-	
+
 	@Override
 	public void init() {
 		AdministracaoServiceAsync serviceAdm = GWT.create(AdministracaoService.class);
@@ -80,9 +81,13 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 							}
 						}
 						AgrupamentoServiceAsync serviceAgrupamento = GWT.create(AgrupamentoService.class);
-						serviceAgrupamento.lista(grupoSelecionado, new WebAsyncCallback<List<Agrupamento>>(getDisplay()) {
+						serviceAgrupamento.lista(grupoSelecionado, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
 							@Override
-							protected void success(List<Agrupamento> lista) {
+							protected void success(List<AgrupamentoVO> listavo) {
+								ArrayList<Agrupamento> lista = new ArrayList<Agrupamento>();
+								for (AgrupamentoVO vo : listavo) {
+									lista.add(vo.getAgrupamento());
+								}
 								getDisplay().populaAgrupamento(lista);
 								buscaEncontros();
 							}
@@ -92,7 +97,7 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void buscaEncontros(){
 		EncontroServiceAsync serviceEncontro = GWT.create(EncontroService.class);
 		serviceEncontro.lista(grupoSelecionado, new WebAsyncCallback<List<Encontro>>(getDisplay()) {
@@ -109,7 +114,7 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void buscaCasais(CasalParamVO casalParamVO){
 		getDisplay().showWaitMessage(true);
 		service.lista(casalParamVO, new WebAsyncCallback<List<Casal>>(getDisplay()) {
@@ -120,7 +125,7 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void imprimir(CasalOpcaoRelatorioVO casalOpcaoRelatorioVO) {
 		getDisplay().showWaitMessage(true);
 		service.imprimeLista(listaCasal, casalOpcaoRelatorioVO, new WebAsyncCallback<Integer>(getDisplay()) {

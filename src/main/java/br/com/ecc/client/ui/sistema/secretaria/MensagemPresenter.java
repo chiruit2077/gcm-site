@@ -1,5 +1,6 @@
 package br.com.ecc.client.ui.sistema.secretaria;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.core.event.ExecutaMenuEvent;
@@ -34,7 +35,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 
 public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> {
-	
+
 	public interface Display extends BaseDisplay {
 		void populaEntidades(List<Mensagem> lista);
 		void setVO(MensagemVO mensagemVO);
@@ -49,14 +50,14 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 	MensagemServiceAsync service = GWT.create(MensagemService.class);
 	AgrupamentoServiceAsync serviceAgrupamento = GWT.create(AgrupamentoService.class);
 	EncontroServiceAsync serviceEncontro = GWT.create(EncontroService.class);
-	private MensagemVO mensagemVO; 
+	private MensagemVO mensagemVO;
 	private AgrupamentoVO agrupamentoVO;
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
-	
+
 	private List<EncontroInscricao> listaInscricao = null;
 	private List<Casal> listaEncontristas = null;
-	
+
 	@Override
 	public void bind() {
 	}
@@ -65,7 +66,7 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 		getDisplay().showWaitMessage(true);
 		getWebResource().getEventBus().fireEvent(new ExecutaMenuEvent());
 	}
-	
+
 	@Override
 	public void init() {
 		GrupoServiceAsync serviceGrupo = GWT.create(GrupoService.class);
@@ -121,7 +122,7 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void excluir(Mensagem mensagemEditado) {
 		getDisplay().showWaitMessage(true);
 		service.exclui(mensagemEditado, new WebAsyncCallback<Void>(getDisplay()) {
@@ -165,18 +166,26 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 		});
 	}
 	public void buscaAgrupamentos(){
-		serviceAgrupamento.lista(grupoSelecionado, new WebAsyncCallback<List<Agrupamento>>(getDisplay()) {
+		serviceAgrupamento.lista(grupoSelecionado, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
 			@Override
-			protected void success(List<Agrupamento> lista) {
+			protected void success(List<AgrupamentoVO> listavo) {
+				ArrayList<Agrupamento> lista = new ArrayList<Agrupamento>();
+				for (AgrupamentoVO vo : listavo) {
+					lista.add(vo.getAgrupamento());
+				}
 				getDisplay().populaAgrupamento(lista);
 				getDisplay().showWaitMessage(false);
 			}
 		});
 	}
 	public void buscaAgrupamentos(final Encontro encontro){
-		serviceAgrupamento.lista(encontro, new WebAsyncCallback<List<Agrupamento>>(getDisplay()) {
+		serviceAgrupamento.lista(encontro, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
 			@Override
-			protected void success(List<Agrupamento> lista) {
+			protected void success(List<AgrupamentoVO> listavo) {
+				ArrayList<Agrupamento> lista = new ArrayList<Agrupamento>();
+				for (AgrupamentoVO vo : listavo) {
+					lista.add(vo.getAgrupamento());
+				}
 				getDisplay().populaAgrupamento(lista);
 				serviceEncontro.listaInscricoes(encontro, false, new WebAsyncCallback<List<EncontroInscricao>>(getDisplay()) {
 					@Override
@@ -188,7 +197,7 @@ public class MensagemPresenter extends BasePresenter<MensagemPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void getEncontristas() {
 		getDisplay().showWaitMessage(true);
 		CasalParamVO vo = new CasalParamVO();
