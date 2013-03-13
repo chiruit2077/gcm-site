@@ -36,7 +36,8 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 	public enum ProcessaOpcao {
 		GERACSV,
 		LISTAGEMAGRUPAMENTO,
-		LISTAGEMFILAROMANTICO;
+		LISTAGEMFILAROMANTICO,
+		LISTAGEMONIBUS;
 	}
 
 	public EncontroRelatoriosSecretariaPresenter(Display display, WebResource portalResource) {
@@ -129,9 +130,16 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					DownloadResourceHelper.showReport(idReport, "_blank", "");
 				}
 			});
-		}
-		else if (opcao.equals(ProcessaOpcao.LISTAGEMFILAROMANTICO)){
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMFILAROMANTICO)){
 			service.imprimeRelatorioRomantico(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, "_blank", "");
+				}
+			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMONIBUS)){
+			service.imprimeRelatorioOnibus(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);

@@ -5,8 +5,8 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
-	<import value="br.com.ecc.model.*"/>
 	<import value="java.util.*"/>
+	<import value="br.com.ecc.model.*"/>
 	<parameter name="TITULO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
@@ -61,13 +61,4 @@
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="54" splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>

@@ -9,4 +9,5 @@ public interface EncontroRelatoriosSecretariaServiceAsync {
 	void imprimeRelatorioRomantico(Encontro encontro,AsyncCallback<Integer> callback);
 	void geraCSV(Encontro encontro, String name, AsyncCallback<Integer> callback);
 	void imprimeRelatorioAgrupamento(Agrupamento agrupamento, AsyncCallback<Integer> callback);
+	void imprimeRelatorioOnibus(Encontro encontro, AsyncCallback<Integer> callback);
 }

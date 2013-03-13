@@ -30,7 +30,8 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField VerticalPanel centralPanel;
 	@UiField RadioButton geraCSVRadioButton;
 	@UiField RadioButton relatorioRomanticoRadioButton;
-	@UiField RadioButton relatorioAgrupamentosRadioButton;
+	@UiField RadioButton relatorioAgrupamentoRadioButton;
+	@UiField RadioButton relatorioOnibusRadioButton;
 	@UiField ListBox agrupamentosListBox;
 
 	private List<Agrupamento> agrupamentos;
@@ -44,7 +45,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	public void processaButtonClickHandler(ClickEvent event){
 		if (geraCSVRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.GERACSV);
-		else if (relatorioAgrupamentosRadioButton.getValue()){
+		else if (relatorioAgrupamentoRadioButton.getValue()){
 			Agrupamento agrupamento = (Agrupamento) ListBoxUtil.getItemSelected(agrupamentosListBox, getAgrupamentos());
 			if (agrupamento != null)
 				presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMAGRUPAMENTO, agrupamento);
@@ -53,6 +54,8 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 		}
 		else if (relatorioRomanticoRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMFILAROMANTICO);
+		else if (relatorioOnibusRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMONIBUS);
 	}
 
 	@UiHandler("fecharImage")

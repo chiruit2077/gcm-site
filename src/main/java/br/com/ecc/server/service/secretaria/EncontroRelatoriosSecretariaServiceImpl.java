@@ -13,6 +13,7 @@ import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotelQuarto;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.tipo.TipoArquivoEnum;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.ArquivoDigitalSalvarCommand;
@@ -52,6 +53,33 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		cmdRelatorio.setReport("listagemromantico.jrxml");
 		cmdRelatorio.setNome("listagemromantico");
 		cmdRelatorio.setTitulo("LISTAGEM FILA DO RESTAURANTE BISTRO DO AMOR");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer imprimeRelatorioOnibus(Encontro encontro) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		List<Pessoa> listaPessoa = new ArrayList<Pessoa>();
+		for (EncontroInscricao encontroInscricao : lista) {
+			listaPessoa.add(encontroInscricao.getCasal().getEle());
+			listaPessoa.add(encontroInscricao.getCasal().getEla());
+		}
+		Collections.sort(listaPessoa, new Comparator<Pessoa>() {
+			@Override
+			public int compare(Pessoa o1, Pessoa o2) {
+				return o1.getNome().compareTo(o2.getNome());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaPessoa);
+		cmdRelatorio.setReport("listagemonibus.jrxml");
+		cmdRelatorio.setNome("listagemonibus");
+		cmdRelatorio.setTitulo("LISTAGEM EMPRESA DE ÔNIBUS");
 		return cmdRelatorio.call();
 	}
 
