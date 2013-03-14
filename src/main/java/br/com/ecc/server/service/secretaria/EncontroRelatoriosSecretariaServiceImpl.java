@@ -11,6 +11,7 @@ import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.ArquivoDigital;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
+import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroHotelQuarto;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Pessoa;
@@ -210,6 +211,70 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 			ArquivoDigital call = cmdArquivo.call();
 			return call.getId();
 		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer imprimeRelatorioNecessidadesEspeciais(Encontro encontro)	throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		List<Pessoa> listaPessoa = new ArrayList<Pessoa>();
+		for (EncontroInscricao encontroInscricao : lista) {
+			if (encontroInscricao.getCasal().getEle().getNecessidadesEspeciais() != null && !encontroInscricao.getCasal().getEle().getNecessidadesEspeciais().equals(""))
+				listaPessoa.add(encontroInscricao.getCasal().getEle());
+			if (encontroInscricao.getCasal().getEla().getNecessidadesEspeciais() != null && !encontroInscricao.getCasal().getEla().getNecessidadesEspeciais().equals(""))
+				listaPessoa.add(encontroInscricao.getCasal().getEla());
+		}
+		Collections.sort(listaPessoa, new Comparator<Pessoa>() {
+			@Override
+			public int compare(Pessoa o1, Pessoa o2) {
+				return o1.getNome().compareTo(o2.getNome());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaPessoa);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemnecessidadesespeciais.jrxml");
+		cmdRelatorio.setNome("listagemnecessidadesespeciais");
+		cmdRelatorio.setTitulo("LISTAGEM DE AFILHADOS COM NECESSIDADES ESPECIAIS");
+		return cmdRelatorio.call();	}
+
+	@Override
+	public Integer imprimeRelatorioDiabeticosVegetarianos(Encontro encontro)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer imprimeRelatorioHotelAfilhados(EncontroHotel encontroHotel)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer imprimeRelatorioHotelEncontristas(EncontroHotel encontroHotel)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer imprimeRelatorioRecepcaoInicial(Encontro encontro)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer imprimeRelatorioRecepcaoFinal(Encontro encontro)
+			throws Exception {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

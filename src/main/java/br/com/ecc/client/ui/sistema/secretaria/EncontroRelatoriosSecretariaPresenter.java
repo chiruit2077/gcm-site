@@ -13,12 +13,15 @@ import br.com.ecc.client.service.cadastro.EncontroService;
 import br.com.ecc.client.service.cadastro.EncontroServiceAsync;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
+import br.com.ecc.client.service.encontro.EncontroHotelService;
+import br.com.ecc.client.service.encontro.EncontroHotelServiceAsync;
 import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaService;
 import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaServiceAsync;
 import br.com.ecc.client.util.DownloadResourceHelper;
 import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Encontro;
+import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.vo.AgrupamentoVO;
 
@@ -29,8 +32,8 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 
 	public interface Display extends BaseDisplay {
 		void init();
-
 		void setListaAgrupamentos(List<Agrupamento> result);
+		void setListaHoteis(List<EncontroHotel> result);
 	}
 
 	public enum ProcessaOpcao {
@@ -39,7 +42,13 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		LISTAGEMFILAROMANTICO,
 		LISTAGEMONIBUS,
 		LISTAGEMALBUM,
-		LISTAGEMORACAOAMOR;
+		LISTAGEMORACAOAMOR,
+		LISTAGEMNECESSIDADESESPECIAIS,
+		LISTAGEMDIABETICOSVEGETARIANOS,
+		LISTAGEMHOTELAFILHADOS,
+		LISTAGEMHOTELENCONTRISTAS,
+		LISTAGEMRECEPCAOONIBUS,
+		LISTAGEMRECEPCAOFINAL;
 	}
 
 	public EncontroRelatoriosSecretariaPresenter(Display display, WebResource portalResource) {
@@ -88,6 +97,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 						setEncontroSelecionado(encontro);
 						getDisplay().showWaitMessage(false);
 						buscaAgrupamentos();
+						buscaHoteis();
 						break;
 					}
 				}
@@ -110,11 +120,22 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		});
 	}
 
+	public void buscaHoteis() {
+		EncontroHotelServiceAsync servicoEncontroHotel = GWT.create(EncontroHotelService.class);
+		servicoEncontroHotel.lista(getEncontroSelecionado(), new WebAsyncCallback<List<EncontroHotel>>(getDisplay()) {
+			@Override
+			protected void success(List<EncontroHotel> lista) {
+				getDisplay().setListaHoteis(lista);
+
+			}
+		});
+	}
+
 	public void processa(Encontro encontro, ProcessaOpcao opcao) {
 		processa(encontro, opcao, null);
 	}
 
-	public void processa(Encontro encontro, ProcessaOpcao opcao, Agrupamento agrupamento) {
+	public void processa(Encontro encontro, ProcessaOpcao opcao, Object object) {
 		getDisplay().showWaitMessage(true);
 		if (opcao.equals(ProcessaOpcao.GERACSV)){
 			service.geraCSV(encontro, "afilhados.csv", new WebAsyncCallback<Integer>(getDisplay()) {
@@ -125,6 +146,8 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMAGRUPAMENTO)){
+			if (object instanceof Agrupamento){
+				Agrupamento agrupamento = (Agrupamento) object;
 			service.imprimeRelatorioAgrupamento(encontro, agrupamento, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport) {
@@ -132,6 +155,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					DownloadResourceHelper.showReport(idReport, "_blank", "");
 				}
 			});
+			}
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMFILAROMANTICO)){
 			service.imprimeRelatorioRomantico(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
@@ -158,6 +182,14 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMORACAOAMOR)){
 			service.imprimeRelatorioOracaoAmor(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, "_blank", "");
+				}
+			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMNECESSIDADESESPECIAIS)){
+			service.imprimeRelatorioNecessidadesEspeciais(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
