@@ -12,16 +12,16 @@ public class RestauranteVO implements Serializable {
 
 	private static final long serialVersionUID = -2710310820053031392L;
 
-	private Restaurante Restaurante;
+	private Restaurante restaurante;
 	private List<Mesa> listaMesas;
 	private List<RestauranteGrupo> listaGrupos;
 	private List<RestauranteTitulo> listaTitulos;
 
 	public Restaurante getRestaurante() {
-		return Restaurante;
+		return restaurante;
 	}
 	public void setRestaurante(Restaurante restaurante) {
-		Restaurante = restaurante;
+		this.restaurante = restaurante;
 	}
 	public List<Mesa> getListaMesas() {
 		return listaMesas;

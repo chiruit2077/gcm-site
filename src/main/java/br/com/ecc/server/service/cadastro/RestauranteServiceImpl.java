@@ -3,6 +3,7 @@ package br.com.ecc.server.service.cadastro;
 import java.util.List;
 
 import br.com.ecc.client.service.cadastro.RestauranteService;
+import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Restaurante;
 import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.model.vo.RestauranteVO;
@@ -28,9 +29,10 @@ public class RestauranteServiceImpl extends SecureRemoteServiceServlet implement
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Listar restaurantes", operacao=Operacao.VISUALIZAR)
-	public List<Restaurante> lista() throws Exception {
+	public List<Restaurante> lista(Grupo grupo) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
-		cmd.setNamedQuery("restaurante.todos");
+		cmd.setNamedQuery("restaurante.porGrupo");
+		cmd.addParameter("grupo", grupo);
 		return cmd.call();
 	}
 

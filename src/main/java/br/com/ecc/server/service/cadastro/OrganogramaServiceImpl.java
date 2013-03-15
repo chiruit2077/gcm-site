@@ -3,11 +3,15 @@ package br.com.ecc.server.service.cadastro;
 import java.util.List;
 
 import br.com.ecc.client.service.cadastro.OrganogramaService;
+import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Organograma;
 import br.com.ecc.model.tipo.Operacao;
+import br.com.ecc.model.vo.OrganogramaVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
-import br.com.ecc.server.command.basico.DeleteEntityCommand;
+import br.com.ecc.server.command.OrganogramaExcluirCommand;
+import br.com.ecc.server.command.OrganogramaSalvarCommand;
+import br.com.ecc.server.command.basico.GetEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 import br.com.ecc.server.command.basico.SaveEntityCommand;
 
@@ -25,17 +29,18 @@ public class OrganogramaServiceImpl extends SecureRemoteServiceServlet implement
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Listar organograma", operacao=Operacao.VISUALIZAR)
-	public List<Organograma> lista() throws Exception {
+	public List<Organograma> lista(Grupo grupo) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
-		cmd.setNamedQuery("organograma.todos");
+		cmd.setNamedQuery("organograma.porGrupo");
+		cmd.addParameter("grupo", grupo);
 		return cmd.call();
 	}
 
 	@Override
 	@Permissao(nomeOperacao="Excluir organograma", operacao=Operacao.EXCLUIR)
 	public void exclui(Organograma organograma) throws Exception {
-		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
-		cmd.setBaseEntity(organograma);
+		OrganogramaExcluirCommand cmd = injector.getInstance(OrganogramaExcluirCommand.class);
+		cmd.setOrganograma(organograma);
 		cmd.call();
 	}
 
@@ -45,6 +50,38 @@ public class OrganogramaServiceImpl extends SecureRemoteServiceServlet implement
 		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(organograma);
 		return (Organograma)cmd.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Permissao(nomeOperacao="Busca VO", operacao=Operacao.VISUALIZAR)
+	public OrganogramaVO getVO(Organograma organograma) throws Exception {
+		OrganogramaVO vo = new OrganogramaVO();
+
+		GetEntityCommand cmd = injector.getInstance(GetEntityCommand.class);
+		cmd.setClazz(Organograma.class);
+		cmd.setId(organograma.getId());
+		vo.setOrganograma((Organograma) cmd.call());
+
+		GetEntityListCommand cmbAreas = injector.getInstance(GetEntityListCommand.class);
+		cmbAreas.setNamedQuery("organogramaArea.porOrganograma");
+		cmbAreas.addParameter("organograma", vo.getOrganograma());
+		vo.setListaAreas(cmbAreas.call());
+
+		GetEntityListCommand cmbCoordenacoes = injector.getInstance(GetEntityListCommand.class);
+		cmbCoordenacoes.setNamedQuery("organogramaCoordenacao.porOrganograma");
+		cmbCoordenacoes.addParameter("organograma", vo.getOrganograma());
+		vo.setListaCoordenacoes(cmbCoordenacoes.call());
+
+		return vo;
+	}
+
+
+	@Override
+	public OrganogramaVO salvaOrganograma(OrganogramaVO vo) throws Exception {
+		OrganogramaSalvarCommand cmd = injector.getInstance(OrganogramaSalvarCommand.class);
+		cmd.setVo(vo);
+		return cmd.call();
 	}
 
 }

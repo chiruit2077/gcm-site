@@ -8,26 +8,26 @@ import br.com.ecc.client.core.mvp.presenter.BasePresenter;
 import br.com.ecc.client.core.mvp.view.BaseDisplay;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
-import br.com.ecc.client.service.cadastro.HotelService;
-import br.com.ecc.client.service.cadastro.HotelServiceAsync;
+import br.com.ecc.client.service.cadastro.OrganogramaService;
+import br.com.ecc.client.service.cadastro.OrganogramaServiceAsync;
 import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Grupo;
-import br.com.ecc.model.Hotel;
+import br.com.ecc.model.Organograma;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
-public class HotelPresenter extends BasePresenter<HotelPresenter.Display> {
+public class OrganogramaPresenter extends BasePresenter<OrganogramaPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
-		void populaHoteis(List<Hotel> lista);
+		void populaOrganogramas(List<Organograma> lista);
 	}
 
-	public HotelPresenter(Display display, WebResource portalResource) {
+	public OrganogramaPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
 
-	HotelServiceAsync service = GWT.create(HotelService.class);
+	OrganogramaServiceAsync service = GWT.create(OrganogramaService.class);
 	private Grupo grupoSelecionado;
 
 	@Override
@@ -52,40 +52,40 @@ public class HotelPresenter extends BasePresenter<HotelPresenter.Display> {
 						break;
 					}
 				}
-				buscaHoteis();
+				buscaOrganogramas();
 			}
 		});
 	}
 
-	public void buscaHoteis(){
+	public void buscaOrganogramas(){
 		getDisplay().showWaitMessage(true);
-		service.lista(getGrupoSelecionado(),new WebAsyncCallback<List<Hotel>>(getDisplay()) {
+		service.lista(getGrupoSelecionado(),new WebAsyncCallback<List<Organograma>>(getDisplay()) {
 			@Override
-			protected void success(List<Hotel> lista) {
-				getDisplay().populaHoteis(lista);
+			protected void success(List<Organograma> lista) {
+				getDisplay().populaOrganogramas(lista);
 				getDisplay().showWaitMessage(false);
 			}
 		});
 	}
-	public void salvar(Hotel hotelEditado) {
+	public void salvar(Organograma organograma) {
 		getDisplay().showWaitMessage(true);
-		hotelEditado.setGrupo(getGrupoSelecionado());
-		service.salva(hotelEditado, new WebAsyncCallback<Hotel>(getDisplay()) {
+		organograma.setGrupo(getGrupoSelecionado());
+		service.salva(organograma, new WebAsyncCallback<Organograma>(getDisplay()) {
 			@Override
-			public void success(Hotel hotel) {
+			public void success(Organograma Organograma) {
 				getDisplay().reset();
-				buscaHoteis();
+				buscaOrganogramas();
 			}
 		});
 	}
 
-	public void excluir(Hotel hotelEditado) {
+	public void excluir(Organograma organograma) {
 		getDisplay().showWaitMessage(true);
-		service.exclui(hotelEditado, new WebAsyncCallback<Void>(getDisplay()) {
+		service.exclui(organograma, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
 				getDisplay().reset();
-				buscaHoteis();
+				buscaOrganogramas();
 			}
 		});
 	}

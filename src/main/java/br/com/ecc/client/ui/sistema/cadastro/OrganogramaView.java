@@ -3,10 +3,9 @@ package br.com.ecc.client.ui.sistema.cadastro;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
-import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.LabelTotalUtil;
-import br.com.ecc.model.Hotel;
+import br.com.ecc.model.Organograma;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,22 +25,16 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HotelView extends BaseView<HotelPresenter> implements HotelPresenter.Display {
+public class OrganogramaView extends BaseView<OrganogramaPresenter> implements OrganogramaPresenter.Display {
 
-	@UiTemplate("HotelView.ui.xml")
-	interface HotelViewUiBinder extends UiBinder<Widget, HotelView> {}
-	private HotelViewUiBinder uiBinder = GWT.create(HotelViewUiBinder.class);
+	@UiTemplate("OrganogramaView.ui.xml")
+	interface ViewUiBinder extends UiBinder<Widget, OrganogramaView> {}
+	private ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
 
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 
-	@UiField NumberTextBox quantidadeQuartos;
 	@UiField TextBox nomeTextBox;
-	@UiField TextBox enderecoTextBox;
-	@UiField TextBox bairroTextBox;
-	@UiField TextBox cepTextBox;
-	@UiField TextBox cidadeTextBox;
-	@UiField TextBox estadoTextBox;
 
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
@@ -49,26 +42,25 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 	@UiField Button novoButton;
 
 
-	@UiField(provided=true) FlexTable hotelFlexTable;
-	private FlexTableUtil hotelTableUtil = new FlexTableUtil();
+	@UiField(provided=true) FlexTable organogramaFlexTable;
+	private FlexTableUtil organogramaTableUtil = new FlexTableUtil();
 
 
-	private Hotel entidadeEditada;
+	private Organograma entidadeEditada;
 
-	public HotelView() {
+	public OrganogramaView() {
 		criaTabela();
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 	}
 
 	private void criaTabela() {
-		hotelFlexTable = new FlexTable();
-		hotelFlexTable.setStyleName("portal-formSmall");
-		hotelTableUtil.initialize(hotelFlexTable);
+		organogramaFlexTable = new FlexTable();
+		organogramaFlexTable.setStyleName("portal-formSmall");
+		organogramaTableUtil.initialize(organogramaFlexTable);
 
-		hotelTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
-		hotelTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
-		hotelTableUtil.addColumn("Qtde Quartos", null, HasHorizontalAlignment.ALIGN_LEFT);
+		organogramaTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
+		organogramaTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
 	}
 
 	@UiHandler("fecharButton")
@@ -86,21 +78,15 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		entidadeEditada.setNome(nomeTextBox.getValue());
-		entidadeEditada.setQuantidadeQuartos(Integer.parseInt(quantidadeQuartos.getText()));
-		entidadeEditada.setEndereco(enderecoTextBox.getValue());
-		entidadeEditada.setBairro(bairroTextBox.getValue());
-		entidadeEditada.setCep(cepTextBox.getValue());
-		entidadeEditada.setCidade(cidadeTextBox.getValue());
-		entidadeEditada.setEstado(estadoTextBox.getValue());
 		presenter.salvar(entidadeEditada);
 	}
-	private void edita(Hotel hotel) {
+	private void edita(Organograma organograma) {
 		limpaCampos();
-		if(hotel == null){
-			entidadeEditada = new Hotel();
+		if(organograma == null){
+			entidadeEditada = new Organograma();
 		} else {
-			entidadeEditada = hotel;
-			defineCampos(hotel);
+			entidadeEditada = organograma;
+			defineCampos(organograma);
 		}
 		editaDialogBox.center();
 		editaDialogBox.show();
@@ -109,46 +95,38 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 
 	public void limpaCampos(){
 		nomeTextBox.setValue(null);
-		quantidadeQuartos.setValue(null);
 	}
 
-	public void defineCampos(Hotel hotel){
-		nomeTextBox.setValue(hotel.getNome());
-		quantidadeQuartos.setValue(hotel.getQuantidadeQuartos().toString());
-		enderecoTextBox.setValue(hotel.getEndereco());
-		bairroTextBox.setValue(hotel.getBairro());
-		cepTextBox.setValue(hotel.getCep());
-		cidadeTextBox.setValue(hotel.getCidade());
-		estadoTextBox.setValue(hotel.getEstado());
-
+	public void defineCampos(Organograma organograma){
+		nomeTextBox.setValue(organograma.getNome());
 	}
 
 	@Override
 	public String getDisplayTitle() {
-		return "Cadastro de Hoteis";
+		return "Cadastro de Organogramas";
 	}
 
 	@Override
 	public void reset() {
 		editaDialogBox.hide();
-		hotelTableUtil.clearData();
+		organogramaTableUtil.clearData();
 	}
 	@Override
-	public void populaHoteis(List<Hotel> lista) {
-		LabelTotalUtil.setTotal(itemTotal, lista.size(), "hotel", "hoteis", "");
-		hotelTableUtil.clearData();
+	public void populaOrganogramas(List<Organograma> lista) {
+		LabelTotalUtil.setTotal(itemTotal, lista.size(), "organograma", "organogramas", "");
+		organogramaTableUtil.clearData();
 		int row = 0;
 		Image editar, excluir;
 		HorizontalPanel hp;
-		for (final Hotel hotel: lista) {
-			Object dados[] = new Object[3];
+		for (final Organograma organograma: lista) {
+			Object dados[] = new Object[2];
 
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent arg0) {
-					edita(hotel);
+					edita(organograma);
 				}
 			});
 			excluir = new Image("images/delete.png");
@@ -156,8 +134,8 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 			excluir.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent arg0) {
-					if(Window.confirm("Deseja excluir este hotel?")){
-						presenter.excluir(hotel);
+					if(Window.confirm("Deseja excluir este organograma?")){
+						presenter.excluir(organograma);
 					}
 				}
 			});
@@ -168,12 +146,11 @@ public class HotelView extends BaseView<HotelPresenter> implements HotelPresente
 			hp.add(excluir);
 
 			dados[0] = hp;
-			dados[1] = hotel.getNome();
-			dados[2] = hotel.getQuantidadeQuartos().toString();
-			hotelTableUtil.addRow(dados,row+1);
+			dados[1] = organograma.getNome();
+			organogramaTableUtil.addRow(dados,row+1);
 			row++;
 		}
-		hotelTableUtil.applyDataRowStyles();
+		organogramaTableUtil.applyDataRowStyles();
 	}
 
 }

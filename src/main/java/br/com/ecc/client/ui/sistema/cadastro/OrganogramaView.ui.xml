@@ -24,18 +24,18 @@
 					<table cellpadding="3" cellspacing="0" border="0">
 						<tr>
 							<td>
-								<g:Button ui:field="novoButton">Adicionar Hotel</g:Button>
+								<g:Button ui:field="novoButton">Adicionar Organograma</g:Button>
 							</td>
 						</tr>
 					</table>
 				</g:HTMLPanel>
 			</g:HorizontalPanel>
 			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
-			<g:FlexTable ui:field="hotelFlexTable" cellPadding="0" cellSpacing="0" />
+			<g:FlexTable ui:field="organogramaFlexTable" cellPadding="0" cellSpacing="0" />
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="350px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do Hotel">
+				         width="350px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do Organograma">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
 						<g:HTMLPanel width="100%">
@@ -44,38 +44,6 @@
 									<td class="portal-formLabel">Nome:</td>
 									<td colspan="3">
 										<g:TextBox ui:field="nomeTextBox" width="400px" maxLength="254"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Quantidade Quartos:</td>
-									<td>
-										<cn:NumberTextBox ui:field="quantidadeQuartos" width="80px" textAlignment="center"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Endereço:</td>
-									<td colspan="3">
-										<g:TextBox ui:field="enderecoTextBox" width="370px" maxLength="254"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Bairro:</td>
-									<td>
-										<g:TextBox ui:field="bairroTextBox" width="200px" maxLength="100"/>
-									</td>
-									<td class="portal-formLabel" >CEP:</td>
-									<td>
-										<g:TextBox ui:field="cepTextBox" width="80px" maxLength="15"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Cidade:</td>
-									<td>
-										<g:TextBox ui:field="cidadeTextBox" width="200px" maxLength="100"/>
-									</td>
-									<td class="portal-formLabel">Estado:</td>
-									<td>
-										<g:TextBox ui:field="estadoTextBox" width="80px" maxLength="2" textAlignment="center"/>
 									</td>
 								</tr>
 							</table>

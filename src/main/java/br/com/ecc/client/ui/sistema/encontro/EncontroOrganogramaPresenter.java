@@ -88,7 +88,7 @@ public class EncontroOrganogramaPresenter extends BasePresenter<EncontroOrganogr
 	}
 
 	public void buscaListaOrganogramas() {
-		organogramaService.lista(new WebAsyncCallback<List<Organograma>>(getDisplay()) {
+		organogramaService.lista(getGrupoSelecionado(),new WebAsyncCallback<List<Organograma>>(getDisplay()) {
 			@Override
 			protected void success(List<Organograma> lista) {
 				setListaOrganogramas(lista);

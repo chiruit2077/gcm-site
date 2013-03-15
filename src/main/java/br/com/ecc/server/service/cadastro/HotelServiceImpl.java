@@ -3,6 +3,7 @@ package br.com.ecc.server.service.cadastro;
 import java.util.List;
 
 import br.com.ecc.client.service.cadastro.HotelService;
+import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Hotel;
 import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.server.SecureRemoteServiceServlet;
@@ -24,9 +25,10 @@ public class HotelServiceImpl extends SecureRemoteServiceServlet implements Hote
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Listar hoteis", operacao=Operacao.VISUALIZAR)
-	public List<Hotel> lista() throws Exception {
+	public List<Hotel> lista(Grupo grupo) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
-		cmd.setNamedQuery("hotel.todos");
+		cmd.setNamedQuery("hotel.porGrupo");
+		cmd.addParameter("grupo", grupo);
 		return cmd.call();
 	}
 

@@ -19,7 +19,7 @@ import br.com.ecc.model.tipo.TipoAtividadeEnum;
 @Entity
 @SequenceGenerator(name="SQ_RESTAURANTE", sequenceName="SQ_RESTAURANTE")
 @NamedQueries({
-	@NamedQuery(name="restaurante.todos", query="select u from Restaurante u order by u.ordem ")
+	@NamedQuery(name="restaurante.porGrupo", query="select u from Restaurante u where u.grupo = :grupo order by u.ordem ")
 })
 public class Restaurante extends _WebBaseEntity {
 
@@ -35,6 +35,10 @@ public class Restaurante extends _WebBaseEntity {
 	@ManyToOne
 	@JoinColumn(name="hotel")
 	private Hotel hotel;
+
+	@ManyToOne
+	@JoinColumn(name="grupo")
+	private Grupo grupo;
 
 	private Integer quantidadeMesas;
 
@@ -84,12 +88,14 @@ public class Restaurante extends _WebBaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		Restaurante other = (Restaurante) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}if (nome != null) {
+			if (nome.equals(other.nome))
+				return true;
+		}
+		return false;
 	}
 
 	public Integer getQuantidadeMesas() {
@@ -154,6 +160,14 @@ public class Restaurante extends _WebBaseEntity {
 
 	public void setQuantidadeCasaisPorMesa(Integer quantidadeCasaisPorMesa) {
 		this.quantidadeCasaisPorMesa = quantidadeCasaisPorMesa;
+	}
+
+	public Grupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
 	}
 
 }

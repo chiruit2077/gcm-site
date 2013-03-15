@@ -19,7 +19,11 @@ import br.com.ecc.model.tipo.TipoAtividadeEnum;
 @Entity
 @SequenceGenerator(name="SQ_ORGANOGRAMAAREAS", sequenceName="SQ_ORGANOGRAMAAREAS")
 @NamedQueries({
-	@NamedQuery(name="organogramaArea.porOrganograma", query="select u from OrganogramaArea u where u.organograma = :organograma ")
+	@NamedQuery(name="organogramaArea.porOrganograma", query="select u from OrganogramaArea u where u.organograma = :organograma "),
+	@NamedQuery(name="organogramaArea.deletePorOrganograma",
+	query="delete from OrganogramaArea u where u.organograma = :organograma"),
+	@NamedQuery(name="organogramaArea.deletePorOrganogramaNotIn",
+	query="delete from OrganogramaArea u where u.organograma = :organograma and u not in (:lista)")
 })
 public class OrganogramaArea extends _WebBaseEntity {
 
@@ -121,12 +125,14 @@ public class OrganogramaArea extends _WebBaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		OrganogramaArea other = (OrganogramaArea) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}if (nome != null) {
+			if (nome.equals(other.nome))
+				return true;
+		}
+		return false;
 	}
 
 	public TipoAtividadeEnum getTipoAtividade() {

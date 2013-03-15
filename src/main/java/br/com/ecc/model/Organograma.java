@@ -5,14 +5,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Version;
 
 @Entity
 @SequenceGenerator(name="SQ_ORGANOGRAMA", sequenceName="SQ_ORGANOGRAMA")
 @NamedQueries({
-	@NamedQuery(name="organograma.todos", query="select u from Organograma u order by u.nome")
+	@NamedQuery(name="organograma.porGrupo", query="select u from Organograma u where u.grupo = :grupo order by u.nome")
 })
 public class Organograma extends _WebBaseEntity {
 
@@ -24,6 +27,13 @@ public class Organograma extends _WebBaseEntity {
 
 	@Column(length=254)
 	private String nome;
+
+	@ManyToOne
+	@JoinColumn(name="grupo")
+	private Grupo grupo;
+
+	@Version
+	private Integer version;
 
 	@Override
 	public String toString() {
@@ -54,12 +64,30 @@ public class Organograma extends _WebBaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		Organograma other = (Organograma) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}if (nome != null) {
+			if (nome.equals(other.nome))
+				return true;
+		}
+		return false;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public Grupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
 	}
 
 }

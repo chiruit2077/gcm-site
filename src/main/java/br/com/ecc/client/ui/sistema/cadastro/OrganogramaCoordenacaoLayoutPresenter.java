@@ -18,7 +18,7 @@ import br.com.ecc.model.vo.RestauranteVO;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
-public class RestauranteLayoutPresenter extends BasePresenter<RestauranteLayoutPresenter.Display> {
+public class OrganogramaCoordenacaoLayoutPresenter extends BasePresenter<OrganogramaCoordenacaoLayoutPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
 		void setRestauranteSelecionado(Restaurante restaurante);
@@ -26,7 +26,7 @@ public class RestauranteLayoutPresenter extends BasePresenter<RestauranteLayoutP
 		void populaEntidades(RestauranteVO vo);
 	}
 
-	public RestauranteLayoutPresenter(Display display, WebResource portalResource) {
+	public OrganogramaCoordenacaoLayoutPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
 

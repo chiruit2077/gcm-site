@@ -58,6 +58,31 @@
 										<cn:NumberTextBox ui:field="quantidadeCasaisPorMesa" width="80px" textAlignment="center"/>
 									</td>
 								</tr>
+								<tr>
+									<td>
+										<g:Label styleName="portal-formLabel" text="Hotel Selecionado: " horizontalAlignment="right" />
+									</td>
+									<td>
+										<g:ListBox ui:field="hoteisListBox" width="400px" />
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="200px">Atividade:</td>
+									<td>
+										<g:ListBox ui:field="atividadeListBox" width="250px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="200px">Tipo Atividade:</td>
+									<td>
+										<g:ListBox ui:field="tipoAtividadeListBox" width="250px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="200px">
+										<g:CheckBox ui:field="checkMesaCheckBox" text="Faz Checagem de Mesa Repitida" />
+									</td>
+								</tr>
 							</table>
 						</g:HTMLPanel>
 					</g:VerticalPanel>

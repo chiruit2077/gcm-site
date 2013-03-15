@@ -9,6 +9,9 @@ import br.com.ecc.client.ui.sistema.cadastro.CasalPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.EncontroPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.GrupoPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.HotelPresenter;
+import br.com.ecc.client.ui.sistema.cadastro.OrganogramaAreaLayoutPresenter;
+import br.com.ecc.client.ui.sistema.cadastro.OrganogramaCoordenacaoLayoutPresenter;
+import br.com.ecc.client.ui.sistema.cadastro.OrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.PapelPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.RestauranteLayoutPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.RestaurantePresenter;
@@ -43,7 +46,10 @@ public enum PresenterCodeEnum  {
 	PAPEL(2,5, PapelPresenter.class, "Cadastro de Papeis", true),
 	HOTEL(2,17, HotelPresenter.class, "Cadastro de Hoteis", true),
 	RESTAURANTE(2,23, RestaurantePresenter.class, "Cadastro de Restaurantes", true),
-	RESTAURANTE_LAYOUTS(2,24, RestauranteLayoutPresenter.class, "Layouts de Restaurantes", true),
+	RESTAURANTE_LAYOUT(2,24, RestauranteLayoutPresenter.class, "Layout do Restaurante", true),
+	ORGANOGRAMA(2,27, OrganogramaPresenter.class, "Cadastro de Organogramas", true ),
+	ORGANOGRAMA_LAYOUT_AREA(2,28, OrganogramaAreaLayoutPresenter.class, "Layout Área do Organograma", true),
+	ORGANOGRAMA_LAYOUT_COORDENACAO(2,29, OrganogramaCoordenacaoLayoutPresenter.class, "Layout Coordenação do Organograma", true),
 
 	ENCONTRO_CONVITE(2,8, EncontroConvitePresenter.class, "Convites ao encontro", true),
 	ENCONTRO_INSCRICAO(2,6, EncontroInscricaoPresenter.class, "Inscrição ao encontro", true),

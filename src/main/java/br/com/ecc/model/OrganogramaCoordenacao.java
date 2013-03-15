@@ -20,7 +20,12 @@ import br.com.ecc.model.tipo.TipoAtividadeEnum;
 @SequenceGenerator(name="SQ_ORGANOGRAMACOORDENACAO", sequenceName="SQ_ORGANOGRAMACOORDENACAO")
 @NamedQueries({
 	@NamedQuery(name="organogramaCoordenacao.porOrganograma", query="select u from OrganogramaCoordenacao u where u.organogramaArea.organograma = :organograma "),
-	@NamedQuery(name="organogramaCoordenacao.porOrganogramaArea", query="select u from OrganogramaCoordenacao u where u.organogramaArea = :organogramaarea ")
+	@NamedQuery(name="organogramaCoordenacao.deletePorOrganograma",
+	query="delete from OrganogramaCoordenacao u where u.organogramaArea in " +
+			"( select a from OrganogramaArea a where a.organograma = :organograma ) "),
+	@NamedQuery(name="organogramaCoordenacao.deletePorOrganogramaNotIn",
+	query="delete from OrganogramaCoordenacao u where u not in (:lista) and u.organogramaArea in " +
+			"( select a from OrganogramaArea a where a.organograma = :organograma ) ")
 })
 public class OrganogramaCoordenacao extends _WebBaseEntity {
 
@@ -126,12 +131,14 @@ public class OrganogramaCoordenacao extends _WebBaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		OrganogramaCoordenacao other = (OrganogramaCoordenacao) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}if (descricao != null) {
+			if (descricao.equals(other.descricao))
+				return true;
+		}
+		return false;
 	}
 
 	public Integer getLinha() {

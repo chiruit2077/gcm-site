@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -13,7 +15,7 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_HOTEL", sequenceName="SQ_HOTEL")
 @NamedQueries({
-	@NamedQuery(name="hotel.todos", query="select u from Hotel u order by u.nome")
+	@NamedQuery(name="hotel.porGrupo", query="select u from Hotel u where u.grupo = :grupo  order by u.nome")
 })
 public class Hotel extends _WebBaseEntity {
 
@@ -25,6 +27,10 @@ public class Hotel extends _WebBaseEntity {
 
 	@Column(length=254)
 	private String nome;
+
+	@ManyToOne
+	@JoinColumn(name="grupo")
+	private Grupo grupo;
 
 	private Integer quantidadeQuartos;
 
@@ -131,12 +137,22 @@ public class Hotel extends _WebBaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		Hotel other = (Hotel) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}if (nome != null) {
+			if (nome.equals(other.nome))
+				return true;
+		}
+		return false;
+	}
+
+	public Grupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
 	}
 
 }

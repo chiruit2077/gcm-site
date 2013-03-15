@@ -36,28 +36,28 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 	@UiTemplate("UsuarioView.ui.xml")
 	interface UsuarioViewUiBinder extends UiBinder<Widget, UsuarioView> {}
 	private UsuarioViewUiBinder uiBinder = GWT.create(UsuarioViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 	@UiField Label itemAcessoTotal;
-	
+
 	@UiField TextBox nomeFiltoTextBox;
 	@UiField Label nomeLabel;
 	@UiField ListBox tipoListBox;
-	
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
-	
-	
+
+
 	@UiField(provided=true) FlexTable usuarioFlexTable;
 	private FlexTableUtil usuarioTableUtil = new FlexTableUtil();
 
 	private UsuarioVO entidadeEditada;
-	
+
 	@UiField(provided=true) FlexTable acessoFlexTable;
 	private FlexTableUtil acessoTableUtil = new FlexTableUtil();
-	
+
 	public UsuarioView() {
 		criaTabela();
 		criaTabelaAcessos();
@@ -65,12 +65,12 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 		tituloFormularioLabel.setText(getDisplayTitle());
 		ListBoxUtil.getItemSelected(tipoListBox, TipoNivelUsuarioEnum.values());
 	}
-	
+
 	private void criaTabela() {
 		usuarioFlexTable = new FlexTable();
 		usuarioFlexTable.setStyleName("portal-formSmall");
 		usuarioTableUtil.initialize(usuarioFlexTable);
-		
+
 		usuarioTableUtil.addColumn("", "0", HasHorizontalAlignment.ALIGN_CENTER);
 		usuarioTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
 		usuarioTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_LEFT);
@@ -79,12 +79,12 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 		acessoFlexTable = new FlexTable();
 		acessoFlexTable.setStyleName("portal-formSmall");
 		acessoTableUtil.initialize(acessoFlexTable);
-		
+
 		acessoTableUtil.addColumn("", "0", HasHorizontalAlignment.ALIGN_CENTER);
 		acessoTableUtil.addColumn("Janela", "300", HasHorizontalAlignment.ALIGN_LEFT);
 		acessoTableUtil.addColumn("Acesso", "50", HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -111,10 +111,10 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 		editaDialogBox.show();
 		tipoListBox.setFocus(true);
 	}
-	
+
 	public void limpaCampos(){
 		ListBoxUtil.setItemSelected(tipoListBox, TipoNivelUsuarioEnum.NORMAL.getNome());
-		nomeLabel.setText(null);		
+		nomeLabel.setText(null);
 	}
 
 	public void defineCampos(UsuarioVO usuarioVO){
@@ -124,7 +124,7 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 		nomeLabel.setText(usuarioVO.getUsuario().getPessoa().getNome());
 		populaAcessos();
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Cadastro de usuários";
@@ -144,7 +144,7 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 		HorizontalPanel hp;
 		for (final Usuario usuario: lista) {
 			Object dados[] = new Object[3];
-			
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -157,7 +157,7 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
 			hp.add(editar);
-			
+
 			dados[0] = hp;
 			dados[1] = usuario.getPessoa().getNome();
 			if(usuario.getNivel()!=null){
@@ -174,7 +174,7 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 		entidadeEditada = vo;
 		defineCampos(vo);
 	}
-	
+
 	public void populaAcessos() {
 		LabelTotalUtil.setTotal(itemAcessoTotal, entidadeEditada.getListaAcessos().size(), "acesso", "acessos", "");
 		acessoTableUtil.clearData();
@@ -190,7 +190,7 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 				}
 			}
 			Object dados[] = new Object[3];
-			
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -203,7 +203,7 @@ public class UsuarioView extends BaseView<UsuarioPresenter> implements UsuarioPr
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
 			hp.add(editar);
-			
+
 			dados[0] = hp;
 			dados[1] = presenterCode.getNome();
 			if(acesso!=null){

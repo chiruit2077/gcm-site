@@ -88,7 +88,7 @@ public class EncontroHotelPresenter extends BasePresenter<EncontroHotelPresenter
 	}
 
 	public void buscaListaHoteis() {
-		hotelservice.lista(new WebAsyncCallback<List<Hotel>>(getDisplay()) {
+		hotelservice.lista(getGrupoSelecionado(),new WebAsyncCallback<List<Hotel>>(getDisplay()) {
 			@Override
 			protected void success(List<Hotel> lista) {
 				setListaHoteis(lista);

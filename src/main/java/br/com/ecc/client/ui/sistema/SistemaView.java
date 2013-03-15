@@ -69,7 +69,10 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 			menuItem.getSubMenu().addItem("Papel", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.PAPEL); } });
 			menuItem.getSubMenu().addItem("Hotel", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTEL); } });
 			menuItem.getSubMenu().addItem("Restaurante", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE); } });
-			menuItem.getSubMenu().addItem("Layout de Restaurante", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE_LAYOUTS); } });
+			menuItem.getSubMenu().addItem("Layout do Restaurante", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE_LAYOUT); } });
+			menuItem.getSubMenu().addItem("Organograma", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA); } });
+			menuItem.getSubMenu().addItem("Layout Áreas de Organograma", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_LAYOUT_AREA); } });
+			menuItem.getSubMenu().addItem("Layout Coordenações do Organograma", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_LAYOUT_COORDENACAO); } });
 		}
 
 		//Secretaria

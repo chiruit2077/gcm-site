@@ -1,13 +1,11 @@
 package br.com.ecc.client.ui.sistema.cadastro;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.util.FlexTableHelper;
 import br.com.ecc.client.util.FlexTableUtil;
-import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.Mesa;
 import br.com.ecc.model.Restaurante;
@@ -31,25 +29,24 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> implements RestauranteLayoutPresenter.Display {
+public class OrganogramaCoordenacaoLayoutView extends BaseView<OrganogramaCoordenacaoLayoutPresenter> implements OrganogramaCoordenacaoLayoutPresenter.Display {
 
-	@UiTemplate("RestauranteLayoutView.ui.xml")
-	interface RestauranteLayoutViewUiBinder extends UiBinder<Widget, RestauranteLayoutView> {}
-	private RestauranteLayoutViewUiBinder uiBinder = GWT.create(RestauranteLayoutViewUiBinder.class);
+	@UiTemplate("OrganogramaCoordenacaoLayoutView.ui.xml")
+	interface LayoutViewUiBinder extends UiBinder<Widget, OrganogramaCoordenacaoLayoutView> {}
+	private LayoutViewUiBinder uiBinder = GWT.create(LayoutViewUiBinder.class);
 
 	@UiField Label tituloFormularioLabel;
 
 	@UiField FlexTable distribuicaoPanel;
 	@UiField(provided=true) FlexTable grupoFlexTable;
 	private FlexTableUtil grupoTableUtil = new FlexTableUtil();
-	@UiField ListBox restauranteListBox;
+	@UiField ListBox organogramaListBox;
 	@UiField DialogBox editaDialogBox;
 	@UiField DialogBox editaGruposDialogBox;
 	@UiField DialogBox editaGrupoDialogBox;
@@ -64,32 +61,21 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	@UiField NumberTextBox colunaTextBox;
 	@UiField NumberTextBox colunaSpamTextBox;
 	@UiField Button salvarButton;
-	@UiField Button addMesaButton;
-	@UiField Button addTituloButton;
+	@UiField Button addAreaButton;
 	@UiField Button salvarMesaButton;
 	@UiField Button fecharMesaButton;
-	@UiField Button salvarGruposButton;
-	@UiField Button adicionarGrupoButton;
-	@UiField Button excluirGruposButton;
 	@UiField Label itemGrupoTotal;
-	@UiField Button fecharGruposButton;
-	@UiField Button editaGruposButton;
-	@UiField Button salvarGrupoButton;
-	@UiField Button fecharGrupoButton;
 
 	private Restaurante restauranteSelecionado;
 	private Mesa entidadeMesaEditada;
 	private RestauranteTitulo entidadeTituloEditada;
-	private RestauranteGrupo entidadeGrupoEditada;
 
 	private List<Restaurante> listaRestaurantes;
 
 	protected VerticalPanel mesaPanelEditado;
 
-	private List<RestauranteGrupo> listaGrupos;
 
-
-	public RestauranteLayoutView() {
+	public OrganogramaCoordenacaoLayoutView() {
 		criaTableGrupo();
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
@@ -131,140 +117,12 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		editaDialogBox.hide();
 	}
 
-	@UiHandler("editaGruposButton")
-	public void editaGruposButtonClickHandle(ClickEvent event){
-		listaGrupos = new ArrayList<RestauranteGrupo>(presenter.getVo().getListaGrupos());
-		populaGrupos();
-		editaGruposDialogBox.center();
-		editaGruposDialogBox.show();
-	}
-
-	@UiHandler("excluirGruposButton")
-	public void excluirGruposButtonClickHandle(ClickEvent event){
-		listaGrupos.clear();
-		populaGrupos();
-	}
-
-	@UiHandler("adicionarGrupoButton")
-	public void adicionarGrupoButtonClickHandler(ClickEvent event){
-		entidadeGrupoEditada = null;
-		editaGrupo(null);
-	}
-
-	@UiHandler("fecharGrupoButton")
-	public void fecharGrupoButtonClickHandler(ClickEvent event){
-		editaGrupoDialogBox.hide();
-	}
-
-	@UiHandler("fecharGruposButton")
-	public void fecharGruposButtonClickHandler(ClickEvent event){
-		editaGruposDialogBox.hide();
-	}
-
-	@UiHandler("salvarGrupoButton")
-	public void salvarGrupoButtonClickHandler(ClickEvent event){
-		if(nomeGrupoTextBox.getValue()==null || nomeGrupoTextBox.getValue().equals("")){
-			Window.alert("Informe o nome do grupo");
-			return;
-		}
-		if(entidadeGrupoEditada==null){
-			RestauranteGrupo grupo = new RestauranteGrupo();
-			grupo.setRestaurante(getRestauranteSelecionado());
-			entidadeGrupoEditada = grupo;
-			listaGrupos.add(grupo);
-		}
-		entidadeGrupoEditada.setNome(nomeGrupoTextBox.getText());
-		editaGrupoDialogBox.hide();
-		populaGrupos();
-	}
-
-	@UiHandler("salvarGruposButton")
-	public void salvarGruposButtonClickHandler(ClickEvent event){
-		for (Mesa mesa: presenter.getVo().getListaMesas()){
-			if (mesa.getGrupo() != null && !listaGrupos.contains(mesa.getGrupo())){
-				mesa.setGrupo(null);
-			}
-		}
-		presenter.getVo().getListaGrupos().clear();
-		presenter.getVo().getListaGrupos().addAll(listaGrupos);
-		editaGruposDialogBox.hide();
-		populaEntidades(presenter.getVo());
-	}
-
-	private void editaGrupo(RestauranteGrupo grupo) {
-		limpaCamposGrupo();
-		defineCamposGrupo(grupo);
-		editaGrupoDialogBox.center();
-		editaGrupoDialogBox.show();
-	}
-
-	private void limpaCamposGrupo() {
-		nomeGrupoTextBox.setText(null);
-	}
-	private void defineCamposGrupo(RestauranteGrupo grupo){
-		if (grupo != null)
-			nomeGrupoTextBox.setText(grupo.getNome());
-	}
-
-	private void populaGrupos() {
-		grupoTableUtil.clearData();
-		int row = 0;
-		Image excluir, editar;
-		HorizontalPanel hp;
-		for (final RestauranteGrupo grupo: listaGrupos) {
-			Object dados[] = new Object[2];
-
-			editar = new Image("images/edit.png");
-			editar.setStyleName("portal-ImageCursor");
-			editar.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent arg0) {
-					editaGrupo(grupo);
-				}
-			});
-			excluir = new Image("images/delete.png");
-			excluir.setStyleName("portal-ImageCursor");
-			excluir.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent arg0) {
-					if(Window.confirm("Deseja excluir este grupo ?")){
-						listaGrupos.remove(grupo);
-						populaGrupos();
-					}
-				}
-			});
-
-			hp = new HorizontalPanel();
-			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			hp.setSpacing(1);
-			hp.add(editar);
-			hp.add(excluir);
-
-			dados[0] = hp;
-			dados[1] = grupo.getNome();
-			grupoTableUtil.addRow(dados,row+1);
-			row++;
-		}
-		LabelTotalUtil.setTotal(itemGrupoTotal, row, "grupo", "grupos", "");
-		grupoTableUtil.applyDataRowStyles();
-	}
-
-	@UiHandler("addMesaButton")
-	public void addMesaButtonClickHandler(ClickEvent event){
+	@UiHandler("addAreaButton")
+	public void addAreaButtonClickHandler(ClickEvent event){
 		limpaCampos();
 		mesaPanelEditado = null;
 		defineCampos(new Mesa());
 		editaDialogBox.setText("Dados da Mesa");
-		editaDialogBox.center();
-		editaDialogBox.show();
-	}
-
-	@UiHandler("addTituloButton")
-	public void addTituloButtonClickHandler(ClickEvent event){
-		limpaCampos();
-		mesaPanelEditado = null;
-		defineCampos(new RestauranteTitulo());
-		editaDialogBox.setText("Dados do Titulo");
 		editaDialogBox.center();
 		editaDialogBox.show();
 	}
@@ -349,9 +207,9 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		editaDialogBox.show();
 	}
 
-	@UiHandler("restauranteListBox")
-	public void restauranteListBoxListBoxChangeHandler(ChangeEvent event) {
-		Restaurante restaurante = (Restaurante) ListBoxUtil.getItemSelected(restauranteListBox, getListaRestaurantes());
+	@UiHandler("organogramaListBox")
+	public void organogramaListBoxListBoxChangeHandler(ChangeEvent event) {
+		Restaurante restaurante = (Restaurante) ListBoxUtil.getItemSelected(organogramaListBox, getListaRestaurantes());
 		setRestauranteSelecionado(restaurante);
 		presenter.setRestauranteSelecionado(restaurante);
 		presenter.buscaVO();
@@ -516,14 +374,14 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	@Override
 	public void setRestauranteSelecionado(Restaurante restauranteSelecionado) {
 		this.restauranteSelecionado = restauranteSelecionado;
-		ListBoxUtil.setItemSelected(restauranteListBox, restauranteSelecionado.toString());
+		ListBoxUtil.setItemSelected(organogramaListBox, restauranteSelecionado.toString());
 
 	}
 
 	@Override
 	public void setListaRestaurantes(List<Restaurante> lista) {
 		this.listaRestaurantes = lista;
-		ListBoxUtil.populate(restauranteListBox, false, lista );
+		ListBoxUtil.populate(organogramaListBox, false, lista );
 	}
 
 	public List<Restaurante> getListaRestaurantes() {

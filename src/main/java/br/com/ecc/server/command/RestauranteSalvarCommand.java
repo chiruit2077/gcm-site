@@ -21,6 +21,7 @@ public class RestauranteSalvarCommand implements Callable<RestauranteVO>{
 	@Override
 	@Transactional
 	public RestauranteVO call() throws Exception {
+		vo.setRestaurante(em.merge(vo.getRestaurante()));
 		if(vo.getListaMesas()!=null){
 			Mesa eip;
 			for (int i = 0; i < vo.getListaMesas().size(); i++) {
