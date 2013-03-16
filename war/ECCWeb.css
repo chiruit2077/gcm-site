@@ -1020,10 +1020,30 @@ html>body .gwt-DecoratedTabBar {
 	color: blue;
 	border-top: 1px solid black;
 }
+
 .organograma-CoordenacaoTituloRed {
 	background: silver;
 	color: #900;
 	border-top: 1px solid black;
+}
+
+.organograma-CoordenacaoTituloBlack {
+	background: silver;
+	color: black;
+	border-top: 1px solid black;
+}
+
+.organograma-CoordenacaoTituloBlueLayout {
+	background: silver;
+	color: blue;
+}
+.organograma-CoordenacaoTituloRedLayout {
+	background: silver;
+	color: #900;
+}
+.organograma-CoordenacaoTituloBlackLayout {
+	background: silver;
+	color: black;
 }
 
 .organograma-AreaTitulo {

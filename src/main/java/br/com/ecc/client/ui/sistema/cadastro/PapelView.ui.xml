@@ -1,5 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder 
+<ui:UiBinder
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
@@ -28,7 +28,7 @@
 						</tr>
 					</table>
 				</g:HTMLPanel>
-			</g:HorizontalPanel> 
+			</g:HorizontalPanel>
 			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
 			<g:FlexTable ui:field="papelFlexTable" cellPadding="0" cellSpacing="0" />
 		</g:VerticalPanel>
@@ -49,6 +49,11 @@
 									<td class="portal-formLabel">Nome:</td>
 									<td>
 										<g:TextBox ui:field="nomeTextBox" width="250px"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<g:CheckBox ui:field="aparecePlanilhaCheckBox" text="Aparece na Planilha"/>
 									</td>
 								</tr>
 							</table>

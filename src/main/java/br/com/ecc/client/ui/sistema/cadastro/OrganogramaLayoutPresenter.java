@@ -6,6 +6,8 @@ import br.com.ecc.client.core.event.ExecutaMenuEvent;
 import br.com.ecc.client.core.mvp.WebAsyncCallback;
 import br.com.ecc.client.core.mvp.presenter.BasePresenter;
 import br.com.ecc.client.core.mvp.view.BaseDisplay;
+import br.com.ecc.client.service.cadastro.AtividadeService;
+import br.com.ecc.client.service.cadastro.AtividadeServiceAsync;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
 import br.com.ecc.client.service.cadastro.OrganogramaService;
@@ -13,6 +15,7 @@ import br.com.ecc.client.service.cadastro.OrganogramaServiceAsync;
 import br.com.ecc.client.service.cadastro.PapelService;
 import br.com.ecc.client.service.cadastro.PapelServiceAsync;
 import br.com.ecc.core.mvp.WebResource;
+import br.com.ecc.model.Atividade;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Organograma;
 import br.com.ecc.model.Papel;
@@ -21,21 +24,23 @@ import br.com.ecc.model.vo.OrganogramaVO;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
-public class OrganogramaAreaLayoutPresenter extends BasePresenter<OrganogramaAreaLayoutPresenter.Display> {
+public class OrganogramaLayoutPresenter extends BasePresenter<OrganogramaLayoutPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
 		void setOrganogramaSelecionado(Organograma Organograma);
 		void setListaOrganogramas(List<Organograma> lista);
 		void populaPapeis(List<Papel> lista);
 		void populaEntidades(OrganogramaVO vo);
+		void populaAtividades(List<Atividade> lista);
 	}
 
-	public OrganogramaAreaLayoutPresenter(Display display, WebResource portalResource) {
+	public OrganogramaLayoutPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
 
 	OrganogramaServiceAsync service = GWT.create(OrganogramaService.class);
 	PapelServiceAsync servicoPapel = GWT.create(PapelService.class);
+	AtividadeServiceAsync servicoAtividade = GWT.create(AtividadeService.class);
 	private Organograma organogramaSelecionado;
 	private OrganogramaVO vo;
 	private Grupo grupoSelecionado;
@@ -64,12 +69,24 @@ public class OrganogramaAreaLayoutPresenter extends BasePresenter<OrganogramaAre
 				}
 				buscaOrganogramas();
 				buscaAtividades();
+				buscaPapeis();
 			}
 		});
 
 	}
 
 	public void buscaAtividades(){
+		getDisplay().showWaitMessage(true);
+		servicoAtividade.lista(getGrupoSelecionado(), new WebAsyncCallback<List<Atividade>>(getDisplay()) {
+			@Override
+			protected void success(List<Atividade> lista) {
+				getDisplay().populaAtividades(lista);
+				getDisplay().showWaitMessage(false);
+			}
+		});
+	}
+
+	public void buscaPapeis(){
 		getDisplay().showWaitMessage(true);
 		servicoPapel.lista(getGrupoSelecionado(), new WebAsyncCallback<List<Papel>>(getDisplay()) {
 			@Override

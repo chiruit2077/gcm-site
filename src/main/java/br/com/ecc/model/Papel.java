@@ -23,17 +23,19 @@ public class Papel extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_PAPEL", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="grupo")
 	private Grupo grupo;
-	
+
 	@Column(length=150)
 	private String nome;
-	
+
 	@Column(length=5)
 	private String sigla;
-	
+
+	private Boolean aparecePlanilha;
+
 	@Version
 	private Integer version;
 
@@ -41,8 +43,8 @@ public class Papel extends _WebBaseEntity {
 	public String toString() {
 		return getNome();
 	}
-	
-	
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -72,5 +74,15 @@ public class Papel extends _WebBaseEntity {
 	}
 	public void setSigla(String sigla) {
 		this.sigla = sigla;
+	}
+
+
+	public Boolean getAparecePlanilha() {
+		return aparecePlanilha;
+	}
+
+
+	public void setAparecePlanilha(Boolean aparecePlanilha) {
+		this.aparecePlanilha = aparecePlanilha;
 	}
 }

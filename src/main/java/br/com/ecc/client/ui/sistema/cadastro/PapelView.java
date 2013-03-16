@@ -18,6 +18,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -32,42 +33,44 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 	@UiTemplate("PapelView.ui.xml")
 	interface PapelViewUiBinder extends UiBinder<Widget, PapelView> {}
 	private PapelViewUiBinder uiBinder = GWT.create(PapelViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
-	
+
 	@UiField TextBox nomeTextBox;
 	@UiField TextBox siglaTextBox;
-	
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
-	
-	
+	@UiField CheckBox aparecePlanilhaCheckBox;
+
+
 	@UiField(provided=true) FlexTable papelFlexTable;
 	private FlexTableUtil papelTableUtil = new FlexTableUtil();
 
 	DateTimeFormat dfGlobal = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
-	
+
 	private Papel entidadeEditada;
-	
+
 	public PapelView() {
 		criaTabela();
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 	}
-	
+
 	private void criaTabela() {
 		papelFlexTable = new FlexTable();
 		papelFlexTable.setStyleName("portal-formSmall");
 		papelTableUtil.initialize(papelFlexTable);
-		
+
 		papelTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		papelTableUtil.addColumn("Sigla", "50", HasHorizontalAlignment.ALIGN_CENTER);
 		papelTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
+		papelTableUtil.addColumn("Planilha", "20", HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -83,8 +86,9 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		entidadeEditada.setSigla(siglaTextBox.getValue());
-		entidadeEditada.setNome(nomeTextBox.getValue());		
+		entidadeEditada.setNome(nomeTextBox.getValue());
 		entidadeEditada.setGrupo(presenter.getGrupoSelecionado());
+		entidadeEditada.setAparecePlanilha(aparecePlanilhaCheckBox.getValue());
 		presenter.salvar(entidadeEditada);
 	}
 	private void edita(Papel papel) {
@@ -99,17 +103,19 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		editaDialogBox.show();
 		siglaTextBox.setFocus(true);
 	}
-	
+
 	public void limpaCampos(){
 		siglaTextBox.setValue(null);
-		nomeTextBox.setValue(null);		
+		nomeTextBox.setValue(null);
+		aparecePlanilhaCheckBox.setValue(true);
 	}
 
 	public void defineCampos(Papel papel){
 		siglaTextBox.setValue(papel.getSigla());
 		nomeTextBox.setValue(papel.getNome());
+		aparecePlanilhaCheckBox.setValue(papel.getAparecePlanilha());
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Cadastro de Papeis";
@@ -128,8 +134,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		Image editar, excluir;
 		HorizontalPanel hp;
 		for (final Papel papel: lista) {
-			Object dados[] = new Object[3];
-			
+			Object dados[] = new Object[4];
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -153,10 +159,14 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 			hp.setSpacing(1);
 			hp.add(editar);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
 			dados[1] = papel.getSigla();
 			dados[2] = papel.getNome();
+			CheckBox checkBox = new CheckBox();
+			checkBox.setValue(papel.getAparecePlanilha());
+			checkBox.setEnabled(false);
+			dados[3] = checkBox;
 			papelTableUtil.addRow(dados,row+1);
 			row++;
 		}

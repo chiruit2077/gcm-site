@@ -328,34 +328,31 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 				coordenacoes.add(coordenacao);
 		}
 
-		if (coordenacoes.size()>0){
-			FlexTable coordenacoesPanel = new FlexTable();
-			coordenacoesPanel.setCellSpacing(5);
-			coordenacoesPanel.setSize("100%", "100%");
-			final FocusPanel focusPanelArea = geraWigetCoordenacaoArea(vo,area);
-			coordenacoesPanel.getFlexCellFormatter().setAlignment(area.getLinhaCoordenacao(),area.getColunaCoordenacao(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_MIDDLE);
-			if (area.getColunaSpamCoordenacao()!=null){
-				coordenacoesPanel.getFlexCellFormatter().setColSpan(area.getLinhaCoordenacao(), area.getColunaCoordenacao(),area.getColunaSpamCoordenacao());
-			}
-			if (area.getLinhaSpamCoordenacao()!=null){
-				coordenacoesPanel.getFlexCellFormatter().setRowSpan(area.getLinhaCoordenacao(), area.getColunaCoordenacao(),area.getLinhaSpamCoordenacao());
-			}
-			coordenacoesPanel.setWidget(area.getLinhaCoordenacao(), area.getColunaCoordenacao(), focusPanelArea);
-			for (OrganogramaCoordenacao  coordenacao : coordenacoes) {
-					coordenacoesPanel.getFlexCellFormatter().setAlignment(coordenacao.getLinha(),coordenacao.getColuna(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_MIDDLE);
-					final FocusPanel focusPanel = geraWigetCoordenacao(vo,coordenacao);
-					if (coordenacao.getColunaSpam()!=null){
-						coordenacoesPanel.getFlexCellFormatter().setColSpan(coordenacao.getLinha(), coordenacao.getColuna(), coordenacao.getColunaSpam());
-					}
-					if (coordenacao.getLinhaSpam()!=null){
-						coordenacoesPanel.getFlexCellFormatter().setRowSpan(coordenacao.getLinha(), coordenacao.getColuna(), coordenacao.getLinhaSpam());
-					}
-					coordenacoesPanel.setWidget(coordenacao.getLinha(), coordenacao.getColuna(), focusPanel);
-			}
-			FlexTableHelper.fixRowSpan(coordenacoesPanel);
-			return coordenacoesPanel;
+		FlexTable coordenacoesPanel = new FlexTable();
+		coordenacoesPanel.setCellSpacing(5);
+		coordenacoesPanel.setSize("100%", "100%");
+		final FocusPanel focusPanelArea = geraWigetCoordenacaoArea(vo,area);
+		coordenacoesPanel.getFlexCellFormatter().setAlignment(area.getLinhaCoordenacao(),area.getColunaCoordenacao(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_MIDDLE);
+		if (area.getColunaSpamCoordenacao()!=null){
+			coordenacoesPanel.getFlexCellFormatter().setColSpan(area.getLinhaCoordenacao(), area.getColunaCoordenacao(),area.getColunaSpamCoordenacao());
 		}
-		return new Label("ORGANOGRAMA - " + area.getNome());
+		if (area.getLinhaSpamCoordenacao()!=null){
+			coordenacoesPanel.getFlexCellFormatter().setRowSpan(area.getLinhaCoordenacao(), area.getColunaCoordenacao(),area.getLinhaSpamCoordenacao());
+		}
+		coordenacoesPanel.setWidget(area.getLinhaCoordenacao(), area.getColunaCoordenacao(), focusPanelArea);
+		for (OrganogramaCoordenacao  coordenacao : coordenacoes) {
+			coordenacoesPanel.getFlexCellFormatter().setAlignment(coordenacao.getLinha(),coordenacao.getColuna(), HorizontalPanel.ALIGN_CENTER, VerticalPanel.ALIGN_MIDDLE);
+			final FocusPanel focusPanel = geraWigetCoordenacao(vo,coordenacao);
+			if (coordenacao.getColunaSpam()!=null){
+				coordenacoesPanel.getFlexCellFormatter().setColSpan(coordenacao.getLinha(), coordenacao.getColuna(), coordenacao.getColunaSpam());
+			}
+			if (coordenacao.getLinhaSpam()!=null){
+				coordenacoesPanel.getFlexCellFormatter().setRowSpan(coordenacao.getLinha(), coordenacao.getColuna(), coordenacao.getLinhaSpam());
+			}
+			coordenacoesPanel.setWidget(coordenacao.getLinha(), coordenacao.getColuna(), focusPanel);
+		}
+		FlexTableHelper.fixRowSpan(coordenacoesPanel);
+		return coordenacoesPanel;
 	}
 
 	private FocusPanel geraWigetCoordenacao(EncontroOrganogramaVO vo,
@@ -372,10 +369,13 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 
 		HorizontalPanel tituloCoordenacaoWidget = new HorizontalPanel();
 		tituloCoordenacaoWidget.setSize("140px", "100%");
-		if (coordenacao.getOrganogramaArea().getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE))
-			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlue");
-		else
-			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloRed");
+		if (coordenacao.getTipoAtividade()!=null){
+			if (coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE))
+				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlue");
+			else
+				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloRed");
+		}else
+			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlack");
 		tituloCoordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		tituloCoordenacaoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 		tituloCoordenacaoWidget.add(new Label(coordenacao.getDescricao()));

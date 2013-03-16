@@ -126,8 +126,7 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		}else if (entidadeTituloEditada!=null){
 			presenter.getVo().getListaTitulos().remove(entidadeTituloEditada);
 		}
-		if (mesaPanelEditado != null)
-			distribuicaoPanel.remove(mesaPanelEditado);
+		populaEntidades(presenter.getVo());
 		editaDialogBox.hide();
 	}
 
