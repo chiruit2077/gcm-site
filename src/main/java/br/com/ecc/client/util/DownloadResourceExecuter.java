@@ -10,7 +10,7 @@ public class DownloadResourceExecuter {
 		if (ie){
 			window.open("report?id=" + idCode +"&reportId="+id, tituloJanela, parameters);
 		} else  {
-			window.open("report?id=" + idCode +"&reportId="+id, tituloJanela, parameters);
+			window.open("eccweb/report?id=" + idCode +"&reportId="+id, tituloJanela, parameters);
 		}
 	}
 	}-*/;

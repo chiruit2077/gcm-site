@@ -3,24 +3,4 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
 		version="2.0">
-		<entity class="br.com.ecc.model.Agrupamento"/>
-		<entity class="br.com.ecc.model.AgrupamentoMembro"/>
-		<entity class="br.com.ecc.model.ArquivoDigital"/>
-		<entity class="br.com.ecc.model.Atividade"/>
-		<entity class="br.com.ecc.model.Casal"/>
-		<entity class="br.com.ecc.model.Encontro"/>
-		<entity class="br.com.ecc.model.EncontroAtividade"/>
-		<entity class="br.com.ecc.model.EncontroAtividadeInscricao"/>
-		<entity class="br.com.ecc.model.EncontroInscricao"/>
-		<entity class="br.com.ecc.model.EncontroPeriodo"/>
-		<entity class="br.com.ecc.model.EncontroTotalizacao"/>
-		<entity class="br.com.ecc.model.EncontroTotalizacaoAtividade"/>
-		<entity class="br.com.ecc.model.Grupo"/>
-		<entity class="br.com.ecc.model.ItemPatrimonio"/>
-		<entity class="br.com.ecc.model.Mensagem"/>
-		<entity class="br.com.ecc.model.MensagemDestinatario"/>
-		<entity class="br.com.ecc.model.Papel"/>
-		<entity class="br.com.ecc.model.Pessoa"/>
-		<entity class="br.com.ecc.model.Usuario"/>
-
 </entity-mappings>
