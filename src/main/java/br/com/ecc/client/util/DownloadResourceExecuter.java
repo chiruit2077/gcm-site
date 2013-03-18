@@ -4,7 +4,7 @@ public class DownloadResourceExecuter {
 
 	public native static void showReport(Integer id, String tituloJanela, String parameters, String idCode, boolean producao) /*-{
 	var ie = window.navigator.appName.toLowerCase().indexOf("microsoft") >= 0;
-	if (!producao){
+	if (false && !producao){
 		window.open("report?id=" + idCode +"&reportId="+id, tituloJanela, parameters);
 	}else{
 		if (ie){
