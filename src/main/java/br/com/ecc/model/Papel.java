@@ -36,6 +36,9 @@ public class Papel extends _WebBaseEntity {
 
 	private Boolean aparecePlanilha;
 
+	private Boolean padrao;
+	private Boolean padrinho;
+
 	@Version
 	private Integer version;
 
@@ -84,5 +87,26 @@ public class Papel extends _WebBaseEntity {
 
 	public void setAparecePlanilha(Boolean aparecePlanilha) {
 		this.aparecePlanilha = aparecePlanilha;
+	}
+
+
+	public Boolean getPadrao() {
+		if (padrao==null) return false;
+		return padrao;
+	}
+
+	public void setPadrao(Boolean padrao) {
+		this.padrao = padrao;
+	}
+
+
+	public Boolean getPadrinho() {
+		if (padrinho==null) return false;
+		return padrinho;
+	}
+
+
+	public void setPadrinho(Boolean padrinho) {
+		this.padrinho = padrinho;
 	}
 }

@@ -17,8 +17,11 @@ import br.com.ecc.model.Atividade;
 import br.com.ecc.model.EncontroAtividade;
 import br.com.ecc.model.EncontroAtividadeInscricao;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.EncontroOrganogramaArea;
+import br.com.ecc.model.EncontroOrganogramaCoordenacao;
 import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.EncontroTotalizacaoAtividade;
+import br.com.ecc.model.OrganogramaArea;
 import br.com.ecc.model.Papel;
 import br.com.ecc.model.tipo.TipoAtividadeEnum;
 import br.com.ecc.model.tipo.TipoEncontroAtividadeProgramaEnum;
@@ -28,6 +31,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoOcorrenciaAtividadeEnum;
 import br.com.ecc.model.tipo.TipoPreenchimentoAtividadeEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
+import br.com.ecc.model.vo.EncontroOrganogramaVO;
 import br.com.ecc.model.vo.EncontroTotalizacaoVO;
 import br.com.ecc.model.vo.ParticipanteVO;
 
@@ -138,10 +142,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		ListBoxUtil.populate(programaListBox, false, TipoEncontroAtividadeProgramaEnum.values());
 
 		ListBoxUtil.populate(planilhaListBox, true, TipoExibicaoPlanilhaEnum.values());
-		if(presenter.isCoordenador()){
-			limparPlanilhaButton.setVisible(true);
-			preencherAutomaticoButton.setVisible(true);
-		}
 	}
 
 	private void criaTabela() {
@@ -247,6 +247,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		editaAtividadeDialogBox.hide();
 		editaInscricaoDialogBox.hide();
 		planilhaFlowPanel.clear();
+		if(presenter.isCoordenador()){
+			limparPlanilhaButton.setVisible(true);
+			preencherAutomaticoButton.setVisible(true);
+		}
 	}
 
 	private boolean participanteAdicionado(List<ParticipanteVO> listaParticipantes, Integer id){
@@ -595,7 +599,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				}
 			}
 
-			verificaAtividade(ea);
+			verificaInconsistenciasAtividade(ea);
 
 			if(ok){
 				addImage = new Image();
@@ -627,12 +631,13 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				if(ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0){
 					addImage.setUrl("images/infook.png");
 					addImage.setTitle("Preenchimento Ok");
-				}else if(ea.getInfoErro().size() == 0 ){
+				}else if(ea.getInfoErro().size() > 0 ){
 					addImage.setUrl("images/infoerror.png");
-					addImage.setTitle("Preenchimento com Erros");
-				}else if(ea.getInfoAtencao().size() == 0 ){
+					addImage.setTitle("Preenchimento com Erros - " + ea.getInfoErro().toString());
+					ea.getInfoErro().toString();
+				}else if(ea.getInfoAtencao().size() > 0 ){
 					addImage.setUrl("images/infowarning.png");
-					addImage.setTitle("Preenchimento com Atenção");
+					addImage.setTitle("Preenchimento com Atenção - " + ea.getInfoAtencao().toString());
 				}
 				htmlPanel.add(addImage, "info_"+ea.getId().toString());
 
@@ -664,26 +669,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			}
 		}
 		planilhaFlowPanel.add(htmlPanel);
-	}
-
-	private void verificaAtividade(EncontroAtividade ea) {
-		ea.getInfoAtencao().clear();
-		ea.getInfoErro().clear();
-		if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
-			if (ea.getQuantidadeDesejada() != null && ea.getQuantidadeDesejada() < ea.getQuantidade() ){
-				ea.getInfoAtencao().add("Faltam " + (ea.getQuantidade()-ea.getQuantidadeDesejada()) + " participantes");
-			}
-			if (ea.getQuantidadeDesejada() != null && ea.getQuantidadeDesejada() > ea.getQuantidade() ){
-				ea.getInfoAtencao().add("Esta passando " + (ea.getQuantidade()-ea.getQuantidadeDesejada()) + " participantes");
-			}
-		}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS)){
-			if (ea.getQuantidadeDesejada() != null && presenter.getEncontroVO().getQuantidadeInscricao() < ea.getQuantidade() ){
-				ea.getInfoErro().add("Faltam " + (ea.getQuantidade()-ea.getQuantidadeDesejada()) + " participantes");
-			}
-		}
-		if (ea.getQuantidade()==0){
-			ea.getInfoErro().add("Sem participantes");
-		}
 	}
 
 	private List<EncontroAtividade> montaListaEncontroAtividadeusuarioAtual() {
@@ -1079,13 +1064,235 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			return;
 		if (Window.confirm("Deseja realmente Limpar Tudo?") == false)
 			return;
-		presenter.limpaPlanilha();
+		listaParticipantesInscritos = new ArrayList<EncontroAtividadeInscricao>();
+		presenter.salvarInscricoes(null, null, listaParticipantesInscritos);
 	}
 
 	@UiHandler("preencherAutomaticoButton")
 	public void preencherAutomaticoButtonButtonClickHandler(ClickEvent event){
+		listaParticipantesInscritos = new ArrayList<EncontroAtividadeInscricao>();
+		listaParticipantesInscritos.addAll(presenter.getListaEncontroAtividadeInscricao());
+		Papel papelPadrao = null;
+		Papel papelPadrinho = null;
+		for (Papel papel:presenter.getGrupoEncontroVO().getListaPapel()){
+			if (papel.getPadrao()){
+				papelPadrao = papel;
+			}
+			if (papel.getPadrinho()){
+				papelPadrinho = papel;
+			}
+		}
+		if (papelPadrao == null){
+			Window.alert("Falta definir o Papel Padrão!");
+			return;
+		}
+		if (papelPadrinho == null){
+			Window.alert("Falta definir o Papel de Padrinho!");
+			return;
+		}
 
+		for (EncontroAtividade atividade : presenter.getEncontroVO().getListaEncontroAtividade()) {
+			//@SuppressWarnings("deprecation")
+			//if (atividade.getInicio().before(new Date(2013-1900,3,13))){
+			if (true){
+				if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS)){
+					List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+					for (EncontroInscricao inscricao : listaInscricao) {
+						if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)) {
+							EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
+							if (atividadeInscricao==null){
+								atividadeInscricao = new EncontroAtividadeInscricao();
+								atividadeInscricao.setEncontroAtividade(atividade);
+								listaParticipantesInscritos.add(atividadeInscricao);
+							}
+							atividadeInscricao.setPapel(papelPadrao);
+							atividadeInscricao.setEncontroInscricao(inscricao);
+						}
+					}
+				}
+				if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.PADRINHOS)){
+					List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+					for (EncontroInscricao inscricao : listaInscricao) {
+						if (inscricao.getTipo().equals(TipoInscricaoEnum.PADRINHO)) {
+							EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
+							if (atividadeInscricao==null){
+								atividadeInscricao = new EncontroAtividadeInscricao();
+								atividadeInscricao.setEncontroAtividade(atividade);
+								listaParticipantesInscritos.add(atividadeInscricao);
+							}
+							atividadeInscricao.setPapel(papelPadrinho);
+							atividadeInscricao.setEncontroInscricao(inscricao);
+						}
+					}
+				}
+				if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
+					List<AgrupamentoVO> agrupamentos = getListaAgrupamentosAtividade(atividade);
+					for (AgrupamentoVO agrupamentoVO : agrupamentos) {
+						for (AgrupamentoMembro menbro : agrupamentoVO.getListaMembros()) {
+							EncontroInscricao inscricao = getEncontroAtividadeInscricao(menbro);
+							EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
+							if (atividadeInscricao==null){
+								atividadeInscricao = new EncontroAtividadeInscricao();
+								atividadeInscricao.setEncontroAtividade(atividade);
+								listaParticipantesInscritos.add(atividadeInscricao);
+							}
+							if (menbro.getPapel()!=null)
+								atividadeInscricao.setPapel(menbro.getPapel());
+							else
+								atividadeInscricao.setPapel(papelPadrao);
+							atividadeInscricao.setEncontroInscricao(inscricao);
+						}
+					}
+				}
+				if (true){
+					List<EncontroOrganogramaVO> listaOrganogramaEncontroVO = presenter.getEncontroVO().getListaOrganogramaEncontroVO();
+					for (EncontroOrganogramaVO encontroOrganogramaVO : listaOrganogramaEncontroVO) {
+						List<EncontroOrganogramaCoordenacao> listaEncontroOrganogramaCoordenacao = encontroOrganogramaVO.getListaEncontroOrganogramaCoordenacao();
+						for (EncontroOrganogramaCoordenacao encontroOrganogramaCoordenacao : listaEncontroOrganogramaCoordenacao) {
+							if (encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getAtividade() != null &&
+									encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getAtividade().equals(atividade.getAtividade())){
+								if (encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getTipoAtividade()==null ||
+										( encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getTipoAtividade() != null &&
+										encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getTipoAtividade().equals(atividade.getTipoAtividade()))){
+									if (encontroOrganogramaCoordenacao.getEncontroInscricao1()!=null){
+										EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,encontroOrganogramaCoordenacao.getEncontroInscricao1());
+										if (atividadeInscricao==null){
+											atividadeInscricao = new EncontroAtividadeInscricao();
+											atividadeInscricao.setEncontroAtividade(atividade);
+											listaParticipantesInscritos.add(atividadeInscricao);
+										}
+										if (encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getPapel()!=null)
+											atividadeInscricao.setPapel(encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getPapel());
+										else{
+											atividadeInscricao.setPapel(papelPadrao);
+										}
+										atividadeInscricao.setEncontroInscricao(encontroOrganogramaCoordenacao.getEncontroInscricao1());
+									}
+									if (encontroOrganogramaCoordenacao.getEncontroInscricao2()!=null){
+										EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,encontroOrganogramaCoordenacao.getEncontroInscricao2());
+										if (atividadeInscricao==null){
+											atividadeInscricao = new EncontroAtividadeInscricao();
+											atividadeInscricao.setEncontroAtividade(atividade);
+											listaParticipantesInscritos.add(atividadeInscricao);
+										}
+										if (encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getPapel()!=null)
+											atividadeInscricao.setPapel(encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getPapel());
+										else{
+											atividadeInscricao.setPapel(papelPadrao);
+										}
+										atividadeInscricao.setEncontroInscricao(encontroOrganogramaCoordenacao.getEncontroInscricao2());
+									}
+									//if (atividade.getId().equals(433)){
+									if (true){
+										OrganogramaArea area = encontroOrganogramaCoordenacao.getOrganogramaCoordenacao().getOrganogramaArea();
+										List<EncontroOrganogramaArea> listaEncontroOrganogramaArea = encontroOrganogramaVO.getListaEncontroOrganogramaArea();
+										for (EncontroOrganogramaArea encontroOrganogramaArea : listaEncontroOrganogramaArea) {
+											if (encontroOrganogramaArea.getOrganogramaArea().equals(area)){
+												if (encontroOrganogramaArea.getOrganogramaArea().getTipoAtividade()==null ||
+														( encontroOrganogramaArea.getOrganogramaArea().getTipoAtividade() != null &&
+														encontroOrganogramaArea.getOrganogramaArea().getTipoAtividade().equals(atividade.getTipoAtividade()))){
+													if (encontroOrganogramaArea.getEncontroInscricao1()!=null){
+														EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,encontroOrganogramaArea.getEncontroInscricao1());
+														if (atividadeInscricao==null){
+															atividadeInscricao = new EncontroAtividadeInscricao();
+															atividadeInscricao.setEncontroAtividade(atividade);
+															listaParticipantesInscritos.add(atividadeInscricao);
+														}
+														if (encontroOrganogramaArea.getOrganogramaArea().getPapel()!=null)
+															atividadeInscricao.setPapel(encontroOrganogramaArea.getOrganogramaArea().getPapel());
+														else{
+															atividadeInscricao.setPapel(papelPadrao);
+														}
+														atividadeInscricao.setEncontroInscricao(encontroOrganogramaArea.getEncontroInscricao1());
+													}
+													if (encontroOrganogramaArea.getEncontroInscricao1()!=null){
+														EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,encontroOrganogramaArea.getEncontroInscricao2());
+														if (atividadeInscricao==null){
+															atividadeInscricao = new EncontroAtividadeInscricao();
+															atividadeInscricao.setEncontroAtividade(atividade);
+															listaParticipantesInscritos.add(atividadeInscricao);
+														}
+														if (encontroOrganogramaArea.getOrganogramaArea().getPapel()!=null)
+															atividadeInscricao.setPapel(encontroOrganogramaArea.getOrganogramaArea().getPapel());
+														else{
+															atividadeInscricao.setPapel(papelPadrao);
+														}
+														atividadeInscricao.setEncontroInscricao(encontroOrganogramaArea.getEncontroInscricao2());
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		presenter.salvarInscricoes(null, null, listaParticipantesInscritos);
 	}
 
+	private EncontroInscricao getEncontroAtividadeInscricao(AgrupamentoMembro menbro) {
+		List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+		for (EncontroInscricao encontroInscricao : listaInscricao) {
+			if (menbro.getCasal() != null && encontroInscricao.getCasal()!= null && encontroInscricao.getCasal().equals(menbro.getCasal()))
+				return encontroInscricao;
+			if (menbro.getPessoa() != null && encontroInscricao.getPessoa()!= null && encontroInscricao.getPessoa().equals(menbro.getPessoa()))
+				return encontroInscricao;
+		}
+		return null;
+	}
+
+	private List<AgrupamentoVO> getListaAgrupamentosAtividade(EncontroAtividade atividade) {
+		ArrayList<AgrupamentoVO> list = new ArrayList<AgrupamentoVO>();
+		List<AgrupamentoVO> listaAgrupamentoVOEncontro = presenter.getEncontroVO().getListaAgrupamentoVOEncontro();
+		for (AgrupamentoVO agrupamentoVO : listaAgrupamentoVOEncontro) {
+			if (agrupamentoVO.getAgrupamento().getAtividade()!=null && agrupamentoVO.getAgrupamento().getAtividade().equals(atividade.getAtividade())){
+				if (agrupamentoVO.getAgrupamento().getTipoAtividade()==null || ( agrupamentoVO.getAgrupamento().getTipoAtividade() != null &&
+						agrupamentoVO.getAgrupamento().getTipoAtividade().equals(atividade.getTipoAtividade() ))){
+					list.add(agrupamentoVO);
+				}
+			}else if (agrupamentoVO.getAgrupamento().getAtividade()==null && agrupamentoVO.getAgrupamento().getTipoAtividade() != null
+					&& agrupamentoVO.getAgrupamento().getTipoAtividade().equals(atividade.getTipoAtividade())){
+				list.add(agrupamentoVO);
+			}
+		}
+		return list;
+	}
+
+	private EncontroAtividadeInscricao getEncontroAtividadeInscricao(EncontroAtividade atividade, EncontroInscricao inscricao){
+		List<EncontroAtividadeInscricao> atividadeInscricao = presenter.getListaEncontroAtividadeInscricao();
+		for (EncontroAtividadeInscricao encontroAtividadeInscricao : atividadeInscricao) {
+			if (encontroAtividadeInscricao.getEncontroAtividade().equals(atividade) && encontroAtividadeInscricao.getEncontroInscricao().equals(inscricao)){
+				return encontroAtividadeInscricao;
+			}
+		}
+		return null;
+	}
+
+	private void verificaInconsistenciasAtividade(EncontroAtividade ea) {
+		ea.getInfoAtencao().clear();
+		ea.getInfoErro().clear();
+		//if (ea.getId().equals(433)){
+		if (true){
+			if (ea.getQuantidade()==0){
+				ea.getInfoErro().add("Sem participantes");
+			}else{
+				if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
+					if (ea.getQuantidadeDesejada() != null && ea.getQuantidadeDesejada() > ea.getQuantidade() ){
+						ea.getInfoAtencao().add("Faltam " + (ea.getQuantidadeDesejada()-ea.getQuantidade()) + " participantes");
+					}
+					if (ea.getQuantidadeDesejada() != null && ea.getQuantidadeDesejada() < ea.getQuantidade() ){
+						ea.getInfoAtencao().add("Esta passando " + (ea.getQuantidade() - ea.getQuantidadeDesejada()) + " participantes");
+					}
+				}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS)){
+					if (ea.getQuantidadeDesejada() != null && presenter.getEncontroVO().getQuantidadeInscricao() < ea.getQuantidade() ){
+						ea.getInfoErro().add("Faltam " + (ea.getQuantidade()-ea.getQuantidadeDesejada()) + " participantes");
+					}
+				}
+			}
+		}
+	}
 
 }

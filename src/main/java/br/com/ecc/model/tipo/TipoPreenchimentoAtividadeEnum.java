@@ -2,6 +2,8 @@ package br.com.ecc.model.tipo;
 
 public enum TipoPreenchimentoAtividadeEnum {
 	TODOS("Todos"),
+	PADRINHOS("Padrinhos"),
+	METADE("Metade Participantes"),
 	VARIAVEL("Variavel");
 
 	private String nome;

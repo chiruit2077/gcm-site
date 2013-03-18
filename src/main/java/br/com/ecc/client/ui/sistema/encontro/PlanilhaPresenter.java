@@ -94,6 +94,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 						getDadosGrupoVO();
 					}
 				});
+				getDisplay().reset();
 			}
 		});
 	}
@@ -166,17 +167,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 	}
 	public void salvarInscricoes(EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes) {
 		getDisplay().showWaitMessage(true);
-		serviceEncontroInscricaoAtividade.salvaInscricoes(encontroAtividade, encontroInscricao, listaParticipantes, new WebAsyncCallback<Void>(getDisplay()) {
-			@Override
-			public void success(Void result) {
-				buscaDadosPlanilha();
-			}
-		});
-	}
-
-	public void limpaPlanilha() {
-		getDisplay().showWaitMessage(true);
-		serviceEncontroInscricaoAtividade.limpaPlanilha(encontroSelecionado, new WebAsyncCallback<Void>(getDisplay()){
+		serviceEncontroInscricaoAtividade.salvaInscricoes(encontroSelecionado, encontroAtividade, encontroInscricao, listaParticipantes, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void result) {
 				buscaDadosPlanilha();

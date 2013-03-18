@@ -41,7 +41,10 @@ import javax.persistence.Version;
 						"where u.encontroInscricao = :encontroInscricao " ),
 	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontro",
 				query="delete from EncontroAtividadeInscricao u " +
-						"where u.encontroAtividade in ( select a from EncontroAtividade a where a.encontro = :encontro ) " )
+						"where u.encontroAtividade in ( select a from EncontroAtividade a where a.encontro = :encontro ) " ),
+	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroNotIn",
+				query="delete from EncontroAtividadeInscricao u " +
+					  "where u not in (:lista) and u.encontroAtividade in ( select a from EncontroAtividade a where a.encontro = :encontro ) " )
 })
 public class EncontroAtividadeInscricao extends _WebBaseEntity {
 	private static final long serialVersionUID = 4975150894016131794L;

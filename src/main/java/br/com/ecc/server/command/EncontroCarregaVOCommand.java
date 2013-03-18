@@ -14,9 +14,11 @@ import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroAtividade;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.EncontroOrganograma;
 import br.com.ecc.model.EncontroTotalizacao;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
+import br.com.ecc.model.vo.EncontroOrganogramaVO;
 import br.com.ecc.model.vo.EncontroTotalizacaoVO;
 import br.com.ecc.model.vo.EncontroVO;
 
@@ -34,13 +36,13 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 	public EncontroVO call() throws Exception {
 		EncontroVO vo = new EncontroVO();
 		vo.setEncontro(em.find(Encontro.class, encontro.getId()));
-		
+
 		Query q;
 		//Periodos
 		q = em.createNamedQuery("encontroPeriodo.porEncontro");
 		q.setParameter("encontro", vo.getEncontro());
 		vo.setListaPeriodo(q.getResultList());
-		
+
 		//Totalizacoes
 		q = em.createNamedQuery("encontroTotalizacao.porEncontro");
 		q.setParameter("encontro",vo.getEncontro());
@@ -50,14 +52,14 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 		for (EncontroTotalizacao encontroTotalizacao : listaTotalizacaos) {
 			encontroTotalizacaoVO = new EncontroTotalizacaoVO();
 			encontroTotalizacaoVO.setEncontroTotalizacao(encontroTotalizacao);
-			
+
 			q = em.createNamedQuery("encontroTotalizacaoAtividade.porEncontroTotalizacao");
 			q.setParameter("encontroTotalizacao", encontroTotalizacao);
 			encontroTotalizacaoVO.setListaAtividade(q.getResultList());
-			
+
 			vo.getListaTotalizacao().add(encontroTotalizacaoVO);
 		}
-		
+
 		//Atividades
 		q = em.createNamedQuery("encontroAtividade.porEncontro");
 		q.setParameter("encontro", vo.getEncontro());
@@ -68,7 +70,7 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 				return o1.getInicio().compareTo(o2.getInicio());
 			}
 		});
-		
+
 		//Inscricao
 		q = em.createNamedQuery("encontroInscricao.porEncontroConfirmados");
 		q.setParameter("encontro", vo.getEncontro());
@@ -79,7 +81,7 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 				return o1.toString().compareTo(o2.toString());
 			}
 		});
-		
+
 		//coordenadores
 		vo.setListaCoordenadores(new ArrayList<Casal>());
 		for (EncontroInscricao encontroInscricao : vo.getListaInscricao()) {
@@ -87,7 +89,7 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 				vo.getListaCoordenadores().add(encontroInscricao.getCasal());
 			}
 		}
-		
+
 		//agrupamentos
 		vo.setListaAgrupamentoVOEncontro(new ArrayList<AgrupamentoVO>());
 		q = em.createNamedQuery("agrupamento.porEncontro");
@@ -97,19 +99,40 @@ public class EncontroCarregaVOCommand implements Callable<EncontroVO>{
 		for (Agrupamento agrupamento : listaAgrupamento) {
 			agrupamentoVO = new AgrupamentoVO();
 			agrupamentoVO.setAgrupamento(agrupamento);
-			
+
 			q = em.createNamedQuery("agrupamentoMembro.porAgrupamento");
 			q.setParameter("agrupamento", agrupamento);
 			agrupamentoVO.setListaMembros(q.getResultList());
-			
+
 			vo.getListaAgrupamentoVOEncontro().add(agrupamentoVO);
 		}
-		
+
+		//organograma
+		vo.setListaOrganogramaEncontroVO(new ArrayList<EncontroOrganogramaVO>());
+		q = em.createNamedQuery("encontroOrganograma.porEncontro");
+		q.setParameter("encontro", vo.getEncontro());
+		List<EncontroOrganograma> listaOrganograma = q.getResultList();
+		EncontroOrganogramaVO organogramaVO;
+		for (EncontroOrganograma organograma : listaOrganograma) {
+			organogramaVO = new EncontroOrganogramaVO();
+			organogramaVO.setEncontroOrganograma(organograma);
+
+			q = em.createNamedQuery("encontroOrganogramaArea.porEncontroOrganograma");
+			q.setParameter("encontroorganograma", organogramaVO.getEncontroOrganograma());
+			organogramaVO.setListaEncontroOrganogramaArea(q.getResultList());
+
+			q = em.createNamedQuery("encontroOrganogramaCoordenacao.porEncontroOrganograma");
+			q.setParameter("encontroorganograma", organogramaVO.getEncontroOrganograma());
+			organogramaVO.setListaEncontroOrganogramaCoordenacao(q.getResultList());
+
+			vo.getListaOrganogramaEncontroVO().add(organogramaVO);
+		}
+
 		//resonsaveis pro convites
 		q = em.createNamedQuery("encontroConviteResponsavel.porEncontro");
 		q.setParameter("encontro", vo.getEncontro());
 		vo.setListaResponsavelConvite(q.getResultList());
-		
+
 		return vo;
 	}
 

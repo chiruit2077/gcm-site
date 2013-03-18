@@ -21,6 +21,7 @@ public class EncontroVO implements Serializable {
 	private List<EncontroInscricao> listaInscricao;
 	private List<Casal> listaCoordenadores;
 	private List<AgrupamentoVO> listaAgrupamentoVOEncontro;
+	private List<EncontroOrganogramaVO> listaOrganogramaEncontroVO;
 	private List<EncontroConviteResponsavel> listaResponsavelConvite;
 
 	public Encontro getEncontro() {
@@ -82,5 +83,12 @@ public class EncontroVO implements Serializable {
 			}
 		}
 		return qtde;
+	}
+	public List<EncontroOrganogramaVO> getListaOrganogramaEncontroVO() {
+		return listaOrganogramaEncontroVO;
+	}
+	public void setListaOrganogramaEncontroVO(
+			List<EncontroOrganogramaVO> listaOrganogramaEncontroVO) {
+		this.listaOrganogramaEncontroVO = listaOrganogramaEncontroVO;
 	}
 }

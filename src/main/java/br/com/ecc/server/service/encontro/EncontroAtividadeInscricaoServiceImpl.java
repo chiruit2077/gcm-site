@@ -80,7 +80,7 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 	}
 
 	@Override
-	public void salvaInscricoes(EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes) throws Exception {
+	public void salvaInscricoes(Encontro encontro, EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes) throws Exception {
 		List<EncontroAtividadeInscricao> novaLista = new ArrayList<EncontroAtividadeInscricao>();
 		for (EncontroAtividadeInscricao encontroAtividadeInscricao : listaParticipantes) {
 			if(encontroAtividadeInscricao.getId()!=null){
@@ -94,9 +94,14 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 				cmd.addParameter("encontroAtividade", encontroAtividade);
 				cmd.addParameter("lista", novaLista );
 				cmd.call();
-			} else {
+			} else if(encontroInscricao!=null){
 				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricaoNotIn");
 				cmd.addParameter("encontroInscricao", encontroInscricao);
+				cmd.addParameter("lista", novaLista );
+				cmd.call();
+			} else {
+				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroNotIn");
+				cmd.addParameter("encontro", encontro);
 				cmd.addParameter("lista", novaLista );
 				cmd.call();
 			}
@@ -105,9 +110,13 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroAtividade");
 				cmd.addParameter("encontroAtividade", encontroAtividade);
 				cmd.call();
-			} else {
+			} else if(encontroInscricao!=null){
 				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
 				cmd.addParameter("encontroInscricao", encontroInscricao);
+				cmd.call();
+			} else {
+				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontro");
+				cmd.addParameter("encontro", encontro);
 				cmd.call();
 			}
 		}
@@ -140,11 +149,4 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 		return cmd.call();
 	}
 
-	@Override
-	public void limpaPlanilha(Encontro encontro) throws Exception {
-		ExecuteUpdateCommand cmd = injector.getInstance(ExecuteUpdateCommand.class);
-		cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontro");
-		cmd.addParameter("encontro", encontro);
-		cmd.call();
-	}
 }

@@ -32,7 +32,7 @@
 				</g:HTMLPanel>
 			</g:HorizontalPanel>
 			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
-			<g:FlexTable ui:field="agrupamentoFlexTable" cellPadding="0" cellSpacing="0" />
+			<g:FlexTable ui:field="agrupamentoFlexTable" cellPadding="0" cellSpacing="0" height="100%"/>
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
