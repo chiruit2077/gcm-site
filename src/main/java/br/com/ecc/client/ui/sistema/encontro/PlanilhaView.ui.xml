@@ -47,8 +47,10 @@
 								<g:ListBox ui:field="planilhaListBox" width="300px"/>
 							</td>
 							<td>
-								<g:Button ui:field="imprimirButton">Imprimir planilha [PDF]</g:Button>
-								<g:Button ui:field="baixarButton">Baixar planilha [Excel]</g:Button>
+								<g:Button ui:field="imprimirButton">Imprimir Planilha [PDF]</g:Button>
+								<g:Button ui:field="baixarButton">Baixar Planilha [Excel]</g:Button>
+								<g:Button ui:field="limparPlanilhaButton" visible="false">Limpar Toda Planilha</g:Button>
+								<g:Button ui:field="preencherAutomaticoButton" visible="false">Preencher Planilha Automática</g:Button>
 							</td>
 						</tr>
 					</table>

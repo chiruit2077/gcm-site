@@ -189,7 +189,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 			Window.alert("Escolha o Tipo!");
 			return;
 		}
-		TipoAtividadeEnum tipoAtividade = (TipoAtividadeEnum) ListBoxUtil.getItemSelected(atividadeListBox, TipoAtividadeEnum.values());
+		TipoAtividadeEnum tipoAtividade = (TipoAtividadeEnum) ListBoxUtil.getItemSelected(tipoAtividadeListBox, TipoAtividadeEnum.values());
 		Atividade atividade = (Atividade) ListBoxUtil.getItemSelected(atividadeListBox, getListaAtividades());
 		presenter.getAgrupamentoVO().getAgrupamento().setGrupo(null);
 		presenter.getAgrupamentoVO().getAgrupamento().setEncontro(null);

@@ -418,10 +418,14 @@ public class OrganogramaLayoutView extends BaseView<OrganogramaLayoutPresenter> 
 		HorizontalPanel tituloCoordenacaoWidget = new HorizontalPanel();
 		tituloCoordenacaoWidget.setSize("140px", "20px");
 		if(coordenacao.getTipoAtividade()!=null){
-			if (coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE))
+			if (coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE) ||
+					coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO )){
 				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlueLayout");
-			else
+			}else if (coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.DESMONTAGEM) ||
+					coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO)){
 				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloRedLayout");
+			}else
+				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlackLayout");
 		}else
 			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlackLayout");
 		tituloCoordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);

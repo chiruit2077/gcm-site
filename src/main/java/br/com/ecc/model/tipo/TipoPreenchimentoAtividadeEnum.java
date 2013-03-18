@@ -1,14 +1,15 @@
 package br.com.ecc.model.tipo;
 
-public enum TipoEncontroAtividadeProgramaEnum {
-	PROGRAMA("Atividade do programa"),
-	PARALELA("Atividade paralela");
+public enum TipoPreenchimentoAtividadeEnum {
+	TODOS("Todos"),
+	VARIAVEL("Variavel");
 
 	private String nome;
 
-	private TipoEncontroAtividadeProgramaEnum(String nome) {
-		this.nome = nome;
+	private TipoPreenchimentoAtividadeEnum(String nome) {
+		setNome(nome);
 	}
+
 	@Override
 	public String toString() {
 		return getNome();
@@ -17,7 +18,9 @@ public enum TipoEncontroAtividadeProgramaEnum {
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 }

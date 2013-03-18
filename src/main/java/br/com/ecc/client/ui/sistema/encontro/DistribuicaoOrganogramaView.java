@@ -185,6 +185,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		defineCamposCoordenacao(encontroOrganogramaCoordenacao);
 		editaDialogBox.center();
 		editaDialogBox.show();
+		casalRadio.setValue(true);
 		inscricaoSuggestBox1.setFocus(true);
 	}
 
@@ -369,13 +370,17 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 
 		HorizontalPanel tituloCoordenacaoWidget = new HorizontalPanel();
 		tituloCoordenacaoWidget.setSize("140px", "100%");
-		if (coordenacao.getTipoAtividade()!=null){
-			if (coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE))
-				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlue");
-			else
-				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloRed");
+		if(coordenacao.getTipoAtividade()!=null){
+			if (coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE) ||
+					coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO )){
+				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlueLayout");
+			}else if (coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.DESMONTAGEM) ||
+					coordenacao.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO)){
+				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloRedLayout");
+			}else
+				tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlackLayout");
 		}else
-			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlack");
+			tituloCoordenacaoWidget.setStyleName("organograma-CoordenacaoTituloBlackLayout");
 		tituloCoordenacaoWidget.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		tituloCoordenacaoWidget.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 		tituloCoordenacaoWidget.add(new Label(coordenacao.getDescricao()));

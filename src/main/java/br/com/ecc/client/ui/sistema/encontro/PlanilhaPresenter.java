@@ -38,7 +38,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
 public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> {
-	
+
 	public interface Display extends BaseDisplay {
 		void populaPlanilha();
 		void populaAtividades(List<Atividade> listaAtividades);
@@ -59,7 +59,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 	private Usuario usuario;
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
-	
+
 	public PlanilhaPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
 	}
@@ -97,7 +97,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void salvarAtividade(EncontroAtividade encontroAtividade) {
 		getDisplay().showWaitMessage(true);
 		Integer pos = null;
@@ -174,6 +174,16 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		});
 	}
 
+	public void limpaPlanilha() {
+		getDisplay().showWaitMessage(true);
+		serviceEncontroInscricaoAtividade.limpaPlanilha(encontroSelecionado, new WebAsyncCallback<Void>(getDisplay()){
+			@Override
+			public void success(Void result) {
+				buscaDadosPlanilha();
+			}
+		});
+	}
+
 	public void excluirEncontroAtividadeInscricao(final EncontroAtividadeInscricao encontroAtividadeInscricao) {
 		getDisplay().showWaitMessage(true);
 		serviceEncontroInscricaoAtividade.exclui(encontroAtividadeInscricao, new WebAsyncCallback<Void>(getDisplay()) {
@@ -194,8 +204,8 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 				setGrupoEncontroVO(grupoEncontroVO);
 				getDisplay().populaAtividades(grupoEncontroVO.getListaAtividade());
 				getDisplay().populaPapel(grupoEncontroVO.getListaPapel());
-				
-				
+
+
 				String cookie = Cookies.getCookie("encontroSelecionado");
 				for (Encontro encontro : grupoEncontroVO.getListaEncontro()) {
 					if(encontro.toString().equals(cookie)){
@@ -207,7 +217,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void getDadosEncontroVO(Encontro encontro){
 		getDisplay().showWaitMessage(true);
 		EncontroServiceAsync service = GWT.create(EncontroService.class);
@@ -221,11 +231,11 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			}
 		});
 	}
-	
+
 	public void buscaDadosPlanilha() {
 		getDisplay().showWaitMessage(true);
 		serviceEncontroInscricaoAtividade.listaFiltrado(
-				encontroSelecionado, 
+				encontroSelecionado,
 				getDisplay().getPeriodoSelecionado(),
 				getDisplay().getTipoExibicaoPlanilhaSelecionado(),
 				new WebAsyncCallback<List<EncontroAtividadeInscricao>>(getDisplay()) {
@@ -237,12 +247,12 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			}
 		});
 	}
-	
+
 
 	public void imprimirPlanilha(Boolean exportarExcel) {
 		getDisplay().showWaitMessage(true);
 		serviceEncontroInscricaoAtividade.imprimePlanilha(
-				encontroSelecionado, 
+				encontroSelecionado,
 				getDisplay().getPeriodoSelecionado(),
 				getDisplay().getTipoExibicaoPlanilhaSelecionado(),
 				exportarExcel,
@@ -253,9 +263,9 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 				getDisplay().showWaitMessage(false);
 			}
 		});
-		
+
 	}
-	
+
 	public GrupoVO getGrupoEncontroVO() {
 		return grupoEncontroVO;
 	}

@@ -19,6 +19,6 @@ public interface EncontroAtividadeInscricaoService extends RemoteService {
 	public void exclui(EncontroAtividadeInscricao encontroAtividadeInscricao) throws Exception;
 	public EncontroAtividadeInscricao salva(EncontroAtividadeInscricao encontroAtividadeInscricao) throws Exception;
 	public void salvaInscricoes(EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes) throws Exception;
-	
 	public Integer imprimePlanilha(Encontro encontro, EncontroPeriodo encontroPeriodo, TipoExibicaoPlanilhaEnum tipoExibicaoPlanilhaEnum, Boolean exportarExcel) throws Exception;
+	public void limpaPlanilha(Encontro encontro) throws Exception;
 }

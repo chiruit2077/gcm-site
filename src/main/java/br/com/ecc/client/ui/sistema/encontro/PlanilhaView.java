@@ -26,6 +26,7 @@ import br.com.ecc.model.tipo.TipoExibicaoPlanilhaEnum;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoOcorrenciaAtividadeEnum;
+import br.com.ecc.model.tipo.TipoPreenchimentoAtividadeEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.EncontroTotalizacaoVO;
 import br.com.ecc.model.vo.ParticipanteVO;
@@ -85,8 +86,12 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiField ListBox papelListBox;
 	@UiField Button excluirInscricaoButton;
 	@UiField Button salvarInscricaoButton;
+
 	@UiField Button adicionarInscricaoButton;
 	@UiField Button excluirTodasInscricaoButton;
+
+	@UiField Button limparPlanilhaButton;
+	@UiField Button preencherAutomaticoButton;
 
 	@UiField HTMLPanel atividadeHTMLPanel;
 	@UiField HTMLPanel participanteHTMLPanel;
@@ -133,6 +138,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		ListBoxUtil.populate(programaListBox, false, TipoEncontroAtividadeProgramaEnum.values());
 
 		ListBoxUtil.populate(planilhaListBox, true, TipoExibicaoPlanilhaEnum.values());
+		if(presenter.isCoordenador()){
+			limparPlanilhaButton.setVisible(true);
+			preencherAutomaticoButton.setVisible(true);
+		}
 	}
 
 	private void criaTabela() {
@@ -351,6 +360,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			html.append("	<td class='portal-celulaPlanilha' style='text-align:left;'>Atividade</td>");
 		}
 		html.append("	<td class='portal-celulaPlanilha'>&nbsp;</td>" +
+				"   <td class='portal-celulaPlanilha'>I</td>" +
 				"   <td class='portal-celulaPlanilha'>Qt</td>");
 		for (EncontroInscricao ei : listaEncontroInscricao) {
 			if(!participanteAdicionado(listaParticipantes, ei.getId())){
@@ -361,9 +371,12 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				if(ei.getCasal()!=null && ei.getCasal().getId().equals(presenter.getCasal().getId()) ||
 				   ei.getPessoa()!=null && ei.getPessoa().getId().equals(presenter.getUsuario().getPessoa().getId())){
 					colunaPadrinho = "style= 'background-color: #ffbf95;'";
-				} else { if(ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
+				} else {
+					if(ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
 						colunaPadrinho = "style= 'background-color: #fdf3b5;'";
-					} else {
+					}else if(ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+						colunaPadrinho = "style= 'background-color: #FF6347;'";
+					}else {
 						colunaPadrinho = "";
 					}
 				}
@@ -372,10 +385,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		}
 		html.append("</tr>");
 		int qtdeParticipantes = 0;
-		int linha=0, coluna=0, colspan=8;
+		int linha=0, coluna=0, colspan=9;
 		if(!bCoordenador)colspan=6;
 		boolean achou, ok;
 		for (EncontroAtividade ea : listaEncontroAtividade) {
+			ea.setQuantidade(0);
 			ok = true;
 			if(encontroPeriodoSelecionado!=null){
 				ok = false;
@@ -422,6 +436,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				html.append("<td class='portal-celulaPlanilha' style='text-align:left;'>" + ea.getTipoAtividade().getNome() + "</td>");
 				html.append("<td class='portal-celulaPlanilha' style='text-align:left;white-space: nowrap;'>" + ea.getAtividade().getNome() + "</td>");
 				html.append("<td id='add_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
+				html.append("<td id='info_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
 				participante = new StringBuffer("");
 				qtdeParticipantes = 0;
 				coluna = 0;
@@ -438,7 +453,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					} else {
 						if(participanteVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.PADRINHO)){
 							parColuna = "style= 'background-color: #fdf3b5;'";
-						} else {
+						}else if(participanteVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+							parColuna = "style= 'background-color: #FF6347;'";
+						}else {
 							parColuna = "";
 						}
 					}
@@ -463,6 +480,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					coluna++;
 				}
 				html.append("<td class='portal-celulaPlanilha'>" + qtdeParticipantes + "</td>");
+				ea.setQuantidade(qtdeParticipantes);
 				html.append(participante);
 				html.append("</tr>");
 				linha++;
@@ -576,6 +594,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					ok = true;
 				}
 			}
+
+			verificaAtividade(ea);
+
 			if(ok){
 				addImage = new Image();
 				addImage.setStyleName("portal-ImageCursor");
@@ -600,6 +621,21 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					}
 				});
 				htmlPanel.add(addImage, "add_"+ea.getId().toString());
+
+				addImage = new Image();
+				addImage.setStyleName("portal-ImageCursor");
+				if(ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0){
+					addImage.setUrl("images/infook.png");
+					addImage.setTitle("Preenchimento Ok");
+				}else if(ea.getInfoErro().size() == 0 ){
+					addImage.setUrl("images/infoerror.png");
+					addImage.setTitle("Preenchimento com Erros");
+				}else if(ea.getInfoAtencao().size() == 0 ){
+					addImage.setUrl("images/infowarning.png");
+					addImage.setTitle("Preenchimento com Atenção");
+				}
+				htmlPanel.add(addImage, "info_"+ea.getId().toString());
+
 				if(bCoordenador){
 					editImage = new Image("images/edit.png");
 					editImage.setStyleName("portal-ImageCursor");
@@ -628,6 +664,26 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			}
 		}
 		planilhaFlowPanel.add(htmlPanel);
+	}
+
+	private void verificaAtividade(EncontroAtividade ea) {
+		ea.getInfoAtencao().clear();
+		ea.getInfoErro().clear();
+		if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
+			if (ea.getQuantidadeDesejada() != null && ea.getQuantidadeDesejada() < ea.getQuantidade() ){
+				ea.getInfoAtencao().add("Faltam " + (ea.getQuantidade()-ea.getQuantidadeDesejada()) + " participantes");
+			}
+			if (ea.getQuantidadeDesejada() != null && ea.getQuantidadeDesejada() > ea.getQuantidade() ){
+				ea.getInfoAtencao().add("Esta passando " + (ea.getQuantidade()-ea.getQuantidadeDesejada()) + " participantes");
+			}
+		}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS)){
+			if (ea.getQuantidadeDesejada() != null && presenter.getEncontroVO().getQuantidadeInscricao() < ea.getQuantidade() ){
+				ea.getInfoErro().add("Faltam " + (ea.getQuantidade()-ea.getQuantidadeDesejada()) + " participantes");
+			}
+		}
+		if (ea.getQuantidade()==0){
+			ea.getInfoErro().add("Sem participantes");
+		}
 	}
 
 	private List<EncontroAtividade> montaListaEncontroAtividadeusuarioAtual() {
@@ -1007,6 +1063,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		}
 		presenter.imprimirPlanilha(false);
 	}
+
 	@UiHandler("baixarButton")
 	public void baixarButtonClickHandler(ClickEvent event){
 		if(getTipoExibicaoPlanilhaSelecionado()==null){
@@ -1015,4 +1072,20 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		}
 		presenter.imprimirPlanilha(true);
 	}
+
+	@UiHandler("limparPlanilhaButton")
+	public void limparPlanilhaButtonClickHandler(ClickEvent event){
+		if (Window.confirm("Deseja Limpar Tudo?") == false)
+			return;
+		if (Window.confirm("Deseja realmente Limpar Tudo?") == false)
+			return;
+		presenter.limpaPlanilha();
+	}
+
+	@UiHandler("preencherAutomaticoButton")
+	public void preencherAutomaticoButtonButtonClickHandler(ClickEvent event){
+
+	}
+
+
 }

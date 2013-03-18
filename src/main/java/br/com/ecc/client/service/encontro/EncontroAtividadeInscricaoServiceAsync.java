@@ -18,4 +18,5 @@ public interface EncontroAtividadeInscricaoServiceAsync {
 	void salvaInscricoes(EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes, AsyncCallback<Void> callback);
 	void exclui(EncontroAtividadeInscricao encontroAtividadeInscricao, AsyncCallback<Void> asyncCallback);
 	void imprimePlanilha(Encontro encontro, EncontroPeriodo encontroPeriodo, TipoExibicaoPlanilhaEnum tipoExibicaoPlanilhaEnum, Boolean exportarExcel, AsyncCallback<Integer> callback);
+	void limpaPlanilha(Encontro encontro, AsyncCallback<Void> callback);
 }

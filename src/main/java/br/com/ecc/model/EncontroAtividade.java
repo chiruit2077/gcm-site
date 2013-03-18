@@ -1,6 +1,8 @@
 package br.com.ecc.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,17 +18,19 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import br.com.ecc.model.tipo.TipoAtividadeEnum;
-import br.com.ecc.model.tipo.TipoOcorrenciaAtividadeEnum;
 import br.com.ecc.model.tipo.TipoEncontroAtividadeProgramaEnum;
+import br.com.ecc.model.tipo.TipoOcorrenciaAtividadeEnum;
+import br.com.ecc.model.tipo.TipoPreenchimentoAtividadeEnum;
 
 @Entity
 @SequenceGenerator(name="SQ_ATIVIDADE", sequenceName="SQ_ATIVIDADE")
 @NamedQueries({
 	@NamedQuery(name="encontroAtividade.porEncontro", query="select u from EncontroAtividade u where u.encontro = :encontro order by u.inicio"),
-	@NamedQuery(name="encontroAtividade.porEncontroCasal", 
+	@NamedQuery(name="encontroAtividade.porEncontroCasal",
 		query="select u from EncontroAtividade u " +
 			  "where u.encontro = :encontro and" +
 			  "      u in (Select e.encontroAtividade from EncontroAtividadeInscricao e where e.encontroInscricao.encontro = :encontro and e.encontroInscricao.casal = :casal ) )" +
@@ -38,38 +42,56 @@ public class EncontroAtividade extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_ATIVIDADE", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontro")
 	private Encontro encontro;
-	
+
 	@ManyToOne
 	@JoinColumn(name="atividade")
 	private Atividade atividade;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date inicio;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fim;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoOcorrenciaAtividadeEnum tipoOcorrencia;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoAtividadeEnum tipoAtividade;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoEncontroAtividadeProgramaEnum tipoPrograma;
-	
+
+	@Enumerated(EnumType.STRING)
+	@Column(length=20)
+	private TipoPreenchimentoAtividadeEnum tipoPreenchimento;
+
 	private Integer quantidadeDesejada;
+
+	@Transient
+	private List<String> infoErro;
+
+	@Transient
+	private List<String> infoAtencao;
+
+	@Transient
+	private Integer quantidade;
 
 	@Version
 	private Integer version;
-	
+
+	public EncontroAtividade() {
+		setInfoAtencao(new ArrayList<String>());
+		setInfoErro(new ArrayList<String>());
+	}
+
 	@Override
 	public String toString() {
 		if(atividade!=null){
@@ -77,7 +99,7 @@ public class EncontroAtividade extends _WebBaseEntity {
 		}
 		return super.toString();
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -137,5 +159,38 @@ public class EncontroAtividade extends _WebBaseEntity {
 	}
 	public void setTipoOcorrencia(TipoOcorrenciaAtividadeEnum tipoOcorrencia) {
 		this.tipoOcorrencia = tipoOcorrencia;
+	}
+
+	public List<String> getInfoAtencao() {
+		return infoAtencao;
+	}
+
+	public void setInfoAtencao(List<String> infoAtencao) {
+		this.infoAtencao = infoAtencao;
+	}
+
+	public List<String> getInfoErro() {
+		return infoErro;
+	}
+
+	public void setInfoErro(List<String> infoErro) {
+		this.infoErro = infoErro;
+	}
+
+	public TipoPreenchimentoAtividadeEnum getTipoPreenchimento() {
+		if (tipoPreenchimento==null) return TipoPreenchimentoAtividadeEnum.VARIAVEL;
+		return tipoPreenchimento;
+	}
+
+	public void setTipoPreenchimento(TipoPreenchimentoAtividadeEnum tipoPreenchimento) {
+		this.tipoPreenchimento = tipoPreenchimento;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
 	}
 }

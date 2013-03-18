@@ -9,10 +9,11 @@ import br.com.ecc.model.EncontroAtividade;
 import br.com.ecc.model.EncontroConviteResponsavel;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
+import br.com.ecc.model.tipo.TipoInscricaoEnum;
 
 public class EncontroVO implements Serializable {
 	private static final long serialVersionUID = -8116104530913020100L;
-	
+
 	private Encontro encontro;
 	private List<EncontroPeriodo> listaPeriodo;
 	private List<EncontroTotalizacaoVO> listaTotalizacao;
@@ -21,7 +22,7 @@ public class EncontroVO implements Serializable {
 	private List<Casal> listaCoordenadores;
 	private List<AgrupamentoVO> listaAgrupamentoVOEncontro;
 	private List<EncontroConviteResponsavel> listaResponsavelConvite;
-	
+
 	public Encontro getEncontro() {
 		return encontro;
 	}
@@ -71,5 +72,15 @@ public class EncontroVO implements Serializable {
 	}
 	public void setListaResponsavelConvite(List<EncontroConviteResponsavel> listaResponsavelConvite) {
 		this.listaResponsavelConvite = listaResponsavelConvite;
+	}
+	public int getQuantidadeInscricao(){
+		int qtde=0;
+		if (getListaInscricao()!= null){
+			for (EncontroInscricao inscricao : getListaInscricao()) {
+				if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO))
+					qtde++;
+			}
+		}
+		return qtde;
 	}
 }

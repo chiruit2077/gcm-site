@@ -14,31 +14,34 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROATIVIDADEINSCRICAO", sequenceName="SQ_ENCONTROATIVIDADEINSCRICAO")
 @NamedQueries({
-	@NamedQuery(name="encontroAtividadeInscricao.porEncontro", 
+	@NamedQuery(name="encontroAtividadeInscricao.porEncontro",
 		query="select u from EncontroAtividadeInscricao u where u.encontroInscricao.encontro = :encontro order by u.encontroAtividade.inicio"),
-	@NamedQuery(name="encontroAtividadeInscricao.porEncontroInscricao", 
+	@NamedQuery(name="encontroAtividadeInscricao.porEncontroInscricao",
 		query="select u from EncontroAtividadeInscricao u where u.encontroInscricao = :encontroInscricao"),
-	@NamedQuery(name="encontroAtividadeInscricao.porEncontroCasal", 
+	@NamedQuery(name="encontroAtividadeInscricao.porEncontroCasal",
 		query="select u from EncontroAtividadeInscricao u " +
 				"where u.encontroInscricao.encontro = :encontro and " +
 				"	   u.encontroInscricao.casal = :casal " +
 				"order by u.encontroAtividade.inicio"),
-	@NamedQuery(name="encontroAtividadeInscricao.porAtividadeInscricao", 
+	@NamedQuery(name="encontroAtividadeInscricao.porAtividadeInscricao",
 		query="select u from EncontroAtividadeInscricao u where u.encontroInscricao = :encontroInscricao and u.encontroAtividade = :encontroAtividade"),
-	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroAtividadeNotIn", 
+	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroAtividadeNotIn",
 				query="delete from EncontroAtividadeInscricao u " +
 					  "where u.encontroAtividade = :encontroAtividade and " +
 					  "      u not in (:lista)"),
-	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroAtividade", 
+	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroAtividade",
 				query="delete from EncontroAtividadeInscricao u " +
 						"where u.encontroAtividade = :encontroAtividade " ),
-	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroInscricaoNotIn", 
+	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroInscricaoNotIn",
 				query="delete from EncontroAtividadeInscricao u " +
 					  "where u.encontroInscricao = :encontroInscricao and " +
 					  "      u not in (:lista)"),
-	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroInscricao", 
+	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontroInscricao",
 				query="delete from EncontroAtividadeInscricao u " +
-						"where u.encontroInscricao = :encontroInscricao " )
+						"where u.encontroInscricao = :encontroInscricao " ),
+	@NamedQuery(name="encontroAtividadeInscricao.deletePorEncontro",
+				query="delete from EncontroAtividadeInscricao u " +
+						"where u.encontroAtividade in ( select a from EncontroAtividade a where a.encontro = :encontro ) " )
 })
 public class EncontroAtividadeInscricao extends _WebBaseEntity {
 	private static final long serialVersionUID = 4975150894016131794L;
@@ -46,22 +49,22 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTROATIVIDADEINSCRICAO", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontroAtividade")
 	private EncontroAtividade encontroAtividade;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontroInscricao")
 	private EncontroInscricao encontroInscricao;
-	
+
 	@ManyToOne
 	@JoinColumn(name="papel")
 	private Papel papel;
-	
+
 	@Version
 	private Integer version;
-	
+
 	public Integer getId() {
 		return id;
 	}

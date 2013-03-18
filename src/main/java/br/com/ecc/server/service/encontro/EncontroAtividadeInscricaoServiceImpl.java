@@ -29,7 +29,7 @@ import com.google.inject.Singleton;
 @Singleton
 public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceServlet implements EncontroAtividadeInscricaoService {
 	private static final long serialVersionUID = -3780927709658969884L;
-	
+
 	@Inject Injector injector;
 
 	@SuppressWarnings("unchecked")
@@ -53,7 +53,7 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 //		if(encontroAtividadeInscricaos!=null && encontroAtividadeInscricaos.size()>0){
 //			throw new WebException("Erro ao excluir EncontroAtividadeInscricao. \nJá existem encontroAtividadeInscricaos neste encontroAtividadeInscricao.");
 //		}
-		
+
 		//exclusão
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(encontroAtividadeInscricao);
@@ -78,7 +78,7 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 		cmd.setBaseEntity(encontroAtividadeInscricao);
 		return (EncontroAtividadeInscricao)cmd.call();
 	}
-	
+
 	@Override
 	public void salvaInscricoes(EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes) throws Exception {
 		List<EncontroAtividadeInscricao> novaLista = new ArrayList<EncontroAtividadeInscricao>();
@@ -124,10 +124,10 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 		cmd.setEncontroPeriodo(encontroPeriodo);
 		cmd.setTipoExibicaoPlanilhaEnum(tipoExibicaoPlanilhaEnum);
 		cmd.setUsuarioAtual(SessionHelper.getUsuario(getThreadLocalRequest().getSession()));
-		
+
 		return cmd.call();
 	}
-	
+
 	@Override
 	@Permissao(nomeOperacao="Impressão da planilha", operacao=Operacao.OUTRO)
 	public Integer imprimePlanilha(Encontro encontro, EncontroPeriodo encontroPeriodo, TipoExibicaoPlanilhaEnum tipoExibicaoPlanilhaEnum, Boolean exportarExcel) throws Exception {
@@ -137,6 +137,14 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 		cmd.setTipoExibicaoPlanilhaEnum(tipoExibicaoPlanilhaEnum);
 		cmd.setUsuarioAtual(SessionHelper.getUsuario(getThreadLocalRequest().getSession()));
 		cmd.setExportaExcel(exportarExcel);
-		return cmd.call();		
+		return cmd.call();
+	}
+
+	@Override
+	public void limpaPlanilha(Encontro encontro) throws Exception {
+		ExecuteUpdateCommand cmd = injector.getInstance(ExecuteUpdateCommand.class);
+		cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontro");
+		cmd.addParameter("encontro", encontro);
+		cmd.call();
 	}
 }
