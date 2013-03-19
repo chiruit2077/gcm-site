@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -70,6 +71,8 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 	@UiField Button novoButton;
 
 	@UiField CheckBox completoCheckBox;
+
+	@UiField FlowPanel formularioFlowPanel;
 
 	@UiField(provided=true) FlexTable agrupamentoFlexTable;
 	private FlexTableUtil agrupamentoTableUtil = new FlexTableUtil();
@@ -142,6 +145,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoCasalEnum.values());
 		ListBoxUtil.populate(tipoAtividadeListBox, true, TipoAtividadeEnum.values());
+		formularioFlowPanel.setHeight((this.getWindowHeight() - 150) + "px");
 	}
 
 	private void criaTabela() {

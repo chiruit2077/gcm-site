@@ -211,6 +211,7 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 
 	@Override
 	public void login(Integer presenterCode) {
+		if (presenterCode==null) return;
 		this.presenterCode = presenterCode;
 		habilita(true);
 		emailTextBox.setValue(null);

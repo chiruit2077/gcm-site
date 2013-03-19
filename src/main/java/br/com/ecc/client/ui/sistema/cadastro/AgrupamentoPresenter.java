@@ -74,7 +74,6 @@ public class AgrupamentoPresenter extends BasePresenter<AgrupamentoPresenter.Dis
 						break;
 					}
 				}
-				buscaAgrupamentos(grupoSelecionado);
 				buscaAtividades(grupoSelecionado);
 				buscaPapeis(grupoSelecionado);
 				buscaEncontros();
@@ -165,6 +164,7 @@ public class AgrupamentoPresenter extends BasePresenter<AgrupamentoPresenter.Dis
 					}
 				}
 				getDisplay().showWaitMessage(false);
+				buscaAgrupamentos(encontroSelecionado);
 				buscaInscricoes(encontroSelecionado);
 			}
 		});

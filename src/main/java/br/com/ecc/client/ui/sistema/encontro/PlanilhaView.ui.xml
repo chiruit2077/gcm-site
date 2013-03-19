@@ -102,6 +102,12 @@
 									</td>
 								</tr>
 								<tr>
+									<td class="portal-formLabel">Preenchimento:</td>
+									<td>
+										<g:ListBox ui:field="preenchimentoListBox" width="200px"/>
+									</td>
+								</tr>
+								<tr>
 									<td class="portal-formLabel">Qtde. desejada:</td>
 									<td>
 										<cn:NumberTextBox ui:field="qtdeNumberTextBox" width="150" textAlignment="center"/>

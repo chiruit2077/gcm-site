@@ -1,5 +1,8 @@
 package br.com.ecc.client.service;
 
+import java.util.List;
+
+import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.vo.DadosLoginVO;
 
@@ -14,4 +17,5 @@ public interface AdministracaoService extends RemoteService {
 	public Boolean reenviarSenha(String email) throws Exception;
 	public Usuario salvaUsuario(Usuario usuario, Boolean senhaAlterada) throws Exception;
 	public Usuario salvaUsuarioLogado(Usuario usuario, Boolean senhaAlterada) throws Exception;
+	public List<Grupo> listaGrupos() throws Exception;
 }

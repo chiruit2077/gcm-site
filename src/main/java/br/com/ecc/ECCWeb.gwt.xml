@@ -10,7 +10,6 @@
   	<inherits name='com.bradrydzewski.gwt.calendar.theme.google.Google' />
   	<inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
 
-
 	<extend-property name="locale" values="en_US"/>
 	<extend-property name="locale" values="pt_BR"/>
 	<set-property name='locale' value='pt_BR'/>

@@ -9,6 +9,7 @@ import br.com.ecc.client.service.AdministracaoService;
 import br.com.ecc.client.util.StringUtil;
 import br.com.ecc.core.mvp.infra.exception.WebValidationException;
 import br.com.ecc.model.Casal;
+import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.Operacao;
@@ -35,31 +36,31 @@ public class AdministracaoServiceImpl extends SecureRemoteServiceServlet impleme
 	private static final long serialVersionUID = -8447158599567399455L;
 
 	@Inject Injector injector;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public DadosLoginVO getDadosLogin() throws Exception {
 		DadosLoginVO vo = new DadosLoginVO();
-		
+
 		Usuario usuario;
-		
+
 		//usuario
 		HttpServletRequest req = getThreadLocalRequest();
 		HttpSession session = req.getSession();
 		if(session != null) {
 			usuario = SessionHelper.getUsuario(session);
-			
+
 			if(usuario!=null){
 				GetEntityCommand cmd = injector.getInstance(GetEntityCommand.class);
 				cmd.setClazz(Usuario.class);
 				cmd.setId(usuario.getId());
 				usuario = (Usuario) cmd.call();
 			}
-			
+
 			vo.setUsuario(usuario);
 			vo.setParametrosRedirecionamentoVO(SessionHelper.getParametros(session));
 		}
-		
+
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		if(vo.getUsuario()!=null){
 			cmd.setNamedQuery("casal.porPessoa");
@@ -73,15 +74,15 @@ public class AdministracaoServiceImpl extends SecureRemoteServiceServlet impleme
 //		cmd = injector.getInstance(GetEntityListCommand.class);
 //		cmd.setNamedQuery("grupo.todos");
 //		vo.setListaGrupos(cmd.call());
-//		
+//
 //		cmd = injector.getInstance(GetEntityListCommand.class);
 //		cmd.setNamedQuery("encontro.todos");
 //		vo.setListaEncontros(cmd.call());
-		
+
 		return vo;
 	}
-	
-	
+
+
 	@Override
 	public void logout() throws Exception {
 		HttpServletRequest req = getThreadLocalRequest();
@@ -136,10 +137,10 @@ public class AdministracaoServiceImpl extends SecureRemoteServiceServlet impleme
 			cmdEmail.setMensagem(new String(texto));
 			cmdEmail.call();
 			return true;
-		} 
+		}
 		throw new WebValidationException("Usuário não encontrado.", null);
 	}
-	
+
 	private Usuario registraUsuario(Usuario usuario){
 		HttpServletRequest req = getThreadLocalRequest();
 		HttpSession session = req.getSession(true);
@@ -157,16 +158,16 @@ public class AdministracaoServiceImpl extends SecureRemoteServiceServlet impleme
 		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(usuario.getPessoa());
 		usuario.setPessoa((Pessoa) cmd.call());
-		
+
 		cmd = injector.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(usuario);
-		usuario = (Usuario)cmd.call();  
-		
+		usuario = (Usuario)cmd.call();
+
 		registraUsuario(usuario);
-		
+
 		return usuario;
 	}
-	
+
 	@Override
 	@Permissao(nomeOperacao="Salva usuario logado", operacao=Operacao.SALVAR)
 	public Usuario salvaUsuarioLogado(Usuario usuario, Boolean senhaAlterada) throws Exception {
@@ -181,17 +182,25 @@ public class AdministracaoServiceImpl extends SecureRemoteServiceServlet impleme
 				throw new WebValidationException("Senha atual inválida.", null);
 			}
 		}
-		
+
 		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(usuario.getPessoa());
 		usuario.setPessoa((Pessoa) cmd.call());
-		
+
 		cmd = injector.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(usuario);
 		usuario = (Usuario)cmd.call();
-		
+
 		registraUsuario(usuario);
 		return usuario;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Grupo> listaGrupos() throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("grupo.todos");
+		return cmd.call();
+	}
+
 }

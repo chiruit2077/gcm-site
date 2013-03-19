@@ -81,6 +81,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField Label casalLabel;
 	@UiField VerticalPanel recadosVerticalPanel;
 	@UiField FlowPanel recadosFlowPanel;
+	@UiField FlowPanel convidadosFlowPanel;
 	@UiField Anchor verLidosAnchor;
 	@UiField Anchor esconderLidosAnchor;
 	@UiField VerticalPanel areaRecadoVerticalPanel;
@@ -125,7 +126,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField FlowPanel aniversarioCasalFlowPanel;
 
 	@UiField VerticalPanel areaConvidadosVerticalPanel;
-	@UiField FlowPanel convidadosFlowPanel;
 	@UiField VerticalPanel convidadosVerticalPanel;
 
 	private Recado entidadeEditada;
@@ -189,7 +189,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			}
 		});
 
-		formularioFlowPanel.setHeight((this.getWindowHeight() - 150) + "px");
+		Window.enableScrolling(false);
 
 		Date hoje = new Date();
 
@@ -219,7 +219,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			  }
 		});
 
-		agendaCalendar.setSize("100%","600px");
 		agendaCalendar.setView(CalendarViews.MONTH);
 		CalendarSettings settings = new CalendarSettings();
 		settings.setIntervalsPerHour(4);
@@ -238,8 +237,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             public void execute() {
-            	if (areaAgendaVerticalPanel.getElement().getClientHeight() > 0 )
-            		agendaCalendar.setHeight(areaAgendaVerticalPanel.getElement().getClientHeight() - 85 + "px");
+            	resizeTimer.schedule(500);
             }
 		});
 	}
@@ -253,16 +251,29 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	}
 
 	private int height = -1;
+	private int width = -1;
 
 	private Timer resizeTimer = new Timer() {
         @Override
         public void run() {
-            int newHeight = Window.getClientHeight();
-            if (newHeight != height) {
-                height = newHeight;
-                agendaCalendar.setHeight(height - 85 + "px");
+            int newHeight = (int) (InicioSistemaView.this.getWindowHeight()*0.6);
+            int newWidth = (int) (InicioSistemaView.this.getWindowWidth()-620);
+            //967px
+            if (newHeight != height || newWidth != width) {
+            	height = newHeight;
+            	width = newWidth;
+            	areaAgendaVerticalPanel.setWidth(width+"px");
+            	areaAgendaVerticalPanel.setHeight(height + "px");
+                agendaCalendar.setHeight(height+"px");
+                agendaCalendar.setWidth(width+"px");
                 agendaCalendar.doSizing();
                 agendaCalendar.doLayout();
+                areaRecadoVerticalPanel.setWidth(width+"px");
+                areaRecadoVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-130) + "px");
+                recadosVerticalPanel.setWidth(width+"px");
+                recadosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-130) + "px");
+                recadosFlowPanel.setWidth(width+"px");
+        		recadosFlowPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-130) + "px");
             }
         }
     };
@@ -394,7 +405,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			aniversarioPessoaFlowPanel.setHeight((h-128) + "px");
 			aniversarioCasalFlowPanel.setHeight((h-128) + "px");
 		}
-
+		convidadosFlowPanel.setHeight((this.getWindowHeight()-128) + "px");
 		imagemLida = true;
 		createScroll();
 	}
@@ -430,8 +441,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 //			aniversarioPessoaFlowPanel.setHeight(((this.getWindowHeight() - 120)/2)-2 + "px");
 //			aniversarioCasalFlowPanel.setHeight(((this.getWindowHeight() - 120)/2)-2 + "px");
 		}
-		recadosFlowPanel.setHeight(((this.getWindowHeight() - 600 ) - 94) + "px");
-		convidadosFlowPanel.setHeight((this.getWindowHeight() - 94) + "px");
 	}
 
 	@Override
