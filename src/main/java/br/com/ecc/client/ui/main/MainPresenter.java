@@ -108,8 +108,6 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 
 	@Override
 	public void init() {
-//		Cookies.removeCookie("grupoSelecionado");
-//		Cookies.removeCookie("encontroSelecionado");
 		setCasal(null);
 		service.getDadosLogin(new WebAsyncCallback<DadosLoginVO>(getDisplay()) {
 			@Override
@@ -155,7 +153,6 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 				String url = Window.Location.getHref();
 				url = url.substring(0,url.indexOf("#"));
 				reload(url);
-				//getWebResource().getPlaceManager().newPlaceClean(HomePresenter.class);
 				getDisplay().resetToolbar(true);
 			}
 		});

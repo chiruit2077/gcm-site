@@ -1097,3 +1097,23 @@ html>body .gwt-DecoratedTabBar {
 	font-size: medium;
 	border: 1px solid gray;
 }
+
+.grupo-Logo {
+	background: white;
+	color: black;
+	border: 1px solid lightgray;
+}
+
+.grupo-LogoTitulo {
+	background: #B0C4DE;
+	color: black;
+	border-top: 1px solid lightgray;
+	font-weight: bold;
+	font-size: large;
+}
+.portal-formulario-Login {
+	background: #B0C4DE;
+	color: black;
+	font-weight: bold;
+	font-size: large;
+}

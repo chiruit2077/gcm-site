@@ -211,7 +211,6 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 
 	@Override
 	public void login(Integer presenterCode) {
-		if (presenterCode==null) return;
 		this.presenterCode = presenterCode;
 		habilita(true);
 		emailTextBox.setValue(null);
@@ -266,17 +265,6 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 		this.paginaIncial = paginaInicial;
 		defineDadosUsuario();
 		defineGrupo();
-//		if(usuario.getNivel()!=null && usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
-//			grupoHorizontalPanel.setStyleName("portal-headerBar");
-//		} else {
-//			grupoHorizontalPanel.setStyleName(null);
-//		}
-		//if(usuario.getNivel()!=null && !usuario.getNivel().equals(TipoNivelUsuarioEnum.CONVIDADO)){
-//		if(presenter.getCasal()!=null && !presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
-//			encontroHorizontalPanel.setStyleName("portal-headerBar");
-//		} else {
-//			encontroHorizontalPanel.setStyleName(null);
-//		}
 	}
 
 	private void defineDadosUsuario(){
@@ -405,7 +393,6 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 	}
 
 	protected void montaEncontroPanel() {
-//		if(usuario.getNivel()!=null && !usuario.getNivel().equals(TipoNivelUsuarioEnum.CONVIDADO)){
 		if(presenter.getCasal()!=null && !presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
 			simplePopupEncontro.clear();
 	        simplePopupEncontro.setStyleName("portal-headerBox");

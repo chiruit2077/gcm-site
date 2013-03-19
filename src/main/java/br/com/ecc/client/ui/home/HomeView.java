@@ -14,6 +14,8 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class HomeView extends BaseView<HomePresenter> implements HomePresenter.Display {
@@ -30,7 +32,7 @@ public class HomeView extends BaseView<HomePresenter> implements HomePresenter.D
 	}
 
 
-	@UiHandler("loginAnchor")
+	@UiHandler("loginButton")
 	public void loginAnchorClickHandler(ClickEvent event) {
 		presenter.getWebResource().getEventBus().fireEvent(new LoginEvent());
 	}
@@ -57,7 +59,20 @@ public class HomeView extends BaseView<HomePresenter> implements HomePresenter.D
 				Image image = new Image();
 				image.setSize("400px", "400px");
 				image.setUrl("eccweb/downloadArquivoDigital?id="+grupo.getIdArquivoDigital());
-				gruposPanel.add(image);
+				VerticalPanel logoGrupo = new VerticalPanel();
+				logoGrupo.setStyleName("grupo-Logo");
+				logoGrupo.setSize("400px", "430px");
+				logoGrupo.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+				logoGrupo.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+				logoGrupo.add(image);
+				HorizontalPanel titulo = new HorizontalPanel();
+				titulo.setSize("400px", "30px");
+				titulo.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+				titulo.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+				titulo.setStyleName("grupo-LogoTitulo");
+				titulo.add(new Label(grupo.getNome()));
+				logoGrupo.add(titulo);
+				gruposPanel.add(logoGrupo);
 			}
 		}
 	}
