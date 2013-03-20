@@ -9,6 +9,7 @@
 	<inherits name='com.bradrydzewski.gwt.calendar.Calendar' />
   	<inherits name='com.bradrydzewski.gwt.calendar.theme.google.Google' />
   	<inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
+  	<inherits name='com.google.gwt.maps.Maps'/>
 
 	<extend-property name="locale" values="en_US"/>
 	<extend-property name="locale" values="pt_BR"/>

@@ -4,7 +4,7 @@
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:rt="urn:import:br.com.ecc.client.ui.component.richtext"
   xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
-  xmlns:c="urn:import:com.bradrydzewski.gwt.calendar.client">
+  xmlns:c="urn:import:com.bradrydzewski.gwt.calendar.client" xmlns:canvas="urn:import:com.google.gwt.canvas.client">
   	<ui:style>
 	  	.formulario{
 			overflow-y:scroll;
@@ -71,7 +71,7 @@
    		<g:HTMLPanel width="100%" height="100%">
 			<table cellpadding="0" cellspacing="0" width="100%" height="100%" border="0">
 				<tr height="100%">
-					<td align="center" style="vertical-align:top;font-size:11px;padding-left:2px;padding-top:2px;padding-right:2px" width="200px" height="100%">
+					<td align="center" style="vertical-align:top;font-size:11px;padding-left:2px;padding-top:2px;padding-right:2px" width="250px" height="100%">
 						<g:VerticalPanel ui:field="areaConvidadosVerticalPanel" width="200px" height="100%" visible="false" styleName="{style.bordeado}">
 							<g:HTMLPanel width="100%" styleName="{style.barra}">
 								<table cellpadding="2" cellspacing="0" width="100%" border="0">
@@ -89,7 +89,7 @@
 						</g:VerticalPanel>
 					</td>
 					<td style="vertical-align:top;font-size:11px;;padding-left:2px;padding-top:2px;padding-right:2px" align="center" width="100%" height="100%">
-					  <g:VerticalPanel ui:field="areaInfoVerticalPanel" width="100%" visible="false" height="100%">
+					  <g:VerticalPanel ui:field="areaInfoVerticalPanel" width="100%" visible="false" height="100%" horizontalAlignment="center" verticalAlignment="top">
 						<g:VerticalPanel ui:field="areaAgendaVerticalPanel" width="100%" visible="false" styleName="{style.bordeado}" height="100%">
 							<g:HTMLPanel width="100%" styleName="{style.barra}">
 								<table cellpadding="2" cellspacing="0" width="100%" border="0">
@@ -102,6 +102,7 @@
 										<td><g:Button ui:field="hojeButton">Hoje</g:Button></td>
 										<td><g:Button ui:field="mensalButton">Mensal</g:Button></td>
 										<td><g:Button ui:field="semanalButton">Semanal</g:Button></td>
+										<td><g:Button ui:field="atividadesButton">Atividades</g:Button></td>
 									    <td width="100px" align="right">
 									    	<g:Button ui:field="addAgendaButton" visible="false">Adicionar Agenda</g:Button>
 									    </td>
@@ -141,7 +142,11 @@
 						<g:VerticalPanel width="200px">
 							<g:HTMLPanel width="100%" styleName="{style.casalArea}">
 								<table cellpadding="1" cellspacing="0" width="100%" border="0">
-									<tr><td align="center" colspan="3"><g:Image ui:field="casalImage" styleName="{style.casalImage}"/></td></tr>
+									<tr>
+										<td align="center" colspan="3" width="400px">
+											<g:Image ui:field="casalImage" styleName="{style.casalImage}"/>
+										</td>
+									</tr>
 									<tr>
 										<td style='padding-left:6px;' width="100%">
 											<g:Label ui:field="casalLabel" width="100%" styleName="{style.casal}"/>
@@ -153,7 +158,8 @@
 									</tr>
 								</table>
 							</g:HTMLPanel>
-							<g:HorizontalPanel ui:field="areaAniversarioHorizontalPanel" visible="false" width="100%" styleName="{style.fonte11}">
+							<g:HorizontalPanel height="10px"/>
+							<g:HorizontalPanel ui:field="areaAniversarioHorizontalPanel" visible="false" width="400px" styleName="{style.fonte11}">
 								<g:VerticalPanel styleName="{style.bordeado}">
 									<g:HTMLPanel width="100%" styleName="{style.barra}">
 										<table cellpadding="2" cellspacing="0" width="100%" border="0">
@@ -167,8 +173,8 @@
 											</tr>
 										</table>
 									</g:HTMLPanel>
-									<g:FlowPanel ui:field="aniversarioPessoaFlowPanel" styleName="content-Scroll" width="100%">
-										<g:VerticalPanel ui:field="aniversarioPessoaVerticalPanel" width="100%"/>
+									<g:FlowPanel ui:field="aniversarioPessoaFlowPanel" styleName="content-Scroll" width="195px">
+										<g:VerticalPanel ui:field="aniversarioPessoaVerticalPanel" width="195px"/>
 									</g:FlowPanel>
 								</g:VerticalPanel>
 								<g:VerticalPanel width="10px"/>
@@ -185,8 +191,8 @@
 											</tr>
 										</table>
 									</g:HTMLPanel>
-									<g:FlowPanel ui:field="aniversarioCasalFlowPanel" styleName="content-Scroll">
-										<g:VerticalPanel ui:field="aniversarioCasalVerticalPanel" width="100%"/>
+									<g:FlowPanel ui:field="aniversarioCasalFlowPanel" styleName="content-Scroll" width="195px">
+										<g:VerticalPanel ui:field="aniversarioCasalVerticalPanel" width="195px"/>
 									</g:FlowPanel>
 								</g:VerticalPanel>
 							</g:HorizontalPanel>
@@ -271,46 +277,75 @@
 				<g:DialogBox ui:field="editaAgendaDialogBox" visible="false"
 					         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Agenda">
 					<g:VerticalPanel width="100%">
-						<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
-							<g:HTMLPanel ui:field="tipoAgendaHTMLPanel" width="100%">
-								<table cellpadding="3" cellspacing="0" width="100%">
-									<tr style="background-color:#fcfdbb;">
-										<td class="portal-formLabel">Tipo Agenda:</td>
-										<td>
-											<g:ListBox ui:field="tipoAgendaLitBox" width="200px"/>
+						<g:HorizontalPanel width="100%" height="100%">
+							<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+								<g:HTMLPanel ui:field="tipoAgendaHTMLPanel" width="100%">
+									<table cellpadding="3" cellspacing="0" width="100%">
+										<tr style="background-color:#fcfdbb;">
+											<td class="portal-formLabel">Tipo Agenda:</td>
+											<td>
+												<g:ListBox ui:field="tipoAgendaLitBox" width="200px"/>
+											</td>
+										</tr>
+									</table>
+								</g:HTMLPanel>
+								<g:HTMLPanel >
+									<table cellpadding="3" align="center">
+										<tr>
+											<td class="portal-formLabel">Responsável:</td>
+											<td colspan="3">
+												<g:SuggestBox ui:field="casalResponsavelSuggestBox" width="400px"/>
+											</td>
+										</tr>
+										<tr>
+											<td class="portal-formLabel">Data/Hora Início:</td>
+											<td colspan="3">
+												<dp:DateBox ui:field="dataInicioDateBox" width="100px" styleName="portal-formField"/>
+											</td>
+										</tr>
+										<tr>
+											<td class="portal-formLabel">Data/Hora Fim:</td>
+											<td colspan="3">
+												<dp:DateBox ui:field="dataFimDateBox" width="100px" styleName="portal-formField"/>
+											</td>
+										</tr>
+										<tr>
+											<td class="portal-formLabel">Titulo:</td>
+											<td colspan="3">
+												<g:TextBox ui:field="tituloAgendaTextBox" width="400px" />
+											</td>
+										</tr>
+										<tr>
+										<td class="portal-formLabel">Endereço:</td>
+										<td colspan="3">
+											<g:TextBox ui:field="enderecoTextBox" width="370px" maxLength="254"/>
 										</td>
-									</tr>
+										</tr>
+										<tr>
+											<td class="portal-formLabel">Bairro:</td>
+											<td>
+												<g:TextBox ui:field="bairroTextBox" width="200px" maxLength="100"/>
+											</td>
+											<td class="portal-formLabel" >CEP:</td>
+											<td>
+												<g:TextBox ui:field="cepTextBox" width="80px" maxLength="15"/>
+											</td>
+										</tr>
+										<tr>
+											<td class="portal-formLabel">Cidade:</td>
+											<td>
+												<g:TextBox ui:field="cidadeTextBox" width="200px" maxLength="100"/>
+											</td>
+											<td class="portal-formLabel">Estado:</td>
+											<td>
+												<g:TextBox ui:field="estadoTextBox" width="80px" maxLength="2" textAlignment="center"/>
+											</td>
+										</tr>
 								</table>
-							</g:HTMLPanel>
-							<g:HTMLPanel >
-								<table cellpadding="3" align="center">
-									<tr>
-										<td class="portal-formLabel">Responsável:</td>
-										<td>
-											<g:SuggestBox ui:field="casalResponsavelSuggestBox" width="400px"/>
-										</td>
-									</tr>
-									<tr>
-										<td class="portal-formLabel">Data/Hora Início:</td>
-										<td>
-											<dp:DateBox ui:field="dataInicioDateBox" width="100px" styleName="portal-formField"/>
-										</td>
-									</tr>
-									<tr>
-										<td class="portal-formLabel">Data/Hora Fim:</td>
-										<td>
-											<dp:DateBox ui:field="dataFimDateBox" width="100px" styleName="portal-formField"/>
-										</td>
-									</tr>
-									<tr>
-										<td class="portal-formLabel">Titulo:</td>
-										<td>
-											<g:TextBox ui:field="tituloAgendaTextBox" width="400px" />
-										</td>
-									</tr>
-							</table>
-							</g:HTMLPanel>
-						</g:VerticalPanel>
+								</g:HTMLPanel>
+							</g:VerticalPanel>
+							<g:HorizontalPanel ui:field="googleMapItem" width="400px" height="400px"/>
+						</g:HorizontalPanel>
 						<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
 							<g:HorizontalPanel spacing="3">
 								<g:Button ui:field="salvarAgendaButton">Salvar</g:Button>

@@ -6,6 +6,7 @@ import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
+import br.com.ecc.client.ui.component.MapWidget;
 import br.com.ecc.client.ui.component.richtext.RichTextToolbar;
 import br.com.ecc.client.util.DateUtil;
 import br.com.ecc.client.util.ListBoxUtil;
@@ -27,8 +28,10 @@ import com.bradrydzewski.gwt.calendar.client.CalendarSettings;
 import com.bradrydzewski.gwt.calendar.client.CalendarSettings.Click;
 import com.bradrydzewski.gwt.calendar.client.CalendarViews;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
@@ -42,6 +45,20 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.maps.client.LoadApi;
+import com.google.gwt.maps.client.LoadApi.LoadLibrary;
+import com.google.gwt.maps.client.MapOptions;
+import com.google.gwt.maps.client.MapTypeId;
+import com.google.gwt.maps.client.base.LatLng;
+import com.google.gwt.maps.client.controls.ControlPosition;
+import com.google.gwt.maps.client.controls.MapTypeControlOptions;
+import com.google.gwt.maps.client.overlays.Marker;
+import com.google.gwt.maps.client.overlays.MarkerOptions;
+import com.google.gwt.maps.client.services.Geocoder;
+import com.google.gwt.maps.client.services.GeocoderRequest;
+import com.google.gwt.maps.client.services.GeocoderRequestHandler;
+import com.google.gwt.maps.client.services.GeocoderResult;
+import com.google.gwt.maps.client.services.GeocoderStatus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -76,6 +93,8 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	private List<Agenda> listaAgenda;
 
+	@UiField HorizontalPanel googleMapItem;
+
 	@UiField Image logoImage;
 	@UiField Image casalImage;
 	@UiField Label casalLabel;
@@ -101,6 +120,11 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField Button excluirAgendaButton;
 	@UiField ListBox tipoAgendaLitBox;
 	@UiField TextBox tituloAgendaTextBox;
+	@UiField TextBox enderecoTextBox;
+	@UiField TextBox bairroTextBox;
+	@UiField TextBox cepTextBox;
+	@UiField TextBox cidadeTextBox;
+	@UiField TextBox estadoTextBox;
 	@UiField(provided = true) SuggestBox casalResponsavelSuggestBox;
 	private final GenericEntitySuggestOracle casalResponsavelSuggest = new GenericEntitySuggestOracle();
 
@@ -203,6 +227,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		dataFimDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataFimDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 
+		dateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 		dateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy")));
 		dateBox.setValue(hoje);
 		dateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
@@ -269,14 +294,16 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
                 agendaCalendar.doSizing();
                 agendaCalendar.doLayout();
                 areaRecadoVerticalPanel.setWidth(width+"px");
-                areaRecadoVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-130) + "px");
-                recadosVerticalPanel.setWidth(width+"px");
-                recadosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-130) + "px");
-                recadosFlowPanel.setWidth(width+"px");
-        		recadosFlowPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-130) + "px");
+                areaRecadoVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-136) + "px");
+                recadosVerticalPanel.setWidth((width-5)+"px");
+                recadosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-136) + "px");
+                recadosFlowPanel.setWidth((width-5)+"px");
+        		recadosFlowPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-136) + "px");
             }
         }
     };
+
+	private MapWidget googleMap;
 
 
 	@UiHandler("semanalButton")
@@ -319,9 +346,15 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			dataFimDateBox.setValue(agenda.getDataFim());
 			tituloAgendaTextBox.setText(agenda.getTitulo());
 			ListBoxUtil.setItemSelected(tipoAgendaLitBox, agenda.getTipo().getNome());
+			enderecoTextBox.setValue(agenda.getEndereco());
+			bairroTextBox.setValue(agenda.getBairro());
+			cepTextBox.setValue(agenda.getCep());
+			cidadeTextBox.setValue(agenda.getCidade());
+			estadoTextBox.setValue(agenda.getEstado());
 			editaAgendaDialogBox.center();
 			editaAgendaDialogBox.show();
 			tituloAgendaTextBox.setFocus(true);
+			loadMapApi();
 		}
 	}
 
@@ -352,6 +385,11 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		entidadeAgendaEditada.setDataFim(dataFimDateBox.getValue());
 		entidadeAgendaEditada.setTitulo(tituloAgendaTextBox.getText());
 		entidadeAgendaEditada.setTipo((TipoAgendaEventoEnum)ListBoxUtil.getItemSelected(tipoAgendaLitBox, TipoAgendaEventoEnum.values()));
+		entidadeAgendaEditada.setEndereco(enderecoTextBox.getValue());
+		entidadeAgendaEditada.setBairro(bairroTextBox.getValue());
+		entidadeAgendaEditada.setCep(cepTextBox.getValue());
+		entidadeAgendaEditada.setCidade(cidadeTextBox.getValue());
+		entidadeAgendaEditada.setEstado(estadoTextBox.getValue());
 		editaAgendaDialogBox.hide();
 		presenter.salvarAgenda(entidadeAgendaEditada);
 	}
@@ -402,10 +440,10 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		} else {
 		}
 		if(h>128){
-			aniversarioPessoaFlowPanel.setHeight((h-128) + "px");
-			aniversarioCasalFlowPanel.setHeight((h-128) + "px");
+			aniversarioPessoaFlowPanel.setHeight((h-140) + "px");
+			aniversarioCasalFlowPanel.setHeight((h-140) + "px");
 		}
-		convidadosFlowPanel.setHeight((this.getWindowHeight()-128) + "px");
+		convidadosFlowPanel.setHeight((this.getWindowHeight()-140) + "px");
 		imagemLida = true;
 		createScroll();
 	}
@@ -437,9 +475,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			} else {
 				casalLabel.setText(presenter.getDadosLoginVO().getUsuario().getPessoa().getNome());
 			}
-		} else {
-//			aniversarioPessoaFlowPanel.setHeight(((this.getWindowHeight() - 120)/2)-2 + "px");
-//			aniversarioCasalFlowPanel.setHeight(((this.getWindowHeight() - 120)/2)-2 + "px");
 		}
 	}
 
@@ -942,4 +977,87 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		this.listaAgenda = listaAgenda;
 	}
 
+	// CARREGANDO API DO GOOGLE
+	private void loadMapApi() {
+		boolean sensor = true;
+		ArrayList<LoadLibrary> loadLibraries = new ArrayList<LoadApi.LoadLibrary>();
+		loadLibraries.add(LoadLibrary.DRAWING);
+		loadLibraries.add(LoadLibrary.GEOMETRY);
+		loadLibraries.add(LoadLibrary.PLACES);
+
+		Runnable onLoadLibraries = new Runnable() {
+			public void run() {
+				drawMapa();
+			}
+		};
+		LoadApi.go(onLoadLibraries, loadLibraries, sensor);
+	}
+
+	//
+	private void drawMapa(){
+		MapTypeControlOptions mapTypeControlOptions = MapTypeControlOptions.newInstance();
+		mapTypeControlOptions.setPosition(ControlPosition.TOP_RIGHT);
+		mapTypeControlOptions.setMapTypeIds(MapTypeId.values());
+
+		MapOptions options = MapOptions.newInstance();
+		options.setMapTypeControlOptions(mapTypeControlOptions);
+		options.setZoom(MapWidget.ZOOM_LOGRADOURO);
+
+		googleMapItem.clear();
+		googleMap = new MapWidget(options);
+		googleMap.setSize("400px", "400px");
+		googleMap.resize();
+		googleMap.setVisible(false);
+		googleMapItem.add(googleMap);
+		drawLogradouro();
+	}
+
+	private void drawLogradouro(){
+		if (googleMap != null && !getEndereco().equals("")) {
+			Geocoder geocoder = Geocoder.newInstance();
+			GeocoderRequest geocoderRequest = GeocoderRequest.newInstance();
+			geocoderRequest.setAddress(getEndereco());
+			geocoder.geocode(geocoderRequest, new GeocoderRequestHandler() {
+				@Override
+				public void onCallback(JsArray<GeocoderResult> results,
+						GeocoderStatus status) {
+					if (status.equals(GeocoderStatus.OK)){
+						GeocoderResult geocoderResult = results.get(0);
+						LatLng position = geocoderResult.getGeometry().getLocation();
+						googleMap.setVisible(true);
+						googleMap.setSize("400px", "400px");
+						googleMap.resize();
+						MarkerOptions optionsMarker = MarkerOptions.newInstance();
+						optionsMarker.setPosition(position);
+						Marker marker = Marker.newInstance(optionsMarker);
+						marker.setMap(googleMap);
+						googleMap.getOverlayMapTypes().clear();
+						googleMap.setZoom(MapWidget.ZOOM_LOGRADOURO);
+						googleMap.setCenter(position);
+					}else {
+						googleMap.setVisible(false);
+					}
+				}
+			});
+		}
+	}
+
+	@UiHandler({"enderecoTextBox","bairroTextBox","cidadeTextBox","estadoTextBox"})
+	public void enderecoChangeEvent(ChangeEvent event){
+		drawLogradouro();
+	}
+
+	private String getEndereco() {
+		StringBuffer buffer = new StringBuffer();
+		if (enderecoTextBox.getValue()!=null)
+			buffer.append(" " + enderecoTextBox.getValue());
+		if (bairroTextBox.getValue()!=null)
+			buffer.append(" " + bairroTextBox.getValue());
+		if (cidadeTextBox.getValue()!=null)
+			buffer.append(" " + cidadeTextBox.getValue());
+		if (estadoTextBox.getValue()!=null)
+			buffer.append(" " + estadoTextBox.getValue());
+		buffer.append(" BRASIL");
+		return buffer.toString().trim();
+	}
 }

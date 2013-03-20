@@ -1,5 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder 
+<ui:UiBinder
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:c="urn:import:br.com.ecc.client.ui.component"
@@ -109,7 +109,7 @@
 				<table cellpadding="0" cellspacing="0" width="100%">
 					<tr>
 						<td align="center">
-							<g:Image url="images/wait.gif" width="40px"/>								
+							<g:Image url="images/wait.gif" width="40px"/>
 						</td>
 					</tr>
 				</table>
@@ -118,8 +118,8 @@
 		<g:HorizontalPanel ui:field="headerPanel" width="100%" styleName="{style.banner}" horizontalAlignment="center">
 			<g:HTMLPanel width="100%" height="35px">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
-					<tr>
-						 <td align="left" style="padding-left: 5px; width:180px;">
+					<tr style="padding-right:10px;padding-left: 10px;">
+						 <td align="left" style="padding-left: 10px; width:180px;">
 							 <g:HorizontalPanel verticalAlignment="middle" height="35px" spacing="0">
 								<g:HorizontalPanel ui:field="grupoHorizontalPanel" verticalAlignment="middle" height="35px" width="150px" spacing="0" styleName="portal-headerBar" visible="false">
 									<g:HorizontalPanel width="5px"/>
@@ -131,17 +131,18 @@
 							 	</g:HorizontalPanel>
 							 	<g:HorizontalPanel ui:field="encontroHorizontalPanel" verticalAlignment="middle" height="35px" width="170px" spacing="5" styleName="portal-headerBar" visible="false">
 									<g:Label ui:field="encontroLabel" styleName="portal-headerBarText" />
-							 	</g:HorizontalPanel> 
+							 	</g:HorizontalPanel>
 						 	</g:HorizontalPanel>
 					 	 </td>
 						 <td align="center">
 						 	<g:HorizontalPanel ui:field="menuHorizontalPanel" spacing="0"/>
 						 </td>
-						 <td align="right" style="padding-right:4px;">
+						 <td align="right" style="padding-right:10px;">
 						 	<g:HorizontalPanel ui:field="usuarioHorizontalPanel" styleName="portal-headerBar" height="35px" spacing="5" verticalAlignment="middle" visible="false">
 								<g:Label ui:field="usuarioNome" styleName="portal-headerBarText" />
 								<g:Image ui:field="usuarioImage" url="images/user.png" width="20px" height="20px"/>
 							</g:HorizontalPanel>
+							<g:HorizontalPanel width="10px"/>
 						 </td>
 					</tr>
 				</table>
