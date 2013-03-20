@@ -12,6 +12,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 @Entity
@@ -81,6 +82,9 @@ public class Pessoa extends _WebBaseEntity {
 
 	@Temporal(TemporalType.DATE)
 	private Date dataAtualizacao;
+
+	@Transient
+	private String tag;
 
 	@Version
 	private Integer version;
@@ -225,5 +229,13 @@ public class Pessoa extends _WebBaseEntity {
 
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 }

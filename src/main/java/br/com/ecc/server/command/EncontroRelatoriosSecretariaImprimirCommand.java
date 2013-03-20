@@ -30,24 +30,34 @@ public class EncontroRelatoriosSecretariaImprimirCommand implements Callable<Int
 	private String report;
 	private String nome;
 	private Encontro encontro;
+	private Map<String, Object> parametros = new HashMap<String, Object>();
+	@SuppressWarnings("rawtypes")
+	private Map mapObjetos;
 
 	@Override
 	@Transactional
 	public Integer call() throws Exception {
-		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("TITULO", getTitulo());
+		getParametros().put("TITULO", getTitulo());
 		ArquivoDigital logo = null;
 		if (getEncontro() != null) logo = (ArquivoDigital)em.find(ArquivoDigital.class, getEncontro().getGrupo().getIdArquivoDigital());
-		if (logo != null) parametros.put("LOGO", new ByteArrayInputStream(logo.getDados()));
+		if (logo != null) getParametros().put("LOGO", new ByteArrayInputStream(logo.getDados()));
 		if(getListaObjects()!=null && getListaObjects().size()>0){
 			ImprimirCommand cmd = injector.getInstance(ImprimirCommand.class);
 			cmd.setDadosRelatorio(getListaObjects());
-			cmd.setParametros(parametros);
+			cmd.setParametros(getParametros());
 			cmd.setReportPathName("/relatorios/");
 			cmd.setReportFileName(getReport());
 			cmd.setReportName(nome + "_" +new SimpleDateFormat("dd_MM_yyyy").format(Calendar.getInstance().getTime()));
 			return cmd.call();
-		} else {
+		}else if(getMapObjetos()!=null && getMapObjetos().size()>0){
+			ImprimirCommand cmd = injector.getInstance(ImprimirCommand.class);
+			cmd.setMapDadosRelatorio(getMapObjetos());
+			cmd.setParametros(getParametros());
+			cmd.setReportPathName("/relatorios/");
+			cmd.setReportFileName(getReport());
+			cmd.setReportName(nome + "_" +new SimpleDateFormat("dd_MM_yyyy").format(Calendar.getInstance().getTime()));
+			return cmd.call();
+		}else {
 			throw new WebException("Nenhum Registro Encontrado");
 		}
 	}
@@ -94,4 +104,17 @@ public class EncontroRelatoriosSecretariaImprimirCommand implements Callable<Int
 		this.encontro = encontro;
 	}
 
+	public Map<String, Object> getParametros() {
+		return parametros;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Map getMapObjetos() {
+		return mapObjetos;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void setMapObjetos(Map mapObjetos) {
+		this.mapObjetos = mapObjetos;
+	}
 }

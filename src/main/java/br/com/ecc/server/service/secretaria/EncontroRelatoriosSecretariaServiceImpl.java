@@ -16,6 +16,8 @@ import br.com.ecc.model.EncontroHotelQuarto;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.tipo.TipoArquivoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
+import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.ArquivoDigitalSalvarCommand;
 import br.com.ecc.server.command.EncontroRelatoriosSecretariaImprimirCommand;
@@ -241,13 +243,62 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		cmdRelatorio.setReport("listagemnecessidadesespeciais.jrxml");
 		cmdRelatorio.setNome("listagemnecessidadesespeciais");
 		cmdRelatorio.setTitulo("LISTAGEM DE AFILHADOS COM NECESSIDADES ESPECIAIS");
-		return cmdRelatorio.call();	}
+		return cmdRelatorio.call();
+	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer imprimeRelatorioDiabeticosVegetarianos(Encontro encontro)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConfirmados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		List<Pessoa> listaPessoa = new ArrayList<Pessoa>();
+		int qtdeVegetarianos = 0;
+		int qtdeDiabeticos = 0;
+		for (EncontroInscricao encontroInscricao : lista) {
+			if (!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+				if (encontroInscricao.getCasal()!=null){
+					if (encontroInscricao.getCasal().getEle().getVegetariano() || encontroInscricao.getCasal().getEle().getDiabetico()){
+						encontroInscricao.getCasal().getEle().setTag(TipoInscricaoCasalEnum.getPorInscricaoCasal(encontroInscricao.getTipo()).getNome());
+						listaPessoa.add(encontroInscricao.getCasal().getEle());
+						if (encontroInscricao.getCasal().getEle().getVegetariano()) qtdeVegetarianos++;
+						if (encontroInscricao.getCasal().getEle().getDiabetico()) qtdeDiabeticos++;
+					}
+					if (encontroInscricao.getCasal().getEla().getVegetariano() || encontroInscricao.getCasal().getEla().getDiabetico()){
+						encontroInscricao.getCasal().getEla().setTag(TipoInscricaoCasalEnum.getPorInscricaoCasal(encontroInscricao.getTipo()).getNome());
+						listaPessoa.add(encontroInscricao.getCasal().getEla());
+						if (encontroInscricao.getCasal().getEla().getVegetariano()) qtdeVegetarianos++;
+						if (encontroInscricao.getCasal().getEla().getDiabetico()) qtdeDiabeticos++;
+					}
+				}else if (encontroInscricao.getPessoa()!=null){
+					if (encontroInscricao.getPessoa().getVegetariano() || encontroInscricao.getPessoa().getDiabetico()){
+						encontroInscricao.getPessoa().setTag(TipoInscricaoCasalEnum.getPorInscricaoCasal(encontroInscricao.getTipo()).getNome());
+						listaPessoa.add(encontroInscricao.getPessoa());
+						if (encontroInscricao.getPessoa().getVegetariano()) qtdeVegetarianos++;
+						if (encontroInscricao.getPessoa().getDiabetico()) qtdeDiabeticos++;
+					}
+				}
+			}
+		}
+		Collections.sort(listaPessoa, new Comparator<Pessoa>() {
+			@Override
+			public int compare(Pessoa o1, Pessoa o2) {
+				if (o1.getTag() != null && o2.getTag() != null ) return o1.getTag().compareTo(o2.getTag());
+				return o1.getNome().compareTo(o2.getNome());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaPessoa);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemdiabeticosvegetarianos.jrxml");
+		cmdRelatorio.setNome("listagemdiabeticosvegetarianos");
+		cmdRelatorio.setTitulo("LISTAGEM DE DIABÉTICOS E VEGETARIANOS");
+		cmdRelatorio.getParametros().put("totalVegetarianos", qtdeVegetarianos);
+		cmdRelatorio.getParametros().put("totalDiabeticos", qtdeDiabeticos);
+		return cmdRelatorio.call();
 	}
 
 	@Override

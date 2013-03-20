@@ -27,6 +27,7 @@ import br.com.ecc.model.vo.AgrupamentoVO;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 
 public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<EncontroRelatoriosSecretariaPresenter.Display> {
 
@@ -196,6 +197,16 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					DownloadResourceHelper.showReport(idReport, "_blank", "");
 				}
 			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMDIABETICOSVEGETARIANOS)){
+			service.imprimeRelatorioDiabeticosVegetarianos(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, "_blank", "");
+				}
+			});
+		}else{
+			Window.alert("Não implementado!!");
 		}
 	}
 

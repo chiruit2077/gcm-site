@@ -26,6 +26,7 @@ public class ImprimirCommand implements Callable<Integer>{
 	@Inject Injector injector;
 
 	private Collection<?> dadosRelatorio;
+	private Map<?,?> mapDadosRelatorio;
 	Map<String, Object> parametros;
 	private String reportPathName;
 	private String reportFileName;
@@ -41,7 +42,7 @@ public class ImprimirCommand implements Callable<Integer>{
 		cmd.setReportFileName(reportFileName);
 		cmd.setReportPathName(reportPathName);
 		JasperPrint jasperPrint = cmd.call();
-		
+
 		if(jasperPrint!=null){
 			ArquivoDigital ad = new ArquivoDigital();
 			ad.setDescricao("Relatorio");
@@ -70,20 +71,20 @@ public class ImprimirCommand implements Callable<Integer>{
 		return null;
 	}
 
-	public byte[] exportaRelatorioEXCELL(JasperPrint impressao) throws JRException, Exception { 
-		JRXlsExporter exporter = new JRXlsExporter(); 
-		ByteArrayOutputStream xlsReport = new ByteArrayOutputStream(); 
-		exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, impressao); 
-		exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, xlsReport); 
+	public byte[] exportaRelatorioEXCELL(JasperPrint impressao) throws JRException, Exception {
+		JRXlsExporter exporter = new JRXlsExporter();
+		ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
+		exporter.setParameter(JRXlsExporterParameter.JASPER_PRINT, impressao);
+		exporter.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, xlsReport);
 //		exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
 //		exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
-		exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE); 
-		exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE); 
-		exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE); 
-		exporter.exportReport(); 
-		return xlsReport.toByteArray(); 
-	} 
-	
+		exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.TRUE);
+		exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+		exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+		exporter.exportReport();
+		return xlsReport.toByteArray();
+	}
+
 	public Collection<?> getDadosRelatorio() {
 		return dadosRelatorio;
 	}
@@ -121,5 +122,13 @@ public class ImprimirCommand implements Callable<Integer>{
 
 	public void setReportName(String reportName) {
 		this.reportName = reportName;
+	}
+
+	public Map<?,?> getMapDadosRelatorio() {
+		return mapDadosRelatorio;
+	}
+
+	public void setMapDadosRelatorio(Map<?,?> mapDadosRelatorio) {
+		this.mapDadosRelatorio = mapDadosRelatorio;
 	}
 }

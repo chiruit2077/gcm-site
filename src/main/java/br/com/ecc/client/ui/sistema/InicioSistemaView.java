@@ -1057,7 +1057,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			buffer.append(" " + cidadeTextBox.getValue());
 		if (estadoTextBox.getValue()!=null)
 			buffer.append(" " + estadoTextBox.getValue());
-		buffer.append(" BRASIL");
+		//buffer.append(" BRASIL");
 		return buffer.toString().trim();
 	}
 }
