@@ -98,4 +98,23 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 	public void setPapel(Papel papel) {
 		this.papel = papel;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EncontroAtividadeInscricao other = (EncontroAtividadeInscricao) obj;
+		if (id != null) {
+			if (id.equals(other.id))
+				return true;
+		}if (getEncontroAtividade() != null) {
+			if (getEncontroAtividade().equals(other.getEncontroAtividade()))
+				return true;
+		}
+		return false;
+	}
 }

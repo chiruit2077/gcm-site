@@ -121,8 +121,6 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	private FlexTableUtil detalheTableUtil = new FlexTableUtil();
 	@UiField ListBox confirmacaoListBox;
 
-	//DateTimeFormat dfGlobal = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
-	//DateTimeFormat dfGlobalTempo = DateTimeFormat.getFormat("dd-MM-yyy HH:mm");
 	NumberFormat dfCurrency = NumberFormat.getCurrencyFormat();
 
 	private EncontroInscricaoVO entidadeEditada;

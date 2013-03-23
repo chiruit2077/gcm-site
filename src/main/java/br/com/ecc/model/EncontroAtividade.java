@@ -75,6 +75,8 @@ public class EncontroAtividade extends _WebBaseEntity {
 
 	private Integer quantidadeDesejada;
 
+	private Boolean revisado;
+
 	@Transient
 	private List<String> infoErro;
 
@@ -98,6 +100,22 @@ public class EncontroAtividade extends _WebBaseEntity {
 			return tipoAtividade.getNome() + " - " + atividade.getNome();
 		}
 		return super.toString();
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EncontroAtividade other = (EncontroAtividade) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 	public Integer getId() {
@@ -193,4 +211,14 @@ public class EncontroAtividade extends _WebBaseEntity {
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
 	}
+
+	public Boolean getRevisado() {
+		if (revisado==null) return false;
+		return revisado;
+	}
+
+	public void setRevisado(Boolean revisado) {
+		this.revisado = revisado;
+	}
+
 }

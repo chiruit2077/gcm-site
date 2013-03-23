@@ -38,6 +38,11 @@
 				<g:HTMLPanel width="100%">
 					<table cellpadding="3" cellspacing="0" border="0">
 						<tr>
+							<td>
+								<g:Label ui:field="itemLabel" width="100%"/>
+							</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
 							<td class="portal-formLabel">Periodo:</td>
 							<td>
 								<g:ListBox ui:field="periodoListBox" width="200px"/>
@@ -113,6 +118,11 @@
 										<cn:NumberTextBox ui:field="qtdeNumberTextBox" width="150" textAlignment="center"/>
 									</td>
 								</tr>
+								<tr>
+									<td>
+										<g:CheckBox ui:field="revisadoCheckBox" text="Revisado"/>
+									</td>
+								</tr>
 							</table>
 						</g:HTMLPanel>
 					</g:VerticalPanel>
@@ -167,6 +177,9 @@
 									<td class="portal-formLabel" width="180px">Papel:</td>
 									<td colpsan="2">
 										<g:ListBox ui:field="papelListBox" width="200px"/>
+									</td>
+									<td>
+										<g:Button ui:field="preencheAutomaticoInscricaoButton" text="Preenche Automático"/>
 									</td>
 								</tr>
 								<tr>
