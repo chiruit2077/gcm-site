@@ -659,7 +659,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				addImage.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent arg0) {
-						//TODO
 						editaInscricao(ea, null);
 						listaParticipantesInscritos = new ArrayList<EncontroAtividadeInscricao>();
 						for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
@@ -997,7 +996,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 							Papel papel = membro.getPapel();
 							if (papel == null)
 								papel = (Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel());
-							adicionaParticipante(papel,buscaInscricao(membro), encontroAtividadeEditada,false);
+							adicionaParticipante(papel,getEncontroInscricao(membro), encontroAtividadeEditada,false);
 						}
 						break;
 					}
@@ -1018,18 +1017,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	public void excluirTodasInscricaoButtonButtonClickHandler(ClickEvent event){
 		listaParticipantesInscritos.clear();
 		populaParticipantesPorAtividade();
-	}
-
-	private EncontroInscricao buscaInscricao(AgrupamentoMembro membro){
-		for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
-			if(membro.getCasal()!=null && ei.getCasal()!=null && membro.getCasal().getId().equals(ei.getCasal().getId())){
-				return ei;
-			}
-			if(membro.getPessoa()!=null && ei.getPessoa()!=null && membro.getPessoa().getId().equals(ei.getPessoa().getId())){
-				return ei;
-			}
-		}
-		return null;
 	}
 
 	private void adicionaParticipante(Papel papel, EncontroInscricao ei, EncontroAtividade atividade, boolean mensagem){
@@ -1182,6 +1169,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			Window.alert("Falta definir o Papel de Padrinho!");
 			return;
 		}
+
+		listaParticipantesInscritos = new ArrayList<EncontroAtividadeInscricao>();
+		listaParticipantesInscritos.addAll(presenter.getListaEncontroAtividadeInscricao());
 
 		for (EncontroAtividade atividade : presenter.getEncontroVO().getListaEncontroAtividade()) {
 			preencheAtividade(atividade, papelPadrao, papelPadrinho);
@@ -1336,14 +1326,16 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		ArrayList<AgrupamentoVO> list = new ArrayList<AgrupamentoVO>();
 		List<AgrupamentoVO> listaAgrupamentoVOEncontro = presenter.getEncontroVO().getListaAgrupamentoVOEncontro();
 		for (AgrupamentoVO agrupamentoVO : listaAgrupamentoVOEncontro) {
-			if (agrupamentoVO.getAgrupamento().getAtividade()!=null && agrupamentoVO.getAgrupamento().getAtividade().equals(atividade.getAtividade())){
-				if (agrupamentoVO.getAgrupamento().getTipoAtividade()==null || ( agrupamentoVO.getAgrupamento().getTipoAtividade() != null &&
-						agrupamentoVO.getAgrupamento().getTipoAtividade().equals(atividade.getTipoAtividade() ))){
+			if (agrupamentoVO.getAgrupamento().getTipo() != null && agrupamentoVO.getAgrupamento().getTipo().equals(TipoInscricaoCasalEnum.ENCONTRISTA)){
+				if (agrupamentoVO.getAgrupamento().getAtividade()!=null && agrupamentoVO.getAgrupamento().getAtividade().equals(atividade.getAtividade())){
+					if (agrupamentoVO.getAgrupamento().getTipoAtividade()==null || ( agrupamentoVO.getAgrupamento().getTipoAtividade() != null &&
+							agrupamentoVO.getAgrupamento().getTipoAtividade().equals(atividade.getTipoAtividade() ))){
+						list.add(agrupamentoVO);
+					}
+				}else if (agrupamentoVO.getAgrupamento().getAtividade()==null && agrupamentoVO.getAgrupamento().getTipoAtividade() != null
+						&& agrupamentoVO.getAgrupamento().getTipoAtividade().equals(atividade.getTipoAtividade())){
 					list.add(agrupamentoVO);
 				}
-			}else if (agrupamentoVO.getAgrupamento().getAtividade()==null && agrupamentoVO.getAgrupamento().getTipoAtividade() != null
-					&& agrupamentoVO.getAgrupamento().getTipoAtividade().equals(atividade.getTipoAtividade())){
-				list.add(agrupamentoVO);
 			}
 		}
 		return list;
