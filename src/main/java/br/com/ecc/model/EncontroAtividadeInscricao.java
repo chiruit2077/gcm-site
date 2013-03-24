@@ -47,7 +47,9 @@ import javax.persistence.Version;
 					  "where u not in (:lista) and u.encontroAtividade in ( select a from EncontroAtividade a where a.encontro = :encontro ) " )
 })
 public class EncontroAtividadeInscricao extends _WebBaseEntity {
-	private static final long serialVersionUID = 4975150894016131794L;
+
+
+	private static final long serialVersionUID = 7806195140391414413L;
 
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTROATIVIDADEINSCRICAO", strategy=GenerationType.AUTO)
@@ -111,10 +113,10 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 		if (id != null) {
 			if (id.equals(other.id))
 				return true;
-		}if (getEncontroAtividade() != null) {
-			if (getEncontroAtividade().equals(other.getEncontroAtividade()))
-				return true;
 		}
+		if (getEncontroAtividade() != null && getEncontroAtividade().equals(other.getEncontroAtividade()) &&
+				getEncontroInscricao() != null && getEncontroInscricao().equals(other.getEncontroInscricao()) )
+			return true;
 		return false;
 	}
 }
