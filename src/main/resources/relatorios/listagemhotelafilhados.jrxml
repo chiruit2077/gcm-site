@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listagemhotelafilhados" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3455ea0d-5ab8-41d5-b887-25104a61aa86">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
+	<import value="br.com.ecc.model.*"/>
+	<import value="java.util.*"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="encontroInscricao1" class="br.com.ecc.model.EncontroInscricao">
+		<fieldDescription><![CDATA[encontroInscricao1]]></fieldDescription>
+	</field>
+	<field name="quarto" class="br.com.ecc.model.Quarto">
+		<fieldDescription><![CDATA[quarto]]></fieldDescription>
+	</field>
+	<group name="quarto">
+		<groupHeader>
+			<band height="8"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="19"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2d40beb8-ab76-4e46-9357-42724286d2e1" mode="Opaque" x="0" y="0" width="555" height="19" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement uuid="b6839d18-7ee4-4261-a37e-7b2b790524ba" x="0" y="0" width="34" height="34">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="4" splitType="Stretch">
+			<line>
+				<reportElement uuid="79d995a9-7d79-4b8d-bb42-32f1443f3fac" x="1" y="0" width="555" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="153" splitType="Stretch">
+			<textField>
+				<reportElement uuid="16463275-898b-42ad-a78b-aed9572d6924" x="78" y="19" width="235" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7389f197-b279-4807-b85f-01a750abe521" mode="Opaque" x="1" y="0" width="553" height="14" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Quarto: " + $F{quarto}.getNumeroQuarto()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="00755b14-25fc-4a62-a7aa-0ec7579749d1" x="320" y="19" width="235" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="84e0efea-c9a8-4b41-805e-173f9c5b2c81" x="78" y="131" width="476" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEndereco() + ". B:" + $F{encontroInscricao1}.getCasal().getBairro() + ". " + $F{encontroInscricao1}.getCasal().getCidade() + "-" + $F{encontroInscricao1}.getCasal().getEstado() + ". " + $F{encontroInscricao1}.getCasal().getCep()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b7571a53-baaf-48a9-b753-bfc2326c5578" x="0" y="131" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Endereço: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="70fe5154-fb25-40f5-8d7d-c1c8edf84a02" x="0" y="33" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[RG: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="24bdaabe-dff6-4f53-86b0-fde4459f1112" x="78" y="33" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getRg() + " - " + $F{encontroInscricao1}.getCasal().getEle().getExpedidor() + ". CPF" + $F{encontroInscricao1}.getCasal().getEle().getCpf()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a7667dc3-1f17-4b5f-9618-8cb3f1f092a2" x="319" y="33" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getRg() + " - " + $F{encontroInscricao1}.getCasal().getEla().getExpedidor() + ". CPF" + $F{encontroInscricao1}.getCasal().getEla().getCpf()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d8d7da98-f775-4ba4-9a01-a1bb3be1c298" x="0" y="47" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Nascimento: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9de901fd-9e62-4131-9c16-ddc5a644ae80" x="78" y="47" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getNascimento()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6527f5cf-bc79-487e-8eb1-c74402e0e60b" x="319" y="47" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getNascimento()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5d07f7c7-ea77-4aec-a166-538771d5ad91" x="0" y="61" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Naturalidade: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="043d2583-45f0-4c8c-a940-5441de79fd05" x="78" y="61" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getNaturalidade()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b8caeec4-7cb3-4aef-b752-c5b2917e1285" x="319" y="61" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getNaturalidade()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fe72bc19-d64e-4361-943e-1a85098246d7" x="0" y="75" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Profissão: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="99ee69a2-90be-4cac-96a2-b65369cc3485" x="78" y="75" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getProfissao()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="292d62a0-9858-4758-89d9-b853f2e7b7e3" x="320" y="75" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getProfissao()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ade2d72f-e1b1-4ee0-892c-6dc2682d3f6a" x="0" y="89" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Tel. Comercial: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="98d3f190-8e3d-491e-ab78-6e345e3944db" x="78" y="89" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getTelefoneComercial()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="aa28eeec-88ae-4f33-8952-f2a293f1fa05" x="0" y="117" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Tel. Residêncial: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2eeac018-90e5-4449-bf25-f65526fb0086" x="78" y="117" width="476" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getTelefone()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0a155d42-0e98-47d9-ba9b-1cecd1e5c74a" x="320" y="89" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getTelefoneComercial()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a52d17a3-20ce-4f65-947f-f7f2316c2190" x="0" y="103" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Tel. Celular: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5a005315-4ca8-40cf-83bf-7a11e86711f7" x="78" y="103" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getTelefoneCelular()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9981cc52-c076-4e28-ac1b-64d41d976c6c" x="319" y="103" width="235" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getTelefoneCelular()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="52b0aebf-2b5b-4d29-a2d4-b569b9eca083" x="0" y="19" width="76" height="14">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Nome: ]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="15">
+			<textField>
+				<reportElement uuid="354dc3cd-691a-4ea5-adf4-9407628e254f" x="367" y="1" width="187" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
