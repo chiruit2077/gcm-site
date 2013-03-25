@@ -302,10 +302,34 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 	}
 
 	@Override
-	public Integer imprimeRelatorioHotelAfilhados(EncontroHotel encontroHotel)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer imprimeRelatorioHotelAfilhados(Encontro encontro) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		GetEntityListCommand cmdQuarto = injector.getInstance(GetEntityListCommand.class);
+		cmdQuarto.setNamedQuery("encontroHotelQuarto.porEncontroHotelListaInscricao");
+		cmdQuarto.addParameter("encontroinscricao1", lista);
+		List<EncontroHotelQuarto> listaQuarto = cmdQuarto.call();
+
+		Collections.sort(listaQuarto, new Comparator<EncontroHotelQuarto>() {
+			@Override
+			public int compare(EncontroHotelQuarto o1, EncontroHotelQuarto o2) {
+				if (o1.getEncontroHotel().equals(o2.getEncontroHotel()))
+					return o1.getQuarto().getNumeroQuarto().compareTo(o2.getQuarto().getNumeroQuarto());
+				else
+					return o1.getEncontroHotel().getId().compareTo(o2.getEncontroHotel().getId());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaQuarto);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemhotelafilhados.jrxml");
+		cmdRelatorio.setNome("listagemhotelafilhados");
+		cmdRelatorio.setTitulo("LISTAGEM AFILHADOS HOTEL");
+		return cmdRelatorio.call();
+		//listagemhotelafilhados.jrxml
 	}
 
 	@Override
