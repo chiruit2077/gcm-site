@@ -205,6 +205,14 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					DownloadResourceHelper.showReport(idReport, "_blank", "");
 				}
 			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMHOTELAFILHADOS)){
+			service.imprimeRelatorioHotelAfilhados(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport){
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, "_blank", "");
+				}
+			} );
 		}else{
 			Window.alert("Não implementado!!");
 		}
