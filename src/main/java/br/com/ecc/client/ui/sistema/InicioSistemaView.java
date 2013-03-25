@@ -898,7 +898,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		mainVP.setWidth("100%");
 		mainVP.setSpacing(2);
 		if(convidado.getIdArquivoDigital()!=null && !convidado.getIdArquivoDigital().equals(0)){
-			Image imagem = new Image("eccweb/downloadArquivoDigital?id=" + convidado.getIdArquivoDigital());
+			Image imagem = new Image("eccweb/downloadArquivoDigital?id=" + convidado.getIdArquivoDigital() + "&thumb=true&forceDownload=true");
 			imagem.setWidth("90%");
 			imagem.setHeight("auto");
 			mainVP.add(imagem);

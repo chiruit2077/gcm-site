@@ -22,7 +22,8 @@ public class DownloadArquivoDigitalServlet extends DownloadFileServlet {
 
 		Integer arquivoId = ServletUtil.getParameterAsInteger(req, "id");
 		if(arquivoId != null) {
-			Boolean forceDownload = ServletUtil.getParameterAsBoolean(req,"forceDownload"); Boolean thumb = ServletUtil.getParameterAsBoolean(req,"thumb");
+			Boolean forceDownload = ServletUtil.getParameterAsBoolean(req,"forceDownload"); 
+			Boolean thumb = ServletUtil.getParameterAsBoolean(req,"thumb");
 			if(forceDownload == null) {
 				forceDownload = false;
 			}

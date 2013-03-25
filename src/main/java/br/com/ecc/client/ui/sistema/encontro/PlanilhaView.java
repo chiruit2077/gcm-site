@@ -388,7 +388,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		StringBuffer participante = new StringBuffer("");
 		StringBuffer html = new StringBuffer(
 			"<table cellpadding='0' cellspacing='0' border='0' style='font-size:10px;' align='left'>" +
-				"<tr style='height:30px;background-color:#e3e3e3;'>" +
+				"<tr style='height:90px;background-color:#e3e3e3;'>" +
 				"	<td align='center' class='portal-celulaPlanilha'>Dia</td>" +
 				"	<td align='center' class='portal-celulaPlanilha'>Inicio</td>" +
 				"	<td align='center' class='portal-celulaPlanilha'>Fim</td>");
@@ -422,7 +422,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						colunaPadrinho = "";
 					}
 				}
-				html.append("<td id='editP_" + ei.getId() + "' class='portal-celulaPlanilha' " + colunaPadrinho + " ></td>");
+				html.append("<td id='editP_" + ei.getId() + "' class='portal-celulaPlanilhaHead' " + colunaPadrinho + " ></td>");
 			}
 		}
 		html.append("</tr>");
@@ -595,12 +595,13 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			for (final EncontroInscricao ei : listaEncontroInscricao) {
 				if(participanteVO.getEncontroInscricao().getId().equals(ei.getId())){
 					if(ei.getCasal()!=null){
-						nome = ei.getCasal().getApelidos("<br/>");
+						//nome = ei.getCasal().getApelidos("<br/>");
+						nome = ei.getCasal().getApelidos(" e ");
 					} else {
 						nome = ei.getPessoa().getApelido();
 					}
 					label = new HTML(nome);
-					label.setStyleName("portal-ImageCursor");
+					label.setStyleName("portal-celulaPlanilhaVertical");
 					if(bCoordenador){
 						label.setTitle("Editar/Adicionar atividades para este participante");
 					} else {
@@ -671,6 +672,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				htmlPanel.add(addImage, "add_"+ea.getId().toString());
 
 				infoImage = new Image();
+				infoImage.setSize("16px", "16px");
 				infoImage.setStyleName("portal-ImageCursor");
 				if(ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0){
 					infoImage.setUrl("images/infook.png");
