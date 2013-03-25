@@ -119,12 +119,12 @@
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Nascimento: ]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="dd/MM/yyyy">
 				<reportElement uuid="9de901fd-9e62-4131-9c16-ddc5a644ae80" x="78" y="47" width="235" height="14"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEle().getNascimento()]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="dd/MM/yyyy">
 				<reportElement uuid="6527f5cf-bc79-487e-8eb1-c74402e0e60b" x="319" y="47" width="235" height="14"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{encontroInscricao1}.getCasal().getEla().getNascimento()]]></textFieldExpression>
