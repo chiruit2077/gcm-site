@@ -6,9 +6,9 @@ public enum TipoAtividadeEnum {
 	CONDUCAO("Condução"),
 	ATIVIDADE("Atividade"),
 	DESMONTAGEM("Desmont.");
-	
+
 	private String nome;
-	
+
 	private TipoAtividadeEnum(String nome) {
 		this.nome = nome;
 	}
@@ -17,7 +17,7 @@ public enum TipoAtividadeEnum {
 	public String toString() {
 		return getNome();
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}

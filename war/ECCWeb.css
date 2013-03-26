@@ -861,20 +861,59 @@ html>body .gwt-DecoratedTabBar {
 	overflow-y: scroll;
 }
 
-/*bolao*/
-/*
-.FlexTable-Bolao {
-	font-size: 10px;
-	border: 1px solid gray;
-}
-*/
-
 .portal-celulaPlanilha {
 	text-align: center;
 	border-right: 1px solid lightgray;
 	border-bottom: 1px solid lightgray;
 	padding-left: 2px;
 	padding-right: 2px;
+	width: 18px;
+	height:20px;
+	min-width: 18px;
+}
+
+.portal-celulaPlanilhaDia {
+	text-align: center;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 20px;
+	height:20px;
+	min-width: 20px;
+}
+
+.portal-celulaPlanilhaHora {
+	text-align: center;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 25px;
+	height:20px;
+	min-width: 25px;
+}
+
+.portal-celulaPlanilhaTipo {
+	text-align: left;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 50px;
+	height:20px;
+	min-width: 50px;
+}
+
+.portal-celulaPlanilhaAtividade {
+	text-align: left;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 200px;
+	height:20px;
+	min-width: 200px;
 }
 
 .portal-celulaPlanilhaHead {
@@ -883,26 +922,82 @@ html>body .gwt-DecoratedTabBar {
 	border-bottom: 1px solid lightgray;
 	padding-left: 2px;
 	padding-right: 2px;
-	height:90px;
-	width: 30px;
-	min-width: 30px;
-	max-width: 30px;
+	width: 18px;
+	height:100px;
+	min-width: 18px;
+}
+
+.portal-celulaPlanilhaDiaHead {
+	text-align: center;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 20px;
+	height:100px;
+	min-width: 20px;
+}
+
+.portal-celulaPlanilhaHoraHead {
+	text-align: center;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 25px;
+	height:100px;
+	min-width: 25px;
+}
+
+.portal-celulaPlanilhaTipoHead {
+	text-align: left;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 50px;
+	height:100px;
+	min-width: 50px;
+}
+
+.portal-celulaPlanilhaAtividadeHead {
+	text-align: left;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	width: 200px;
+	height:100px;
+	min-width: 200px;
+}
+
+.portal-celulaPlanilhaInscritoHead {
+	text-align: center;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	padding-left: 2px;
+	padding-right: 2px;
+	height:100px;
+	width: 18px;
+	min-width: 18px;
+	max-width: 18px;
 }
 .portal-celulaPlanilhaVertical {
+	text-align: left;
 	cursor: pointer;
-    height:90px;
-    width: 30px;
-    min-width: 30px;
-	max-width: 30px;
+    height:18px;
+    width: 100px;
+    min-width: 100px;
+	max-width: 100px;
     white-space: nowrap;
     transform:rotate(270deg);
-    transform-origin:center center;
+    transform-origin:29% 150%;
     -o-transform:rotate(270deg);
-    -o-transform-origin:center center;
+    -o-transform-origin:29% 150%;
     -moz-transform:rotate(270deg);
-    -moz-transform-origin:center center;
+    -moz-transform-origin:29% 150%;
     -webkit-transform:rotate(270deg);
-    -webkit-transform-origin:center center;
+    -webkit-transform-origin:29% 150%;
 }
 
 .portal-corFundo{
