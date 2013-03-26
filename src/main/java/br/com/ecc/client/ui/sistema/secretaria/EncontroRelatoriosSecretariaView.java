@@ -43,6 +43,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton relatorioRecepcaoFinalRadioButton;
 	@UiField ListBox hoteisListBox;
 	@UiField ListBox agrupamentosListBox;
+	@UiField ListBox agrupamentosOnibusListBox;
 
 	private List<Agrupamento> agrupamentos;
 	private List<EncontroHotel> encontroHoteis;
@@ -65,8 +66,13 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 		}
 		else if (relatorioRomanticoRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMFILAROMANTICO);
-		else if (relatorioOnibusRadioButton.getValue())
-			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMONIBUS);
+		else if (relatorioOnibusRadioButton.getValue()){
+			Agrupamento agrupamento = (Agrupamento) ListBoxUtil.getItemSelected(agrupamentosOnibusListBox, getAgrupamentos());
+			if (agrupamento != null)
+				presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMONIBUS, agrupamento);
+			else
+				presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMONIBUS);
+		}
 		else if (relatorioAlbumRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMALBUM);
 		else if (relatorioOracaoAmorRadioButton.getValue())
@@ -116,6 +122,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	public void setListaAgrupamentos(List<Agrupamento> result) {
 		setAgrupamentos(result);
 		ListBoxUtil.populate(agrupamentosListBox, false, result);
+		ListBoxUtil.populate(agrupamentosOnibusListBox, true, result);
 		if (result.size()>0)
 			agrupamentosListBox.setSelectedIndex(0);
 	}

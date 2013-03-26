@@ -11,8 +11,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface EncontroRelatoriosSecretariaService extends RemoteService {
 	public Integer imprimeRelatorioRomantico(Encontro encontro) throws Exception;
 	public Integer geraCSV(Encontro encontro, String name) throws Exception;
-	public Integer imprimeRelatorioAgrupamento(Encontro encontro, Agrupamento agrupamento)	throws Exception;
-	public Integer imprimeRelatorioOnibus(Encontro encontro) throws Exception;
+	public Integer imprimeRelatorioAgrupamento(Encontro encontro, Agrupamento agrupamento) throws Exception;
+	public Integer imprimeRelatorioOnibus(Encontro encontro, Agrupamento agrupamento) throws Exception;
 	public Integer imprimeRelatorioAlbum(Encontro encontro) throws Exception;
 	public Integer imprimeRelatorioNecessidadesEspeciais(Encontro encontro) throws Exception;
 	public Integer imprimeRelatorioDiabeticosVegetarianos(Encontro encontro) throws Exception;

@@ -273,10 +273,10 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 				inscricaoSuggestBox4.setValue(null);
 
 			}else{
-				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
-				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
-				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
-				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+				inscricaoSuggest2.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+				inscricaoSuggest3.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
+				inscricaoSuggest4.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLikeTipo");
 				params.put("encontro", presenter.getEncontroSelecionado());
 				params.put("tipo", TipoInscricaoEnum.getPorEncontroQuarto(tipoQuarto));
 				inscricaoSuggest1.setQueryParams(params);

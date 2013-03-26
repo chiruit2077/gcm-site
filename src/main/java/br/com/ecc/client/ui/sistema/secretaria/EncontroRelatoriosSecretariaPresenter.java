@@ -149,13 +149,13 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMAGRUPAMENTO)){
 			if (object instanceof Agrupamento){
 				Agrupamento agrupamento = (Agrupamento) object;
-			service.imprimeRelatorioAgrupamento(encontro, agrupamento, new WebAsyncCallback<Integer>(getDisplay()) {
-				@Override
-				protected void success(Integer idReport) {
-					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
-				}
-			});
+				service.imprimeRelatorioAgrupamento(encontro, agrupamento, new WebAsyncCallback<Integer>(getDisplay()) {
+					@Override
+					protected void success(Integer idReport) {
+						getDisplay().showWaitMessage(false);
+						DownloadResourceHelper.showReport(idReport, "_blank", "");
+					}
+				});
 			}
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMFILAROMANTICO)){
 			service.imprimeRelatorioRomantico(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
@@ -166,7 +166,11 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMONIBUS)){
-			service.imprimeRelatorioOnibus(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+			Agrupamento agrupamento = null;
+			if (object instanceof Agrupamento){
+				agrupamento = (Agrupamento) object;
+			}
+			service.imprimeRelatorioOnibus(encontro, agrupamento, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);

@@ -13,10 +13,16 @@ import javax.persistence.Version;
 
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROORGANOCOORD", sequenceName="SQ_ENCONTROORGANOCOORD")
-@NamedQueries(
+@NamedQueries({
 		@NamedQuery(name="encontroOrganogramaCoordenacao.porEncontroOrganograma", query="select u from EncontroOrganogramaCoordenacao u " +
-				" where u.encontroOrganograma = :encontroorganograma ")
-)
+				" where u.encontroOrganograma = :encontroorganograma "),
+		@NamedQuery(name="encontroOrganogramaCoordenacao.updatePorEncontroInscricao1",
+				query="update EncontroOrganogramaCoordenacao u set u.encontroInscricao1 = null " +
+						"where u.encontroInscricao1 = :encontroInscricao " ),
+    	@NamedQuery(name="encontroOrganogramaCoordenacao.updatePorEncontroInscricao2",
+				query="update EncontroOrganogramaCoordenacao u set u.encontroInscricao2 = null " +
+						"where u.encontroInscricao2 = :encontroInscricao " )
+})
 
 public class EncontroOrganogramaCoordenacao extends _WebBaseEntity {
 

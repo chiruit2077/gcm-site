@@ -120,7 +120,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Integer imprimeRelatorioOnibus(Encontro encontro) throws Exception {
+	public Integer imprimeRelatorioOnibus(Encontro encontro, Agrupamento agrupamento) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
 		cmd.addParameter("encontro", encontro);
@@ -129,6 +129,22 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		for (EncontroInscricao encontroInscricao : lista) {
 			listaPessoa.add(encontroInscricao.getCasal().getEle());
 			listaPessoa.add(encontroInscricao.getCasal().getEla());
+		}
+		if (agrupamento != null){
+			GetEntityListCommand cmdAgrupamento = injector.getInstance(GetEntityListCommand.class);
+			cmdAgrupamento.setNamedQuery("agrupamentoMembro.porAgrupamento");
+			cmdAgrupamento.addParameter("agrupamento", agrupamento);
+			List<AgrupamentoMembro> listaMenbro = cmdAgrupamento.call();
+			for (AgrupamentoMembro agrupamentoMembro : listaMenbro) {
+				if (agrupamentoMembro.getCasal() != null ) {
+					listaPessoa.add(agrupamentoMembro.getCasal().getEle());
+					listaPessoa.add(agrupamentoMembro.getCasal().getEla());
+				}
+				if (agrupamentoMembro.getPessoa() != null ) {
+					listaPessoa.add(agrupamentoMembro.getPessoa());
+				}
+			}
+
 		}
 		Collections.sort(listaPessoa, new Comparator<Pessoa>() {
 			@Override
@@ -301,6 +317,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		return cmdRelatorio.call();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer imprimeRelatorioHotelAfilhados(Encontro encontro) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
@@ -329,7 +346,6 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		cmdRelatorio.setNome("listagemhotelafilhados");
 		cmdRelatorio.setTitulo("LISTAGEM AFILHADOS HOTEL");
 		return cmdRelatorio.call();
-		//listagemhotelafilhados.jrxml
 	}
 
 	@Override

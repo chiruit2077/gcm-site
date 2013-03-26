@@ -17,7 +17,16 @@ import javax.persistence.Version;
 		@NamedQuery(name="encontroRestauranteMesa.porEncontroRestaurante", query="select u from EncontroRestauranteMesa u " +
 					" where u.encontroRestaurante = :encontrorestaurante "),
 		@NamedQuery(name="encontroRestauranteMesa.porEncontroRestauranteOutro", query="select u from EncontroRestauranteMesa u " +
-						" where u.encontroRestaurante != :encontrorestaurante and u.encontroRestaurante.encontro = :encontro ")
+						" where u.encontroRestaurante != :encontrorestaurante and u.encontroRestaurante.encontro = :encontro "),
+		@NamedQuery(name="encontroRestauranteMesa.updatePorEncontroGarcon",
+			query="update EncontroRestauranteMesa u set u.encontroGarcon = null " +
+		 			"where u.encontroGarcon = :encontroInscricao " ),
+		@NamedQuery(name="encontroRestauranteMesa.updatePorEncontroAfilhado1",
+			query="update EncontroRestauranteMesa u set u.encontroAfilhado1 = null " +
+		 			"where u.encontroAfilhado1 = :encontroInscricao " ),
+		@NamedQuery(name="encontroRestauranteMesa.updatePorEncontroAfilhado2",
+			query="update EncontroRestauranteMesa u set u.encontroAfilhado2 = null " +
+		 			"where u.encontroAfilhado2 = :encontroInscricao " )
 })
 
 public class EncontroRestauranteMesa extends _WebBaseEntity {

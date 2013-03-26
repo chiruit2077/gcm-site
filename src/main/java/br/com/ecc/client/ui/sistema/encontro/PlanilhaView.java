@@ -674,7 +674,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				infoImage = new Image();
 				infoImage.setSize("16px", "16px");
 				infoImage.setStyleName("portal-ImageCursor");
-				if(ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0){
+				if(ea.getRevisado() && ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0 ){
+					infoImage.setUrl("images/inforevisado.png");
+					infoImage.setTitle("Preenchimento Revisado Manualmente");
+					qtdeok++;
+				}else if(ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0){
 					infoImage.setUrl("images/infook.png");
 					infoImage.setTitle("Preenchimento Ok");
 					qtdeok++;

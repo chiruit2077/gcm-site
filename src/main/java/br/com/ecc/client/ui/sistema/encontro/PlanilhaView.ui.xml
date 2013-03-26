@@ -178,6 +178,7 @@
 									<td colpsan="2">
 										<g:ListBox ui:field="papelListBox" width="200px"/>
 									</td>
+									<td>&nbsp;</td>
 									<td>
 										<g:Button ui:field="preencheAutomaticoInscricaoButton" text="Preenche Automático"/>
 									</td>

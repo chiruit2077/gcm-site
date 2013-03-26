@@ -34,7 +34,7 @@ import com.google.inject.Singleton;
 @Singleton
 public class CasalServiceImpl extends SecureRemoteServiceServlet implements CasalService {
 	private static final long serialVersionUID = -6986089366658250854L;
-	
+
 	@Inject Injector injector;
 
 	@SuppressWarnings("unchecked")
@@ -66,7 +66,7 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 					listaCasal.add(ei.getCasal());
 				}
 			}
-			
+
 		}  else {
 			if(casalParamVO.getNome()==null){
 				cmd.setNamedQuery("casal.porGrupo");
@@ -98,15 +98,6 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 	@Override
 	@Permissao(nomeOperacao="Excluir casal", operacao=Operacao.EXCLUIR)
 	public void exclui(Casal casal) throws Exception {
-//		//dependencias
-//		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-//		cmdEntidade.setNamedQuery("encontro.porCasal");
-//		cmdEntidade.addParameter("casal", casal);
-//		List<Encontro> encontros = cmdEntidade.call();
-//		if(encontros!=null && encontros.size()>0){
-//			throw new WebException("Erro ao excluir Casal. \nJá existem encontros neste casal.");
-//		}
-		
 		//exclusão
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(casal);
@@ -118,12 +109,12 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 	public CasalVO getVO(Casal casal) throws Exception {
 		CasalVO vo = new CasalVO();
 		vo.setCasal(casal);
-		
+
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("casalContato.porCasal");
 		cmd.addParameter("casal", casal);
 		vo.setListaContatos(cmd.call());
-		
+
 		return vo;
 	}
 	@SuppressWarnings("unchecked")
@@ -153,19 +144,19 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 		cmd.setCasalVO(casalVO);
 		cmd.setUsuario(usuario);
 		casalVO = cmd.call();
-		
+
 		if(casalVO.getCasal().getTipoCasal()!=null && !casalVO.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
 			UsuarioGerarPorPessoaCommand cmdGeraUsuarios = injector.getInstance(UsuarioGerarPorPessoaCommand.class);
 			cmdGeraUsuarios.call();
 		}
 		return casalVO;
 	}
-	
+
 	@Override
 	@Permissao(nomeOperacao="Salvar casal", operacao=Operacao.SALVAR)
 	public Casal salva(Casal casal) throws Exception {
 		Usuario usuario = SessionHelper.getUsuario(getThreadLocalRequest().getSession());
-		
+
 		CasalVO casalVO = new CasalVO();
 		casalVO.setCasal(casal);
 		CasalSalvarCommand cmd = injector.getInstance(CasalSalvarCommand.class);
@@ -173,12 +164,12 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 		cmd.setIgnorarCotatos(true);
 		cmd.setUsuario(usuario);
 		casalVO = cmd.call();
-		
+
 		//if(casalVO.getCasal().getTipoCasal()!=null && !casalVO.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
 		UsuarioGerarPorPessoaCommand cmdGeraUsuarios = injector.getInstance(UsuarioGerarPorPessoaCommand.class);
 		cmdGeraUsuarios.call();
 		//}
-		
+
 		return casalVO.getCasal();
 	}
 
@@ -189,5 +180,5 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 		cmd.setCasalOpcaoRelatorioVO(casalOpcaoRelatorioVO);
 		return cmd.call();
 	}
-	
+
 }

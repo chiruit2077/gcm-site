@@ -21,18 +21,18 @@ import com.google.inject.persist.Transactional;
 public class CasalSalvarCommand implements Callable<CasalVO>{
 
 	@Inject EntityManager em;
-	
+
 	private CasalVO casalVO;
 	private Boolean ignorarCotatos;
 	private Usuario usuario;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public CasalVO call() throws Exception {
 		Query q;
 		Casal casal = casalVO.getCasal();
-		
+
 		//verificação de segurança pra que o tipo não seja alterado opr outro que não seja o administrador
 		usuario = em.find(Usuario.class, usuario.getId());
 		if(!usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
@@ -46,19 +46,19 @@ public class CasalSalvarCommand implements Callable<CasalVO>{
 
 		casal.setEle(em.merge(casal.getEle()));
 		casal.setEla(em.merge(casal.getEla()));
-		
+
 		q = em.createNamedQuery("casal.porPessoa");
 		q.setParameter("pessoa", usuario.getPessoa());
 		q.setMaxResults(1);
 		List<Casal> lista = q.getResultList();
 		if(lista.size()!=0){
-			if(casal.getId()!=null && casal.getId().equals(lista.get(0).getId())){
+			if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) || casal.getId()==null || (casal.getId()!=null && casal.getId().equals(lista.get(0).getId()))){
 				casal.setAtualizacaoCadastro(new Date());
 			}
 		}
-		
+
 		casalVO.setCasal(em.merge(casal));
-		
+
 		//contatos
 		if(!ignorarCotatos){
 			List<CasalContato> novaLista = new ArrayList<CasalContato>();
@@ -88,10 +88,10 @@ public class CasalSalvarCommand implements Callable<CasalVO>{
 				}
 			}
 		}
-		
+
 		q = em.createNamedQuery("arquivoDigital.limpaLixo");
 		q.executeUpdate();
-		
+
 		return casalVO;
 	}
 

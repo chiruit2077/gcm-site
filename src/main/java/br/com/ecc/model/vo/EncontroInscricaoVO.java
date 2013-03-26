@@ -9,10 +9,11 @@ import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 
 public class EncontroInscricaoVO implements Serializable {
 	private static final long serialVersionUID = 2042741114587479558L;
-	
+
 	private EncontroInscricao encontroInscricao;
 	private List<EncontroInscricaoPagamento> listaPagamento;
 	private List<EncontroInscricaoPagamentoDetalhe> listaPagamentoDetalhe;
+	private Boolean marcaFichaPreenchida;
 
 	public EncontroInscricao getEncontroInscricao() {
 		return encontroInscricao;
@@ -31,5 +32,11 @@ public class EncontroInscricaoVO implements Serializable {
 	}
 	public void setListaPagamentoDetalhe(List<EncontroInscricaoPagamentoDetalhe> listaPagamentoDetalhe) {
 		this.listaPagamentoDetalhe = listaPagamentoDetalhe;
+	}
+	public Boolean getMarcaFichaPreenchida() {
+		return marcaFichaPreenchida;
+	}
+	public void setMarcaFichaPreenchida(Boolean marcaFichaPreenchida) {
+		this.marcaFichaPreenchida = marcaFichaPreenchida;
 	}
 }

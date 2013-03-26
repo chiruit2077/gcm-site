@@ -167,10 +167,12 @@
 													</td>
 												</tr>
 												<tr>
-													<td colspan="2">&nbsp;</td>
 													<td class="portal-formLabel">Atualizada:</td>
 													<td>
 														<g:TextBox ui:field="dataFichaAtualizadaAfilhadoDateBox" width="120px" styleName="portal-formField" readOnly="true"/>
+													</td>
+													<td colspan="2">
+														<g:CheckBox ui:field="marcaPreenchimentoFichaCheckBox" text="Marca Preenchimento da Ficha" visible="false"/>
 													</td>
 												</tr>
 												<tr>

@@ -81,6 +81,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiField ListBox mensagemListBox;
 	@UiField DateBox dataMaxParcelaDateBox;
 	@UiField CheckBox esconderPagamentoCheckBox;
+	@UiField CheckBox marcaPreenchimentoFichaCheckBox;
 
 	@UiField HTMLPanel participanteHTMLPanel;
 	@UiField Label participanteLabel;
@@ -276,6 +277,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		entidadeEditada.getEncontroInscricao().setDataMaximaParcela(dataMaxParcelaDateBox.getValue());
 		entidadeEditada.getEncontroInscricao().setEsconderPlanoPagamento(esconderPagamentoCheckBox.getValue());
 		entidadeEditada.getEncontroInscricao().setTipoConfirmacao((TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values()));
+		entidadeEditada.setMarcaFichaPreenchida(marcaPreenchimentoFichaCheckBox.getValue());
 
 		if(!verificaDadosPagamento()){
 			if(!Window.confirm("Não foram definidas suas opções de pagamento.\nDeseja sair mesmo assim?")){
@@ -356,6 +358,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		dataFichaRecebidaAfilhadoDateBox.setValue(null);
 		dataFichaAtualizadaAfilhadoDateBox.setValue(null);
 		dataLimiteHTMLPanel.setVisible(false);
+		marcaPreenchimentoFichaCheckBox.setValue(false);
 
 		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 			dataLimiteHTMLPanel.setVisible(true);
@@ -367,6 +370,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			codigoNumberTextBox.setEnabled(true);
 			if (presenter.getEncontroSelecionado().getUsaFichaPagamento().equals(1))
 				codigoNumberTextBox.setEnabled(false);
+			marcaPreenchimentoFichaCheckBox.setVisible(true);
 		} else {
 			participanteHTMLPanel.setVisible(true);
 			casalHTMLPanel.setVisible(false);

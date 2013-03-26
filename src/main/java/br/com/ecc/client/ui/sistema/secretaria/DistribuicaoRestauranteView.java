@@ -511,10 +511,6 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			if (p.getVegetariano()){
 				apelido+="<input type='image' src='images/ballgreen32.png' width='15' height='15'/>";
 			}
-			if (p.getHipertenso()){
-				apelido+="<input type='image' src='images/ballyellow32.png' width='15' height='15'/>";
-			}
-
 			return apelido;
 		}
 		return "<span>VAGO</span>";

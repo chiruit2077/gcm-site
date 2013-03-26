@@ -61,8 +61,17 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 				encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(new Date());
 			}
 		} else {
-			if (!usuarioAtual.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR))
-				encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(null);
+			if (usuarioAtual.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+				if (encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario() != null &&
+					encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario().getDataEnvio() != null &&
+					encontroInscricaoVO.getEncontroInscricao().getDataPrenchimentoFicha()==null &&
+					encontroInscricaoVO.getEncontroInscricao().getCasal().getAtualizacaoCadastro() != null &&
+					encontroInscricaoVO.getEncontroInscricao().getCasal().getAtualizacaoCadastro().after(getEncontroInscricaoVO().getEncontroInscricao().getMensagemDestinatario().getDataEnvio())){
+					encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(getEncontroInscricaoVO().getEncontroInscricao().getCasal().getAtualizacaoCadastro());
+				}
+				if (encontroInscricaoVO.getMarcaFichaPreenchida() && encontroInscricaoVO.getEncontroInscricao().getDataPrenchimentoFicha()==null)
+					encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(new Date());
+			}
 		}
 
 		EncontroInscricaoFichaPagamento ficha = null;
@@ -73,17 +82,51 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			q.executeUpdate();
 			if (encontroInscricaoVO.getEncontroInscricao().getFichaPagamento()!=null){
 				ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
-				if (ficha!=null){
-					ficha.setStatus(TipoInscricaoFichaStatusEnum.LIBERADO);
-					ficha.setObservacao(TipoConfirmacaoEnum.DESISTENCIA.getNome());
-					EncontroInscricaoFichaPagamento vaga = new EncontroInscricaoFichaPagamento();
-					vaga.setFicha(ficha.getFicha());
-					vaga.setEncontro(ficha.getEncontro());
-					vaga.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
-					vaga.setTipo(ficha.getTipo());
-					vaga = em.merge(vaga);
-				}
+				ficha.setStatus(TipoInscricaoFichaStatusEnum.LIBERADO);
+				ficha.setObservacao(TipoConfirmacaoEnum.DESISTENCIA.getNome());
+				EncontroInscricaoFichaPagamento vaga = new EncontroInscricaoFichaPagamento();
+				vaga.setFicha(ficha.getFicha());
+				vaga.setEncontro(ficha.getEncontro());
+				vaga.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
+				vaga.setTipo(ficha.getTipo());
+				vaga = em.merge(vaga);
 			}
+			q = em.createNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao1");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao2");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao3");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao4");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroRestauranteMesa.updatePorEncontroGarcon");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroRestauranteMesa.updatePorEncontroAfilhado1");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroRestauranteMesa.updatePorEncontroAfilhado2");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroOrganogramaCoordenacao.updatePorEncontroInscricao1");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroOrganogramaCoordenacao.updatePorEncontroInscricao2");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroOrganogramaArea.updatePorEncontroInscricao1");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
+			q = em.createNamedQuery("encontroOrganogramaArea.updatePorEncontroInscricao2");
+			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
+			q.executeUpdate();
 		}else{
 			ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
 			if (ficha==null && !encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.EXTERNO)){
