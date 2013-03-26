@@ -1109,7 +1109,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			});
 
 			dados[0] = excluirParticipante;
-			dados[1] = atividadeParticipante.getEncontroInscricao().toString();
+			dados[1] = atividadeParticipante.getEncontroInscricao().toStringApelidos();
 			final ListBox listBox = new ListBox();
 			ListBoxUtil.populate(listBox, false, getListaPapel());
 			if (atividadeParticipante.getPapel()!=null)
@@ -1120,7 +1120,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				}
 			});
 			dados[2] = listBox;
-			dados[2] = atividadeParticipante.getPapel().getNome();
 			encontroInscricaoTableUtil.addRow(dados,row+1);
 			row++;
 		}
