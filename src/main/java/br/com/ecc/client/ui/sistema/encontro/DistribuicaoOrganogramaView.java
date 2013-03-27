@@ -56,7 +56,6 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 	private final GenericEntitySuggestOracle inscricaoSuggest1 = new GenericEntitySuggestOracle();
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox2;
 	private final GenericEntitySuggestOracle inscricaoSuggest2 = new GenericEntitySuggestOracle();
-	@UiField Button salvarButton;
 	@UiField Button salvarCoordenacaoButton;
 	@UiField Button fecharCoordenacaoButton;
 	@UiField Button printButton;
@@ -89,11 +88,6 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 	@UiHandler("fecharImage")
 	public void fecharImageClickHandler(ClickEvent event){
 		presenter.fechar();
-	}
-
-	@UiHandler("salvarButton")
-	public void salvarButtonClickHandler(ClickEvent event){
-		presenter.salvar();
 	}
 
 	@UiHandler("printButton")
@@ -141,16 +135,6 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 			if(!inscricaoSuggestBox2.getValue().equals("")){
 				entidadeEditadaArea.setEncontroInscricao2((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
 			}
-			coordenacaoAreaWidgetEditado.clear();
-			if (entidadeEditadaArea.getEncontroInscricao1()!= null){
-				coordenacaoAreaWidgetEditado.add(new Label(entidadeEditadaArea.getEncontroInscricao1().toStringApelidos()));
-				if (entidadeEditadaArea.getEncontroInscricao2()!= null){
-					coordenacaoAreaWidgetEditado.add(new Label(entidadeEditadaArea.getEncontroInscricao2().toStringApelidos()));
-				}
-			}else{
-				coordenacaoAreaWidgetEditado.add(new Label("VAGO"));
-			}
-
 		}else{
 			entidadeEditadaCoordenacao.setEncontroOrganograma(presenter.getEncontroOrganogramaSelecionado());
 
@@ -163,20 +147,10 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 			if(!inscricaoSuggestBox2.getValue().equals("")){
 				entidadeEditadaCoordenacao.setEncontroInscricao2((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
 			}
-			coordenacaoWidgetEditado.clear();
-			if (entidadeEditadaCoordenacao.getEncontroInscricao1()!= null){
-				coordenacaoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao1().toStringApelidos()));
-				if (entidadeEditadaCoordenacao.getEncontroInscricao2()!= null){
-					coordenacaoWidgetEditado.add(new Label(entidadeEditadaCoordenacao.getEncontroInscricao2().toStringApelidos()));
-				}
-				coordenacaoWidgetEditado.setVisible(true);
-			}else{
-				coordenacaoWidgetEditado.add(new Label("VAGO"));
-				coordenacaoWidgetEditado.setVisible(false);
-			}
 		}
 
 		editaDialogBox.hide();
+		presenter.salvar();
 
 	}
 	private void editaCoordenacao(EncontroOrganogramaCoordenacao encontroOrganogramaCoordenacao) {

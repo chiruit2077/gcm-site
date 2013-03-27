@@ -59,7 +59,6 @@ public class OrganogramaLayoutView extends BaseView<OrganogramaLayoutPresenter> 
 	@UiField NumberTextBox linhaSpamCoordenacaoTextBox;
 	@UiField NumberTextBox colunaCoordenacaoTextBox;
 	@UiField NumberTextBox colunaSpamCoordenacaoTextBox;
-	@UiField Button salvarButton;
 	@UiField Button addAreaButton;
 	@UiField Button salvarAreaButton;
 	@UiField Button fecharAreaButton;
@@ -94,11 +93,6 @@ public class OrganogramaLayoutView extends BaseView<OrganogramaLayoutPresenter> 
 		presenter.fechar();
 	}
 
-	@UiHandler("salvarButton")
-	public void salvarButtonClickHandler(ClickEvent event){
-		presenter.salvar();
-	}
-
 	@UiHandler("fecharAreaButton")
 	public void fecharAreaButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -111,8 +105,8 @@ public class OrganogramaLayoutView extends BaseView<OrganogramaLayoutPresenter> 
 		}else if (entidadeCoordenacaoEditada!=null ){
 			presenter.getVo().getListaCoordenacoes().remove(entidadeCoordenacaoEditada);
 		}
-		populaEntidades(presenter.getVo());
 		editaDialogBox.hide();
+		presenter.salvar();
 	}
 
 	@UiHandler("addAreaButton")
@@ -180,7 +174,6 @@ public class OrganogramaLayoutView extends BaseView<OrganogramaLayoutPresenter> 
 			if (areaPanelEditado == null){
 				presenter.getVo().getListaAreas().add(entidadeAreaEditada);
 			}
-			populaEntidades(presenter.getVo());
 			editaDialogBox.hide();
 		}else if (entidadeCoordenacaoEditada!=null){
 			entidadeCoordenacaoEditada.setOrganogramaArea(getOrganogramaAreaSelecionado());
@@ -201,10 +194,9 @@ public class OrganogramaLayoutView extends BaseView<OrganogramaLayoutPresenter> 
 			if (areaPanelEditado == null){
 				presenter.getVo().getListaCoordenacoes().add(entidadeCoordenacaoEditada);
 			}
-			populaEntidades(presenter.getVo());
 			editaDialogBox.hide();
 		}
-
+		presenter.salvar();
 	}
 
 	private void edita(OrganogramaArea organogramaArea) {

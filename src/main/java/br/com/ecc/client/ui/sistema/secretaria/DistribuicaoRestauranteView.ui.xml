@@ -34,7 +34,6 @@
 				<g:ListBox ui:field="restauranteListBox" width="400px" />
 				<g:Button ui:field="gerarDistribuicaoButton">Gerar Distribuição Automática</g:Button>
 				<g:Button ui:field="limpaDistribuicaoButton">Limpa Distribuição</g:Button>
-				<g:Button ui:field="salvarButton">Salvar</g:Button>
 				<g:Button ui:field="printButton">Imprimir</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>

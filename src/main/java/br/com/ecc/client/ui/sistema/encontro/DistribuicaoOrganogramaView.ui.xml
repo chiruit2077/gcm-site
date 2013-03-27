@@ -32,7 +32,6 @@
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="left" >
 				<g:Label styleName="portal-formLabel" text="Organograma Selecionado: " horizontalAlignment="right" />
 				<g:ListBox ui:field="organogramaListBox" width="400px"/>
-				<g:Button ui:field="salvarButton">Salvar</g:Button>
 				<g:Button ui:field="printButton">Imprimir</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>

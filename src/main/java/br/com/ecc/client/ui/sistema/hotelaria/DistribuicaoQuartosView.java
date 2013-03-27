@@ -73,7 +73,6 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 	private final GenericEntitySuggestOracle inscricaoSuggest4 = new GenericEntitySuggestOracle();
 	@UiField ListBox tipoEncontroQuartoListBox;
 	@UiField Label quartoNumberLabel;
-	@UiField Button salvarButton;
 	@UiField Button salvarQuartoButton;
 	@UiField Button fecharQuartoButton;
 	@UiField Button printButton;
@@ -142,11 +141,6 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 		presenter.fechar();
 	}
 
-	@UiHandler("salvarButton")
-	public void salvarButtonClickHandler(ClickEvent event){
-		presenter.salvar();
-	}
-
 	@UiHandler("printButton")
 	public void printButtonClickHandler(ClickEvent event){
 		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",distribuicaoPanel.getElement());
@@ -188,30 +182,7 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 		}
 
 		editaDialogBox.hide();
-		totalLabel.setText(geraTotaisQuartos(presenter.getEncontroHotelVO(), null));
-
-		quartoWidgetEditado.clear();
-		quartoWidgetEditado.setStyleName(entidadeEditada.getTipo().getStyle());
-		if (entidadeEditada.getTipo().equals(TipoEncontroQuartoEnum.SOLTEIROS)){
-			if (entidadeEditada.getEncontroInscricao1()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao1().getPessoa().getApelido():entidadeEditada.getEncontroInscricao1().getPessoa().getNome()));
-			}
-			if (entidadeEditada.getEncontroInscricao2()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao2().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao2().getPessoa().getApelido():entidadeEditada.getEncontroInscricao2().getPessoa().getNome()));
-			}
-			if (entidadeEditada.getEncontroInscricao3()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao3().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao3().getPessoa().getApelido():entidadeEditada.getEncontroInscricao3().getPessoa().getNome()));
-			}
-			if (entidadeEditada.getEncontroInscricao4()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao4().getPessoa().getApelido()!=null?entidadeEditada.getEncontroInscricao4().getPessoa().getApelido():entidadeEditada.getEncontroInscricao4().getPessoa().getNome()));
-			}
-		}else{
-			if (entidadeEditada.getEncontroInscricao1()!= null){
-				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getCasal().getEle().getApelido()!=null?entidadeEditada.getEncontroInscricao1().getCasal().getEle().getApelido():entidadeEditada.getEncontroInscricao1().getCasal().getEle().getNome()));
-				quartoWidgetEditado.add(new Label("e"));
-				quartoWidgetEditado.add(new Label(entidadeEditada.getEncontroInscricao1().getCasal().getEla().getApelido()!=null?entidadeEditada.getEncontroInscricao1().getCasal().getEla().getApelido():entidadeEditada.getEncontroInscricao1().getCasal().getEla().getNome()));
-			}
-		}
+		presenter.salvar();
 	}
 	private void edita(EncontroHotelQuarto encontroHotelQuarto) {
 		limpaCampos();

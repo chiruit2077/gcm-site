@@ -68,7 +68,6 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox3;
 	private final GenericEntitySuggestOracle inscricaoSuggest3 = new GenericEntitySuggestOracle();
 	@UiField Label mesaNumberLabel;
-	@UiField Button salvarButton;
 	@UiField Button salvarMesaButton;
 	@UiField Button fecharMesaButton;
 	@UiField Button printButton;
@@ -77,16 +76,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	private EncontroRestaurante restauranteSelecionado;
 	private EncontroRestauranteMesa entidadeEditada;
-	private Label labelAfilhadoEle1Editado;
-	private Label labelAfilhadoEla1Editado;
-	private Label labelAfilhadoEle2Editado;
-	private Label labelAfilhadoEla2Editado;
-	private Label labelGarconEditado;
-	private VerticalPanel mesaPanelEditado;
-	private Mesa mesaEditada;
-
 	private List<EncontroInscricao> listaGarcons;
-
 	private List<EncontroRestaurante> listaRestaurantes;
 
 	public DistribuicaoRestauranteView() {
@@ -142,11 +132,6 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	}
 
 
-	@UiHandler("salvarButton")
-	public void salvarButtonClickHandler(ClickEvent event){
-		presenter.salvar();
-	}
-
 	@UiHandler("fecharMesaButton")
 	public void fecharQuartoButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -160,14 +145,6 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		entidadeEditada.setEncontroAfilhado2(null);
 		entidadeEditada.setEncontroGarcon(null);
 
-		labelAfilhadoEle1Editado.setText("VAGO");
-		labelAfilhadoEla1Editado.setText("VAGO");
-		if ( entidadeEditada.getMesa().getQuantidadeCasais()==2 ){
-			labelAfilhadoEle2Editado.setText("VAGO");
-			labelAfilhadoEla2Editado.setText("VAGO");
-		}
-		labelGarconEditado.setText("VAGO");
-
 		if(!inscricaoSuggestBox1.getValue().equals("")){
 			entidadeEditada.setEncontroAfilhado1((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue()));
 		}
@@ -178,9 +155,9 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			entidadeEditada.setEncontroGarcon((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest3.getListaEntidades(), inscricaoSuggestBox3.getValue()));
 		}
 
-		populaMesa(mesaEditada, mesaPanelEditado, entidadeEditada, labelAfilhadoEle1Editado, labelAfilhadoEla1Editado, labelAfilhadoEle2Editado, labelAfilhadoEla2Editado, labelGarconEditado);
-
 		editaDialogBox.hide();
+		presenter.salvar();
+
 
 	}
 
@@ -380,13 +357,6 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			focusPanel.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					labelAfilhadoEle1Editado = afilhadoEle1;
-					labelAfilhadoEla1Editado = afilhadoEla1;
-					labelAfilhadoEle2Editado = afilhadoEle2;
-					labelAfilhadoEla2Editado = afilhadoEla2;
-					labelGarconEditado = garcon;
-					mesaPanelEditado = mesaPanel;
-					mesaEditada = mesa;
 					edita(encontroRestauranteMesa);
 				}
 			});
@@ -431,13 +401,6 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			focusPanel.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					labelAfilhadoEle1Editado = afilhadoEle1;
-					labelAfilhadoEla1Editado = afilhadoEla1;
-					labelAfilhadoEle2Editado = null;
-					labelAfilhadoEla2Editado = null;
-					labelGarconEditado = garcon;
-					mesaPanelEditado = mesaPanel;
-					mesaEditada = mesa;
 					edita(encontroRestauranteMesa);
 				}
 			});
@@ -550,7 +513,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	@UiHandler("limpaDistribuicaoButton")
 	public void limpaDistribuicaoButtonClickHandler(ClickEvent event){
-		if ( !Window.confirm("Este procedimento ira limpar todos dados, desja continur ?"))
+		if ( !Window.confirm("Este procedimento irá apagar a distribuição atual," +
+				"deseja continur ?"))
 			return;
 		if (presenter.getVo().getListaMesas().size()>0){
 			List<EncontroRestauranteMesa> restauranteMesa = presenter.getVo().getListaEncontroRestauranteMesa();
@@ -602,7 +566,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 				}
 			}
 			showWaitMessage(false);
-			populaEntidades(presenter.getVo());
+			presenter.salvar();
 		}
 	}
 

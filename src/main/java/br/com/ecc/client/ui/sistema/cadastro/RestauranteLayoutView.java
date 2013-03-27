@@ -63,7 +63,6 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	@UiField NumberTextBox linhaSpamTextBox;
 	@UiField NumberTextBox colunaTextBox;
 	@UiField NumberTextBox colunaSpamTextBox;
-	@UiField Button salvarButton;
 	@UiField Button addMesaButton;
 	@UiField Button addTituloButton;
 	@UiField Button salvarMesaButton;
@@ -109,11 +108,6 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		presenter.fechar();
 	}
 
-	@UiHandler("salvarButton")
-	public void salvarButtonClickHandler(ClickEvent event){
-		presenter.salvar();
-	}
-
 	@UiHandler("fecharMesaButton")
 	public void fecharMesaButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -126,8 +120,8 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		}else if (entidadeTituloEditada!=null){
 			presenter.getVo().getListaTitulos().remove(entidadeTituloEditada);
 		}
-		populaEntidades(presenter.getVo());
 		editaDialogBox.hide();
+		presenter.salvar();
 	}
 
 	@UiHandler("editaGruposButton")
@@ -187,7 +181,7 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		presenter.getVo().getListaGrupos().clear();
 		presenter.getVo().getListaGrupos().addAll(listaGrupos);
 		editaGruposDialogBox.hide();
-		populaEntidades(presenter.getVo());
+		presenter.salvar();
 	}
 
 	private void editaGrupo(RestauranteGrupo grupo) {
@@ -327,8 +321,8 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 				presenter.getVo().getListaTitulos().add(entidadeTituloEditada);
 			}
 		}
-		populaEntidades(presenter.getVo());
 		editaDialogBox.hide();
+		presenter.salvar();
 
 	}
 

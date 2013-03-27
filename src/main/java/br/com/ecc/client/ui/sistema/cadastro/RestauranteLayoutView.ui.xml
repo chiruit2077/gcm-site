@@ -31,11 +31,10 @@
 		<g:VerticalPanel ui:field="centralPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center">
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="left" >
 				<g:Label styleName="portal-formLabel" text="Restaurante Selecionado: " horizontalAlignment="right" />
-				<g:ListBox ui:field="restauranteListBox" width="400px" />
+				<g:ListBox ui:field="restauranteListBox" width="400px"/>
 				<g:Button ui:field="addMesaButton">Adiciona Mesa</g:Button>
 				<g:Button ui:field="addTituloButton">Adiciona Titulo</g:Button>
 				<g:Button ui:field="editaGruposButton">Grupos</g:Button>
-				<g:Button ui:field="salvarButton">Salvar</g:Button>
 				<g:Label ui:field="totalLabel" styleName="{style.total}" horizontalAlignment="right" />
 			</g:HorizontalPanel>
 			<g:HorizontalPanel width="100%" horizontalAlignment="center">
