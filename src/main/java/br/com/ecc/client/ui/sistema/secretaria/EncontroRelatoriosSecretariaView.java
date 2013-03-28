@@ -29,7 +29,9 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 
 	@UiField Label tituloFormularioLabel;
 	@UiField VerticalPanel centralPanel;
-	@UiField RadioButton geraCSVRadioButton;
+	@UiField RadioButton geraCSVCorelRadioButton;
+	@UiField RadioButton geraCSVCrachaRadioButton;
+	@UiField RadioButton geraCSVCrachaAgrupamentoRadioButton;
 	@UiField RadioButton relatorioRomanticoRadioButton;
 	@UiField RadioButton relatorioAgrupamentoRadioButton;
 	@UiField RadioButton relatorioOnibusRadioButton;
@@ -43,6 +45,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton relatorioRecepcaoFinalRadioButton;
 	@UiField ListBox hoteisListBox;
 	@UiField ListBox agrupamentosListBox;
+	@UiField ListBox agrupamentosCrachaAgrupamentoListBox;
 	@UiField ListBox agrupamentosOnibusListBox;
 
 	private List<Agrupamento> agrupamentos;
@@ -55,8 +58,17 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 
 	@UiHandler("processaButton")
 	public void processaButtonClickHandler(ClickEvent event){
-		if (geraCSVRadioButton.getValue())
-			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.GERACSV);
+		if (geraCSVCorelRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.GERACSVCOREL);
+		else if (geraCSVCrachaRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.GERACSVCRACAS);
+		else if (geraCSVCrachaAgrupamentoRadioButton.getValue()){
+			Agrupamento agrupamento = (Agrupamento) ListBoxUtil.getItemSelected(agrupamentosCrachaAgrupamentoListBox, getAgrupamentos());
+			if (agrupamento != null)
+				presenter.processa(null, ProcessaOpcao.GERACSVCRACAS, agrupamento);
+			else
+				Window.alert("Escolha um Agrupamento");
+		}
 		else if (relatorioAgrupamentoRadioButton.getValue()){
 			Agrupamento agrupamento = (Agrupamento) ListBoxUtil.getItemSelected(agrupamentosListBox, getAgrupamentos());
 			if (agrupamento != null)
@@ -122,9 +134,13 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	public void setListaAgrupamentos(List<Agrupamento> result) {
 		setAgrupamentos(result);
 		ListBoxUtil.populate(agrupamentosListBox, false, result);
-		ListBoxUtil.populate(agrupamentosOnibusListBox, true, result);
-		if (result.size()>0)
+		ListBoxUtil.populate(agrupamentosCrachaAgrupamentoListBox, false, result);
+		ListBoxUtil.populate(agrupamentosOnibusListBox, false, result);
+		if (result.size()>0){
 			agrupamentosListBox.setSelectedIndex(0);
+			agrupamentosCrachaAgrupamentoListBox.setSelectedIndex(-1);
+			agrupamentosOnibusListBox.setSelectedIndex(-1);
+		}
 	}
 
 	public List<Agrupamento> getAgrupamentos() {

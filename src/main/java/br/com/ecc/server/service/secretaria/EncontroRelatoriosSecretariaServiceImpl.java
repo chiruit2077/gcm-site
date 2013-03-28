@@ -189,7 +189,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Integer geraCSV(Encontro encontro, String name) throws Exception {
+	public Integer geraCSVCorel(Encontro encontro, String name) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
 		cmd.addParameter("encontro", encontro);
@@ -228,6 +228,75 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 			cmdArquivo.setArquivoDigital(arquivoDigital);
 			ArquivoDigital call = cmdArquivo.call();
 			return call.getId();
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Integer geraCSVCrachas(Encontro encontro, Agrupamento agrupamento, String name) throws Exception {
+		if (encontro != null){
+			GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+			cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+			cmd.addParameter("encontro", encontro);
+			List<EncontroInscricao> lista = cmd.call();
+
+			if (lista.size()>0){
+				String dados = "ELE;;ELA;ELA;;ELE;";
+
+				for (EncontroInscricao encontroInscricao : lista) {
+					dados+= "\n" + encontroInscricao.getCasal().getEle().getApelido().toUpperCase() + ";" ;
+					dados+= "DA;" ;
+					dados+= encontroInscricao.getCasal().getEla().getApelido().toUpperCase() + ";" ;
+					dados+= encontroInscricao.getCasal().getEla().getApelido().toUpperCase() + ";" ;
+					dados+= "DO;" ;
+					dados+= encontroInscricao.getCasal().getEle().getApelido().toUpperCase() + ";" ;
+				}
+
+				ArquivoDigitalSalvarCommand cmdArquivo = injector.getInstance(ArquivoDigitalSalvarCommand.class);
+				ArquivoDigital arquivoDigital = new ArquivoDigital();
+				arquivoDigital.setNomeArquivo(name);
+				arquivoDigital.setDados(dados.getBytes());
+				arquivoDigital.setMimeType("text/csv");
+				arquivoDigital.setTipo(TipoArquivoEnum.ARQUIVO);
+				arquivoDigital.setTamanho(arquivoDigital.getDados().length);
+				cmdArquivo.setArquivoDigital(arquivoDigital);
+				ArquivoDigital call = cmdArquivo.call();
+				return call.getId();
+			}
+		}else if (agrupamento != null){
+			GetEntityListCommand cmdAgrupamento = injector.getInstance(GetEntityListCommand.class);
+			cmdAgrupamento.setNamedQuery("agrupamentoMembro.porAgrupamento");
+			cmdAgrupamento.addParameter("agrupamento", agrupamento);
+			List<AgrupamentoMembro> listaMenbro = cmdAgrupamento.call();
+			if (listaMenbro.size()>0){
+				String dados = "ELE;;ELA;ELA;;ELE;";
+
+				for (AgrupamentoMembro agrupamentoMembro : listaMenbro) {
+					if (agrupamentoMembro.getCasal() != null ) {
+						dados+= "\n" + agrupamentoMembro.getCasal().getEle().getApelido().toUpperCase() + ";" ;
+						dados+= "DA;" ;
+						dados+= agrupamentoMembro.getCasal().getEla().getApelido().toUpperCase() + ";" ;
+						dados+= agrupamentoMembro.getCasal().getEla().getApelido().toUpperCase() + ";" ;
+						dados+= "DO;" ;
+						dados+= agrupamentoMembro.getCasal().getEle().getApelido().toUpperCase() + ";" ;
+					}
+					if (agrupamentoMembro.getPessoa() != null ) {
+						dados+= "\n" + agrupamentoMembro.getPessoa().getApelido().toUpperCase() + ";" ;
+						dados+= ";;;;;" ;
+					}
+				}
+
+				ArquivoDigitalSalvarCommand cmdArquivo = injector.getInstance(ArquivoDigitalSalvarCommand.class);
+				ArquivoDigital arquivoDigital = new ArquivoDigital();
+				arquivoDigital.setNomeArquivo(name);
+				arquivoDigital.setDados(dados.getBytes());
+				arquivoDigital.setMimeType("text/csv");
+				arquivoDigital.setTipo(TipoArquivoEnum.ARQUIVO);
+				arquivoDigital.setTamanho(arquivoDigital.getDados().length);
+				cmdArquivo.setArquivoDigital(arquivoDigital);
+				ArquivoDigital call = cmdArquivo.call();
+				return call.getId();
+			}
 		}
 		return null;
 	}

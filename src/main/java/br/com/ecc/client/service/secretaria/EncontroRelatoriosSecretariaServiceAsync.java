@@ -8,7 +8,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface EncontroRelatoriosSecretariaServiceAsync {
 	void imprimeRelatorioRomantico(Encontro encontro,AsyncCallback<Integer> callback);
-	void geraCSV(Encontro encontro, String name, AsyncCallback<Integer> callback);
+	void geraCSVCorel(Encontro encontro, String name, AsyncCallback<Integer> callback);
+	void geraCSVCrachas(Encontro encontro, Agrupamento agrupamento, String name, AsyncCallback<Integer> callback);
 	void imprimeRelatorioAgrupamento(Encontro encontro, Agrupamento agrupamento, AsyncCallback<Integer> callback);
 	void imprimeRelatorioOnibus(Encontro encontro, Agrupamento agrupamento, AsyncCallback<Integer> callback);
 	void imprimeRelatorioAlbum(Encontro encontro, AsyncCallback<Integer> callback);

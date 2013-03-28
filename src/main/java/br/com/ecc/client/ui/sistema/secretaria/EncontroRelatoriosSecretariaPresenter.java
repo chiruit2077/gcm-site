@@ -38,7 +38,8 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 	}
 
 	public enum ProcessaOpcao {
-		GERACSV,
+		GERACSVCOREL,
+		GERACSVCRACAS,
 		LISTAGEMAGRUPAMENTO,
 		LISTAGEMFILAROMANTICO,
 		LISTAGEMONIBUS,
@@ -138,14 +139,36 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 
 	public void processa(Encontro encontro, ProcessaOpcao opcao, Object object) {
 		getDisplay().showWaitMessage(true);
-		if (opcao.equals(ProcessaOpcao.GERACSV)){
-			service.geraCSV(encontro, "afilhados.csv", new WebAsyncCallback<Integer>(getDisplay()) {
+		if (opcao.equals(ProcessaOpcao.GERACSVCOREL)){
+			service.geraCSVCorel(encontro, "afilhados.csv", new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idArquivo) {
 					getDisplay().showWaitMessage(false);
 					DownloadResourceHelper.showArquivoDigital(idArquivo, "_blank", true, "");
 				}
 			});
+		}else if (opcao.equals(ProcessaOpcao.GERACSVCRACAS)){
+			Agrupamento agrupamento = null;
+			if (object instanceof Agrupamento){
+				agrupamento = (Agrupamento) object;
+			}
+			if (encontro != null){
+				service.geraCSVCrachas(encontro, null, "crachasafilhados.csv", new WebAsyncCallback<Integer>(getDisplay()) {
+					@Override
+					protected void success(Integer idArquivo) {
+						getDisplay().showWaitMessage(false);
+						DownloadResourceHelper.showArquivoDigital(idArquivo, "_blank", true, "");
+					}
+				});
+			}else if (agrupamento != null){
+				service.geraCSVCrachas(null, agrupamento, "crachasextras.csv", new WebAsyncCallback<Integer>(getDisplay()) {
+					@Override
+					protected void success(Integer idArquivo) {
+						getDisplay().showWaitMessage(false);
+						DownloadResourceHelper.showArquivoDigital(idArquivo, "_blank", true, "");
+					}
+				});
+			}
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMAGRUPAMENTO)){
 			if (object instanceof Agrupamento){
 				Agrupamento agrupamento = (Agrupamento) object;
