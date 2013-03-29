@@ -9,6 +9,7 @@ import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.MapWidget;
 import br.com.ecc.client.ui.component.richtext.RichTextToolbar;
 import br.com.ecc.client.util.DateUtil;
+import br.com.ecc.client.util.DownloadResourceExecuter;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.model.Agenda;
@@ -192,7 +193,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 						return;
 					} else {
 						if(casal.getIdArquivoDigital()!=null){
-							casalRecadoImage.setUrl("eccweb/downloadArquivoDigital?thumb=true&id="+casal.getIdArquivoDigital());
+							casalRecadoImage.setUrl(DownloadResourceExecuter.makeUrl("downloadArquivoDigital?thumb=true&id="+casal.getIdArquivoDigital()));
 						}
 					}
 				}
@@ -462,10 +463,10 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		if(presenter.getDadosLoginVO().getCasal()!=null){
 			if(presenter.getDadosLoginVO().getCasal().getGrupo()!=null &&
 			   presenter.getDadosLoginVO().getCasal().getGrupo().getIdArquivoDigital()!=null){
-				logoImage.setUrl("eccweb/downloadArquivoDigital?id="+presenter.getDadosLoginVO().getCasal().getGrupo().getIdArquivoDigital());
+				logoImage.setUrl(DownloadResourceExecuter.makeUrl("downloadArquivoDigital?id="+presenter.getDadosLoginVO().getCasal().getGrupo().getIdArquivoDigital()));
 			}
 			if(presenter.getDadosLoginVO().getCasal().getIdArquivoDigital()!=null){
-				casalImage.setUrl("eccweb/downloadArquivoDigital?id="+presenter.getDadosLoginVO().getCasal().getIdArquivoDigital());
+				casalImage.setUrl(DownloadResourceExecuter.makeUrl("downloadArquivoDigital?id="+presenter.getDadosLoginVO().getCasal().getIdArquivoDigital()));
 				logoImage.setVisible(true);
 			} else {
 				logoImage.setVisible(false);
@@ -521,7 +522,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			casalSuggest.getListaEntidades().add(recado.getCasal());
 			casalRecadoLabel.setVisible(true);
 			if(recado.getCasal().getIdArquivoDigital()!=null){
-				casalRecadoImage.setUrl("eccweb/downloadArquivoDigital?id="+recado.getCasal().getIdArquivoDigital());
+				casalRecadoImage.setUrl(DownloadResourceExecuter.makeUrl("downloadArquivoDigital?id="+recado.getCasal().getIdArquivoDigital()));
 			}
 			tipoHTMLPanel.setVisible(false);
 		}
@@ -648,7 +649,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			mainHP.add(hp3);
 		}
 		if(recado.getCasal().getIdArquivoDigital()!=null){
-			Image imagem = new Image("eccweb/downloadArquivoDigital?thumb=true&id=" + recado.getCasalOrigem().getIdArquivoDigital());
+			Image imagem = new Image(DownloadResourceExecuter.makeUrl("downloadArquivoDigital?thumb=true&id=" + recado.getCasalOrigem().getIdArquivoDigital()));
 			imagem.setWidth("60px");
 			imagem.setHeight("auto");
 			mainHP.add(imagem);
@@ -794,7 +795,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			}
 		}
 		if(niver.getCasal().getIdArquivoDigital()!=null){
-			Image imagem = new Image("eccweb/downloadArquivoDigital?thumb=true&id=" + niver.getCasal().getIdArquivoDigital());
+			Image imagem = new Image(DownloadResourceExecuter.makeUrl("downloadArquivoDigital?thumb=true&id=" + niver.getCasal().getIdArquivoDigital()));
 			imagem.setWidth("30px");
 			imagem.setHeight("auto");
 			mainHP.add(imagem);
@@ -898,7 +899,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		mainVP.setWidth("100%");
 		mainVP.setSpacing(2);
 		if(convidado.getIdArquivoDigital()!=null && !convidado.getIdArquivoDigital().equals(0)){
-			Image imagem = new Image("eccweb/downloadArquivoDigital?id=" + convidado.getIdArquivoDigital() + "&thumb=true");
+			Image imagem = new Image(DownloadResourceExecuter.makeUrl("downloadArquivoDigital?id=" + convidado.getIdArquivoDigital() + "&thumb=true"));
 			imagem.setWidth("90%");
 			imagem.setHeight("auto");
 			mainVP.add(imagem);

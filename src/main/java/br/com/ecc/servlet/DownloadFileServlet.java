@@ -1,5 +1,7 @@
 package br.com.ecc.servlet;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -24,14 +26,10 @@ public abstract class DownloadFileServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 5915431898806084080L;
 
-	protected void writeResponse(HttpServletResponse resp, String fileName, Integer length, String contentType, byte[] content,boolean forceDownload) throws IOException {
+	protected void writeResponse(HttpServletResponse resp, String fileName, Integer length, String contentType, byte[] content, boolean forceDownload) throws IOException {
 		if(fileName == null || "".equals(fileName) || length == null || content == null) {
 			throw new WebRuntimeException("Possíveis problemas: fileName=null, length=null, content=null");
 		}
-
-		int BUFSIZE = 1024;
-
-		//resp.setCharacterEncoding("UTF-8");
 
 		resp.setHeader("Content-Length", "" + length);
 		resp.setHeader("Content-Type", (contentType != null && !"".equals(contentType)) ? contentType : "application/octet-stream" );
@@ -49,14 +47,19 @@ public abstract class DownloadFileServlet extends HttpServlet{
 			out.flush();
 			out.close();
 		}else{
-			byte[] bbuf = new byte[BUFSIZE];
-			ByteArrayInputStream in = new ByteArrayInputStream(content);
-			int lengthwrite = 0;
-
-			while ((in != null) && ((lengthwrite = in.read(bbuf)) != -1)) {
-				op.write(bbuf, 0, lengthwrite);
+			BufferedInputStream input = null;
+			BufferedOutputStream output = null;
+			try {
+			    input = new BufferedInputStream(new ByteArrayInputStream(content));
+			    output = new BufferedOutputStream(op);
+			    byte[] buffer = new byte[8192];
+			    for (int size = 0; (size = input.read(buffer)) > 0;) {
+			        output.write(buffer, 0, size);
+			    }
+			} finally {
+			    if (output != null) try { output.close(); } catch (IOException logOrIgnore) {}
+			    if (input != null) try { input.close(); } catch (IOException logOrIgnore) {}
 			}
-			in.close();
 			op.flush();
 			op.close();
 		}
