@@ -17,7 +17,7 @@ public class DownloadResourceExecuter {
 
 	public native static String makeUrl(String url) /*-{
 		if (@br.com.ecc.client.util.DownloadResourceExecuter::producao){
-			return "eccweb/"+url;
+			return @br.com.ecc.client.util.DownloadResourceExecuter::baseURL+"eccweb/"+url;
 		}else{
 			return @br.com.ecc.client.util.DownloadResourceExecuter::baseURL+"eccweb/"+url;
 		}
