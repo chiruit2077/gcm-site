@@ -6,17 +6,24 @@ public class DownloadResourceExecuter {
 
 	public static String navegador="unknown";
 	public static int navegadorversion=0;
-	public static Boolean producao = GWT.isProdMode();
+	public static boolean producao = false;
+	public static String baseURL="";
 
 	static{
 		DownloadResourceExecuter.getNavegador();
+		baseURL = GWT.getHostPageBaseURL();
+		producao = GWT.isProdMode();
 	}
 
 	public native static String makeUrl(String url) /*-{
-		return url;
+		if (@br.com.ecc.client.util.DownloadResourceExecuter::producao){
+			return "eccweb/"+url;
+		}else{
+			return @br.com.ecc.client.util.DownloadResourceExecuter::baseURL+"eccweb/"+url;
+		}
 	}-*/;
 
-	public native static void showReport(Integer id, String tituloJanela, String parameters, String idCode) /*-{
+	public native static void showReport(int id, String tituloJanela, String parameters, String idCode) /*-{
 		window.open(@br.com.ecc.client.util.DownloadResourceExecuter::makeUrl(Ljava/lang/String;)("report?id=" + idCode +"&reportId="+id), tituloJanela, parameters);
 	}-*/;
 
@@ -32,7 +39,7 @@ public class DownloadResourceExecuter {
 		window.open(link, tituloJanela, parameters);
 	}-*/;
 
-	public native static void showArquivoDigital(Integer id, String tituloJanela, boolean forceDownload, String parameters) /*-{
+	public native static void showArquivoDigital(int id, String tituloJanela, boolean forceDownload, String parameters) /*-{
 		window.open(@br.com.ecc.client.util.DownloadResourceExecuter::makeUrl(Ljava/lang/String;)("downloadArquivoDigital?id=" + id +"&forceDownload="+(forceDownload?"true":"false")), tituloJanela, parameters);
 	}-*/;
 

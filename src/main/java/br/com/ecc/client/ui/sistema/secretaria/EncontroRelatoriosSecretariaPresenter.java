@@ -213,7 +213,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMNECESSIDADESESPECIAIS)){
