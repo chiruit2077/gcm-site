@@ -1000,6 +1000,20 @@ html>body .gwt-DecoratedTabBar {
     -webkit-transform-origin:29% 150%;
 }
 
+.portal-celulaPlanilhaVerticalIE {
+	text-align: left;
+	cursor: pointer;
+    height:18px;
+    width: 100px;
+    min-width: 100px;
+	max-width: 100px;
+    white-space: nowrap;
+	transform:rotate(270deg);
+    transform-origin:29% 150%;
+    -ms-transform:rotate(270deg);
+    -ms-transform-origin:29% 150%;
+}
+
 .portal-corFundo{
 	background-color: white;
 	color: white;

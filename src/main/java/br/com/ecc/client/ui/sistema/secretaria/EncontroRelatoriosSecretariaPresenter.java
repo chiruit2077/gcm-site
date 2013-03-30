@@ -176,7 +176,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					@Override
 					protected void success(Integer idReport) {
 						getDisplay().showWaitMessage(false);
-						DownloadResourceHelper.showReport(idReport, "_blank", "");
+						DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 					}
 				});
 			}
@@ -185,7 +185,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMONIBUS)){
@@ -197,7 +197,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMALBUM)){
@@ -205,7 +205,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMORACAOAMOR)){
@@ -221,7 +221,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMDIABETICOSVEGETARIANOS)){
@@ -229,7 +229,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMHOTELAFILHADOS)){
@@ -237,7 +237,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				@Override
 				protected void success(Integer idReport){
 					getDisplay().showWaitMessage(false);
-					DownloadResourceHelper.showReport(idReport, "_blank", "");
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			} );
 		}else{

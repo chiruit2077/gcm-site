@@ -352,7 +352,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!-- <plugin>
 				<groupId>com.github.goldin</groupId>
 				<artifactId>copy-maven-plugin</artifactId>
 				<version>0.2.5</version>
@@ -373,7 +373,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 		</plugins>
 		<pluginManagement>
 			<plugins>

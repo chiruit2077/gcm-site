@@ -12,6 +12,7 @@ import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.FlexTableUtil.TipoColuna;
 import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
+import br.com.ecc.client.util.NavegadorUtil;
 import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.Atividade;
 import br.com.ecc.model.EncontroAtividade;
@@ -60,8 +61,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
@@ -449,7 +450,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						nome = ei.getPessoa().getApelido();
 					}
 					HTML label = new HTML(nome);
-					label.setStyleName("portal-celulaPlanilhaVertical");
+					if (NavegadorUtil.navegador.equals("ie"))
+						label.setStyleName("portal-celulaPlanilhaVerticalIE");
+					else
+						label.setStyleName("portal-celulaPlanilhaVertical");
 					if(bCoordenador){
 						label.setTitle("Editar/Adicionar atividades para este participante");
 					} else {
