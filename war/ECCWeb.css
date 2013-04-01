@@ -987,8 +987,6 @@ html>body .gwt-DecoratedTabBar {
 	cursor: pointer;
     height:18px;
     width: 100px;
-    min-width: 100px;
-	max-width: 100px;
     white-space: nowrap;
     transform:rotate(270deg);
     transform-origin:29% 150%;
@@ -1005,8 +1003,6 @@ html>body .gwt-DecoratedTabBar {
 	cursor: pointer;
     height:18px;
     width: 100px;
-    min-width: 100px;
-	max-width: 100px;
     white-space: nowrap;
 	transform:rotate(270deg);
     transform-origin:29% 150%;

@@ -103,7 +103,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 			@Override
 			public int compare(EncontroHotelQuarto o1, EncontroHotelQuarto o2) {
 				if (o1.getEncontroHotel().equals(o2.getEncontroHotel()))
-					return o1.getQuarto().getNumeroQuarto().compareTo(o2.getQuarto().getNumeroQuarto());
+					return -1*o1.getQuarto().getNumeroQuarto().compareTo(o2.getQuarto().getNumeroQuarto());
 				else
 					return o1.getEncontroHotel().getId().compareTo(o2.getEncontroHotel().getId());
 			}
@@ -164,6 +164,33 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public Integer imprimeRelatorioAfilhadosPadrinhos(Encontro encontro) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		List<Casal> listaCasal = new ArrayList<Casal>();
+		for (EncontroInscricao encontroInscricao : lista) {
+			listaCasal.add(encontroInscricao.getCasal());
+		}
+		Collections.sort(listaCasal, new Comparator<Casal>() {
+			@Override
+			public int compare(Casal o1, Casal o2) {
+				return o1.getEle().getApelido().compareTo(o2.getEle().getApelido());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemafilhados.jrxml");
+		cmdRelatorio.setNome("listagemafilhados");
+		cmdRelatorio.setTitulo("LISTAGEM AFILHADOS E PADRINHOS");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public Integer imprimeRelatorioAgrupamento(Encontro encontro, Agrupamento agrupamento) throws Exception {
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("agrupamentoMembro.porAgrupamento");
@@ -173,7 +200,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 			@Override
 			public int compare(AgrupamentoMembro o1, AgrupamentoMembro o2) {
 				if (o1.getRotulo() != null && o2.getRotulo() != null ) return o1.getRotulo().compareTo(o2.getRotulo());
-				if (o1.getRotulo() == null && o2.getRotulo() != null && !o2.equals("") ) return -1;
+				if (o1.getRotulo() == null && o2.getRotulo() != null && !o2.getRotulo().equals("") ) return -1;
 				return o1.getCasal().getApelidos("e").compareTo(o2.getCasal().getApelidos("e"));
 			}
 		});

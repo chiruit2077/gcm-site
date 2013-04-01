@@ -646,7 +646,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		if(email!=null){
 			email = email.trim().replace(",", "");
 		}
-		if(email.equals("")){
+		if(email==null || email.equals("")){
 			Window.alert("O participante não possui email cadastrado.\nNão será possível enviar a ficha.");
 			return;
 		}

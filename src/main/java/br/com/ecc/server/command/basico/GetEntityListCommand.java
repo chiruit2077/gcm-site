@@ -37,18 +37,21 @@ public class GetEntityListCommand implements Callable<List>{
 		}else if(this.query !=null){
 			query = em.get().createQuery(this.query);
 		}
-		if (params!=null){
-			for (Iterator iterator = params.keySet().iterator(); iterator.hasNext();) {
-				String parametro = (String) iterator.next();
-				query = query.setParameter(parametro, params.get(parametro));
+		if (query != null){
+			if (params!=null){
+				for (Iterator iterator = params.keySet().iterator(); iterator.hasNext();) {
+					String parametro = (String) iterator.next();
+					query = query.setParameter(parametro, params.get(parametro));
+				}
 			}
+			if(maxResults!=null){
+				query.setMaxResults(maxResults);
+			}
+			List<_WebBaseEntity> lista = query.getResultList();
+
+			return lista;
 		}
-		if(maxResults!=null){
-			query.setMaxResults(maxResults);
-		}
-		List<_WebBaseEntity> lista = query.getResultList();
-		
-		return lista;
+		return null;
 	}
 
 	public void setParams(Map<String, Object> params) {

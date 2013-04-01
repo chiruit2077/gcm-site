@@ -40,6 +40,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 	public enum ProcessaOpcao {
 		GERACSVCOREL,
 		GERACSVCRACAS,
+		LISTAGEMAFILHADOSPADRINHOS,
 		LISTAGEMAGRUPAMENTO,
 		LISTAGEMFILAROMANTICO,
 		LISTAGEMONIBUS,
@@ -180,6 +181,14 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					}
 				});
 			}
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMAFILHADOSPADRINHOS)){
+			service.imprimeRelatorioAfilhadosPadrinhos(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+				}
+			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMFILAROMANTICO)){
 			service.imprimeRelatorioRomantico(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override

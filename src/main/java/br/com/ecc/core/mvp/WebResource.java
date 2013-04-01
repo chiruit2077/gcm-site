@@ -14,9 +14,9 @@ public class WebResource implements Serializable {
 	private final PlaceManager placeManager;
 	private final WebConfig eccConfig;
 	private final WebGlobal eccGlobal;
-	
+
 	private static WebResource instance ;
-	
+
 	/** retorna null se o construtor padrao nao tiver sido usado nem uma vez */
 	public static WebResource getInstanceCreated() {
 		if(instance == null) {
@@ -24,7 +24,7 @@ public class WebResource implements Serializable {
 		}
 		return instance;
 	}
-	
+
 	@Inject
 	public WebResource(EventBus eventBus, PlaceManager placeManager, WebConfig eccConfig, WebGlobal eccGlobal) {
 		this.eventBus = eventBus;

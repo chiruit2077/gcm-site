@@ -11,18 +11,10 @@
 			color: blue;
 			text-align: left;
 		}
-		.flow {
+		.planilha {
 			overflow: auto;
 			border: 1px solid lightgray;
 			height: 100%;
-			width: 100%;
-		}
-		.flowHead {
-			overflow: hidden;
-			border-top: 1px solid lightgray;
-			border-left: 1px solid lightgray;
-			border-right: 1px solid lightgray;
-			height: 100px;
 			width: 100%;
 		}
 		.negrito {
@@ -72,8 +64,7 @@
 				</g:HTMLPanel>
 			</g:HorizontalPanel>
 			<g:VerticalPanel horizontalAlignment="left" width="100%" height="100%" verticalAlignment="top">
-				<g:FlowPanel ui:field="planilhaHeadFlowPanel" styleName="{style.flowHead}" />
-				<g:FlowPanel ui:field="planilhaFlowPanel" styleName="{style.flow}"/>
+				<g:HTMLPanel ui:field="planilhaPanel" width="100%" height="100%" styleName="{style.planilha}"/>
 			</g:VerticalPanel>
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">

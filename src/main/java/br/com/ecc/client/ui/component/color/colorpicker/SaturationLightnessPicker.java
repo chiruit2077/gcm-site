@@ -27,7 +27,7 @@ public class SaturationLightnessPicker extends Composite {
 	public SaturationLightnessPicker() {
 		canvas = new Canvas();
 		canvas.setCanvasSize(180, 180);
-		
+
 		initWidget(canvas);
 
 		canvas.addMouseDownHandler(new MouseDownHandler() {
@@ -38,7 +38,7 @@ public class SaturationLightnessPicker extends Composite {
 				String color = getColorAtPixel(handleX, handleY);
 				drawGradient(true);
 				fireColorChanged(color);
-				
+
 				mouseDown = true;
 			}
 		});
@@ -74,11 +74,11 @@ public class SaturationLightnessPicker extends Composite {
 
 	private void drawGradient(boolean drawHandle) {
 		RenderingContext ctx = canvas.getContext();
-		
+
 		// draw gradient
 		for (int x = 0; x <= 179; x++) {
 			Gradient grad = ctx.createLinearGradient(x, 0, x, 179);
-			int s = Math.round(x * 100 / 179);
+			int s = (int) Math.round(x * 100.0 / 179.0);
 			String hex = ColorUtils.hsl2hex(hue, s, 0);
 			grad.addColorStop(0, "#" + hex); //$NON-NLS-1$
 			hex = ColorUtils.hsl2hex(hue, s, 100);
@@ -94,7 +94,7 @@ public class SaturationLightnessPicker extends Composite {
 			ctx.closePath();
 			ctx.setFillStyle("#ffffff"); //$NON-NLS-1$
 			ctx.fill();
-			
+
 			ctx.beginPath();
 			ctx.arc(handleX, handleY, 2, 0, Math.PI * 2, false);
 			ctx.closePath();
@@ -102,15 +102,15 @@ public class SaturationLightnessPicker extends Composite {
 			ctx.fill();
 		}
 	}
-	
+
 	public HandlerRegistration addColorChangedHandler(IColorChangedHandler handler) {
 		return addHandler(handler, ColorChangedEvent.getType());
 	}
-	
+
 	private void fireColorChanged(String color) {
 		fireEvent(new ColorChangedEvent(color));
 	}
-	
+
 	private String getColorAtPixel(int x, int y) {
 		x = Math.max(Math.min(x, 179), 0);
 		y = Math.max(Math.min(y, 179), 0);
@@ -119,7 +119,7 @@ public class SaturationLightnessPicker extends Composite {
 		JsArrayInteger data = imageData.getData();
 		return ColorUtils.rgb2hex(data.get(0), data.get(1), data.get(2));
 	}
-	
+
 	public void setHue(int hue) {
 		this.hue = hue;
 		drawGradient(false);

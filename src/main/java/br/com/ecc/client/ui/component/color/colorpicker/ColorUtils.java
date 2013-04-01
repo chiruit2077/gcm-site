@@ -10,19 +10,19 @@ final class ColorUtils {
 		double r = 0d;
 		double g = 0d;
 		double b;
-	
+
 		if (s > 0d) {
 			if (h >= 1d) {
 				h = 0d;
 			}
-	
+
 			h = h * 6d;
 			double f = h - Math.floor(h);
 			double a = Math.round(l * 255d * (1d - s));
 			b = Math.round(l * 255d * (1d - (s * f)));
 			double c = Math.round(l * 255d * (1d - (s * (1d - f))));
 			l = Math.round(l * 255d);
-	
+
 			switch ((int) Math.floor(h)) {
 				case 0:
 					r = l;
@@ -56,7 +56,7 @@ final class ColorUtils {
 			}
 			return new int[] { (int) Math.round(r), (int) Math.round(g), (int) Math.round(b) };
 		}
-	
+
 		l = Math.round(l * 255d);
 		return new int[] { (int) l, (int) l, (int) l };
 	}
@@ -82,15 +82,15 @@ final class ColorUtils {
 	static String hsl2hex(int h, int s, int l) {
 		return hsl2hex(new int[] { h, s, l });
 	}
-	
+
 	static int[] rgb2hsl(int[] rgb) {
 		double max = Math.max(Math.max(rgb[0], rgb[1]), rgb[2]); // 0xdd = 221
 		double delta = max - Math.min(Math.min(rgb[0], rgb[1]), rgb[2]); // 153
 		double h = 0;
-		int s = 0;
+		double s = 0;
 		int l = (int) Math.round(max * 100d / 255d); // 87 ok
 		if (max != 0) {
-			s = (int) Math.round(delta * 100d / max); // 69 ok
+			s = Math.round(delta * 100d / max); // 69 ok
 			if (max == rgb[0]) {
 				h = (rgb[1] - rgb[2]) / delta;
 			} else if (max == rgb[1]) {
@@ -103,9 +103,9 @@ final class ColorUtils {
 				h += 360d;
 			}
 		}
-		return new int[] { (int) Math.round(h), Math.round(s), l };
+		return new int[] { (int) Math.round(h), (int) Math.round(s), l };
 	}
-	
+
 	static int[] getRGB(String color) {
 		return new int[] {
 			Integer.parseInt(color.substring(0, 2), 16),

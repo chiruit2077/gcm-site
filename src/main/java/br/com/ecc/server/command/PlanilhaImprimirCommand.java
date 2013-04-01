@@ -38,7 +38,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 	@Inject EntityManager em;
 
 	private Encontro encontro;
-	private EncontroPeriodo encontroPeriodo; 
+	private EncontroPeriodo encontroPeriodo;
 	private TipoExibicaoPlanilhaEnum tipoExibicaoPlanilhaEnum;
 	private Usuario usuarioAtual;
 	private Casal casalAtual = null;
@@ -51,7 +51,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		SimpleDateFormat dfDia = new SimpleDateFormat("E");
 		SimpleDateFormat dfEncontro = new SimpleDateFormat("MMMM yyyy");
 		Query q;
-		
+
 		if(usuarioAtual!=null){
 			q = em.createNamedQuery("casal.porPessoa");
 			q.setParameter("pessoa", usuarioAtual.getPessoa());
@@ -61,11 +61,11 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 				casalAtual = lista.get(0);
 			}
 		}
-		
+
 		EncontroCarregaVOCommand cmdVO = injector.getInstance(EncontroCarregaVOCommand.class);
 		cmdVO.setEncontro(encontro);
 		EncontroVO encontroVO = cmdVO.call();
-		
+
 		List<EncontroInscricao> lei = new ArrayList<EncontroInscricao>();
 		for (EncontroInscricao ei : encontroVO.getListaInscricao()) {
 			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
@@ -73,14 +73,14 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 			}
 		}
 		encontroVO.setListaInscricao(lei);
-		
+
 		EncontroPlanilhaCommand cmdEP = injector.getInstance(EncontroPlanilhaCommand.class);
 		cmdEP.setEncontro(encontro);
 		cmdEP.setEncontroPeriodo(encontroPeriodo);
 		cmdEP.setTipoExibicaoPlanilhaEnum(tipoExibicaoPlanilhaEnum);
 		cmdEP.setUsuarioAtual(usuarioAtual);
 		List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao = cmdEP.call();
-		
+
 		Date inicio = null, fim = new Date(3000,1,1);
 		if(encontroPeriodo!=null){
 			boolean achou = false;
@@ -95,7 +95,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 				}
 			}
 		}
-		
+
 		List<EncontroAtividade> listaEncontroAtividade = new ArrayList<EncontroAtividade>();
 		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
 		if(tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.COMPLETA)){
@@ -110,12 +110,12 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.TODAS_ATIVIDADES_MINHA_COLUNA)){
 			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual(encontroVO);
 			listaEncontroAtividade = encontroVO.getListaEncontroAtividade();
-		}  
-		
+		}
+
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("datas", dfEncontro.format(encontroVO.getEncontro().getInicio()));
 		parametros.put("grupo", encontroVO.getEncontro().getGrupo().getNome());
-		
+
 		String legenda = "";
 		q = em.createNamedQuery("papel.porGrupo");
 		q.setParameter("grupo", encontroVO.getEncontro().getGrupo());
@@ -125,17 +125,17 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 			legenda += papel.getSigla() + ": " + papel.getNome();
 		}
 		parametros.put("legenda", legenda);
-		
+
 		List<PlanilhaRelatorio> dadosRelatorio = new ArrayList<PlanilhaRelatorio>();
 		PlanilhaRelatorio planilhaRelatorio;
-		
+
 		Collections.sort(listaEncontroAtividadeInscricao, new Comparator<EncontroAtividadeInscricao>() {
 			@Override
 			public int compare(EncontroAtividadeInscricao o1, EncontroAtividadeInscricao o2) {
 				String s1, s2;
 				if(o1.getEncontroInscricao().getCasal()!=null) s1 = o1.getEncontroInscricao().getCasal().getApelidos(null);
 				else s1 = o1.getEncontroInscricao().getPessoa().getApelido();
-				
+
 				if(o2.getEncontroInscricao().getCasal()!=null) s2 = o2.getEncontroInscricao().getCasal().getApelidos(null);
 				else s2 = o2.getEncontroInscricao().getPessoa().getApelido();
 				return s1.compareTo(s2);
@@ -166,7 +166,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 			periodo = encontroVO.getListaPeriodo().get(0);
 			periodoAnterior = periodo;
 		}
-		
+
 		String tipo = "";
 		boolean achou = false, ok = false, padrinho = false, nos = false, minhaAtividade=false;
 		int i=0;
@@ -196,7 +196,8 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 					tipo="";
 				}
 				planilhaRelatorio = new PlanilhaRelatorio();
-				planilhaRelatorio.setPeriodo(periodo.getNome());
+				//TODO VERFICAR JUAN
+				if (periodo != null ) planilhaRelatorio.setPeriodo(periodo.getNome());
 				planilhaRelatorio.setTipoAtividade(tipo);
 				planilhaRelatorio.setAtividade(atividade.getAtividade().getNome());
 				planilhaRelatorio.setDia(dfDia.format(atividade.getInicio()).toUpperCase());
@@ -231,7 +232,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 						if(eai.getEncontroAtividade().getId().equals(atividade.getId()) &&
 						   eai.getEncontroInscricao().getId().equals(inscricao.getId())){
 							planilhaRelatorio.getPapel().add(eai.getPapel().getSigla());
-							
+
 							if(inscricao.getCasal()!=null && inscricao.getCasal().getId().equals(casalAtual.getId())){
 								minhaAtividade = true;
 							} else if(inscricao.getPessoa()!=null && inscricao.getPessoa().getId().equals(usuarioAtual.getPessoa().getId())){
@@ -275,7 +276,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 			throw new WebException("Nenhum dado encontrado");
 		}
 	}
-	
+
 	private List<EncontroAtividade> montaListaEncontroAtividadeusuarioAtual(List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao) {
 		List<EncontroAtividade> listaAtividades = new ArrayList<EncontroAtividade>();
 		for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
@@ -309,7 +310,7 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		}
 		return listaEncontroInscricao;
 	}
-	
+
 	public Encontro getEncontro() {
 		return encontro;
 	}

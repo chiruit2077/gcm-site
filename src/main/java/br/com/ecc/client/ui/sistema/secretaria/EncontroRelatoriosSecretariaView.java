@@ -34,6 +34,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton geraCSVCrachaAgrupamentoRadioButton;
 	@UiField RadioButton relatorioRomanticoRadioButton;
 	@UiField RadioButton relatorioAgrupamentoRadioButton;
+	@UiField RadioButton relatorioAfilhadosPadrinhosRadioButton;
 	@UiField RadioButton relatorioOnibusRadioButton;
 	@UiField RadioButton relatorioAlbumRadioButton;
 	@UiField RadioButton relatorioOracaoAmorRadioButton;
@@ -69,6 +70,8 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 			else
 				Window.alert("Escolha um Agrupamento");
 		}
+		else if (relatorioAfilhadosPadrinhosRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMAFILHADOSPADRINHOS);
 		else if (relatorioAgrupamentoRadioButton.getValue()){
 			Agrupamento agrupamento = (Agrupamento) ListBoxUtil.getItemSelected(agrupamentosListBox, getAgrupamentos());
 			if (agrupamento != null)

@@ -1,5 +1,6 @@
 package br.com.ecc.core.mvp.history;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +16,14 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 
-public class PlaceManager implements ValueChangeHandler<String> {
+public class PlaceManager implements Serializable, ValueChangeHandler<String> {
+
+	private static final long serialVersionUID = 6272122458856752177L;
 
 	/**
 	 * Apesar do IE suportar até 2048 caracteres na url coloquei 1900 por segurança e para descontar o contexto
 	 */
-	private static final int MAX_TOKEN_SIZE = 1900; 
+	private static final int MAX_TOKEN_SIZE = 1900;
 	private static final String HT_DELIM = "_HT_";
 	public static final String HOME_PRESENTER = "br.com.ecc.client.ui.home.HomePresenter";
 
@@ -41,15 +44,15 @@ public class PlaceManager implements ValueChangeHandler<String> {
 	public void newPlace(@SuppressWarnings("rawtypes") Class<? extends Presenter> presenter) {
 		newPlace(new StateHistory(presenter));
 	}
-	
+
 	public void newPlace(StateHistory newStateHistory) {
 		newPlace(newStateHistory, true, true);
 	}
-	
+
 	public void newPlaceClean(@SuppressWarnings("rawtypes") Class<? extends Presenter> presenter) {
 		newPlace(new StateHistory(presenter), true, false);
 	}
-	
+
 	public void newPlaceClean(StateHistory state) {
 		newPlace(state, true, false);
 	}
@@ -65,7 +68,7 @@ public class PlaceManager implements ValueChangeHandler<String> {
 
 		List<String> lstTokens = new ArrayList<String>();
 		StringTokenizer st = new StringTokenizer(decodeHistoryToken, HT_DELIM);
-		
+
 		String newJsonHistoryToken = newStateHistory.getHistoryTokenAsJson(false);
 		if(newJsonHistoryToken.length() > 350) {
 			GWT.log("ATENÇÃO: O StateHistory para o Presenter: "+newStateHistory.getPresenterName()+" possui mais de 350 letras. " +
@@ -75,25 +78,25 @@ public class PlaceManager implements ValueChangeHandler<String> {
 			StateHistory sh = new StateHistory();
 			sh.setHistoryTokenAsJson(jhToken);
 			sh.setShow(false);
-			
+
 			if(sh.getHistoryTokenAsJson(false).equals(newJsonHistoryToken)) {
 				sh.setShow(true);
 				newStateHistory = null;
 			}
-			
+
 			lstTokens.add( sh.getHistoryTokenAsJson() );
 		}
 		if(newStateHistory != null) {
 			newStateHistory.setShow(true);
 			lstTokens.add(newStateHistory.getHistoryTokenAsJson());
 		}
-		
+
 		String newDecodeHistoryToken = joinTokens(lstTokens);
 		if(! decodeHistoryToken.equals(newDecodeHistoryToken)) {
 			newPlace(CipherUtil.encodeToken(newDecodeHistoryToken), refresh);
 		}
 	}
-	
+
 	private void newPlace(String encodeHistoryToken, boolean refresh) {
 		if(encodeHistoryToken.length() > MAX_TOKEN_SIZE) {
 			String message = "O número de abas em abertas estourou o mecanismo de histórico da aplicação. Tente fechar uma ou mais abas antes de continuar.";
@@ -102,41 +105,41 @@ public class PlaceManager implements ValueChangeHandler<String> {
 			Window.alert(message);
 			return;
 		}
-		
+
 		if (History.getToken().equals(encodeHistoryToken)) {
 			currentPlace();
 		} else {
 			History.newItem( encodeHistoryToken, refresh );
 		}
 	}
-	
+
 	public void removePlace(StateHistory... tokensToRemove) {
 		removePlace(false, tokensToRemove);
 	}
-	
+
 	public void showPlace( String jsonHistoryTokenSelect ) {
 		StateHistory stateHistory = new StateHistory();
 		stateHistory.setHistoryTokenAsJson(jsonHistoryTokenSelect);
 		newPlace(stateHistory, false, true);
 	}
-	
+
 	public void updatePlace(StateHistory oldStateHistory, StateHistory newStateHistory) {
 		if(oldStateHistory != null && newStateHistory != null) {
 			newStateHistory.setShow( oldStateHistory.getShow() );
-			
+
 			String currentToken = oldStateHistory.getHistoryTokenAsJson(true);
 			String newToken = newStateHistory.getHistoryTokenAsJson(true);
 
-			List<String> tokens = new ArrayList<String>(); 
+			List<String> tokens = new ArrayList<String>();
 			String decodeHistoryToken = CipherUtil.decodeToken(History.getToken());
 			StringTokenizer st = new StringTokenizer(decodeHistoryToken, HT_DELIM);
 			for (String jsToken : st.getTokens()) {
 				if(jsToken.equals(newToken)) {
 					// token novo e igual a outro token ja existente, nao faz nada
 					GWT.log("Não pude executar o updatePlace(...). O novo place já encontra-se aberto. token: " + newToken);
-					return; 
+					return;
 				}
-				
+
 				if(jsToken.equals(currentToken)) {
 					tokens.add(newToken);
 				}
@@ -144,7 +147,7 @@ public class PlaceManager implements ValueChangeHandler<String> {
 					tokens.add(jsToken);
 				}
 			}
-			
+
 //			PlaceUpdateEvent event = new PlaceUpdateEvent();
 //			event.setCurrentStateHistory(oldStateHistory);
 //			event.setNewStateHistory(newStateHistory);
@@ -152,7 +155,7 @@ public class PlaceManager implements ValueChangeHandler<String> {
 			newPlace( CipherUtil.encodeToken(joinTokens(tokens)), false );
 		}
 	}
-	
+
 	public void updatePlace(List<StateHistory> states) {
 		List<String> tokens = new ArrayList<String>();
 		boolean show = false;
@@ -179,13 +182,13 @@ public class PlaceManager implements ValueChangeHandler<String> {
 		}
 		return false;
 	}
-	
+
 	private void removePlace(boolean refresh, StateHistory... tokensToRemove) {
 		if(tokensToRemove != null) {
 			List<StateHistory> states = new ArrayList<StateHistory>();
 			String decodeHistoryToken = CipherUtil.decodeToken(History.getToken());
 			StringTokenizer st = new StringTokenizer(decodeHistoryToken, HT_DELIM);
-			
+
 			int indexNextTokenToShow = -1;
 			for (int i=0; i < st.getTokens().length;  i++) {
 				String jsToken = st.getTokens()[i];
@@ -224,7 +227,7 @@ public class PlaceManager implements ValueChangeHandler<String> {
 		}
 		return states;
 	}
-	
+
 	private String joinTokens(List<String> tokens) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(tokens.get(0));
@@ -234,13 +237,13 @@ public class PlaceManager implements ValueChangeHandler<String> {
 		}
 		return sb.toString();
 	}
-	
+
 	public String getPresenterName(String jsonHistoryToken) {
 		if(jsonHistoryToken!=null && !"".equals(jsonHistoryToken.trim())) {
 			try {
 				StateHistory stateHistory = new StateHistory();
 				stateHistory.setHistoryTokenAsJson(jsonHistoryToken);
-				
+
 				return stateHistory.getPresenterName();
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -252,28 +255,28 @@ public class PlaceManager implements ValueChangeHandler<String> {
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		if (event.getValue() != null) {
-			if("".equals(event.getValue()) ) { 
+			if("".equals(event.getValue()) ) {
 				newPlace(new StateHistory( HOME_PRESENTER )); // fica no HOME de qualquer jeito!
 			}
 			else {
 				List<StateHistory> states = new ArrayList<StateHistory>();
-				
+
 				String decodeHistoryToken = CipherUtil.decodeToken(event.getValue());
 				StringTokenizer  sTokenizer = new StringTokenizer(decodeHistoryToken, HT_DELIM);
 				for (String jsonHistoryToken : sTokenizer.getTokens()) {
 					StateHistory stateHistory = new StateHistory();
 					stateHistory.setHistoryTokenAsJson(jsonHistoryToken);
-		
+
 					states.add(stateHistory);
 				}
 
 				PlaceEvent placeEvent = new PlaceEvent();
 				placeEvent.setStates(states);
-				
+
 				eventBus.fireEvent(placeEvent);
 			}
 		}
 	}
 
-	
+
 }
