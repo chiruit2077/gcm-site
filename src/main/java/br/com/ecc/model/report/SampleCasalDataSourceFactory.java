@@ -2,30 +2,19 @@ package br.com.ecc.model.report;
 
 import java.util.Vector;
 
-import br.com.ecc.model.Casal;
-import br.com.ecc.model.Pessoa;
+import br.com.ecc.model.vo.PlanilhaEncontroInscricaoVO;
 
 public class SampleCasalDataSourceFactory {
 
-	public static  Vector<Casal>  createBeanCollection() {
-		Vector<Casal> coll = new Vector<Casal>();
+	public static  Vector<PlanilhaEncontroInscricaoVO>  createBeanCollection() {
+		Vector<PlanilhaEncontroInscricaoVO> coll = new Vector<PlanilhaEncontroInscricaoVO>();
 
-		Casal casal = new Casal();
-		casal.setEle(new Pessoa());
-		casal.setEla(new Pessoa());
-		casal.getEle().setNome("FULANO DE TAL");
-		casal.getEla().setNome("FULANA DE TAL");
-		casal.getEle().setApelido("FULANO");
-		casal.getEla().setApelido("FULANA");
-		coll.add(casal);
-
-		casal = new Casal();
-		casal.setEle(new Pessoa());
-		casal.setEla(new Pessoa());
-		casal.getEle().setNome("CICLANO DE TAL");
-		casal.getEla().setNome("CICLANA DE TAL");
-		casal.getEle().setApelido("CICLANO");
-		casal.getEla().setApelido("CICLANA");
+		PlanilhaEncontroInscricaoVO casal = new PlanilhaEncontroInscricaoVO();
+		casal.setEle("FULANO DE TAL");
+		casal.setEla("FULANA DE TAL");
+		casal.setTipo("FULANO");
+		casal.setPapel("FULANA");
+		casal.setQtde(1);
 		coll.add(casal);
 
 		return coll;

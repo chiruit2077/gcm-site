@@ -22,6 +22,7 @@ import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
+import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.vo.AgrupamentoVO;
 
@@ -35,6 +36,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		void init();
 		void setListaAgrupamentos(List<Agrupamento> result);
 		void setListaHoteis(List<EncontroHotel> result);
+		void setListaPeriodos(List<EncontroPeriodo> result);
 	}
 
 	public enum ProcessaOpcao {
@@ -50,8 +52,9 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		LISTAGEMDIABETICOSVEGETARIANOS,
 		LISTAGEMHOTELAFILHADOS,
 		LISTAGEMHOTELENCONTRISTAS,
-		LISTAGEMRECEPCAOONIBUS,
-		LISTAGEMRECEPCAOFINAL;
+		LISTAGEMRECEPCAOINICIAL,
+		LISTAGEMRECEPCAOFINAL,
+		LISTAGEMPLANILHA;
 	}
 
 	public EncontroRelatoriosSecretariaPresenter(Display display, WebResource portalResource) {
@@ -101,6 +104,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 						getDisplay().showWaitMessage(false);
 						buscaAgrupamentos();
 						buscaHoteis();
+						buscaPeriodos();
 						break;
 					}
 				}
@@ -129,6 +133,17 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 			@Override
 			protected void success(List<EncontroHotel> lista) {
 				getDisplay().setListaHoteis(lista);
+
+			}
+		});
+	}
+
+	public void buscaPeriodos() {
+		EncontroServiceAsync servicoEncontroHotel = GWT.create(EncontroService.class);
+		servicoEncontroHotel.listaPeriodos(getEncontroSelecionado(), new WebAsyncCallback<List<EncontroPeriodo>>(getDisplay()) {
+			@Override
+			protected void success(List<EncontroPeriodo> lista) {
+				getDisplay().setListaPeriodos(lista);
 
 			}
 		});
@@ -243,6 +258,18 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMHOTELAFILHADOS)){
 			service.imprimeRelatorioHotelAfilhados(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport){
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+				}
+			} );
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMPLANILHA)){
+			EncontroPeriodo periodo = null;
+			if (object instanceof EncontroPeriodo){
+				periodo = (EncontroPeriodo) object;
+			}
+			service.imprimeRelatorioPlanilha(encontro, periodo, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport){
 					getDisplay().showWaitMessage(false);

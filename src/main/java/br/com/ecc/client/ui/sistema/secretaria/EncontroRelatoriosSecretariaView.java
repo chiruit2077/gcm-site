@@ -7,6 +7,7 @@ import br.com.ecc.client.ui.sistema.secretaria.EncontroRelatoriosSecretariaPrese
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.EncontroHotel;
+import br.com.ecc.model.EncontroPeriodo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -44,17 +45,31 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton relatorioHotelEncontristasRadioButton;
 	@UiField RadioButton relatorioRecepcaoInicialRadioButton;
 	@UiField RadioButton relatorioRecepcaoFinalRadioButton;
+	@UiField RadioButton relatorioPlanilhaRadioButton;
 	@UiField ListBox hoteisListBox;
 	@UiField ListBox agrupamentosListBox;
 	@UiField ListBox agrupamentosCrachaAgrupamentoListBox;
 	@UiField ListBox agrupamentosOnibusListBox;
+	@UiField ListBox periodoListBox;
 
 	private List<Agrupamento> agrupamentos;
 	private List<EncontroHotel> encontroHoteis;
+	private List<EncontroPeriodo> listaPeriodo;
 
 	public EncontroRelatoriosSecretariaView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
+	}
+
+
+	@Override
+	public void setListaPeriodos(List<EncontroPeriodo> listaPeriodo){
+		setListaPeriodo(listaPeriodo);
+		periodoListBox.clear();
+		periodoListBox.addItem("TODOS");
+		for(EncontroPeriodo periodo : listaPeriodo) {
+			periodoListBox.addItem(periodo.toString());
+		}
 	}
 
 	@UiHandler("processaButton")
@@ -107,9 +122,13 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 
 		}
 		else if (relatorioRecepcaoInicialRadioButton.getValue())
-			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMORACAOAMOR);
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMRECEPCAOINICIAL);
 		else if (relatorioRecepcaoFinalRadioButton.getValue())
-			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMORACAOAMOR);
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMRECEPCAOFINAL);
+		else if (relatorioPlanilhaRadioButton.getValue()){
+			EncontroPeriodo periodo = (EncontroPeriodo) ListBoxUtil.getItemSelected(periodoListBox, getListaPeriodo());
+			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.LISTAGEMPLANILHA, periodo);
+		}
 		else
 			Window.alert("Escolha uma Opção!");
 	}
@@ -168,6 +187,16 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 		ListBoxUtil.populate(hoteisListBox, false, result);
 		if (result.size()>0)
 			hoteisListBox.setSelectedIndex(0);
+	}
+
+
+	public List<EncontroPeriodo> getListaPeriodo() {
+		return listaPeriodo;
+	}
+
+
+	public void setListaPeriodo(List<EncontroPeriodo> listaPeriodo) {
+		this.listaPeriodo = listaPeriodo;
 	}
 
 }

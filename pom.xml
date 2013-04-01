@@ -294,7 +294,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					</compileTargets>
 					<runTarget>br.com.ecc.ECCWeb/ECCWeb.html
 					</runTarget>
-					<style>DETAILED</style>
+					<style>OBF</style>
 					<extraJvmArgs>-Xmx1024m</extraJvmArgs>
 					<draftCompile>true</draftCompile>
 					<localWorkers>2</localWorkers>

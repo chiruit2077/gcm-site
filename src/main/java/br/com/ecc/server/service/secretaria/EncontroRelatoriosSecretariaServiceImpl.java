@@ -1,9 +1,14 @@
 package br.com.ecc.server.service.secretaria;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaService;
 import br.com.ecc.model.Agrupamento;
@@ -14,15 +19,18 @@ import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroHotelQuarto;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.tipo.TipoArquivoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.vo.PlanilhaEncontroInscricaoVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.ArquivoDigitalSalvarCommand;
 import br.com.ecc.server.command.EncontroRelatoriosSecretariaImprimirCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 
+import com.google.gwt.dev.util.collect.HashMap;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
@@ -32,6 +40,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 	private static final long serialVersionUID = 895888786302857306L;
 	@Inject Injector injector;
+	@Inject EntityManager em;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -85,6 +94,115 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		cmdRelatorio.setNome("listagemalbum");
 		cmdRelatorio.setTitulo("LISTAGEM DE ENTREGA DOS ÁLBUNS");
 		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo) throws Exception {
+		EncontroPeriodo periodofim = null;
+		String sql = "";
+		if (periodo==null){
+			sql = "select ele.apelido as ele, ela.apelido as ela, d.tipo, f.nome as papel, count(*) as qtde " +
+				" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f " +
+				" where a.encontro = :encontro and " +
+				" a.atividade = b.id and " +
+				" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
+				" a.encontro = d.encontro and " +
+				" d.casal = e.id and " +
+				" e.ele = ele.id and " +
+				" e.ela = ela.id and " +
+				" f.id = c.papel " +
+				" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
+				" order by d.tipo, ele.apelido, f.nome ";
+		}else{
+			periodofim = getPeriodoFim(periodo);
+			if (periodofim != null){
+				sql = "select ele.apelido as ele, ela.apelido as ela, d.tipo, f.nome as papel, count(*) as qtde " +
+						" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f, encontroperiodo g, encontroperiodo h " +
+						" where a.encontro = :encontro and " +
+						" a.atividade = b.id and " +
+						" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
+						" a.encontro = d.encontro and " +
+						" d.casal = e.id and " +
+						" e.ele = ele.id and " +
+						" e.ela = ela.id and " +
+						" f.id = c.papel and " +
+						" a.encontro = g.encontro and " +
+						" a.encontro = h.encontro and " +
+						" a.inicio >= g.inicio and a.fim < h.inicio and g.id = :periodo and h.id = :peridofim " +
+						" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
+						" order by d.tipo, ele.apelido, f.nome ";
+			}else{
+				sql = "select ele.apelido as ele, ela.apelido as ela, d.tipo, f.nome as papel, count(*) as qtde " +
+						" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f, encontroperiodo g " +
+						" where a.encontro = :encontro and " +
+						" a.atividade = b.id and " +
+						" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
+						" a.encontro = d.encontro and " +
+						" d.casal = e.id and " +
+						" e.ele = ele.id and " +
+						" e.ela = ela.id and " +
+						" f.id = c.papel and " +
+						" a.encontro = g.encontro and " +
+						" a.inicio >= g.inicio and g.id = :periodo " +
+						" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
+						" order by d.tipo, ele.apelido, f.nome ";
+			}
+		}
+		Query query = em.createNativeQuery(sql);
+		query.setParameter("encontro", encontro.getId());
+		if (periodo!=null)
+			query.setParameter("periodo", periodo.getId());
+		if (periodofim != null)
+			query.setParameter("peridofim", periodofim.getId());
+		List<PlanilhaEncontroInscricaoVO> listaCasal = new ArrayList<PlanilhaEncontroInscricaoVO>();
+		Map<String,Integer> count = new HashMap<String,Integer>();
+		Map<String,Integer> qtde = new HashMap<String,Integer>();
+		List<Object[]> resultList = query.getResultList();
+		for (Object[] object : resultList) {
+			PlanilhaEncontroInscricaoVO vo = new PlanilhaEncontroInscricaoVO();
+			vo.setEle((String) object[0]);
+			vo.setEla((String) object[1]);
+			vo.setTipo((String) object[2]);
+			vo.setPapel((String) object[3]);
+			vo.setQtde(new Integer(((BigInteger) object[4]).intValue()));
+			listaCasal.add(vo);
+			Integer countaux = count.get(vo.getPapel());
+			if (countaux != null) count.put(vo.getPapel(), countaux+vo.getQtde());
+			else count.put(vo.getPapel(), vo.getQtde());
+			Integer qtdeaux = qtde.get(vo.getPapel());
+			if (qtdeaux != null) qtde.put(vo.getPapel(), qtdeaux+1);
+			else qtde.put(vo.getPapel(), 1);
+		}
+
+		for (String papel : count.keySet()) {
+			count.put(papel, count.get(papel) / qtde.get(papel));
+		}
+
+		for (PlanilhaEncontroInscricaoVO vo : listaCasal) {
+			vo.setMedia(count.get(vo.getPapel()));
+		}
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemplanilha.jrxml");
+		cmdRelatorio.setNome("listagemplanilha");
+		cmdRelatorio.setTitulo("LISTAGEM PLANILHA ATRIBUIÇÕES POR CASAL");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	private EncontroPeriodo getPeriodoFim(EncontroPeriodo periodo) {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroPeriodo.porEncontro");
+		cmd.addParameter("encontro", periodo.getEncontro());
+		List<EncontroPeriodo> list = cmd.call();
+		for (EncontroPeriodo encontroPeriodo : list) {
+			if (periodo.getInicio().before(encontroPeriodo.getInicio()))
+				return encontroPeriodo;
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

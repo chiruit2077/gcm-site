@@ -3,9 +3,12 @@ package br.com.ecc.server.service.cadastro;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import br.com.ecc.client.service.cadastro.EncontroService;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
@@ -24,8 +27,9 @@ import com.google.inject.Singleton;
 @Singleton
 public class EncontroServiceImpl extends SecureRemoteServiceServlet implements EncontroService {
 	private static final long serialVersionUID = 8739734601403901436L;
-	
+
 	@Inject Injector injector;
+	@Inject EntityManager em;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -68,7 +72,7 @@ public class EncontroServiceImpl extends SecureRemoteServiceServlet implements E
 			}
 			vo.setListaInscricao(lista);
 		}
-		
+
 		return vo;
 	}
 
@@ -84,4 +88,14 @@ public class EncontroServiceImpl extends SecureRemoteServiceServlet implements E
 		cmd.addParameter("encontro", encontro);
 		return cmd.call();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<EncontroPeriodo> listaPeriodos(Encontro encontro) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroPeriodo.porEncontro");
+		cmd.addParameter("encontro", encontro);
+		return cmd.call();
+	}
+
 }

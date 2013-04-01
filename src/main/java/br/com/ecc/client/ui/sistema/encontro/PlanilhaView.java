@@ -202,7 +202,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	public void preenchimentoListBox(ChangeEvent event){
 		TipoPreenchimentoAtividadeEnum tipo = (TipoPreenchimentoAtividadeEnum) ListBoxUtil.getItemSelected(preenchimentoListBox, TipoPreenchimentoAtividadeEnum.values());
 		if(tipo.equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
-			qtdeNumberTextBox.setValue(null);
 			qtdeNumberTextBox.setEnabled(true);
 			qtdeNumberTextBox.setFocus(true);
 		}else{
@@ -264,7 +263,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		}
 		if(encontroAtividade.getTipoPreenchimento()!=null){
 			ListBoxUtil.setItemSelected(preenchimentoListBox, encontroAtividade.getTipoPreenchimento().getNome());
-			if (!encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
+			if (encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
 				if (encontroAtividade.getQuantidadeDesejada()!=null)
 					qtdeNumberTextBox.setValue(encontroAtividade.getQuantidadeDesejada().toString());
 				qtdeNumberTextBox.setEnabled(true);

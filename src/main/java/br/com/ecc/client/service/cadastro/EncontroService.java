@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricao;
+import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.vo.EncontroVO;
 
@@ -17,4 +18,5 @@ public interface EncontroService extends RemoteService {
 	public void salva(EncontroVO encontroVO) throws Exception;
 	public EncontroVO getVO(Encontro encontro, Boolean ignorarAfilhados) throws Exception;
 	public List<EncontroInscricao> listaInscricoes(Encontro encontroSelecionado, Boolean exibeRecusados) throws Exception;
+	public List<EncontroPeriodo> listaPeriodos(Encontro encontro) throws Exception;
 }

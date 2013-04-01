@@ -38,9 +38,12 @@ public class EncontroRelatoriosSecretariaImprimirCommand implements Callable<Int
 	@Transactional
 	public Integer call() throws Exception {
 		getParametros().put("TITULO", getTitulo());
-		ArquivoDigital logo = null;
-		if (getEncontro() != null) logo = (ArquivoDigital)em.find(ArquivoDigital.class, getEncontro().getGrupo().getIdArquivoDigital());
-		if (logo != null) getParametros().put("LOGO", new ByteArrayInputStream(logo.getDados()));
+		if (getEncontro() != null) {
+			ArquivoDigital logo = (ArquivoDigital)em.find(ArquivoDigital.class, getEncontro().getGrupo().getIdArquivoDigital());
+			if (logo != null) {
+				getParametros().put("LOGO", new ByteArrayInputStream(logo.getDados()));
+			}
+		}
 		if(getListaObjects()!=null && getListaObjects().size()>0){
 			ImprimirCommand cmd = injector.getInstance(ImprimirCommand.class);
 			cmd.setDadosRelatorio(getListaObjects());

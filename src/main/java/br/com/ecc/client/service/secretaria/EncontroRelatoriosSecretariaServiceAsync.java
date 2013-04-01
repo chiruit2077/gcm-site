@@ -3,6 +3,7 @@ package br.com.ecc.client.service.secretaria;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
+import br.com.ecc.model.EncontroPeriodo;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -21,4 +22,5 @@ public interface EncontroRelatoriosSecretariaServiceAsync {
 	void imprimeRelatorioRecepcaoFinal(Encontro encontro, AsyncCallback<Integer> callback);
 	void imprimeRelatorioRecepcaoInicial(Encontro encontro, AsyncCallback<Integer> callback);
 	void imprimeRelatorioAfilhadosPadrinhos(Encontro encontro, AsyncCallback<Integer> callback);
+	void imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo, AsyncCallback<Integer> callback);
 }
