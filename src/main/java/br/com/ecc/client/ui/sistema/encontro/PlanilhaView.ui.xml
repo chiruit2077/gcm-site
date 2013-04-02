@@ -159,7 +159,7 @@
 							<table cellpadding="3" align="left">
 								<tr>
 									<td class="portal-formLabel" width="180px">Participante:</td>
-									<td>
+									<td colpsan="2">
 										<g:ListBox ui:field="inscricaoListBox" width="400px"/>
 									</td>
 								</tr>
@@ -169,31 +169,42 @@
 							<table cellpadding="3" align="left">
 								<tr>
 									<td class="portal-formLabel" width="180px">Atividade:</td>
-									<td>
+									<td colpsan="2">
 										<g:ListBox ui:field="atividadeEditaListBox" width="400px"/>
 									</td>
+									<td width="200px">&nbsp;</td>
 								</tr>
 							</table>
 						</g:HTMLPanel>
 						<g:HTMLPanel width="100%" ui:field="papelHTMLPanel">
 							<table cellpadding="3" align="left">
 								<tr>
-									<td class="portal-formLabel" width="180px">Papel:</td>
-									<td colpsan="2">
+									<td class="portal-formLabel" width="250px">Papel:</td>
+									<td >
 										<g:ListBox ui:field="papelListBox" width="200px"/>
 									</td>
-									<td>&nbsp;</td>
 									<td>
-										<g:Button ui:field="preencheAutomaticoInscricaoButton" text="Preenche Automático"/>
+										<g:CheckBox ui:field="revisadoInscricaoCheckBox" text="Revisado"/>
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel" width="180px">Adicionar partipação para:</td>
-									<td width="200px">
-										<g:ListBox ui:field="addInscricaoListBox" width="200px"/>
+									<td class="portal-formLabel" width="250px">Adicionar partipação para:</td>
+									<td>
+										<g:ListBox ui:field="addInscricaoListBox" width="400px"/>
 									</td>
 									<td>
 										<g:Button ui:field="adicionarInscricaoButton" text="Adicionar participação"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="250px">Outro atividade:</td>
+									<td colpsan="2">
+										<g:ListBox ui:field="addAtividadeListBox" width="400px"/>
+									</td>
+								</tr>
+								<tr>
+									<td colpsan="2">
+										<g:Button ui:field="preencheAutomaticoInscricaoButton" text="Preenche Automático"/>
 									</td>
 									<td>
 										<g:Button ui:field="excluirTodasInscricaoButton" text="Excluir Todas Participações"/>

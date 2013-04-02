@@ -53,6 +53,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 	EncontroAtividadeInscricaoServiceAsync serviceEncontroInscricaoAtividade = GWT.create(EncontroAtividadeInscricaoService.class);
 
 	private List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao;
+	private List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricaoFull;
 	private GrupoVO grupoEncontroVO;
 	private EncontroVO encontroVO;
 	private Casal casal;
@@ -216,7 +217,6 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			@Override
 			protected void success(EncontroVO encontroVO) {
 				setEncontroVO(encontroVO);
-				getDisplay().populaInscricao();
 				getDisplay().populaPeriodos();
 				getDisplay().showWaitMessage(false);
 			}
@@ -233,8 +233,16 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			@Override
 			protected void success(List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao) {
 				setListaEncontroAtividadeInscricao(listaEncontroAtividadeInscricao);
+				getDisplay().populaInscricao();
 				getDisplay().populaPlanilha();
 				getDisplay().showWaitMessage(false);
+			}
+		});
+		serviceEncontroInscricaoAtividade.lista(
+				encontroSelecionado,new WebAsyncCallback<List<EncontroAtividadeInscricao>>(getDisplay()) {
+			@Override
+			protected void success(List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao) {
+				setListaEncontroAtividadeInscricaoFull(listaEncontroAtividadeInscricao);
 			}
 		});
 	}
@@ -250,7 +258,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 				new WebAsyncCallback<Integer>(getDisplay()) {
 			@Override
 			protected void success(Integer idRelatorio) {
-				DownloadResourceHelper.showReport(idRelatorio, "_blank", "");
+				DownloadResourceHelper.showReport(idRelatorio, getDisplay().getDisplayTitle(), "");
 				getDisplay().showWaitMessage(false);
 			}
 		});
@@ -318,5 +326,14 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	public void setEncontroSelecionado(Encontro encontroSelecionado) {
 		this.encontroSelecionado = encontroSelecionado;
+	}
+
+	public List<EncontroAtividadeInscricao> getListaEncontroAtividadeInscricaoFull() {
+		return listaEncontroAtividadeInscricaoFull;
+	}
+
+	public void setListaEncontroAtividadeInscricaoFull(
+			List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricaoFull) {
+		this.listaEncontroAtividadeInscricaoFull = listaEncontroAtividadeInscricaoFull;
 	}
 }

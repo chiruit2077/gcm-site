@@ -749,6 +749,12 @@ html>body .gwt-DecoratedTabBar {
 .portal-ImageCursor {
 	cursor: pointer;
 }
+
+.portal-ImageCursorErro {
+	cursor: pointer;
+	background-color: red;
+}
+
 .portal-FlowPanel {
 	overflow-y: auto;
 	border: 1px solid gray;

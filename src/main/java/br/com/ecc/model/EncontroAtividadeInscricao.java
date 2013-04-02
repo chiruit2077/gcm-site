@@ -1,5 +1,8 @@
 package br.com.ecc.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 @Entity
@@ -67,8 +71,17 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 	@JoinColumn(name="papel")
 	private Papel papel;
 
+	private Boolean revisado;
+
+	@Transient
+	private List<String> infoErro;
+
 	@Version
 	private Integer version;
+
+	public EncontroAtividadeInscricao() {
+		setInfoErro(new ArrayList<String>());
+	}
 
 	public Integer getId() {
 		return id;
@@ -101,6 +114,7 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 		this.papel = papel;
 	}
 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -118,5 +132,22 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 				getEncontroInscricao() != null && getEncontroInscricao().equals(other.getEncontroInscricao()) )
 			return true;
 		return false;
+	}
+
+	public List<String> getInfoErro() {
+		return infoErro;
+	}
+
+	public void setInfoErro(List<String> infoErro) {
+		this.infoErro = infoErro;
+	}
+
+	public Boolean getRevisado() {
+		if (revisado==null) return false;
+		return revisado;
+	}
+
+	public void setRevisado(Boolean revisado) {
+		this.revisado = revisado;
 	}
 }

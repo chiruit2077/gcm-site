@@ -71,8 +71,10 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 		List<EncontroAtividadeInscricao> lista = cmdVerifica.call();
 		if (lista.size()>0){
 			Papel papel = encontroAtividadeInscricao.getPapel();
+			Boolean revisado = encontroAtividadeInscricao.getRevisado();
 			encontroAtividadeInscricao = lista.get(0);
 			encontroAtividadeInscricao.setPapel(papel);
+			encontroAtividadeInscricao.setRevisado(revisado);
 		}
 		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(encontroAtividadeInscricao);

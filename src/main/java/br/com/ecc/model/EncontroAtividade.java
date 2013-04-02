@@ -21,6 +21,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+
 import br.com.ecc.model.tipo.TipoAtividadeEnum;
 import br.com.ecc.model.tipo.TipoEncontroAtividadeProgramaEnum;
 import br.com.ecc.model.tipo.TipoOcorrenciaAtividadeEnum;
@@ -97,7 +99,8 @@ public class EncontroAtividade extends _WebBaseEntity {
 	@Override
 	public String toString() {
 		if(atividade!=null){
-			return tipoAtividade.getNome() + " - " + atividade.getNome();
+			return DateTimeFormat.getFormat("E").format(inicio) + " " +
+		         DateTimeFormat.getFormat("HH:mm").format(inicio) + " " + DateTimeFormat.getFormat("HH:mm").format(fim) + " " + tipoAtividade.getNome() + " - " + atividade.getNome();
 		}
 		return super.toString();
 	}
