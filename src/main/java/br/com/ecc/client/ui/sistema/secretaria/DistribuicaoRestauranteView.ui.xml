@@ -53,12 +53,6 @@
 									<td>
 										<g:Label styleName="portal-formLabel" text="Vegetariano"/>
 									</td>
-									<td>
-										<g:Image url="images/ballyellow32.png" styleName="portal-ImageCursor" width="20px"/>
-									</td>
-									<td>
-										<g:Label styleName="portal-formLabel" text="Hipertenso"/>
-									</td>
 								</tr>
 							</table>
 				</g:HTMLPanel>

@@ -66,4 +66,13 @@ public class ReportServlet extends HttpServlet {
 			response.getOutputStream().println(msg);
 		}
 	}
+
+	public static final String DOCTYPE =
+		    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">";
+
+	public String headWithTitle(String title) {
+		    return(DOCTYPE + "\n" +
+		           "<HTML>\n" +
+		           "<HEAD><TITLE>" + title + "</TITLE></HEAD>\n");
+	}
 }

@@ -632,6 +632,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	private boolean isSelecionadoMesa(EncontroInscricao encontroInscricao, EncontroRestaurante restaurante, Mesa mesa) {
 		if( encontroInscricao==null) return false;
+		if (!mesa.getRestaurante().isCheckMesa()) return false;
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesaOutros()) {
 			if (encontroRestaurante.getMesa().getRestaurante().isCheckMesa()){
 				if (encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
