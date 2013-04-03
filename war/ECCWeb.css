@@ -1207,8 +1207,8 @@ html>body .gwt-DecoratedTabBar {
 }
 
 .restaurante-Panel {
-	background: black;
-	color: white;
+	background: #DCDCDC;
+	color: black;
 	font-weight: bold;
 	font-size: large;
  	border: 2px solid black;
@@ -1231,7 +1231,7 @@ html>body .gwt-DecoratedTabBar {
 }
 
 .restaurante-Afilhado {
-	background: #DCE6F1;
+	background: #BDB76B;
 	color: black;
 	font-size: medium;
 	border: 1px solid gray;

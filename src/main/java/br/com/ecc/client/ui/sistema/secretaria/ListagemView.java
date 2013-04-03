@@ -47,23 +47,23 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@UiTemplate("ListagemView.ui.xml")
 	interface ListagemViewUiBinder extends UiBinder<Widget, ListagemView> {}
 	private ListagemViewUiBinder uiBinder = GWT.create(ListagemViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 	@UiField Label itemListagemTotal;
 	@UiField VerticalPanel centralPanel;
-	
+
 	@UiField(provided=true) FlexTable casalFlexTable;
 	private FlexTableUtil casalTableUtil = new FlexTableUtil();
-	
+
 	@UiField(provided=true) FlexTable casalListagemFlexTable;
 	private FlexTableUtil casalListagemTableUtil = new FlexTableUtil();
-	
+
 	@UiField TextBox nomeTextBox;
 	@UiField ListBox agrupamentoListBox;
 	@UiField ListBox tipoInscricaoListBox;
 	@UiField ListBox tipoListBox;
-	
+
 	@UiField TextBox tituloTextBox;
 	@UiField CheckBox apelidoCheckBox;
 	@UiField CheckBox emailCheckBox;
@@ -74,10 +74,10 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@UiField CheckBox vegetarianoCheckBox;
 	@UiField CheckBox diabeticoCheckBox;
 	@UiField CheckBox tipoCheckBox;
-	
+
 	@UiField DialogBox emailDialogBox;
 	@UiField TextArea emailTextArea;
-	
+
 	private List<Agrupamento> listaAgrupamento;
 	private List<Casal> listaCasalPesquisa = new ArrayList<Casal>();
 
@@ -92,12 +92,12 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		for (TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
 			tipoInscricaoListBox.addItem(tipo.toString());
 		}
-		
+
 		tipoListBox.addItem("");
 		for (TipoCasalEnum tipo : TipoCasalEnum.values()) {
 			tipoListBox.addItem(tipo.toString());
 		}
-		
+
 		nomeTextBox.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -109,12 +109,12 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 			}
 		});
 	}
-	
+
 	private void criaTabela() {
 		casalFlexTable = new FlexTable();
 		casalFlexTable.setStyleName("portal-formSmall");
 		casalTableUtil.initialize(casalFlexTable);
-		
+
 		casalTableUtil.addColumn("", "10", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("Apelidos", "140", HasHorizontalAlignment.ALIGN_LEFT);
 		casalTableUtil.addColumn("Nomes", "230", HasHorizontalAlignment.ALIGN_LEFT);
@@ -126,12 +126,12 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalTableUtil.addColumn("V", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
-	
+
 	private void criaTabelaListagem() {
 		casalListagemFlexTable = new FlexTable();
 		casalListagemFlexTable.setStyleName("portal-formSmall");
 		casalListagemTableUtil.initialize(casalListagemFlexTable);
-		
+
 		casalListagemTableUtil.addColumn("", "10", HasHorizontalAlignment.ALIGN_CENTER);
 		casalListagemTableUtil.addColumn("Apelidos", "140", HasHorizontalAlignment.ALIGN_LEFT);
 		casalListagemTableUtil.addColumn("Nomes", "230", HasHorizontalAlignment.ALIGN_LEFT);
@@ -143,7 +143,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalListagemTableUtil.addColumn("V", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalListagemTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
-	
+
 	@UiHandler("buscarButton")
 	public void buscarButtonClickHandler(ClickEvent event){
 		CasalParamVO vo = new CasalParamVO();
@@ -161,18 +161,18 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		}
 		presenter.buscaCasais(vo);
 	}
-	
+
 	@UiHandler("limparButton")
 	public void limparButtonClickHandler(ClickEvent event){
 		casalTableUtil.clearData();
 	}
-	
+
 	@UiHandler("limparListagemButton")
 	public void limparListagemButtonClickHandler(ClickEvent event){
 		casalListagemTableUtil.clearData();
 		presenter.setListaCasal(new ArrayList<Casal>());
 	}
-	
+
 	@UiHandler("imprimirButton")
 	public void imprimirButtonClickHandler(ClickEvent event){
 		CasalOpcaoRelatorioVO casalOpcaoRelatorioVO = new CasalOpcaoRelatorioVO();
@@ -188,13 +188,13 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalOpcaoRelatorioVO.setTipo(tipoCheckBox.getValue());
 		presenter.imprimir(casalOpcaoRelatorioVO);
 	}
-	
+
 	@UiHandler("emailButton")
 	public void emailButtonClickHandler(ClickEvent event){
 		String emails = "";
 		for (Casal casal : presenter.getListaCasal()) {
 			if(!emails.equals("")){
-				emails += ", ";	
+				emails += ", ";
 			}
 			emails += casal.getEmails(", ");
 		}
@@ -202,13 +202,13 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		emailDialogBox.center();
 		emailDialogBox.show();
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		emailDialogBox.hide();
 	}
-	
-	
+
+
 	@UiHandler("adicionarButton")
 	public void adicionarButtonClickHandler(ClickEvent event){
 		for (Casal casal : listaCasalPesquisa) {
@@ -218,18 +218,18 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		}
 		populaEntidades(presenter.getListaCasal(), true);
 	}
-	
+
 	@UiHandler("fecharImage")
 	public void fecharImageClickHandler(ClickEvent event){
 		presenter.fechar();
 	}
-	
-	
+
+
 	@Override
 	public void init(){
 		nomeTextBox.setFocus(true);
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Listagem de Casais";
@@ -238,7 +238,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@Override
 	public void reset() {
 	}
-	
+
 	@Override
 	public void populaEntidades(List<Casal> lista, final Boolean listagem) {
 		Collections.sort(lista, new Comparator<Casal>() {
@@ -262,7 +262,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		String t = "";
 		for (final Casal casal: lista) {
 			Object dados[] = new Object[10];
-			
+
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
@@ -292,10 +292,10 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 				}
 			});
 			hp.add(imagem);
-			
+
 			dados[0] = hp;
 			dados[1] = casal.getApelidos("e");
-			
+
 			t = "";
 			if(casal.getEle()!=null){
 				t = casal.getEle().getNome()+ "<br>" ;
@@ -304,21 +304,21 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 				t += casal.getEla().getNome();
 			}
 			dados[2] = new HTML(t);
-			
+
 			t = "";
 			if(casal.getEle()!=null){
-				t = (casal.getEle().getEmail()==null?"&nbsp;":casal.getEle().getEmail()) + "<br>";
+				t = ((casal.getEle().getEmail()!=null && !casal.getEle().getEmail().equals(""))?casal.getEle().getEmail():"&nbsp;") + "<br>";
 			}
 			if(casal.getEla()!=null){
-				t = (casal.getEla().getEmail()==null?"&nbsp;":casal.getEla().getEmail());
+				t += ((casal.getEla().getEmail()!=null && !casal.getEla().getEmail().equals(""))?casal.getEla().getEmail():"&nbsp;");
 			}
 			dados[3] = new HTML(t);
 			t = "";
 			if(casal.getEle()!=null){
-				t = (casal.getEle().getTelefoneCelular()==null?"&nbsp;":casal.getEle().getTelefoneCelular()) + "<br>";
+				t = ((casal.getEle().getTelefoneCelular()!=null && !casal.getEle().getTelefoneCelular().equals(""))?casal.getEle().getTelefoneCelular():"&nbsp;") + "<br>";
 			}
 			if(casal.getEla()!=null){
-				t = (casal.getEla().getTelefoneCelular()==null?"&nbsp;":casal.getEla().getTelefoneCelular());
+				t += ((casal.getEla().getTelefoneCelular()!=null && !casal.getEla().getTelefoneCelular().equals(""))?casal.getEla().getTelefoneCelular():"&nbsp;");
 			}
 			dados[4] = new HTML(t);
 			dados[5] = casal.getTelefone();
@@ -327,7 +327,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 				t = (casal.getEle().getAlergico()!=null&&casal.getEle().getAlergico()?"Sim":"Não") + "<br>";
 			}
 			if(casal.getEla()!=null){
-				t = (casal.getEla().getAlergico()!=null&&casal.getEla().getAlergico()?"Sim":"Não");
+				t += (casal.getEla().getAlergico()!=null&&casal.getEla().getAlergico()?"Sim":"Não");
 			}
 			dados[6] = new HTML(t);
 			t = "";
@@ -335,7 +335,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 				t = (casal.getEle().getDiabetico()!=null&&casal.getEle().getDiabetico()?"Sim":"Não") + "<br>";
 			}
 			if(casal.getEla()!=null){
-				t = (casal.getEla().getDiabetico()!=null&&casal.getEla().getDiabetico()?"Sim":"Não");
+				t += (casal.getEla().getDiabetico()!=null&&casal.getEla().getDiabetico()?"Sim":"Não");
 			}
 			dados[7] = new HTML(t);
 			t = "";
@@ -343,10 +343,10 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 				t = (casal.getEle().getVegetariano()!=null&&casal.getEle().getVegetariano()?"Sim":"Não") + "<br>";
 			}
 			if(casal.getEla()!=null){
-				t = (casal.getEla().getVegetariano()!=null&&casal.getEla().getVegetariano()?"Sim":"Não");
+				t += (casal.getEla().getVegetariano()!=null&&casal.getEla().getVegetariano()?"Sim":"Não");
 			}
 			dados[8] = new HTML(t);
-			dados[9] = casal.getTipoCasal()==null?"":casal.getTipoCasal().getNome(); 
+			dados[9] = casal.getTipoCasal()==null?"":casal.getTipoCasal().getNome();
 			if(listagem){
 				casalListagemTableUtil.addRow(dados,row+1);
 			} else {
@@ -370,13 +370,13 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 			agrupamentoListBox.addItem(agrupamento.toString());
 		}
 	}
-	
+
 	@UiHandler("agrupamentoListBox")
 	public void agrupamentoListBoxChangeHandler(ChangeEvent event) {
 		nomeTextBox.setValue(null);
 		tipoInscricaoListBox.setSelectedIndex(0);
 	}
-	
+
 	@UiHandler("tipoInscricaoListBox")
 	public void tipoInscricaoListBoxChangeHandler(ChangeEvent event) {
 		agrupamentoListBox.setSelectedIndex(0);

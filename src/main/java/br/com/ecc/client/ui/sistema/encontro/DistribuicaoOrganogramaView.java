@@ -17,7 +17,6 @@ import br.com.ecc.model.OrganogramaCoordenacao;
 import br.com.ecc.model._WebBaseEntity;
 import br.com.ecc.model.tipo.TipoAtividadeEnum;
 import br.com.ecc.model.vo.EncontroOrganogramaVO;
-import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -92,8 +91,7 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 
 	@UiHandler("printButton")
 	public void printButtonClickHandler(ClickEvent event){
-		//Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",distribuicaoPanel.getElement());
-		Print.it("","<link rel=styleSheet type=text/css media=print href=/ECCWeb.css>",distribuicaoPanel.getElement());
+		printWidget(distribuicaoPanel);
 	}
 
 	@UiHandler("fecharCoordenacaoButton")

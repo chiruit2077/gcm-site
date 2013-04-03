@@ -3,6 +3,7 @@ package br.com.ecc.client.core.mvp.view;
 import br.com.ecc.client.core.event.WaitEvent;
 import br.com.ecc.client.core.mvp.presenter.BasePresenter;
 import br.com.ecc.core.mvp.eventbus.WebEventBus;
+import br.com.freller.tool.client.Print;
 
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -11,10 +12,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 @SuppressWarnings({ "rawtypes" })
 public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
-	
+
 	public P presenter;
 	private Widget widget;
-	
+
 	public BaseView() {
 		bindWindow();
 	}
@@ -50,11 +51,11 @@ public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
 	public Widget asWidget() {
 		return this.widget;
 	}
-	
+
 	@Override
 	public void draw() {
 	}
-	
+
 	protected int getWindowHeight(){
 		try{
 			return Window.getClientHeight();
@@ -62,7 +63,7 @@ public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
 			return 768;
 		}
 	}
-	
+
 	protected int getWindowWidth(){
 		try{
 			return Window.getClientWidth();
@@ -70,7 +71,7 @@ public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
 			return 1024;
 		}
 	}
-	
+
 	protected int getBodyHeight(){
 		try{
 			return Window.getClientHeight() - HEADER_HEIGHT;
@@ -97,19 +98,19 @@ public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
 
 	public void adjustWindowSize() {
 	}
-	
+
 	@Override
 	public void showError(String error) {
 		if (widget != null){
 			Window.alert(error);
-		} 
+		}
 	}
-	
+
 	@Override
 	public void showMessage(String message) {
 		if (widget != null){
 			Window.alert(message);
-		} 
+		}
 	}
 	@Override
 	public void showWaitMessage(boolean wait) {
@@ -117,8 +118,14 @@ public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
 		showMsg.setWait(wait);
 		WebEventBus.getInstance().fireEvent(showMsg);
 	}
-	
+
 	public BaseView getBaseView() {
 		return this;
+	}
+
+	public void printWidget(Widget widget){
+		Print.it("<link rel=styleSheet type=text/css media=print href=/ECCWeb.css>"+
+			    "<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",
+			    widget.getElement());
 	}
 }

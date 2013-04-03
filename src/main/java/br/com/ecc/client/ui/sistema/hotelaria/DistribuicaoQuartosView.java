@@ -21,7 +21,6 @@ import br.com.ecc.model.tipo.TipoEncontroQuartoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoQuartoEnum;
 import br.com.ecc.model.vo.EncontroHotelVO;
-import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -143,7 +142,8 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 
 	@UiHandler("printButton")
 	public void printButtonClickHandler(ClickEvent event){
-		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",distribuicaoPanel.getElement());
+		printWidget(distribuicaoPanel);
+
 	}
 
 	@UiHandler("fecharQuartoButton")

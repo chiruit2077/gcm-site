@@ -16,6 +16,7 @@ import br.com.ecc.client.util.FlexTableUtil.TipoColuna;
 import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
+import br.com.ecc.client.util.NavegadorUtil;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroInscricaoPagamento;
@@ -27,7 +28,6 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoMensagemEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.vo.EncontroInscricaoVO;
-import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -238,7 +238,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 	@UiHandler("printButton")
 	public void printButtonClickHandler(ClickEvent event){
-		Print.it("","<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",encontroInscricaoFlexTable.getElement());
+		printWidget(encontroInscricaoFlexTable);
 	}
 
 
@@ -533,7 +533,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 					}
 				}
 				if(podeEditar || ok){
-					editar = new Image("images/edit.png");
+					editar = new Image(NavegadorUtil.makeUrlResource("images/edit.png"));
 					editar.setTitle("Editar as informações da inscrição");
 					editar.setStyleName("portal-ImageCursor");
 					editar.addClickHandler(new ClickHandler() {
@@ -546,7 +546,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				}
 
 				if(podeEditar){
-					excluir = new Image("images/delete.png");
+					excluir = new Image(NavegadorUtil.makeUrlResource("images/delete.png"));
 					excluir.setTitle("Excluir esta inscrição");
 					excluir.setStyleName("portal-ImageCursor");
 					excluir.addClickHandler(new ClickHandler() {
@@ -726,7 +726,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			hp.setSpacing(1);
 
 			if(podeEditar){
-				editar = new Image("images/edit.png");
+				editar = new Image(NavegadorUtil.makeUrlResource("images/edit.png"));
 				editar.setTitle("Editar este detalhe");
 				editar.setStyleName("portal-ImageCursor");
 				editar.addClickHandler(new ClickHandler() {
@@ -739,7 +739,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			}
 
 			if(podeEditar){
-				excluir = new Image("images/delete.png");
+				excluir = new Image(NavegadorUtil.makeUrlResource("images/delete.png"));
 				excluir.setTitle("Excluir este detalhe");
 				excluir.setStyleName("portal-ImageCursor");
 				excluir.addClickHandler(new ClickHandler() {

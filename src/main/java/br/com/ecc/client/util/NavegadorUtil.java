@@ -16,11 +16,11 @@ public class NavegadorUtil {
 	}
 
 	public native static String makeUrl(String url) /*-{
-		if (@br.com.ecc.client.util.NavegadorUtil::producao){
-			return @br.com.ecc.client.util.NavegadorUtil::baseURL+"eccweb/"+url;
-		}else{
-			return @br.com.ecc.client.util.NavegadorUtil::baseURL+"eccweb/"+url;
-		}
+		return @br.com.ecc.client.util.NavegadorUtil::baseURL+"eccweb/"+url;
+	}-*/;
+
+	public native static String makeUrlResource(String url) /*-{
+		return @br.com.ecc.client.util.NavegadorUtil::baseURL+url;
 	}-*/;
 
 	public native static void getNavegador()/*-{

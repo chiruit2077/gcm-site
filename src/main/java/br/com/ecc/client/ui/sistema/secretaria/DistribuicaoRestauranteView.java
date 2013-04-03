@@ -9,6 +9,7 @@ import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.util.FlexTableHelper;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
+import br.com.ecc.client.util.NavegadorUtil;
 import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroInscricao;
@@ -22,7 +23,6 @@ import br.com.ecc.model._WebBaseEntity;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.EncontroRestauranteVO;
-import br.com.freller.tool.client.Print;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -128,7 +128,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	@UiHandler("printButton")
 	public void printButtonClickHandler(ClickEvent event){
-		Print.it("","<link rel=styleSheet type=text/css media=print href=/ECCWeb.css>",distribuicaoPanel.getElement());
+		printWidget(distribuicaoPanel);
 	}
 
 
@@ -469,10 +469,10 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		if (p!=null){
 			String apelido = "<span>" + p.getApelido() + "</span>";
 			if (p.getDiabetico()){
-				apelido+="<input type='image' src='images/ballred32.png' width='15' height='15'/>";
+				apelido+="<input type='image' src='" + NavegadorUtil.makeUrlResource("images/ballred32.png") + "' width='15' height='15'/>";
 			}
 			if (p.getVegetariano()){
-				apelido+="<input type='image' src='images/ballgreen32.png' width='15' height='15'/>";
+				apelido+="<input type='image' src='" + NavegadorUtil.makeUrlResource("images/ballgreen32.png") + "' width='15' height='15'/>";
 			}
 			return apelido;
 		}
