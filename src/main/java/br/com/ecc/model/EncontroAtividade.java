@@ -77,6 +77,8 @@ public class EncontroAtividade extends _WebBaseEntity {
 
 	private Integer quantidadeDesejada;
 
+	private Integer porcentagem;
+
 	private Boolean revisado;
 
 	@Transient
@@ -222,6 +224,27 @@ public class EncontroAtividade extends _WebBaseEntity {
 
 	public void setRevisado(Boolean revisado) {
 		this.revisado = revisado;
+	}
+
+	@Transient
+	public Long getDuracao() {
+		if (getFim() == null || getInicio() == null) return new Long(0);
+		return (getFim().getTime() - getInicio().getTime()) / 1000 / 60;
+	}
+
+	@Transient
+	public Integer getPorcentagemReal() {
+		if (getPorcentagem()!=null) return getPorcentagem();
+		return getTipoAtividade().getPorcentagem();
+	}
+
+
+	public Integer getPorcentagem() {
+		return porcentagem;
+	}
+
+	public void setPorcentagem(Integer porcentagem) {
+		this.porcentagem = porcentagem;
 	}
 
 }

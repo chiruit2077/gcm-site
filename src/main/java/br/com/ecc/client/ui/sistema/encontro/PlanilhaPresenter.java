@@ -102,7 +102,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	public void salvarAtividade(EncontroAtividade encontroAtividade) {
 		getDisplay().showWaitMessage(true);
-		Integer pos = null;
+		/*Integer pos = null;
 		if(encontroAtividade.getId()!=null){
 			EncontroAtividade ea;
 			for (int i=0; i<grupoEncontroVO.getListaAtividade().size(); i++) {
@@ -113,17 +113,18 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 				}
 			}
 		}
-		final Integer indice = pos;
+		final Integer indice = pos;*/
 		serviceEncontroAtividade.salva(encontroAtividade, new WebAsyncCallback<EncontroAtividade>(getDisplay()) {
 			@Override
 			public void success(EncontroAtividade encontroAtividade) {
-				if(indice!=null){
+				/*if(indice!=null){
 					encontroVO.getListaEncontroAtividade().set(indice, encontroAtividade);
 				} else {
 					encontroVO.getListaEncontroAtividade().add(encontroAtividade);
 				}
 				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false);
+				getDisplay().showWaitMessage(false);*/
+				buscaDadosPlanilha();
 			}
 		});
 	}
@@ -133,15 +134,16 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		serviceEncontroAtividade.exclui(encontroAtividade, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
-				encontroVO.getListaEncontroAtividade().remove(encontroAtividade);
+				/*encontroVO.getListaEncontroAtividade().remove(encontroAtividade);
 				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false);
+				getDisplay().showWaitMessage(false)*/;
+				buscaDadosPlanilha();
 			}
 		});
 	}
 	public void salvarInscricao(EncontroAtividadeInscricao encontroAtividadeInscricao) {
 		getDisplay().showWaitMessage(true);
-		Integer pos = null;
+		/*Integer pos = null;
 		if(encontroAtividadeInscricao.getId()!=null){
 			EncontroAtividadeInscricao eai;
 			for (int i=0; i<listaEncontroAtividadeInscricao.size(); i++) {
@@ -152,17 +154,18 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 				}
 			}
 		}
-		final Integer indice = pos;
+		final Integer indice = pos;*/
 		serviceEncontroInscricaoAtividade.salva(encontroAtividadeInscricao, new WebAsyncCallback<EncontroAtividadeInscricao>(getDisplay()) {
 			@Override
 			public void success(EncontroAtividadeInscricao encontroAtividadeInscricao) {
-				if(indice!=null){
+				/*if(indice!=null){
 					listaEncontroAtividadeInscricao.set(indice, encontroAtividadeInscricao);
 				} else {
 					listaEncontroAtividadeInscricao.add(encontroAtividadeInscricao);
 				}
 				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false);
+				getDisplay().showWaitMessage(false);*/
+				buscaDadosPlanilha();
 			}
 		});
 	}
@@ -181,9 +184,10 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		serviceEncontroInscricaoAtividade.exclui(encontroAtividadeInscricao, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
-				listaEncontroAtividadeInscricao.remove(encontroAtividadeInscricao);
+				/*listaEncontroAtividadeInscricao.remove(encontroAtividadeInscricao);
 				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false);
+				getDisplay().showWaitMessage(false);*/
+				buscaDadosPlanilha();
 			}
 		});
 	}

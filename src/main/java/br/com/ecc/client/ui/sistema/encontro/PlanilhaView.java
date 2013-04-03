@@ -91,6 +91,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiField DateBox inicioDateBox;
 	@UiField DateBox fimDateBox;
 	@UiField(provided=true) NumberTextBox qtdeNumberTextBox;
+	@UiField(provided=true) NumberTextBox porcentagemNumberTextBox;
 	@UiField Button excluirAtividadeButton;
 
 	@UiField DialogBox editaInscricaoDialogBox;
@@ -139,6 +140,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		criaTabela();
 		criaTabelaAtividade();
 		qtdeNumberTextBox = new NumberTextBox(false, false, 5, 5);
+		porcentagemNumberTextBox = new NumberTextBox(false, false, 3, 3);
 		initWidget(uiBinder.createAndBindUi(this));
 
 		planilhaPanel.setWidth(this.getWindowWidth() - 30 +"px");
@@ -223,6 +225,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		if(qtdeNumberTextBox.getNumber()!=null){
 			encontroAtividadeEditada.setQuantidadeDesejada(qtdeNumberTextBox.getNumber().intValue());
 		}
+		encontroAtividadeEditada.setPorcentagem(null);
+		if(porcentagemNumberTextBox.getNumber()!=null){
+			encontroAtividadeEditada.setPorcentagem(porcentagemNumberTextBox.getNumber().intValue());
+		}
 		encontroAtividadeEditada.setTipoAtividade((TipoAtividadeEnum)ListBoxUtil.getItemSelected(tipoListBox, TipoAtividadeEnum.values()));
 		encontroAtividadeEditada.setTipoOcorrencia((TipoOcorrenciaAtividadeEnum)ListBoxUtil.getItemSelected(ocorrenciaListBox, TipoOcorrenciaAtividadeEnum.values()));
 		encontroAtividadeEditada.setTipoPrograma((TipoEncontroAtividadeProgramaEnum)ListBoxUtil.getItemSelected(programaListBox, TipoEncontroAtividadeProgramaEnum.values()));
@@ -250,6 +256,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	public void limpaCamposAtividade(){
 		excluirAtividadeButton.setVisible(false);
+		revisadoCheckBox.setValue(false);
+		qtdeNumberTextBox.setValue(null);
+		porcentagemNumberTextBox.setValue(null);
 	}
 
 	public void defineCamposAtividade(EncontroAtividade encontroAtividade){
@@ -274,6 +283,8 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				qtdeNumberTextBox.setEnabled(false);
 			}
 		}
+		if (encontroAtividade.getPorcentagem()!=null)
+			porcentagemNumberTextBox.setValue(encontroAtividade.getPorcentagem().toString());
 		if(encontroAtividade.getAtividade()!=null){
 			ListBoxUtil.setItemSelected(atividadeListBox, encontroAtividade.getAtividade().getNome());
 		}
@@ -779,6 +790,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				boolean choca=false;
 				boolean chocainicio=false;
 				boolean chocafim=false;
+				boolean chocaseguido=false;
+				/*if (encontroAtividade.getId().equals(438) && ea.getId().equals(425) && ei.getId().equals(199))
+					System.out.println("TESTE");*/
 				if(encontroAtividade.getInicio().equals(ea.getInicio()) ||
 						(encontroAtividade.getInicio().after(ea.getInicio()) && encontroAtividade.getInicio().before(ea.getFim()))){
 					chocainicio=true;
@@ -787,6 +801,31 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						(encontroAtividade.getFim().after(ea.getInicio()) && encontroAtividade.getFim().before(ea.getFim()))){
 					chocafim=true;
 				}
+				if( encontroAtividade.getPorcentagemReal().equals(100) &&
+						ea.getPorcentagemReal().equals(100) ){
+						if ( encontroAtividade.getInicio().equals(ea.getFim()))
+							chocaseguido = true;
+						if ( encontroAtividade.getFim().equals(ea.getInicio()))
+							chocaseguido = true;
+				}
+				if (chocainicio || chocafim){
+					int porcentagem1 = encontroAtividade.getPorcentagemReal();
+					int porcentagem2 = ea.getPorcentagemReal();
+					long duracaominima1 = (long) (encontroAtividade.getDuracao()*porcentagem1/100);
+					long duracaominima2 = (long) (ea.getDuracao()*porcentagem2/100);
+					long duracaochoque = 0;
+					if (chocainicio && chocafim) duracaochoque = (encontroAtividade.getFim().getTime() - encontroAtividade.getInicio().getTime()) / 1000 / 60;
+					else if (chocainicio) duracaochoque = (ea.getFim().getTime() - encontroAtividade.getInicio().getTime()) / 1000 / 60;
+					else if (chocafim) duracaochoque = (encontroAtividade.getFim().getTime() - ea.getInicio().getTime()) / 1000 / 60;
+
+					if (duracaominima1 > duracaochoque && duracaominima1 > 0 && duracaominima2 > 0 && duracaochoque < ea.getDuracao())
+						choca=true;
+					if (duracaominima2 < duracaochoque && duracaominima1 > 0 && duracaominima2 > 0 && duracaochoque > encontroAtividade.getDuracao())
+						choca=true;
+				}
+				if (chocaseguido)
+					choca=true;
+				/*
 				if (chocainicio || chocafim){
 					if ( logicalXOR(chocainicio,chocafim) &&
 							((encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO) &&
@@ -796,7 +835,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE) &&
 									ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE))||
 							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO))/* ||
+									ea.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO)) ||
 							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO) &&
 									ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE)) ||
 							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE) &&
@@ -804,7 +843,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO) &&
 									ea.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO)) ||
 							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO))*/
+									ea.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO))
 						)){
 						choca=true;
 					}
@@ -812,13 +851,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 							!ea.getTipoAtividade().equals(TipoAtividadeEnum.MUSICA))){
 						choca=true;
 					}
-				}
+				}*/
 				if (choca){
-					if ((encontroAtividade.getTipoOcorrencia().equals(TipoOcorrenciaAtividadeEnum.SIMULTANEA) &&
-							!encontroAtividade.getTipoOcorrencia().equals(ea.getTipoOcorrencia())) ||
-							(encontroAtividade.getTipoOcorrencia().equals(ea.getTipoOcorrencia()) ||
-							!ea.getTipoOcorrencia().equals(TipoOcorrenciaAtividadeEnum.SIMULTANEA)))
-						listaChocam.add(encontroAtividade);
+					listaChocam.add(encontroAtividade);
 				}
 			}
 		}

@@ -123,7 +123,13 @@
 									</td>
 								</tr>
 								<tr>
+									<td class="portal-formLabel">Porcentagem Minima Tempo:</td>
 									<td>
+										<cn:NumberTextBox ui:field="porcentagemNumberTextBox" width="150" textAlignment="center"/>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
 										<g:CheckBox ui:field="revisadoCheckBox" text="Revisado"/>
 									</td>
 								</tr>
