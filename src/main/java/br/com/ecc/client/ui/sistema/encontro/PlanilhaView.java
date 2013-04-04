@@ -1025,12 +1025,12 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			participanteHTMLPanel.setVisible(true);
 			opcoesHTMLPanel.setVisible(true);
 			atividadeHTMLPanel.setVisible(true);
+			papelHTMLPanel.setVisible(true);
 			entidadeEditadaTituloLabel.setText("Atividade:");
 			entidadeEditadaLabel.setText(encontroAtividade.getAtividade().getNome());
 			if(encontroAtividadeInscricao != null){
 				opcoesHTMLPanel.setVisible(false);
 				atividadeHTMLPanel.setVisible(false);
-				papelHTMLPanel.setVisible(false);
 				adicionarInscricaoButton.setVisible(false);
 				selecionaInscricaoButton.setVisible(false);
 				excluirTodasInscricaoButton.setVisible(false);
@@ -1083,10 +1083,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			excluirTodasInscricaoButton.setVisible(false);
 			preencheAutomaticoInscricaoButton.setVisible(false);
 			selecionaInscricaoButton.setVisible(false);
-			atividadeHTMLPanel.setVisible(false);
+			atividadeHTMLPanel.setVisible(true);
 			papelHTMLPanel.setVisible(true);
-			opcoesHTMLPanel.setVisible(false);
-			papelHTMLPanel.setVisible(false);
+			opcoesHTMLPanel.setVisible(true);
 			participantesFlowPanel.setVisible(true);
 			entidadeEditadaTituloLabel.setText("Participante:");
 			if(encontroAtividadeInscricao.getEncontroInscricao().getCasal()!=null){
@@ -1129,7 +1128,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		excluirInscricaoButton.setVisible(false);
 		participantesFlowPanel.setVisible(false);
 		preencheAutomaticoInscricaoButton.setVisible(false);
-		papelHTMLPanel.setVisible(true);
+		papelHTMLPanel.setVisible(false);
 		salvarInscricaoButton.setVisible(true);
 		encontroInscricaoTableUtil.clearData();
 		revisadoInscricaoCheckBox.setVisible(false);
