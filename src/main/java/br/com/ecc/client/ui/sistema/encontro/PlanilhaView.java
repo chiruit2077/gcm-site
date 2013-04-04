@@ -1800,7 +1800,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				if ( !mostraCoordenacaoCheckBox.getValue() && getCoordenacao(ei)){
 					ok=false;
 				}
-				if ( !naomostraPadrinhoCheckBox.getValue() && ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
+				if ( naomostraPadrinhoCheckBox.getValue() && ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
 					ok=false;
 				}
 				if(ok){
