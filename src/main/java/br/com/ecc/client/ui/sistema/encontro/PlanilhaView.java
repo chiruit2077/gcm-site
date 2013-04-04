@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
+import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.FlexTableUtil.TipoColuna;
 import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
+import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.client.util.NavegadorUtil;
 import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.Atividade;
@@ -24,6 +27,7 @@ import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.EncontroTotalizacaoAtividade;
 import br.com.ecc.model.OrganogramaArea;
 import br.com.ecc.model.Papel;
+import br.com.ecc.model._WebBaseEntity;
 import br.com.ecc.model.tipo.TipoAtividadeEnum;
 import br.com.ecc.model.tipo.TipoEncontroAtividadeProgramaEnum;
 import br.com.ecc.model.tipo.TipoExibicaoPlanilhaEnum;
@@ -41,6 +45,8 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -61,6 +67,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -78,6 +87,15 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiField ListBox periodoListBox;
 	@UiField ListBox planilhaListBox;
 
+	@UiField DialogBox selecaoInscricaoDialogBox;
+	@UiField Button salvarSelecaoButton;
+
+	@UiField Button selecionaInscricaoButton;
+	@UiField Label itemSelecionaTotal;
+	@UiField(provided=true) FlexTable selecionInscricaoFlexTable;
+	private FlexTableUtil selecionInscricaoTableUtil = new FlexTableUtil();
+
+
 	@UiField DialogBox editaAtividadeDialogBox;
 	@UiField ListBox tipoListBox;
 	@UiField ListBox ocorrenciaListBox;
@@ -88,6 +106,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiField ListBox preenchimentoListBox;
 	@UiField CheckBox revisadoCheckBox;
 	@UiField CheckBox revisadoInscricaoCheckBox;
+	@UiField CheckBox mostraCoordenacaoCheckBox;
+	@UiField CheckBox mostraChoqueCheckBox;
+	@UiField CheckBox naomostraPadrinhoCheckBox;
 	@UiField DateBox inicioDateBox;
 	@UiField DateBox fimDateBox;
 	@UiField(provided=true) NumberTextBox qtdeNumberTextBox;
@@ -97,7 +118,8 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiField DialogBox editaInscricaoDialogBox;
 	@UiField Label entidadeEditadaLabel;
 	@UiField Label entidadeEditadaTituloLabel;
-	@UiField ListBox inscricaoListBox;
+	@UiField(provided = true) SuggestBox inscricaoSuggestBox1;
+	private final GenericEntitySuggestOracle inscricaoSuggest1 = new GenericEntitySuggestOracle();
 	@UiField ListBox papelListBox;
 	@UiField Button excluirInscricaoButton;
 	@UiField Button salvarInscricaoButton;
@@ -112,6 +134,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiField HTMLPanel atividadeHTMLPanel;
 	@UiField HTMLPanel participanteHTMLPanel;
 	@UiField HTMLPanel papelHTMLPanel;
+	@UiField HTMLPanel opcoesHTMLPanel;
 
 	@UiField ListBox addInscricaoListBox;
 	@UiField FlowPanel participantesFlowPanel;
@@ -120,6 +143,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	private FlexTableUtil encontroInscricaoTableUtil = new FlexTableUtil();
 	@UiField(provided=true) FlexTable encontroInscricaoAtividadeFlexTable;
 	private FlexTableUtil encontroInscricaoAtividadeTableUtil = new FlexTableUtil();
+
+	@UiField(provided = true) RadioButton casalRadio;
+	@UiField(provided = true) RadioButton pessoaRadio;
 
 	@UiField HTMLPanel planilhaPanel;
 	@UiField VerticalPanel centralPanel;
@@ -130,6 +156,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	private EncontroAtividadeInscricao encontroAtividadeInscricaoEditada;
 
 	private List<EncontroAtividadeInscricao> listaParticipantesInscritos;
+	private List<ParticipanteVO> listaParticipantesSugeridos;
 	private List<Papel> listaPapel;
 
 	DateTimeFormat dfDia = DateTimeFormat.getFormat("E");
@@ -138,10 +165,26 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	public PlanilhaView() {
 		criaTabela();
+		criaTabelaSelecao();
 		criaTabelaAtividade();
 		qtdeNumberTextBox = new NumberTextBox(false, false, 5, 5);
 		porcentagemNumberTextBox = new NumberTextBox(false, false, 3, 3);
+		casalRadio = new RadioButton("tipo", "Por Casal");
+		pessoaRadio = new RadioButton("tipo", "Por Pessoa");
+		inscricaoSuggest1.setMinimoCaracteres(2);
+		inscricaoSuggestBox1 = new SuggestBox(inscricaoSuggest1);
+
 		initWidget(uiBinder.createAndBindUi(this));
+
+		inscricaoSuggestBox1.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
+			@Override
+			public void onSelection(SelectionEvent<Suggestion> event) {
+				if(!inscricaoSuggestBox1.getValue().equals("")){
+					addInscricaoListBox.setSelectedIndex(0);
+					addAtividadeListBox.setSelectedIndex(-1);
+				}
+			}
+		});
 
 		planilhaPanel.setWidth(this.getWindowWidth() - 30 +"px");
 		planilhaPanel.setHeight(this.getWindowHeight() - 140 +"px");
@@ -170,7 +213,20 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroInscricaoTableUtil.addColumn("", "20", HasHorizontalAlignment.ALIGN_CENTER);
 		encontroInscricaoTableUtil.addColumn("Participante", null, HasHorizontalAlignment.ALIGN_LEFT);
 		encontroInscricaoTableUtil.addColumn("Papel", "200", HasHorizontalAlignment.ALIGN_LEFT);
+		encontroInscricaoTableUtil.addColumn("Revisado", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
+
+	private void criaTabelaSelecao() {
+		selecionInscricaoFlexTable = new FlexTable();
+		selecionInscricaoFlexTable.setStyleName("portal-formSmall");
+		selecionInscricaoTableUtil.initialize(selecionInscricaoFlexTable);
+
+		selecionInscricaoTableUtil.addColumn("", "20", HasHorizontalAlignment.ALIGN_CENTER);
+		selecionInscricaoTableUtil.addColumn("Casal", null, HasHorizontalAlignment.ALIGN_LEFT);
+		selecionInscricaoTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_LEFT);
+		selecionInscricaoTableUtil.addColumn("Qtde", "50", HasHorizontalAlignment.ALIGN_RIGHT);
+	}
+
 	private void criaTabelaAtividade() {
 		encontroInscricaoAtividadeFlexTable = new FlexTable();
 		encontroInscricaoAtividadeFlexTable.setStyleName("portal-formSmall");
@@ -182,12 +238,18 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroInscricaoAtividadeTableUtil.addColumn("Fim", "50", HasHorizontalAlignment.ALIGN_CENTER,TipoColuna.DATE, "HH:mm");
 		encontroInscricaoAtividadeTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroInscricaoAtividadeTableUtil.addColumn("Atividade", null, HasHorizontalAlignment.ALIGN_LEFT);
-		encontroInscricaoAtividadeTableUtil.addColumn("Papel", "200", HasHorizontalAlignment.ALIGN_LEFT);
+		encontroInscricaoAtividadeTableUtil.addColumn("Papel", "100", HasHorizontalAlignment.ALIGN_LEFT);
+		encontroInscricaoAtividadeTableUtil.addColumn("Revisado", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
 	@UiHandler("fecharAtividadeButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaAtividadeDialogBox.hide();
+	}
+
+	@UiHandler("fecharSelecaoButton")
+	public void fecharSelecionaButtonClickHandler(ClickEvent event){
+		selecaoInscricaoDialogBox.hide();
 	}
 
 	@UiHandler("excluirAtividadeButton")
@@ -302,6 +364,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	public void reset() {
 		editaAtividadeDialogBox.hide();
 		editaInscricaoDialogBox.hide();
+		selecaoInscricaoDialogBox.hide();
 		planilhaPanel.clear();
 		if(presenter.isCoordenador()){
 			limparPlanilhaButton.setVisible(true);
@@ -390,9 +453,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			}
 		});
 
-		editaAtividadeDialogBox.hide();
-		editaInscricaoDialogBox.hide();
-
 		EncontroPeriodo periodo = null, periodoAnterior = null;
 		List<EncontroPeriodo> listaEncontroPeriodo = presenter.getEncontroVO().getListaPeriodo();
 		if(listaEncontroPeriodo.size()>0){
@@ -430,6 +490,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				ParticipanteVO p = new ParticipanteVO();
 				p.setEncontroInscricao(ei);
 				p.setQtdeAtividades(0);
+				p.getTags().clear();
 				listaParticipantes.add(p);
 				if(ei.getCasal()!=null && ei.getCasal().getId().equals(presenter.getCasal().getId()) ||
 				   ei.getPessoa()!=null && ei.getPessoa().getId().equals(presenter.getUsuario().getPessoa().getId())){
@@ -451,6 +512,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 
 		int qtdeParticipantes = 0;
+		List<String> lista = new ArrayList<String>();
 		int linha=0, coluna=0, colspan=9;
 		if(!bCoordenador)colspan=6;
 		boolean achou, ok;
@@ -476,6 +538,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						for (final ParticipanteVO participanteVO : listaParticipantes) {
 							html.append("<td align='center' class='portal-celulaPlanilha'>"+ participanteVO.getQtdeAtividades() + "</td>");
 							participanteVO.setQtdeAtividades(0);
+							participanteVO.getTags().clear();
 						}
 						html.append("</tr>");
 						periodoAnterior = periodo;
@@ -505,6 +568,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				html.append("<td id='info_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
 				participante = new StringBuffer("");
 				qtdeParticipantes = 0;
+				lista.clear();
 				coluna = 0;
 				for (ParticipanteVO participanteVO : listaParticipantes) {
 					achou = false;
@@ -534,18 +598,21 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 									participante.append("<td class='portal-celulaPlanilha' " + parColuna + ">" + eai.getPapel().getSigla() + "</td>");
 								}
 								qtdeParticipantes++;
+								lista.add(eai.getEncontroInscricao().toStringApelidos() + " - " + eai.getPapel().toString());
 								participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
+								if (participanteVO.getTags()!=null)
+									participanteVO.getTags().add(eai.getEncontroAtividade().toString() + " - " + eai.getPapel().toString());
 								achou= true;
 								break;
 							}
 						}
 					}
 					if(!achou){
-						participante.append("<td class='portal-celulaPlanilha' " + parColuna + ">");
+						participante.append("<td class='portal-celulaPlanilha' " + parColuna + "/>");
 					}
 					coluna++;
 				}
-				html.append("<td class='portal-celulaPlanilha'>" + qtdeParticipantes + "</td>");
+				html.append("<td class='portal-celulaPlanilha' title='Participantes:" + convertListToStringLinhas(lista) +"'>" + qtdeParticipantes + "</td>");
 				ea.setQuantidade(qtdeParticipantes);
 				html.append(participante);
 				html.append("</tr>");
@@ -556,8 +623,8 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			html.append("<tr style='background-color:#cdffbf;'>");
 			html.append("<td colspan='" + colspan + "' class='portal-celulaPlanilha' style='text-align:left;'> Total de atividades para \"" + periodo.getNome() + "\":</td>");
 			for (ParticipanteVO participanteVO : listaParticipantes) {
-				html.append("<td align='center' class='portal-celulaPlanilha'>"+ participanteVO.getQtdeAtividades() + "</td>");
-				participanteVO.setQtdeAtividades(0);
+				html.append("<td class='portal-celulaPlanilha' title='" + participanteVO.getEncontroInscricao().toStringApelidos() + convertListToStringLinhas(participanteVO.getTags()) + "'>"  +
+						participanteVO.getQtdeAtividades() + "</td>");
 			}
 			html.append("</tr>");
 		}
@@ -570,24 +637,18 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				html.append("<td colspan='" + colspan + "' class='portal-celulaPlanilha' style='text-align:left;'>" + totalizador.getEncontroTotalizacao().getNome() + "</td>");
 				for (ParticipanteVO participanteVO : listaParticipantes) {
 					participanteVO.setQtdeAtividades(0);
-					achou = false;
 					for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
 						if(participanteVO.getEncontroInscricao().getId().equals(eai.getEncontroInscricao().getId())){
 							for (EncontroTotalizacaoAtividade atividade : totalizador.getListaAtividade()) {
 								if(atividade.getAtividade()==null || eai.getEncontroAtividade().getAtividade().getId().equals(atividade.getAtividade().getId())){
 									if(atividade.getTipoAtividade()==null || atividade.getTipoAtividade().equals(eai.getEncontroAtividade().getTipoAtividade())){
 										participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
-										achou = true;
 									}
 								}
 							}
 						}
 					}
-					if(achou){
-						html.append("<td class='portal-celulaPlanilha'>" + participanteVO.getQtdeAtividades() + "</td>");
-					} else {
-						html.append("<td class='portal-celulaPlanilha'>0</td>");
-					}
+					html.append("<td class='portal-celulaPlanilha' title='" + participanteVO.getEncontroInscricao().toStringApelidos()+"'>" + participanteVO.getQtdeAtividades() + "</td>");
 				}
 				html.append("</tr>");
 			}
@@ -702,7 +763,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				infoImage.setStyleName("portal-ImageCursor");
 				if(ea.getRevisado() && ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0 ){
 					infoImage.setUrl("images/inforevisado.png");
-					infoImage.setTitle("Preenchimento Revisado Manualmente");
+					infoImage.setTitle("Preenchimento Revisado");
 					qtdeok++;
 				}else if(ea.getInfoErro().size() == 0 && ea.getInfoAtencao().size() == 0){
 					infoImage.setUrl("images/infook.png");
@@ -710,12 +771,12 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					qtdeok++;
 				}else if(ea.getInfoErro().size() > 0 ){
 					infoImage.setUrl("images/infoerror.png");
-					infoImage.setTitle("Preenchimento com Erros - " + ea.getInfoErro().toString());
+					infoImage.setTitle("Preenchimento com Erros - " +convertListToStringLinhas(ea.getInfoErro()));
 					ea.getInfoErro().toString();
 					qtdeerro++;
 				}else if(ea.getInfoAtencao().size() > 0 ){
 					infoImage.setUrl("images/infowarning.png");
-					infoImage.setTitle("Preenchimento com Atenção - " + ea.getInfoAtencao().toString());
+					infoImage.setTitle("Preenchimento com Atenção - " + convertListToStringLinhas(ea.getInfoAtencao()));
 					qtdeatencao++;
 				}
 				htmlPanel.add(infoImage, "info_"+ea.getId().toString());
@@ -734,9 +795,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					for (final EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
 						if(eai.getEncontroAtividade().getId().equals(ea.getId())){
 							HTML label = new HTML(eai.getPapel().getSigla());
+							label.setTitle(eai.getEncontroInscricao().toStringApelidos());
 							if(getChoqueHorarios(eai)){
 								label.setStyleName("portal-ImageCursorErro");
-								label.setTitle("Erros - " + eai.getInfoErro().toString());
+								label.setTitle(label.getTitle() + "\rErros - " + convertListToStringLinhas(eai.getInfoErro()));
 							}
 							else
 								label.setStyleName("portal-ImageCursor");
@@ -775,10 +837,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	}
 
 	private boolean getChoqueHorarios(EncontroAtividadeInscricao eai) {
-		return getChoqueHorarios(eai, eai.getEncontroAtividade(), eai.getEncontroInscricao());
+		return getChoqueHorarios(eai, eai.getEncontroAtividade(), eai.getEncontroInscricao(), eai.getPapel());
 	}
 
-	private boolean getChoqueHorarios(EncontroAtividadeInscricao eai, EncontroAtividade ea, EncontroInscricao ei) {
+	private boolean getChoqueHorarios(EncontroAtividadeInscricao eai, EncontroAtividade ea, EncontroInscricao ei, Papel papel) {
+		if (papel.getChocaPlanilha()) return false;
 		if (eai != null){
 			eai.getInfoErro().clear();
 			if (eai.getRevisado()) return false;
@@ -825,33 +888,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				}
 				if (chocaseguido)
 					choca=true;
-				/*
-				if (chocainicio || chocafim){
-					if ( logicalXOR(chocainicio,chocafim) &&
-							((encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE)) ||
-							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO))||
-							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE))||
-							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO)) ||
-							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE)) ||
-							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO)) ||
-							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO)) ||
-							(encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.CONDUCAO) &&
-									ea.getTipoAtividade().equals(TipoAtividadeEnum.PREPARO))
-						)){
-						choca=true;
-					}
-					if (chocainicio && chocafim && (!encontroAtividade.getTipoAtividade().equals(TipoAtividadeEnum.MUSICA) &&
-							!ea.getTipoAtividade().equals(TipoAtividadeEnum.MUSICA))){
-						choca=true;
-					}
-				}*/
 				if (choca){
 					listaChocam.add(encontroAtividade);
 				}
@@ -931,16 +967,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiHandler("addInscricaoListBox")
 	public void addInscricaoListBoxChangeHandler(ChangeEvent event) {
 		if(addInscricaoListBox.getSelectedIndex()>0){
-			inscricaoListBox.setSelectedIndex(-1);
+			inscricaoSuggestBox1.setValue(null);
 		}
 		addAtividadeListBox.setSelectedIndex(-1);
-	}
-	@UiHandler("inscricaoListBox")
-	public void inscricaoListBoxListBoxChangeHandler(ChangeEvent event) {
-		if(inscricaoListBox.getSelectedIndex()>=0){
-			addInscricaoListBox.setSelectedIndex(0);
-			addAtividadeListBox.setSelectedIndex(-1);
-		}
 	}
 
 	@Override
@@ -950,30 +979,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	@Override
 	public void populaInscricao() {
-		ListBoxUtil.populate(inscricaoListBox, false, presenter.getEncontroVO().getListaInscricao());
-		/*List<EncontroAtividade> listaAtividade = new ArrayList<EncontroAtividade>();
-		EncontroPeriodo encontroPeriodoSelecionado = getPeriodoSelecionado();
-		if(encontroPeriodoSelecionado!=null){
-			Date inicio = null, fim = new Date(3000,1,1);
-			boolean achou = false;
-			inicio = encontroPeriodoSelecionado.getInicio();
-			for (EncontroPeriodo ep : presenter.getEncontroVO().getListaPeriodo()) {
-				if(ep.getId().equals(encontroPeriodoSelecionado.getId())){
-					achou = true;
-				}
-				if(achou && ep.getInicio().after(inicio)){
-					fim = ep.getInicio();
-					break;
-				}
-			}
-			for (EncontroAtividade ea : presenter.getEncontroVO().getListaEncontroAtividade()) {
-				if(ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
-					listaAtividade.add(ea);
-				}
-			}
-		}else{
-			listaAtividade.addAll(presenter.getEncontroVO().getListaEncontroAtividade());
-		}*/
 		ListBoxUtil.populate(atividadeEditaListBox, false, presenter.getEncontroVO().getListaEncontroAtividade());
 		ListBoxUtil.populate(addAtividadeListBox, false, presenter.getEncontroVO().getListaEncontroAtividade());
 	}
@@ -987,6 +992,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	public void excluirInscricaoButtonClickHandler(ClickEvent event){
 		if(Window.confirm("Deseja excluir esta participação ?")){
 			presenter.excluirEncontroAtividadeInscricao(encontroAtividadeInscricaoEditada);
+			editaInscricaoDialogBox.hide();
 		}
 	}
 
@@ -998,16 +1004,16 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			} else {
 				if(Window.confirm("Deseja excluir todos os participantes para esta atividade?")){
 					presenter.salvarInscricoes(encontroAtividadeEditada, encontroInscricaoEditada, listaParticipantesInscritos);
-				} else {
-					editaInscricaoDialogBox.hide();
-				}
+				} else return;
 			}
 		} else {
 			encontroAtividadeInscricaoEditada.setPapel((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()));
-			encontroAtividadeInscricaoEditada.setEncontroInscricao((EncontroInscricao)ListBoxUtil.getItemSelected(inscricaoListBox, presenter.getEncontroVO().getListaInscricao()));
+			encontroAtividadeInscricaoEditada.setEncontroInscricao(encontroInscricaoEditada);
 			encontroAtividadeInscricaoEditada.setRevisado(revisadoInscricaoCheckBox.getValue());
 			presenter.salvarInscricao(encontroAtividadeInscricaoEditada);
+
 		}
+		editaInscricaoDialogBox.hide();
 	}
 	private void editaInscricao(EncontroAtividade encontroAtividade, EncontroAtividadeInscricao encontroAtividadeInscricao) {
 		limpaCamposInscricao();
@@ -1017,10 +1023,16 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		}
 		if(encontroAtividade!=null){
 			participanteHTMLPanel.setVisible(true);
+			opcoesHTMLPanel.setVisible(true);
+			atividadeHTMLPanel.setVisible(true);
 			entidadeEditadaTituloLabel.setText("Atividade:");
 			entidadeEditadaLabel.setText(encontroAtividade.getAtividade().getNome());
 			if(encontroAtividadeInscricao != null){
+				opcoesHTMLPanel.setVisible(false);
+				atividadeHTMLPanel.setVisible(false);
+				papelHTMLPanel.setVisible(false);
 				adicionarInscricaoButton.setVisible(false);
+				selecionaInscricaoButton.setVisible(false);
 				excluirTodasInscricaoButton.setVisible(false);
 				encontroAtividadeInscricaoEditada = new EncontroAtividadeInscricao();
 				encontroAtividadeInscricaoEditada.setEncontroAtividade(encontroAtividade);
@@ -1029,23 +1041,30 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				excluirInscricaoButton.setVisible(true);
 				preencheAutomaticoInscricaoButton.setVisible(false);
 				excluirTodasInscricaoButton.setVisible(false);
+				selecionaInscricaoButton.setVisible(false);
 				addAtividadeListBox.setSelectedIndex(-1);
 				addInscricaoListBox.setVisible(false);
 				addAtividadeListBox.setVisible(false);
 				revisadoInscricaoCheckBox.setVisible(true);
+				inscricaoSuggestBox1.setEnabled(false);
+				casalRadio.setEnabled(false);
+				pessoaRadio.setEnabled(false);
 			} else {
+				atividadeHTMLPanel.setVisible(false);
 				preencheAutomaticoInscricaoButton.setVisible(true);
 				excluirTodasInscricaoButton.setVisible(true);
 				adicionarInscricaoButton.setVisible(true);
 				excluirTodasInscricaoButton.setVisible(true);
+				selecionaInscricaoButton.setVisible(true);
 				encontroAtividadeInscricaoEditada = encontroAtividadeInscricao;
 				addInscricaoListBox.addItem("Este participante", "1");
 				addInscricaoListBox.addItem("Todos os participantes", "2");
-				addInscricaoListBox.addItem("Padrinhos", "3");
-				addInscricaoListBox.addItem("Apoios", "4");
-				addInscricaoListBox.addItem("Estão na atividade:", "5");
-				addInscricaoListBox.addItem("Não estão na atividade:", "6");
-				addInscricaoListBox.addItem("Não choca horario", "7");
+				addInscricaoListBox.addItem("Todos os participantes + Externo", "3");
+				addInscricaoListBox.addItem("Padrinhos", "4");
+				addInscricaoListBox.addItem("Apoios", "5");
+				addInscricaoListBox.addItem("Estão na atividade:", "6");
+				addInscricaoListBox.addItem("Não estão na atividade:", "7");
+				addInscricaoListBox.addItem("Não choca horario", "8");
 				for (AgrupamentoVO agrupamentoVO : presenter.getEncontroVO().getListaAgrupamentoVOEncontro()) {
 					if ( agrupamentoVO.getAgrupamento().getTipo().equals(TipoInscricaoCasalEnum.ENCONTRISTA))
 						addInscricaoListBox.addItem(agrupamentoVO.getAgrupamento().getNome(), agrupamentoVO.getAgrupamento().getNome());
@@ -1063,7 +1082,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			adicionarInscricaoButton.setVisible(true);
 			excluirTodasInscricaoButton.setVisible(false);
 			preencheAutomaticoInscricaoButton.setVisible(false);
-			atividadeHTMLPanel.setVisible(true);
+			selecionaInscricaoButton.setVisible(false);
+			atividadeHTMLPanel.setVisible(false);
+			papelHTMLPanel.setVisible(true);
+			opcoesHTMLPanel.setVisible(false);
+			papelHTMLPanel.setVisible(false);
 			participantesFlowPanel.setVisible(true);
 			entidadeEditadaTituloLabel.setText("Participante:");
 			if(encontroAtividadeInscricao.getEncontroInscricao().getCasal()!=null){
@@ -1084,21 +1107,24 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			participanteHTMLPanel.setVisible(false);
 			atividadeHTMLPanel.setVisible(false);
 			papelHTMLPanel.setVisible(false);
+			opcoesHTMLPanel.setVisible(false);
 			excluirInscricaoButton.setVisible(false);
 			salvarInscricaoButton.setVisible(false);
 			preencheAutomaticoInscricaoButton.setVisible(false);
 			excluirTodasInscricaoButton.setVisible(false);
 			revisadoInscricaoCheckBox.setVisible(false);
+			selecionaInscricaoButton.setVisible(false);
 
 		}
 		editaInscricaoDialogBox.center();
 		editaInscricaoDialogBox.show();
-		inscricaoListBox.setFocus(true);
+		inscricaoSuggestBox1.setFocus(true);
 	}
 
 	public void limpaCamposInscricao(){
 		addInscricaoListBox.clear();
 		atividadeHTMLPanel.setVisible(false);
+		opcoesHTMLPanel.setVisible(false);
 		participanteHTMLPanel.setVisible(false);
 		excluirInscricaoButton.setVisible(false);
 		participantesFlowPanel.setVisible(false);
@@ -1107,7 +1133,17 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		salvarInscricaoButton.setVisible(true);
 		encontroInscricaoTableUtil.clearData();
 		revisadoInscricaoCheckBox.setVisible(false);
+		inscricaoSuggestBox1.setValue(null);
+		casalRadio.setValue(true);
 		itemTotal.setText(null);
+		inscricaoSuggestBox1.setEnabled(true);
+		casalRadio.setEnabled(true);
+		pessoaRadio.setEnabled(true);
+		ListBoxUtil.setItemSelected(papelListBox, presenter.getPapelPadrao().toString());
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
 	}
 
 	public void defineCamposInscricao(EncontroAtividadeInscricao encontroAtividadeInscricao){
@@ -1117,10 +1153,17 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				ListBoxUtil.setItemSelected(papelListBox, encontroAtividadeInscricao.getPapel().getNome());
 			}
 			if(encontroAtividadeInscricao!=null && encontroAtividadeInscricao.getEncontroInscricao()!=null){
-				ListBoxUtil.setItemSelected(inscricaoListBox, encontroAtividadeInscricao.getEncontroInscricao().toString());
+				if (encontroAtividadeInscricao.getEncontroInscricao().getCasal()!=null)
+					casalRadio.setValue(true);
+				else
+					pessoaRadio.setValue(true);
+				inscricaoSuggestBox1.setValue(encontroAtividadeInscricao.getEncontroInscricao().toString());
+				inscricaoSuggest1.setListaEntidades(new ArrayList<_WebBaseEntity>());
+				inscricaoSuggest1.getListaEntidades().add(encontroAtividadeInscricao.getEncontroInscricao());
 			}
 			revisadoInscricaoCheckBox.setValue(encontroAtividadeInscricao.getRevisado());
-			populaAtividadesPorParticipante();
+			if(participantesFlowPanel.isVisible())
+				populaAtividadesPorParticipante();
 		}else{
 			populaParticipantesPorAtividade();
 		}
@@ -1134,25 +1177,15 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	@UiHandler("preencheAutomaticoInscricaoButton")
 	public void preencheAutomaticoInscricaoButtonClickHandler(ClickEvent event){
-		Papel papelPadrao = null;
-		Papel papelPadrinho = null;
-		for (Papel papel:presenter.getGrupoEncontroVO().getListaPapel()){
-			if (papel.getPadrao()){
-				papelPadrao = papel;
-			}
-			if (papel.getPadrinho()){
-				papelPadrinho = papel;
-			}
-		}
-		if (papelPadrao == null){
+		if (presenter.getPapelPadrao() == null){
 			Window.alert("Falta definir o Papel Padrão!");
 			return;
 		}
-		if (papelPadrinho == null){
+		if (presenter.getPapelPadrinho() == null){
 			Window.alert("Falta definir o Papel de Padrinho!");
 			return;
 		}
-		preencheAtividade(encontroAtividadeEditada, papelPadrao, papelPadrinho);
+		preencheAtividade(encontroAtividadeEditada, presenter.getPapelPadrao(), presenter.getPapelPadrinho());
 		populaParticipantesPorAtividade();
 	}
 
@@ -1161,29 +1194,36 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		String opcao = addInscricaoListBox.getValue(addInscricaoListBox.getSelectedIndex());
 		if(encontroInscricaoFlexTable.isVisible()){
 			if(opcao.equals("1")){
-				adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
-							(EncontroInscricao)ListBoxUtil.getItemSelected(inscricaoListBox, presenter.getEncontroVO().getListaInscricao()),
-							 encontroAtividadeEditada,true);
+				EncontroInscricao ei = (EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue());
+				if (ei != null)
+					adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
+						ei, encontroAtividadeEditada,true);
 			} else if(opcao.equals("2")){
+				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
+					if (!ei.getTipo().equals(TipoInscricaoEnum.EXTERNO))
+						adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
+							ei, encontroAtividadeEditada,false);
+				}
+			} else if(opcao.equals("3")){
 				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
 					adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
 							ei, encontroAtividadeEditada,false);
 				}
-			} else if(opcao.equals("3")){
+			} else if(opcao.equals("4")){
 				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
 					if(ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
 						adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
 								ei, encontroAtividadeEditada,false);
 					}
 				}
-			} else if(opcao.equals("4")){
+			} else if(opcao.equals("5")){
 				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
 					if(ei.getTipo().equals(TipoInscricaoEnum.APOIO)){
 						adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
 								ei, encontroAtividadeEditada,false);
 					}
 				}
-			} else if(opcao.equals("5")){
+			} else if(opcao.equals("6")){
 				EncontroAtividade atividade = (EncontroAtividade) ListBoxUtil.getItemSelected(addAtividadeListBox, presenter.getEncontroVO().getListaEncontroAtividade());
 				if (atividade != null ) {
 					for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricaoFull()) {
@@ -1192,7 +1232,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						}
 					}
 				}
-			} else if(opcao.equals("6")){
+			} else if(opcao.equals("7")){
 				EncontroAtividade atividade = (EncontroAtividade) ListBoxUtil.getItemSelected(addAtividadeListBox, presenter.getEncontroVO().getListaEncontroAtividade());
 				if (atividade != null ) {
 					List<EncontroInscricao> lista = new ArrayList<EncontroInscricao>();
@@ -1208,10 +1248,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						}
 					}
 				}
-			} else if(opcao.equals("7")){
+			} else if(opcao.equals("8")){
 				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
 					if(!ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
-						if(!getChoqueHorarios(null,encontroAtividadeEditada,ei))
+						if(!getChoqueHorarios(null,encontroAtividadeEditada,ei,(Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel())))
 							adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
 									ei, encontroAtividadeEditada,false);
 					}
@@ -1286,7 +1326,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroInscricaoTableUtil.clearData();
 		int row = 0;
 		for (final EncontroAtividadeInscricao atividadeParticipante: listaParticipantesInscritos) {
-			Object dados[] = new Object[3];
+			Object dados[] = new Object[4];
 
 			final Image excluirParticipante = new Image("images/delete.png");
 			excluirParticipante.setStyleName("portal-ImageCursor");
@@ -1294,7 +1334,13 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				@Override
 				public void onClick(ClickEvent arg0) {
 					listaParticipantesInscritos.remove(atividadeParticipante);
-					ListBoxUtil.setItemSelected(inscricaoListBox, atividadeParticipante.getEncontroInscricao().toString());
+					if (atividadeParticipante.getEncontroInscricao().getCasal()!=null)
+						casalRadio.setValue(true);
+					else
+						pessoaRadio.setValue(true);
+					inscricaoSuggestBox1.setValue(atividadeParticipante.getEncontroInscricao().toString());
+					inscricaoSuggest1.setListaEntidades(new ArrayList<_WebBaseEntity>());
+					inscricaoSuggest1.getListaEntidades().add(atividadeParticipante.getEncontroInscricao());
 					ListBoxUtil.setItemSelected(papelListBox, atividadeParticipante.getPapel().toString());
 					populaParticipantesPorAtividade();
 				}
@@ -1312,6 +1358,14 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				}
 			});
 			dados[2] = listBox;
+			final CheckBox checkBox = new CheckBox();
+			checkBox.setValue(atividadeParticipante.getRevisado());
+			checkBox.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					atividadeParticipante.setRevisado(checkBox.getValue());
+				}
+			});
+			dados[3] = checkBox;
 			encontroInscricaoTableUtil.addRow(dados,row+1);
 			row++;
 		}
@@ -1324,7 +1378,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			LabelTotalUtil.setTotal(itemTotal, listaParticipantesInscritos.size(), "atividade", "atividades", "a");
 			int row = 0;
 			for (final EncontroAtividadeInscricao ativdadeInscricao: listaParticipantesInscritos) {
-				Object dados[] = new Object[7];
+				Object dados[] = new Object[8];
 
 				final Image excluirAtividade = new Image("images/delete.png");
 				excluirAtividade.setStyleName("portal-ImageCursor");
@@ -1332,7 +1386,13 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					@Override
 					public void onClick(ClickEvent arg0) {
 						listaParticipantesInscritos.remove(ativdadeInscricao);
-						ListBoxUtil.setItemSelected(inscricaoListBox, ativdadeInscricao.getEncontroInscricao().toString());
+						if (ativdadeInscricao.getEncontroInscricao().getCasal()!=null)
+							casalRadio.setValue(true);
+						else
+							pessoaRadio.setValue(true);
+						inscricaoSuggestBox1.setValue(ativdadeInscricao.getEncontroInscricao().toString());
+						inscricaoSuggest1.setListaEntidades(new ArrayList<_WebBaseEntity>());
+						inscricaoSuggest1.getListaEntidades().add(ativdadeInscricao.getEncontroInscricao());
 						ListBoxUtil.setItemSelected(papelListBox, ativdadeInscricao.getPapel().toString());
 						populaAtividadesPorParticipante();
 					}
@@ -1344,7 +1404,24 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				dados[3] = dfHora.format(ativdadeInscricao.getEncontroAtividade().getFim());
 				dados[4] = ativdadeInscricao.getEncontroAtividade().getTipoAtividade().getNome();
 				dados[5] = ativdadeInscricao.getEncontroAtividade().getAtividade().getNome();
-				dados[6] = ativdadeInscricao.getPapel().getNome();
+				final ListBox listBox = new ListBox();
+				ListBoxUtil.populate(listBox, false, getListaPapel());
+				if (ativdadeInscricao.getPapel()!=null)
+					ListBoxUtil.setItemSelected(listBox, ativdadeInscricao.getPapel().toString());
+				listBox.addChangeHandler(new ChangeHandler() {
+					public void onChange(ChangeEvent event) {
+						ativdadeInscricao.setPapel((Papel) ListBoxUtil.getItemSelected(listBox,getListaPapel()));
+					}
+				});
+				dados[6] = listBox;
+				final CheckBox checkBox = new CheckBox();
+				checkBox.setValue(ativdadeInscricao.getRevisado());
+				checkBox.addClickHandler(new ClickHandler() {
+					public void onClick(ClickEvent event) {
+						ativdadeInscricao.setRevisado(checkBox.getValue());
+					}
+				});
+				dados[7] = checkBox;
 				encontroInscricaoAtividadeTableUtil.addRow(dados,row+1);
 				row++;
 			}
@@ -1638,12 +1715,199 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		}
 	}
 
+	@UiHandler("casalRadio")
+	public void casalRadioClickHandler(ClickEvent event){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+	}
+
+	@UiHandler("pessoaRadio")
+	public void pessoaRadioClickHandler(ClickEvent event){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+	}
+
 	public List<Papel> getListaPapel() {
 		return listaPapel;
 	}
 
 	public void setListaPapel(List<Papel> listaPapel) {
 		this.listaPapel = listaPapel;
+	}
+
+	private String convertListToStringLinhas(List<String> objects){
+		if (objects==null || objects.size()==0) return "";
+		StringBuffer retorno = new StringBuffer();
+		for (Object object : objects) {
+			retorno.append("\r"+object.toString());
+		}
+		return new String(retorno);
+	}
+
+	@UiHandler("salvarSelecaoButton")
+	public void salvarSelecaoButtonClickHandler(ClickEvent event){
+		boolean achou = false;
+		for (final ParticipanteVO participante: listaParticipantesSugeridos) {
+			if(participante.getSelecionado()){
+				adicionaParticipante((Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel()),
+						participante.getEncontroInscricao(), encontroAtividadeEditada,true);
+				achou=true;
+			}
+		}
+		if (achou){
+			populaParticipantesPorAtividade();
+			selecaoInscricaoDialogBox.hide();
+		}else{
+			Window.alert("Nenhum dadp Selecionado");
+		}
+	}
+
+	@UiHandler("selecionaInscricaoButton")
+	public void selecionaInscricaoButtonClickHandler(ClickEvent event){
+		limpaSelecao();
+		defineCamposSelecao();
+		selecaoInscricaoDialogBox.center();
+		selecaoInscricaoDialogBox.show();
+	}
+
+
+	@UiHandler(value={"mostraChoqueCheckBox", "mostraCoordenacaoCheckBox","naomostraPadrinhoCheckBox"})
+	public void filtroButtonClickHandler(ClickEvent event){
+		defineCamposSelecao();
+	}
+
+	@SuppressWarnings("deprecation")
+	private void defineCamposSelecao() {
+		List<EncontroAtividade> listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
+		List<EncontroInscricao> listaEncontroInscricao = presenter.getEncontroVO().getListaInscricao();
+		List<ParticipanteVO> listaParticipantes = new ArrayList<ParticipanteVO>();
+
+		Papel papel = (Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel());
+
+		boolean ok;
+
+		for (EncontroInscricao ei : listaEncontroInscricao) {
+			if(!participanteAdicionado(listaParticipantes, ei.getId()) && getEncontroAtividadeInscricao(encontroAtividadeEditada, ei) == null &&
+					!ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+				ok=true;
+				if ( !mostraChoqueCheckBox.getValue() && !getChoqueHorarios(null, encontroAtividadeEditada, ei, papel)){
+					ok=false;
+				}
+				if ( !mostraCoordenacaoCheckBox.getValue() && getCoordenacao(ei)){
+					ok=false;
+				}
+				if ( !naomostraPadrinhoCheckBox.getValue() && ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
+					ok=false;
+				}
+				if(ok){
+					ParticipanteVO p = new ParticipanteVO();
+					p.setEncontroInscricao(ei);
+					p.setQtdeAtividades(0);
+					p.getTags().clear();
+					listaParticipantes.add(p);
+				}
+			}
+		}
+
+		if (listaParticipantes.size()>0){
+			EncontroPeriodo periodo = null;
+			for (EncontroPeriodo p : presenter.getEncontroVO().getListaPeriodo()) {
+				if(encontroAtividadeEditada.getInicio().compareTo(p.getInicio())>=0){
+					periodo = p;
+				}
+			}
+
+			if(periodo!=null){
+				Date inicio = null, fim = new Date(3000,1,1);
+				boolean achou = false;
+				inicio = periodo.getInicio();
+				for (EncontroPeriodo ep : presenter.getEncontroVO().getListaPeriodo()) {
+					if(ep.getId().equals(periodo.getId())){
+						achou = true;
+					}
+					if(achou && ep.getInicio().after(inicio)){
+						fim = ep.getInicio();
+						break;
+					}
+				}
+				for (EncontroAtividade ea : listaEncontroAtividade) {
+					if(ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
+						for (ParticipanteVO participanteVO : listaParticipantes) {
+							for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
+								if(participanteVO.getEncontroInscricao().getId().equals(eai.getEncontroInscricao().getId())){
+									if(eai.getEncontroAtividade().getId().equals(ea.getId())){
+										participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			Collections.sort(listaParticipantes, new Comparator<ParticipanteVO>() {
+				@Override
+				public int compare(ParticipanteVO o1, ParticipanteVO o2) {
+					return o1.getQtdeAtividades().compareTo(o2.getQtdeAtividades());
+				}
+			});
+			listaParticipantesSugeridos = listaParticipantes;
+		}
+		LabelTotalUtil.setTotal(itemSelecionaTotal, listaParticipantes.size(), "sugestão", "sugestões", "");
+		selecionInscricaoTableUtil.clearData();
+		int row = 0;
+		for (final ParticipanteVO participante: listaParticipantes) {
+			Object dados[] = new Object[4];
+
+			final CheckBox checkBox = new CheckBox();
+			checkBox.setValue(false);
+			checkBox.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					participante.setSelecionado(checkBox.getValue());
+				}
+			});
+
+			dados[0] = checkBox;
+			dados[1] = participante.getEncontroInscricao().toStringApelidos();
+			dados[2] = participante.getEncontroInscricao().getTipo().getNome();
+			dados[3] = participante.getQtdeAtividades().toString();
+			selecionInscricaoTableUtil.addRow(dados,row+1);
+			row++;
+		}
+		selecionInscricaoTableUtil.applyDataRowStyles();
+	}
+
+	private boolean getCoordenacao(EncontroInscricao ei) {
+		List<EncontroOrganogramaVO> organograma = presenter.getEncontroVO().getListaOrganogramaEncontroVO();
+		for (EncontroOrganogramaVO encontroOrganogramaVO : organograma) {
+			List<EncontroOrganogramaArea> area = encontroOrganogramaVO.getListaEncontroOrganogramaArea();
+			for (EncontroOrganogramaArea aux : area) {
+				if (aux.getEncontroInscricao1()!=null && aux.getEncontroInscricao1().getId().equals(ei.getId()))
+					return true;
+				if (aux.getEncontroInscricao2()!=null && aux.getEncontroInscricao2().getId().equals(ei.getId()))
+					return true;
+			}
+			List<EncontroOrganogramaCoordenacao> coordenacao = encontroOrganogramaVO.getListaEncontroOrganogramaCoordenacao();
+			for (EncontroOrganogramaCoordenacao aux : coordenacao) {
+				if (aux.getEncontroInscricao1()!=null && aux.getEncontroInscricao1().getId().equals(ei.getId()))
+					return true;
+				if (aux.getEncontroInscricao2()!=null && aux.getEncontroInscricao2().getId().equals(ei.getId()))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private void limpaSelecao() {
+		selecionInscricaoTableUtil.clearData();
+		mostraChoqueCheckBox.setValue(false);
+		mostraCoordenacaoCheckBox.setValue(false);
+		naomostraPadrinhoCheckBox.setValue(false);
 	}
 
 }

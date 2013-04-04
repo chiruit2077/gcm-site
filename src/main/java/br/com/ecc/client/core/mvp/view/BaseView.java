@@ -7,6 +7,8 @@ import br.com.freller.tool.client.Print;
 
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -124,8 +126,12 @@ public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
 	}
 
 	public void printWidget(Widget widget){
-		Print.it("<link rel=styleSheet type=text/css media=print href=/ECCWeb.css>"+
-			    "<link rel=styleSheet type=text/css media=paper href=/paperStyle.css>",
-			    widget.getElement());
+		Element element = widget.getElement();
+		Print.saveOrigIFrames(element);
+		Print.updateFieldsDOM(element);
+		String html = "<div class='pageA4'>" + DOM.toString(element) +"</div>";
+		Print.it("","<link rel=styleSheet type=text/css media=print href=/ECCWeb.css> " +
+			     "<link rel=styleSheet type=text/css media=print href=/paperStyle.css>",
+			     html);
 	}
 }

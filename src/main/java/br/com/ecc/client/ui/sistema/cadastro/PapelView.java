@@ -46,6 +46,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
 	@UiField CheckBox aparecePlanilhaCheckBox;
+	@UiField CheckBox chocaPlanilhaCheckBox;
+	@UiField CheckBox padrinhoCheckBox;
 
 
 	@UiField(provided=true) FlexTable papelFlexTable;
@@ -92,6 +94,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		entidadeEditada.setGrupo(presenter.getGrupoSelecionado());
 		entidadeEditada.setAparecePlanilha(aparecePlanilhaCheckBox.getValue());
 		entidadeEditada.setPadrao(padraoCheckBox.getValue());
+		entidadeEditada.setPadrinho(padrinhoCheckBox.getValue());
+		entidadeEditada.setChocaPlanilha(chocaPlanilhaCheckBox.getValue());
 		presenter.salvar(entidadeEditada);
 	}
 	private void edita(Papel papel) {
@@ -111,6 +115,9 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		siglaTextBox.setValue(null);
 		nomeTextBox.setValue(null);
 		aparecePlanilhaCheckBox.setValue(true);
+		padraoCheckBox.setValue(true);
+		padrinhoCheckBox.setValue(true);
+		chocaPlanilhaCheckBox.setValue(true);
 	}
 
 	public void defineCampos(Papel papel){
@@ -118,6 +125,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		nomeTextBox.setValue(papel.getNome());
 		aparecePlanilhaCheckBox.setValue(papel.getAparecePlanilha());
 		padraoCheckBox.setValue(papel.getPadrao());
+		padrinhoCheckBox.setValue(papel.getPadrinho());
+		chocaPlanilhaCheckBox.setValue(papel.getChocaPlanilha());
 	}
 
 	@Override

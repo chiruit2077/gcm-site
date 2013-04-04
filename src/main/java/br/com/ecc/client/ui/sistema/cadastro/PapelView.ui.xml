@@ -52,13 +52,19 @@
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2">
+									<td>
 										<g:CheckBox ui:field="padraoCheckBox" text="Padrão"/>
+									</td>
+									<td>
+										<g:CheckBox ui:field="padrinhoCheckBox" text="Padrão Padrinho"/>
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2">
+									<td>
 										<g:CheckBox ui:field="aparecePlanilhaCheckBox" text="Aparece na Planilha"/>
+									</td>
+									<td>
+										<g:CheckBox ui:field="chocaPlanilhaCheckBox" text="Choca na Planilha"/>
 									</td>
 								</tr>
 							</table>

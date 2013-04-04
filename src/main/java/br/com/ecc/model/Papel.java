@@ -15,7 +15,7 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_PAPEL", sequenceName="SQ_PAPEL")
 @NamedQueries({
-	@NamedQuery(name="papel.porGrupo", query="select u from Papel u where u.grupo = :grupo order by u.sigla")
+	@NamedQuery(name="papel.porGrupo", query="select u from Papel u where u.grupo = :grupo order by u.nome")
 })
 public class Papel extends _WebBaseEntity {
 	private static final long serialVersionUID = -731109587772901285L;
@@ -35,6 +35,7 @@ public class Papel extends _WebBaseEntity {
 	private String sigla;
 
 	private Boolean aparecePlanilha;
+	private Boolean chocaPlanilha;
 
 	private Boolean padrao;
 	private Boolean padrinho;
@@ -125,5 +126,14 @@ public class Papel extends _WebBaseEntity {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+
+	public Boolean getChocaPlanilha() {
+		if (chocaPlanilha==null) return false;
+		return chocaPlanilha;
+	}
+	public void setChocaPlanilha(Boolean chocaPlanilha) {
+		this.chocaPlanilha = chocaPlanilha;
 	}
 }

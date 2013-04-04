@@ -60,6 +60,8 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 	private Usuario usuario;
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
+	private Papel papelPadrao;
+	private Papel papelPadrinho;
 
 	public PlanilhaPresenter(Display display, WebResource portalResource) {
 		super(display, portalResource);
@@ -201,6 +203,14 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 				getDisplay().populaAtividades(grupoEncontroVO.getListaAtividade());
 				getDisplay().populaPapel(grupoEncontroVO.getListaPapel());
 
+				for (Papel papel: grupoEncontroVO.getListaPapel()){
+					if (papel.getPadrao()){
+						setPapelPadrao(papel);
+					}
+					if (papel.getPadrinho()){
+						setPapelPadrinho(papel);
+					}
+				}
 
 				String cookie = Cookies.getCookie("encontroSelecionado");
 				for (Encontro encontro : grupoEncontroVO.getListaEncontro()) {
@@ -339,5 +349,21 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 	public void setListaEncontroAtividadeInscricaoFull(
 			List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricaoFull) {
 		this.listaEncontroAtividadeInscricaoFull = listaEncontroAtividadeInscricaoFull;
+	}
+
+	public Papel getPapelPadrao() {
+		return papelPadrao;
+	}
+
+	public void setPapelPadrao(Papel papelPadrao) {
+		this.papelPadrao = papelPadrao;
+	}
+
+	public Papel getPapelPadrinho() {
+		return papelPadrinho;
+	}
+
+	public void setPapelPadrinho(Papel papelPadrinho) {
+		this.papelPadrinho = papelPadrinho;
 	}
 }

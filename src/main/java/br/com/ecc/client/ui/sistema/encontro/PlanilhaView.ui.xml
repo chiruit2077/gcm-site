@@ -146,7 +146,7 @@
 				</g:VerticalPanel>
 			</g:DialogBox>
 			<g:DialogBox ui:field="editaInscricaoDialogBox" visible="false"
-				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da participação">
+				         width="100%" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da participação">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
 						<g:HTMLPanel width="100%">
@@ -164,9 +164,15 @@
 						<g:HTMLPanel width="100%" ui:field="participanteHTMLPanel">
 							<table cellpadding="3" align="left">
 								<tr>
+							    	<td colspan="2" align="center">
+					    				<g:RadioButton ui:field="casalRadio"/>
+				    					<g:RadioButton ui:field="pessoaRadio"/>
+					    			</td>
+							    </tr>
+								<tr>
 									<td class="portal-formLabel" width="180px">Participante:</td>
-									<td colpsan="2">
-										<g:ListBox ui:field="inscricaoListBox" width="400px"/>
+									<td>
+										<g:SuggestBox ui:field="inscricaoSuggestBox1" width="400px"/>
 									</td>
 								</tr>
 							</table>
@@ -193,6 +199,10 @@
 										<g:CheckBox ui:field="revisadoInscricaoCheckBox" text="Revisado"/>
 									</td>
 								</tr>
+							</table>
+						</g:HTMLPanel>
+						<g:HTMLPanel width="100%" ui:field="opcoesHTMLPanel">
+							<table cellpadding="3" align="left">
 								<tr>
 									<td class="portal-formLabel" width="250px">Adicionar partipação para:</td>
 									<td>
@@ -209,8 +219,11 @@
 									</td>
 								</tr>
 								<tr>
-									<td colpsan="2">
+									<td>
 										<g:Button ui:field="preencheAutomaticoInscricaoButton" text="Preenche Automático"/>
+									</td>
+									<td align="center">
+										<g:Button ui:field="selecionaInscricaoButton" text="Seleciona Inscrição Sugestiva"/>
 									</td>
 									<td>
 										<g:Button ui:field="excluirTodasInscricaoButton" text="Excluir Todas Participações"/>
@@ -237,6 +250,40 @@
 							<g:Button ui:field="excluirInscricaoButton" visible="false">Excluir</g:Button>
 							<g:Button ui:field="salvarInscricaoButton">Salvar</g:Button>
 							<g:Button ui:field="fecharInscricaoButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+			<g:DialogBox ui:field="selecaoInscricaoDialogBox" visible="false"
+				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Seleciona Inscrição Sugestiva">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" spacing="5">
+						<g:VerticalPanel width="100%">
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" align="left">
+								<tr>
+									<td align="left">
+										<g:CheckBox ui:field="mostraChoqueCheckBox" text="Mostra Choque"/>
+									</td>
+									<td align="left">
+										<g:CheckBox ui:field="mostraCoordenacaoCheckBox" text="Mostra Coordenadores"/>
+									</td>
+									<td align="left">
+										<g:CheckBox ui:field="naomostraPadrinhoCheckBox" text="Não Mostra Padrinhos"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+								<g:Label ui:field="itemSelecionaTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
+								<g:FlowPanel styleName="portal-FlowPanel" height="400px">
+									<g:FlexTable ui:field="selecionInscricaoFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
+ 							    </g:FlowPanel>
+						</g:VerticalPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarSelecaoButton">Ok</g:Button>
+							<g:Button ui:field="fecharSelecaoButton">Cancelar</g:Button>
 						</g:HorizontalPanel>
 					</g:VerticalPanel>
 				</g:VerticalPanel>
