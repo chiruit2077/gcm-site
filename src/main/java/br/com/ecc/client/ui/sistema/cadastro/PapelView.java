@@ -71,8 +71,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		papelTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		papelTableUtil.addColumn("Sigla", "50", HasHorizontalAlignment.ALIGN_CENTER);
 		papelTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
-		papelTableUtil.addColumn("Planilha", "20", HasHorizontalAlignment.ALIGN_LEFT);
-		papelTableUtil.addColumn("Padrão", "20", HasHorizontalAlignment.ALIGN_LEFT);
+		papelTableUtil.addColumn("Planilha", "20", HasHorizontalAlignment.ALIGN_CENTER);
+		papelTableUtil.addColumn("Padrão", "20", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
 	@UiHandler("fecharButton")
@@ -115,9 +115,9 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		siglaTextBox.setValue(null);
 		nomeTextBox.setValue(null);
 		aparecePlanilhaCheckBox.setValue(true);
-		padraoCheckBox.setValue(true);
-		padrinhoCheckBox.setValue(true);
-		chocaPlanilhaCheckBox.setValue(true);
+		padraoCheckBox.setValue(false);
+		padrinhoCheckBox.setValue(false);
+		chocaPlanilhaCheckBox.setValue(false);
 	}
 
 	public void defineCampos(Papel papel){

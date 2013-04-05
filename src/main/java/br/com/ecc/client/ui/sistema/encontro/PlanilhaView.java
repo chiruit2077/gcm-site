@@ -854,7 +854,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				boolean chocainicio=false;
 				boolean chocafim=false;
 				boolean chocaseguido=false;
-				/*if (encontroAtividade.getId().equals(438) && ea.getId().equals(425) && ei.getId().equals(199))
+				/*if (encontroAtividade.getId().equals(491) && ea.getId().equals(484) && ei.getId().equals(217))
 					System.out.println("TESTE");*/
 				if(encontroAtividade.getInicio().equals(ea.getInicio()) ||
 						(encontroAtividade.getInicio().after(ea.getInicio()) && encontroAtividade.getInicio().before(ea.getFim()))){
@@ -877,13 +877,26 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					long duracaominima1 = (long) (encontroAtividade.getDuracao()*porcentagem1/100);
 					long duracaominima2 = (long) (ea.getDuracao()*porcentagem2/100);
 					long duracaochoque = 0;
-					if (chocainicio && chocafim) duracaochoque = (encontroAtividade.getFim().getTime() - encontroAtividade.getInicio().getTime()) / 1000 / 60;
+					if (chocainicio && chocafim)  {
+						Date inicio = null;
+						Date fim = null;
+
+						if (encontroAtividade.getFim().before(ea.getFim()) || encontroAtividade.getFim().equals(ea.getFim()))
+							fim = encontroAtividade.getFim();
+						else
+							fim = ea.getFim();
+						if (encontroAtividade.getInicio().after(ea.getInicio()) || encontroAtividade.getInicio().equals(ea.getInicio()))
+							inicio = encontroAtividade.getInicio();
+						else
+							inicio = ea.getInicio();
+						duracaochoque = (fim.getTime() - inicio.getTime()) / 1000 / 60;
+					}
 					else if (chocainicio) duracaochoque = (ea.getFim().getTime() - encontroAtividade.getInicio().getTime()) / 1000 / 60;
 					else if (chocafim) duracaochoque = (encontroAtividade.getFim().getTime() - ea.getInicio().getTime()) / 1000 / 60;
+					long duracaomaximachoque1 = (long) (encontroAtividade.getDuracao()-duracaominima1);
+					long duracaomaximachoque2 = (long) (ea.getDuracao()-duracaominima2);
 
-					if (duracaominima1 > duracaochoque && duracaominima1 > 0 && duracaominima2 > 0 && duracaochoque < ea.getDuracao())
-						choca=true;
-					if (duracaominima2 < duracaochoque && duracaominima1 > 0 && duracaominima2 > 0 && duracaochoque > encontroAtividade.getDuracao())
+					if (duracaomaximachoque1 < duracaochoque && duracaomaximachoque2 < duracaochoque)
 						choca=true;
 				}
 				if (chocaseguido)
@@ -895,7 +908,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		}
 		for (EncontroAtividade encontroAtividade : listaChocam) {
 			EncontroAtividadeInscricao inscricao = getEncontroAtividadeInscricaoFull(encontroAtividade, ei);
-			if (inscricao!=null && !inscricao.getRevisado()){
+			if (inscricao!=null && !inscricao.getRevisado() && !inscricao.getPapel().getChocaPlanilha()){
 				if(eai != null)
 					eai.getInfoErro().add(encontroAtividade.toString());
 				else
@@ -1792,6 +1805,8 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		for (EncontroInscricao ei : listaEncontroInscricao) {
 			if(!participanteAdicionado(listaParticipantes, ei.getId()) && getEncontroAtividadeInscricao(encontroAtividadeEditada, ei) == null &&
 					!ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+				if (ei.getId().equals(271))
+					System.out.println(ei);
 				ok=true;
 				if ( !mostraChoqueCheckBox.getValue() && !getChoqueHorarios(null, encontroAtividadeEditada, ei, papel)){
 					ok=false;

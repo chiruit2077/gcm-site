@@ -496,7 +496,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		Image editar, excluir;
 		HorizontalPanel hp;
 		boolean ok = false, exibeLinha;
-		int coordenador = 0, padrinho=0, apoio=0, afilhado=0, desistencia=0;
+		int coordenador = 0, padrinho=0, apoio=0, afilhado=0, desistencia=0, externo=0;
 		for (final EncontroInscricao encontroInscricao: lista) {
 			exibeLinha = true;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
@@ -513,6 +513,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 					apoio++;
 				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
 					afilhado++;
+				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+					externo++;
 				}
 			}
 			if(exibeLinha){
@@ -605,6 +607,11 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			totais += " / " + afilhado + " afilhado";
 		} else {
 			totais += " / " + afilhado + " afilhados";
+		}
+		if(externo==1 || externo==0){
+			totais += " / " + externo + " externo";
+		} else {
+			totais += " / " + externo + " externos";
 		}
 		if(desistencia==1 || desistencia==0){
 			totais += " / " + desistencia + " desistencia";

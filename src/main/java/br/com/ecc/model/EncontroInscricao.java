@@ -62,6 +62,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeEncontristaLike",
 		query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
 		  "   where uc.encontro = :encontro and " +
+		  "        uc.tipoConfirmacao = 'CONFIRMADO' and " +
 		  "        uc.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR', 'EXTERNO' ) and " +
 		  "       ( upper(c.ele.nome) like upper(:key) or " +
 		  "        upper(c.ele.apelido) like upper(:key) or " +
@@ -71,6 +72,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
     @NamedQuery(name="encontroInscricao.porEncontroCasalNomeAfilhadoLike",
 			query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
 			  "   where uc.encontro = :encontro and " +
+			  "        uc.tipoConfirmacao = 'CONFIRMADO' and " +
 			  "        uc.tipo in ( 'AFILHADO' ) and " +
 			  "       ( upper(c.ele.nome) like upper(:key) or " +
 			  "        upper(c.ele.apelido) like upper(:key) or " +

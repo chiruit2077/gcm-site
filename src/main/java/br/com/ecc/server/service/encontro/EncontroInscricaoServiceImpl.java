@@ -3,6 +3,9 @@ package br.com.ecc.server.service.encontro;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import br.com.ecc.client.service.encontro.EncontroInscricaoService;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
@@ -27,8 +30,9 @@ import com.google.inject.Singleton;
 @Singleton
 public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet implements EncontroInscricaoService {
 	private static final long serialVersionUID = -3780927709658969884L;
-	
+
 	@Inject Injector injector;
+	@Inject EntityManager em;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -38,7 +42,7 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		cmd.setNamedQuery("encontroInscricao.porEncontro");
 		cmd.addParameter("encontro", encontro);
 		List<EncontroInscricao> lista = cmd.call();
-		
+
 		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		for (EncontroInscricao encontroInscricao : lista) {
 			if(encontroInscricao.getMensagemDestinatario()!=null){
@@ -53,7 +57,7 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 				encontroInscricao.setDataPrenchimentoFichaStr(df.format(encontroInscricao.getDataPrenchimentoFicha()));
 			}
 		}
-		
+
 		return lista;
 	}
 
@@ -65,18 +69,57 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		cmdDelete.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
 		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
 		cmdDelete.call();
-		
+
 		//exclusão
-		cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
-		cmdDelete.setNamedQuery("encontroInscricaoPagamento.deletePorEncontroInscricao");
-		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
-		cmdDelete.call();
-		
 		cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
 		cmdDelete.setNamedQuery("encontroInscricaoPagamentoDetalhe.deletePorEncontroInscricao");
 		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
 		cmdDelete.call();
-		
+
+		cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
+		cmdDelete.setNamedQuery("encontroInscricaoPagamento.deletePorEncontroInscricao");
+		cmdDelete.addParameter("encontroInscricao", encontroInscricao);
+		cmdDelete.call();
+
+		Query q = null;
+		q = em.createNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao1");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao2");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao3");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao4");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroRestauranteMesa.updatePorEncontroGarcon");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroRestauranteMesa.updatePorEncontroAfilhado1");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroRestauranteMesa.updatePorEncontroAfilhado2");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroOrganogramaCoordenacao.updatePorEncontroInscricao1");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroOrganogramaCoordenacao.updatePorEncontroInscricao2");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroOrganogramaArea.updatePorEncontroInscricao1");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+		q = em.createNamedQuery("encontroOrganogramaArea.updatePorEncontroInscricao2");
+		q.setParameter("encontroInscricao", encontroInscricao);
+		q.executeUpdate();
+
+
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(encontroInscricao);
 		cmd.call();
@@ -87,22 +130,22 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 	@Permissao(nomeOperacao="Busca VO", operacao=Operacao.VISUALIZAR)
 	public EncontroInscricaoVO getVO(EncontroInscricao encontroInscricao) throws Exception {
 		EncontroInscricaoVO vo = new EncontroInscricaoVO();
-		
+
 		GetEntityCommand cmd = injector.getInstance(GetEntityCommand.class);
 		cmd.setClazz(EncontroInscricao.class);
 		cmd.setId(encontroInscricao.getId());
 		vo.setEncontroInscricao((EncontroInscricao) cmd.call());
-		
+
 		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
 		cmdEntidade.setNamedQuery("encontroInscricaoPagamento.porEncontroInscricao");
 		cmdEntidade.addParameter("encontroInscricao", vo.getEncontroInscricao());
 		vo.setListaPagamento(cmdEntidade.call());
-		
+
 		cmdEntidade = injector.getInstance(GetEntityListCommand.class);
 		cmdEntidade.setNamedQuery("encontroInscricaoPagamentoDetalhe.porEncontroInscricao");
 		cmdEntidade.addParameter("encontroInscricao", vo.getEncontroInscricao());
 		vo.setListaPagamentoDetalhe(cmdEntidade.call());
-		
+
 		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		if(vo.getEncontroInscricao().getMensagemDestinatario()!=null){
 			if(vo.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()!=null){
@@ -115,22 +158,22 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		if(vo.getEncontroInscricao().getDataPrenchimentoFicha()!=null){
 			vo.getEncontroInscricao().setDataPrenchimentoFichaStr(df.format(vo.getEncontroInscricao().getDataPrenchimentoFicha()));
 		}
-		
+
 		return vo;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Busca inscricao pro casal - VO", operacao=Operacao.VISUALIZAR)
 	public EncontroInscricaoVO getVO(Encontro encontro, Casal casal) throws Exception {
 		EncontroInscricaoVO vo = null;
-		
+
 		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
 		cmdEntidade.setNamedQuery("encontroInscricao.porEncontroCasal");
 		cmdEntidade.addParameter("encontro", encontro);
 		cmdEntidade.addParameter("casal", casal);
 		List<EncontroInscricao> lista = cmdEntidade.call();
-		
+
 		if(lista.size()>0){
 			vo = getVO(lista.get(0));
 			SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -146,10 +189,10 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 				vo.getEncontroInscricao().setDataPrenchimentoFichaStr(df.format(vo.getEncontroInscricao().getDataPrenchimentoFicha()));
 			}
 		}
-		
+
 		return vo;
 	}
-	
+
 	@Override
 	@Permissao(nomeOperacao="Salvar encontroInscricao", operacao=Operacao.SALVAR)
 	public EncontroInscricaoVO salva(EncontroInscricaoVO encontroInscricaoVO) throws Exception {

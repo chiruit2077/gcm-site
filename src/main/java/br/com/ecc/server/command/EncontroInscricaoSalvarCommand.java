@@ -77,14 +77,12 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 		EncontroInscricaoFichaPagamento ficha = null;
 
 		if(encontroInscricaoVO.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
-			q = em.createNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
-			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
-			q.executeUpdate();
 			if (encontroInscricaoVO.getEncontroInscricao().getFichaPagamento()!=null){
 				ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
 				ficha.setStatus(TipoInscricaoFichaStatusEnum.LIBERADO);
 				ficha.setObservacao(TipoConfirmacaoEnum.DESISTENCIA.getNome());
 				EncontroInscricaoFichaPagamento vaga = new EncontroInscricaoFichaPagamento();
+				ficha.setEncontroInscricao(null);
 				vaga.setFicha(ficha.getFicha());
 				vaga.setEncontro(ficha.getEncontro());
 				vaga.setStatus(TipoInscricaoFichaStatusEnum.NORMAL);
@@ -146,7 +144,8 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 		}
 		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));
 		if (ficha!=null){
-			ficha.setEncontroInscricao(encontroInscricaoVO.getEncontroInscricao());
+			if(!encontroInscricaoVO.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA))
+				ficha.setEncontroInscricao(encontroInscricaoVO.getEncontroInscricao());
 			ficha = em.merge(ficha);
 		}
 

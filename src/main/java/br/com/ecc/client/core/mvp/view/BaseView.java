@@ -126,11 +126,16 @@ public abstract class BaseView<P extends BasePresenter> implements BaseDisplay {
 	}
 
 	public void printWidget(Widget widget){
+		printWidget(widget, getDisplayTitle());
+	}
+
+	public void printWidget(Widget widget, String titulo){
 		Element element = widget.getElement();
 		Print.saveOrigIFrames(element);
 		Print.updateFieldsDOM(element);
 		String html = "<div class='pageA4'>" + DOM.toString(element) +"</div>";
-		Print.it("","<link rel=styleSheet type=text/css media=print href=/ECCWeb.css> " +
+		Print.it("","<title>" + titulo + "</title>" +
+		         "<link rel=styleSheet type=text/css media=print href=/ECCWeb.css> " +
 			     "<link rel=styleSheet type=text/css media=print href=/paperStyle.css>",
 			     html);
 	}

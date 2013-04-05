@@ -40,8 +40,8 @@
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" align="center">
 								<tr>
-									<td class="portal-formLabel">Sigla:</td>
-									<td>
+									<td width="200px" class="portal-formLabel">Sigla:</td>
+									<td width="200px">
 										<g:TextBox ui:field="siglaTextBox" width="50px" textAlignment="center" maxLength="5"/>
 									</td>
 								</tr>
@@ -64,7 +64,7 @@
 										<g:CheckBox ui:field="aparecePlanilhaCheckBox" text="Aparece na Planilha"/>
 									</td>
 									<td>
-										<g:CheckBox ui:field="chocaPlanilhaCheckBox" text="Choca na Planilha"/>
+										<g:CheckBox ui:field="chocaPlanilhaCheckBox" text="Não choca Horario na Planilha"/>
 									</td>
 								</tr>
 							</table>
