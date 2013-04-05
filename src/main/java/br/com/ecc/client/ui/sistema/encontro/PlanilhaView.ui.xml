@@ -86,7 +86,7 @@
 										<g:ListBox ui:field="atividadeListBox" width="300px"/>
 									</td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td class="portal-formLabel">Ocorrência:</td>
 									<td>
 										<g:ListBox ui:field="ocorrenciaListBox" width="200px"/>
@@ -97,7 +97,7 @@
 									<td>
 										<g:ListBox ui:field="programaListBox" width="200px"/>
 									</td>
-								</tr>
+								</tr> -->
 								<tr>
 									<td class="portal-formLabel">Inicio:</td>
 									<td>
@@ -126,6 +126,9 @@
 									<td class="portal-formLabel">Porcentagem Minima Tempo:</td>
 									<td>
 										<cn:NumberTextBox ui:field="porcentagemNumberTextBox" width="150" textAlignment="center"/>
+									</td>
+									<td>
+										<g:Label ui:field="porcentagemPadraoLabel" width="200px"/>
 									</td>
 								</tr>
 								<tr>
@@ -157,6 +160,9 @@
 									</td>
 									<td>
 										<g:Label ui:field="entidadeEditadaLabel" width="400px" styleName="{style.negrito}"/>
+									</td>
+									<td>
+										<g:Label ui:field="entidadeInfoLabel" width="200px" styleName="{style.negrito}"/>
 									</td>
 								</tr>
 							</table>
@@ -270,6 +276,9 @@
 									</td>
 									<td align="left">
 										<g:CheckBox ui:field="naomostraPadrinhoCheckBox" text="Não Mostra Padrinhos"/>
+									</td>
+									<td>
+										<g:Label ui:field="mediaLabel" styleName="portal-rowCountLabel"/>
 									</td>
 								</tr>
 							</table>

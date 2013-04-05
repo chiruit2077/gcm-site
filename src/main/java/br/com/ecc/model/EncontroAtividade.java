@@ -21,12 +21,10 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-
 import br.com.ecc.model.tipo.TipoAtividadeEnum;
-import br.com.ecc.model.tipo.TipoEncontroAtividadeProgramaEnum;
-import br.com.ecc.model.tipo.TipoOcorrenciaAtividadeEnum;
 import br.com.ecc.model.tipo.TipoPreenchimentoAtividadeEnum;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 @Entity
 @SequenceGenerator(name="SQ_ATIVIDADE", sequenceName="SQ_ATIVIDADE")
@@ -39,11 +37,18 @@ import br.com.ecc.model.tipo.TipoPreenchimentoAtividadeEnum;
 			  "order by u.inicio")
 })
 public class EncontroAtividade extends _WebBaseEntity {
-	private static final long serialVersionUID = 8016064080696278205L;
+
+
+	private static final long serialVersionUID = 9141156097707357523L;
 
 	@Id
 	@GeneratedValue(generator="SQ_ATIVIDADE", strategy=GenerationType.AUTO)
 	private Integer id;
+
+	public EncontroAtividade() {
+		infoErro = new ArrayList<String>();
+		infoAtencao = new ArrayList<String>();
+	}
 
 	@ManyToOne
 	@JoinColumn(name="encontro")
@@ -59,17 +64,17 @@ public class EncontroAtividade extends _WebBaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fim;
 
-	@Enumerated(EnumType.STRING)
+	/*@Enumerated(EnumType.STRING)
 	@Column(length=20)
-	private TipoOcorrenciaAtividadeEnum tipoOcorrencia;
+	private TipoOcorrenciaAtividadeEnum tipoOcorrencia;*/
 
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoAtividadeEnum tipoAtividade;
 
-	@Enumerated(EnumType.STRING)
+	/*@Enumerated(EnumType.STRING)
 	@Column(length=20)
-	private TipoEncontroAtividadeProgramaEnum tipoPrograma;
+	private TipoEncontroAtividadeProgramaEnum tipoPrograma;*/
 
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
@@ -92,11 +97,6 @@ public class EncontroAtividade extends _WebBaseEntity {
 
 	@Version
 	private Integer version;
-
-	public EncontroAtividade() {
-		setInfoAtencao(new ArrayList<String>());
-		setInfoErro(new ArrayList<String>());
-	}
 
 	@Override
 	public String toString() {
@@ -159,12 +159,12 @@ public class EncontroAtividade extends _WebBaseEntity {
 	public void setFim(Date fim) {
 		this.fim = fim;
 	}
-	public TipoEncontroAtividadeProgramaEnum getTipoPrograma() {
+	/*public TipoEncontroAtividadeProgramaEnum getTipoPrograma() {
 		return tipoPrograma;
 	}
 	public void setTipoPrograma(TipoEncontroAtividadeProgramaEnum tipoPrograma) {
 		this.tipoPrograma = tipoPrograma;
-	}
+	}*/
 	public Integer getQuantidadeDesejada() {
 		return quantidadeDesejada;
 	}
@@ -177,12 +177,12 @@ public class EncontroAtividade extends _WebBaseEntity {
 	public void setTipoAtividade(TipoAtividadeEnum tipoAtividade) {
 		this.tipoAtividade = tipoAtividade;
 	}
-	public TipoOcorrenciaAtividadeEnum getTipoOcorrencia() {
+	/*public TipoOcorrenciaAtividadeEnum getTipoOcorrencia() {
 		return tipoOcorrencia;
 	}
 	public void setTipoOcorrencia(TipoOcorrenciaAtividadeEnum tipoOcorrencia) {
 		this.tipoOcorrencia = tipoOcorrencia;
-	}
+	}*/
 
 	public List<String> getInfoAtencao() {
 		return infoAtencao;

@@ -29,11 +29,9 @@ import br.com.ecc.model.OrganogramaArea;
 import br.com.ecc.model.Papel;
 import br.com.ecc.model._WebBaseEntity;
 import br.com.ecc.model.tipo.TipoAtividadeEnum;
-import br.com.ecc.model.tipo.TipoEncontroAtividadeProgramaEnum;
 import br.com.ecc.model.tipo.TipoExibicaoPlanilhaEnum;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
-import br.com.ecc.model.tipo.TipoOcorrenciaAtividadeEnum;
 import br.com.ecc.model.tipo.TipoPreenchimentoAtividadeEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 import br.com.ecc.model.vo.EncontroOrganogramaVO;
@@ -98,8 +96,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	@UiField DialogBox editaAtividadeDialogBox;
 	@UiField ListBox tipoListBox;
-	@UiField ListBox ocorrenciaListBox;
-	@UiField ListBox programaListBox;
+	/*@UiField ListBox ocorrenciaListBox;
+	@UiField ListBox programaListBox;*/
+	@UiField Label porcentagemPadraoLabel;
+	@UiField Label mediaLabel;
+	@UiField Label entidadeInfoLabel;
 	@UiField ListBox atividadeListBox;
 	@UiField ListBox atividadeEditaListBox;
 	@UiField ListBox addAtividadeListBox;
@@ -198,8 +199,8 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		fimDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 
 		ListBoxUtil.populate(tipoListBox, false, TipoAtividadeEnum.values());
-		ListBoxUtil.populate(ocorrenciaListBox, false, TipoOcorrenciaAtividadeEnum.values());
-		ListBoxUtil.populate(programaListBox, false, TipoEncontroAtividadeProgramaEnum.values());
+		/*ListBoxUtil.populate(ocorrenciaListBox, false, TipoOcorrenciaAtividadeEnum.values());
+		ListBoxUtil.populate(programaListBox, false, TipoEncontroAtividadeProgramaEnum.values());*/
 		ListBoxUtil.populate(preenchimentoListBox, false, TipoPreenchimentoAtividadeEnum.values());
 
 		ListBoxUtil.populate(planilhaListBox, true, TipoExibicaoPlanilhaEnum.values());
@@ -214,6 +215,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroInscricaoTableUtil.addColumn("Participante", null, HasHorizontalAlignment.ALIGN_LEFT);
 		encontroInscricaoTableUtil.addColumn("Papel", "200", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroInscricaoTableUtil.addColumn("Revisado", "50", HasHorizontalAlignment.ALIGN_CENTER);
+		encontroInscricaoTableUtil.addColumn("Info", "10", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
 	private void criaTabelaSelecao() {
@@ -240,6 +242,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroInscricaoAtividadeTableUtil.addColumn("Atividade", null, HasHorizontalAlignment.ALIGN_LEFT);
 		encontroInscricaoAtividadeTableUtil.addColumn("Papel", "100", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroInscricaoAtividadeTableUtil.addColumn("Revisado", "50", HasHorizontalAlignment.ALIGN_CENTER);
+		encontroInscricaoAtividadeTableUtil.addColumn("Info", "10", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
 	@UiHandler("fecharAtividadeButton")
@@ -292,11 +295,12 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			encontroAtividadeEditada.setPorcentagem(porcentagemNumberTextBox.getNumber().intValue());
 		}
 		encontroAtividadeEditada.setTipoAtividade((TipoAtividadeEnum)ListBoxUtil.getItemSelected(tipoListBox, TipoAtividadeEnum.values()));
-		encontroAtividadeEditada.setTipoOcorrencia((TipoOcorrenciaAtividadeEnum)ListBoxUtil.getItemSelected(ocorrenciaListBox, TipoOcorrenciaAtividadeEnum.values()));
-		encontroAtividadeEditada.setTipoPrograma((TipoEncontroAtividadeProgramaEnum)ListBoxUtil.getItemSelected(programaListBox, TipoEncontroAtividadeProgramaEnum.values()));
+		/*encontroAtividadeEditada.setTipoOcorrencia((TipoOcorrenciaAtividadeEnum)ListBoxUtil.getItemSelected(ocorrenciaListBox, TipoOcorrenciaAtividadeEnum.values()));
+		encontroAtividadeEditada.setTipoPrograma((TipoEncontroAtividadeProgramaEnum)ListBoxUtil.getItemSelected(programaListBox, TipoEncontroAtividadeProgramaEnum.values()));*/
 		encontroAtividadeEditada.setTipoPreenchimento((TipoPreenchimentoAtividadeEnum)ListBoxUtil.getItemSelected(preenchimentoListBox, TipoPreenchimentoAtividadeEnum.values()));
 		encontroAtividadeEditada.setRevisado(revisadoCheckBox.getValue());
 		presenter.salvarAtividade(encontroAtividadeEditada);
+		editaAtividadeDialogBox.hide();
 	}
 	private void edita(EncontroAtividade encontroAtividade) {
 		limpaCamposAtividade();
@@ -327,13 +331,14 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroAtividadeEditada = encontroAtividade;
 		if(encontroAtividade.getTipoAtividade()!=null){
 			ListBoxUtil.setItemSelected(tipoListBox, encontroAtividade.getTipoAtividade().getNome());
+			porcentagemPadraoLabel.setText("Porcentagem Padrão: " + encontroAtividade.getTipoAtividade().getPorcentagem());
 		}
-		if(encontroAtividade.getTipoOcorrencia()!=null){
+		/*if(encontroAtividade.getTipoOcorrencia()!=null){
 			ListBoxUtil.setItemSelected(ocorrenciaListBox, encontroAtividade.getTipoOcorrencia().getNome());
 		}
 		if(encontroAtividade.getTipoPrograma()!=null){
 			ListBoxUtil.setItemSelected(programaListBox, encontroAtividade.getTipoPrograma().getNome());
-		}
+		}*/
 		if(encontroAtividade.getTipoPreenchimento()!=null){
 			ListBoxUtil.setItemSelected(preenchimentoListBox, encontroAtividade.getTipoPreenchimento().getNome());
 			if (encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
@@ -350,6 +355,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		if(encontroAtividade.getAtividade()!=null){
 			ListBoxUtil.setItemSelected(atividadeListBox, encontroAtividade.getAtividade().getNome());
 		}
+
 		revisadoCheckBox.setValue(encontroAtividade.getRevisado());
 		inicioDateBox.setValue(encontroAtividade.getInicio());
 		fimDateBox.setValue(encontroAtividade.getFim());
@@ -919,10 +925,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		return false;
 	}
 
-	public boolean logicalXOR(boolean x, boolean y) {
-	    return ( ( x || y ) && ! ( x && y ) );
-	}
-
 	private List<EncontroAtividade> montaListaEncontroAtividadeusuarioAtual() {
 		List<EncontroAtividade> listaAtividades = new ArrayList<EncontroAtividade>();
 		for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
@@ -975,6 +977,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiHandler("periodoListBox")
 	public void periodoListBoxChangeHandler(ChangeEvent event) {
 		planilhaListBoxChangeHandler(null);
+	}
+
+	@UiHandler("tipoListBox")
+	public void tipoListBoxChangeHandler(ChangeEvent event) {
+		porcentagemPadraoLabel.setText("Porcentagem Padrão: " + ListBoxUtil.getItemSelected(tipoListBox, TipoAtividadeEnum.values()));
 	}
 
 	@UiHandler("addInscricaoListBox")
@@ -1087,6 +1094,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				addAtividadeListBox.setSelectedIndex(-1);
 				addAtividadeListBox.setVisible(true);
 				revisadoInscricaoCheckBox.setVisible(false);
+				entidadeInfoLabel.setText(convertListToStringLinhas(encontroAtividade.getInfoErro()) + convertListToStringLinhas(encontroAtividade.getInfoAtencao()));
 			}
 			defineCamposInscricao(encontroAtividadeInscricao);
 			encontroInscricaoFlexTable.setVisible(true);
@@ -1148,6 +1156,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		inscricaoSuggestBox1.setValue(null);
 		casalRadio.setValue(true);
 		itemTotal.setText(null);
+		entidadeInfoLabel.setText(null);
 		inscricaoSuggestBox1.setEnabled(true);
 		casalRadio.setEnabled(true);
 		pessoaRadio.setEnabled(true);
@@ -1338,7 +1347,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroInscricaoTableUtil.clearData();
 		int row = 0;
 		for (final EncontroAtividadeInscricao atividadeParticipante: listaParticipantesInscritos) {
-			Object dados[] = new Object[4];
+			Object dados[] = new Object[5];
 
 			final Image excluirParticipante = new Image("images/delete.png");
 			excluirParticipante.setStyleName("portal-ImageCursor");
@@ -1378,6 +1387,13 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				}
 			});
 			dados[3] = checkBox;
+			Label label = new Label();
+			if (getChoqueHorarios(atividadeParticipante)){
+				label.setText("Erros");
+				label.setStyleName("portal-ImageCursorErro");
+				label.setTitle("\rErros - " + convertListToStringLinhas(atividadeParticipante.getInfoErro()));
+			}
+			dados[4] = label;
 			encontroInscricaoTableUtil.addRow(dados,row+1);
 			row++;
 		}
@@ -1390,7 +1406,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			LabelTotalUtil.setTotal(itemTotal, listaParticipantesInscritos.size(), "atividade", "atividades", "a");
 			int row = 0;
 			for (final EncontroAtividadeInscricao ativdadeInscricao: listaParticipantesInscritos) {
-				Object dados[] = new Object[8];
+				Object dados[] = new Object[9];
 
 				final Image excluirAtividade = new Image("images/delete.png");
 				excluirAtividade.setStyleName("portal-ImageCursor");
@@ -1434,10 +1450,19 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					}
 				});
 				dados[7] = checkBox;
+				Label label = new Label();
+				if (getChoqueHorarios(ativdadeInscricao)){
+					label.setText("Erros");
+					label.setStyleName("portal-ImageCursorErro");
+					label.setTitle("\rErros - " + convertListToStringLinhas(ativdadeInscricao.getInfoErro()));
+				}
+				dados[8] = label;
 				encontroInscricaoAtividadeTableUtil.addRow(dados,row+1);
 				row++;
 			}
 			encontroInscricaoAtividadeTableUtil.applyDataRowStyles();
+			verificaInconsistenciasAtividade(encontroAtividadeEditada);
+			entidadeInfoLabel.setText(convertListToStringLinhas(encontroAtividadeEditada.getInfoErro()) + convertListToStringLinhas(encontroAtividadeEditada.getInfoAtencao()));
 		}
 	}
 
@@ -1797,6 +1822,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		List<EncontroAtividade> listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
 		List<EncontroInscricao> listaEncontroInscricao = presenter.getEncontroVO().getListaInscricao();
 		List<ParticipanteVO> listaParticipantes = new ArrayList<ParticipanteVO>();
+		List<ParticipanteVO> listaExcluida = new ArrayList<ParticipanteVO>();
 
 		Papel papel = (Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel());
 
@@ -1808,7 +1834,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				if (ei.getId().equals(271))
 					System.out.println(ei);
 				ok=true;
-				if ( !mostraChoqueCheckBox.getValue() && !getChoqueHorarios(null, encontroAtividadeEditada, ei, papel)){
+				if ( !mostraChoqueCheckBox.getValue() && getChoqueHorarios(null, encontroAtividadeEditada, ei, papel)){
 					ok=false;
 				}
 				if ( !mostraCoordenacaoCheckBox.getValue() && getCoordenacao(ei)){
@@ -1823,9 +1849,18 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					p.setQtdeAtividades(0);
 					p.getTags().clear();
 					listaParticipantes.add(p);
+				}else{
+					ParticipanteVO p = new ParticipanteVO();
+					p.setEncontroInscricao(ei);
+					p.setQtdeAtividades(0);
+					p.getTags().clear();
+					listaExcluida.add(p);
 				}
 			}
 		}
+
+		int qtdeAtividade=0;
+		int qtdeAtividadeParticipacoes=0;
 
 		if (listaParticipantes.size()>0){
 			EncontroPeriodo periodo = null;
@@ -1848,13 +1883,27 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						break;
 					}
 				}
+
 				for (EncontroAtividade ea : listaEncontroAtividade) {
-					if(ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
+					if(!ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS) && ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
+						qtdeAtividade++;
 						for (ParticipanteVO participanteVO : listaParticipantes) {
 							for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
 								if(participanteVO.getEncontroInscricao().getId().equals(eai.getEncontroInscricao().getId())){
 									if(eai.getEncontroAtividade().getId().equals(ea.getId())){
 										participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
+										qtdeAtividadeParticipacoes++;
+										break;
+									}
+								}
+							}
+						}
+						for (ParticipanteVO participanteVO : listaExcluida) {
+							for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
+								if(participanteVO.getEncontroInscricao().getId().equals(eai.getEncontroInscricao().getId())){
+									if(eai.getEncontroAtividade().getId().equals(ea.getId())){
+										participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
+										qtdeAtividadeParticipacoes++;
 										break;
 									}
 								}
@@ -1872,6 +1921,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			});
 			listaParticipantesSugeridos = listaParticipantes;
 		}
+		int media = 0;
+		if (qtdeAtividade > 0) media = qtdeAtividadeParticipacoes / qtdeAtividade;
+		mediaLabel.setText("Média de Atividades " + media );
 		LabelTotalUtil.setTotal(itemSelecionaTotal, listaParticipantes.size(), "sugestão", "sugestões", "");
 		selecionInscricaoTableUtil.clearData();
 		int row = 0;
@@ -1890,6 +1942,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			dados[1] = participante.getEncontroInscricao().toStringApelidos();
 			dados[2] = participante.getEncontroInscricao().getTipo().getNome();
 			dados[3] = participante.getQtdeAtividades().toString();
+			if (participante.getQtdeAtividades() < media )
+				selecionInscricaoTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalBlue");
+			else
+				selecionInscricaoTableUtil.setRowSpecialStyle(row+1, "FlexTable-RowSpecialNormalRed");
 			selecionInscricaoTableUtil.addRow(dados,row+1);
 			row++;
 		}
@@ -1920,7 +1976,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	private void limpaSelecao() {
 		selecionInscricaoTableUtil.clearData();
 		mostraChoqueCheckBox.setValue(false);
-		mostraCoordenacaoCheckBox.setValue(false);
+		mostraCoordenacaoCheckBox.setValue(true);
 		naomostraPadrinhoCheckBox.setValue(false);
 	}
 
