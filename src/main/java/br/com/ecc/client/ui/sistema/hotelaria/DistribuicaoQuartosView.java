@@ -668,7 +668,7 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 						if (encontroHotelQuarto.getEncontroInscricao4()!= null){
 							quartoNomeWidget.add(new Label(encontroHotelQuarto.getEncontroInscricao4().getPessoa().getApelido()!=null?encontroHotelQuarto.getEncontroInscricao4().getPessoa().getApelido():encontroHotelQuarto.getEncontroInscricao4().getPessoa().getNome()));
 						}
-						if (encontroHotelQuarto.getEncontroInscricao4()== null && encontroHotelQuarto.getEncontroInscricao4()== null && encontroHotelQuarto.getEncontroInscricao4()== null && encontroHotelQuarto.getEncontroInscricao4()== null ){
+						if (encontroHotelQuarto.getEncontroInscricao1()== null && encontroHotelQuarto.getEncontroInscricao2()== null && encontroHotelQuarto.getEncontroInscricao3()== null && encontroHotelQuarto.getEncontroInscricao4()== null ){
 							quartoNomeWidget.add(new Label("VAGO"));
 						}
 					}else{

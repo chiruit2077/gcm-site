@@ -264,6 +264,17 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			} );
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMHOTELENCONTRISTAS)){
+			if (object instanceof EncontroHotel){
+				EncontroHotel encontroHotel = (EncontroHotel) object;
+				service.imprimeRelatorioHotelEncontristas(encontroHotel, new WebAsyncCallback<Integer>(getDisplay()) {
+					@Override
+					protected void success(Integer idReport){
+						getDisplay().showWaitMessage(false);
+						DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+					}
+				} );
+			}
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMPLANILHA)){
 			EncontroPeriodo periodo = null;
 			if (object instanceof EncontroPeriodo){
