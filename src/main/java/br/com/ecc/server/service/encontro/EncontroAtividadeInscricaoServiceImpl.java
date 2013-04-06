@@ -1,13 +1,10 @@
 package br.com.ecc.server.service.encontro;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.service.encontro.EncontroAtividadeInscricaoService;
 import br.com.ecc.model.Encontro;
-import br.com.ecc.model.EncontroAtividade;
 import br.com.ecc.model.EncontroAtividadeInscricao;
-import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Papel;
 import br.com.ecc.model.tipo.Operacao;
@@ -18,7 +15,6 @@ import br.com.ecc.server.auth.Permissao;
 import br.com.ecc.server.command.EncontroPlanilhaCommand;
 import br.com.ecc.server.command.PlanilhaImprimirCommand;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
-import br.com.ecc.server.command.basico.ExecuteUpdateCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 import br.com.ecc.server.command.basico.SaveEntityCommand;
 
@@ -45,16 +41,6 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 	@Override
 	@Permissao(nomeOperacao="Excluir encontroAtividadeInscricao", operacao=Operacao.EXCLUIR)
 	public void exclui(EncontroAtividadeInscricao encontroAtividadeInscricao) throws Exception {
-		//dependencias
-//		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-//		cmdEntidade.setNamedQuery("encontroAtividadeInscricao.porEncontroAtividadeInscricao");
-//		cmdEntidade.addParameter("encontroAtividadeInscricao", encontroAtividadeInscricao);
-//		List<EncontroAtividadeInscricao> encontroAtividadeInscricaos = cmdEntidade.call();
-//		if(encontroAtividadeInscricaos!=null && encontroAtividadeInscricaos.size()>0){
-//			throw new WebException("Erro ao excluir EncontroAtividadeInscricao. \nJá existem encontroAtividadeInscricaos neste encontroAtividadeInscricao.");
-//		}
-
-		//exclusão
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(encontroAtividadeInscricao);
 		cmd.call();
@@ -82,48 +68,19 @@ public class EncontroAtividadeInscricaoServiceImpl extends SecureRemoteServiceSe
 	}
 
 	@Override
-	public void salvaInscricoes(Encontro encontro, EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes) throws Exception {
-		List<EncontroAtividadeInscricao> novaLista = new ArrayList<EncontroAtividadeInscricao>();
-		for (EncontroAtividadeInscricao encontroAtividadeInscricao : listaParticipantes) {
-			if(encontroAtividadeInscricao.getId()!=null){
-				novaLista.add(encontroAtividadeInscricao);
-			}
+	public void salvaInscricoes(Encontro encontro, List<EncontroAtividadeInscricao> listaParticipantes, List<EncontroAtividadeInscricao> listaParticipantesOriginal) throws Exception {
+		int i = 0;
+		while (i < listaParticipantes.size()) {
+			listaParticipantes.set(i, salva(listaParticipantes.get(i)));
+			i++;
 		}
-		ExecuteUpdateCommand cmd = injector.getInstance(ExecuteUpdateCommand.class);
-		if(novaLista.size()>0){
-			if(encontroAtividade!=null){
-				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroAtividadeNotIn");
-				cmd.addParameter("encontroAtividade", encontroAtividade);
-				cmd.addParameter("lista", novaLista );
-				cmd.call();
-			} else if(encontroInscricao!=null){
-				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricaoNotIn");
-				cmd.addParameter("encontroInscricao", encontroInscricao);
-				cmd.addParameter("lista", novaLista );
-				cmd.call();
-			} else {
-				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroNotIn");
-				cmd.addParameter("encontro", encontro);
-				cmd.addParameter("lista", novaLista );
-				cmd.call();
+
+		DeleteEntityCommand cmdDelete = injector.getInstance(DeleteEntityCommand.class);
+		for (EncontroAtividadeInscricao encontroAtividadeInscricao : listaParticipantesOriginal) {
+			if(!listaParticipantes.contains(encontroAtividadeInscricao)){
+				cmdDelete.setBaseEntity(encontroAtividadeInscricao);
+				cmdDelete.call();
 			}
-		} else {
-			if(encontroAtividade!=null){
-				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroAtividade");
-				cmd.addParameter("encontroAtividade", encontroAtividade);
-				cmd.call();
-			} else if(encontroInscricao!=null){
-				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
-				cmd.addParameter("encontroInscricao", encontroInscricao);
-				cmd.call();
-			} else {
-				cmd.setNamedQuery("encontroAtividadeInscricao.deletePorEncontro");
-				cmd.addParameter("encontro", encontro);
-				cmd.call();
-			}
-		}
-		for (EncontroAtividadeInscricao encontroAtividadeInscricao : listaParticipantes) {
-			salva(encontroAtividadeInscricao);
 		}
 	}
 

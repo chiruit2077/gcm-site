@@ -23,7 +23,6 @@ import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroAtividade;
 import br.com.ecc.model.EncontroAtividadeInscricao;
-import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Papel;
@@ -104,28 +103,9 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	public void salvarAtividade(EncontroAtividade encontroAtividade) {
 		getDisplay().showWaitMessage(true);
-		/*Integer pos = null;
-		if(encontroAtividade.getId()!=null){
-			EncontroAtividade ea;
-			for (int i=0; i<grupoEncontroVO.getListaAtividade().size(); i++) {
-				ea = encontroVO.getListaEncontroAtividade().get(i);
-				if(ea.getId().equals(encontroAtividade.getId())){
-					pos = i;
-					break;
-				}
-			}
-		}
-		final Integer indice = pos;*/
 		serviceEncontroAtividade.salva(encontroAtividade, new WebAsyncCallback<EncontroAtividade>(getDisplay()) {
 			@Override
 			public void success(EncontroAtividade encontroAtividade) {
-				/*if(indice!=null){
-					encontroVO.getListaEncontroAtividade().set(indice, encontroAtividade);
-				} else {
-					encontroVO.getListaEncontroAtividade().add(encontroAtividade);
-				}
-				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false);*/
 				buscaDadosPlanilha();
 			}
 		});
@@ -136,44 +116,22 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		serviceEncontroAtividade.exclui(encontroAtividade, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
-				/*encontroVO.getListaEncontroAtividade().remove(encontroAtividade);
-				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false)*/;
 				buscaDadosPlanilha();
 			}
 		});
 	}
 	public void salvarInscricao(EncontroAtividadeInscricao encontroAtividadeInscricao) {
 		getDisplay().showWaitMessage(true);
-		/*Integer pos = null;
-		if(encontroAtividadeInscricao.getId()!=null){
-			EncontroAtividadeInscricao eai;
-			for (int i=0; i<listaEncontroAtividadeInscricao.size(); i++) {
-				eai = listaEncontroAtividadeInscricao.get(i);
-				if(eai.getId().equals(encontroAtividadeInscricao.getId())){
-					pos = i;
-					break;
-				}
-			}
-		}
-		final Integer indice = pos;*/
 		serviceEncontroInscricaoAtividade.salva(encontroAtividadeInscricao, new WebAsyncCallback<EncontroAtividadeInscricao>(getDisplay()) {
 			@Override
 			public void success(EncontroAtividadeInscricao encontroAtividadeInscricao) {
-				/*if(indice!=null){
-					listaEncontroAtividadeInscricao.set(indice, encontroAtividadeInscricao);
-				} else {
-					listaEncontroAtividadeInscricao.add(encontroAtividadeInscricao);
-				}
-				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false);*/
 				buscaDadosPlanilha();
 			}
 		});
 	}
-	public void salvarInscricoes(EncontroAtividade encontroAtividade, EncontroInscricao encontroInscricao, List<EncontroAtividadeInscricao> listaParticipantes) {
+	public void salvarInscricoes(List<EncontroAtividadeInscricao> listaParticipantes, List<EncontroAtividadeInscricao> listaParticipantesOriginais) {
 		getDisplay().showWaitMessage(true);
-		serviceEncontroInscricaoAtividade.salvaInscricoes(encontroSelecionado, encontroAtividade, encontroInscricao, listaParticipantes, new WebAsyncCallback<Void>(getDisplay()) {
+		serviceEncontroInscricaoAtividade.salvaInscricoes(encontroSelecionado, listaParticipantes, listaParticipantesOriginais, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void result) {
 				buscaDadosPlanilha();
@@ -186,9 +144,6 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		serviceEncontroInscricaoAtividade.exclui(encontroAtividadeInscricao, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
-				/*listaEncontroAtividadeInscricao.remove(encontroAtividadeInscricao);
-				getDisplay().populaPlanilha();
-				getDisplay().showWaitMessage(false);*/
 				buscaDadosPlanilha();
 			}
 		});

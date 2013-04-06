@@ -451,7 +451,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	@Override
 	public String getDisplayTitle() {
-		return "Bem vindo ao sistema";
+		return "Bem vindo ao Sistema ECC BRASIL";
 	}
 
 	@Override
