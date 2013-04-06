@@ -1451,6 +1451,12 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					label.setTitle("\rErros - " + convertListToStringLinhas(atividadeParticipante.getInfoErro()));
 				}
 				dados[4] = label;
+				if (!presenter.isCoordenador()){
+					checkBox.setEnabled(false);
+					listBox.setEnabled(false);
+					label.setVisible(false);
+				}
+
 				encontroInscricaoTableUtil.addRow(dados,row+1);
 				row++;
 			}
@@ -1507,6 +1513,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					label.setTitle("\rErros - " + convertListToStringLinhas(ativdadeInscricao.getInfoErro()));
 				}
 				dados[8] = label;
+				if (!presenter.isCoordenador()){
+					checkBox.setEnabled(false);
+					listBox.setEnabled(false);
+					label.setVisible(false);
+				}
 				encontroInscricaoAtividadeTableUtil.addRow(dados,row+1);
 				row++;
 			}
