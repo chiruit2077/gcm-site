@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ecc.model.EncontroAtividadeInscricao;
 import br.com.ecc.model.EncontroInscricao;
 
 public class ParticipanteVO implements Serializable {
@@ -13,6 +14,7 @@ public class ParticipanteVO implements Serializable {
 	private Integer qtdeAtividades;
 	private List<String> tags = new ArrayList<String>();
 	private Boolean selecionado=false;
+	private List<EncontroAtividadeInscricao> encontroAtividadeInscricaos = new ArrayList<EncontroAtividadeInscricao>();
 
 	public Integer getQtdeAtividades() {
 		return qtdeAtividades;
@@ -37,5 +39,12 @@ public class ParticipanteVO implements Serializable {
 	}
 	public void setSelecionado(Boolean selecionado) {
 		this.selecionado = selecionado;
+	}
+	public List<EncontroAtividadeInscricao> getEncontroAtividadeInscricaos() {
+		return encontroAtividadeInscricaos;
+	}
+	public void setEncontroAtividadeInscricaos(
+			List<EncontroAtividadeInscricao> encontroAtividadeInscricaos) {
+		this.encontroAtividadeInscricaos = encontroAtividadeInscricaos;
 	}
 }

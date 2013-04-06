@@ -48,6 +48,7 @@ public class EncontroAtividade extends _WebBaseEntity {
 	public EncontroAtividade() {
 		infoErro = new ArrayList<String>();
 		infoAtencao = new ArrayList<String>();
+		encontroAtividadeInscricaos = new ArrayList<EncontroAtividadeInscricao>();
 	}
 
 	@ManyToOne
@@ -64,17 +65,9 @@ public class EncontroAtividade extends _WebBaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fim;
 
-	/*@Enumerated(EnumType.STRING)
-	@Column(length=20)
-	private TipoOcorrenciaAtividadeEnum tipoOcorrencia;*/
-
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoAtividadeEnum tipoAtividade;
-
-	/*@Enumerated(EnumType.STRING)
-	@Column(length=20)
-	private TipoEncontroAtividadeProgramaEnum tipoPrograma;*/
 
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
@@ -93,7 +86,7 @@ public class EncontroAtividade extends _WebBaseEntity {
 	private List<String> infoAtencao;
 
 	@Transient
-	private Integer quantidade;
+	private List<EncontroAtividadeInscricao> encontroAtividadeInscricaos;
 
 	@Version
 	private Integer version;
@@ -209,14 +202,6 @@ public class EncontroAtividade extends _WebBaseEntity {
 		this.tipoPreenchimento = tipoPreenchimento;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public Boolean getRevisado() {
 		if (revisado==null) return false;
 		return revisado;
@@ -245,6 +230,15 @@ public class EncontroAtividade extends _WebBaseEntity {
 
 	public void setPorcentagem(Integer porcentagem) {
 		this.porcentagem = porcentagem;
+	}
+
+	public List<EncontroAtividadeInscricao> getEncontroAtividadeInscricaos() {
+		return encontroAtividadeInscricaos;
+	}
+
+	public void setEncontroAtividadeInscricaos(
+			List<EncontroAtividadeInscricao> encontroAtividadeInscricaos) {
+		this.encontroAtividadeInscricaos = encontroAtividadeInscricaos;
 	}
 
 }

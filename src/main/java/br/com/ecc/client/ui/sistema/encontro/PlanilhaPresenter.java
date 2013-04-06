@@ -41,7 +41,6 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 	public interface Display extends BaseDisplay {
 		void populaPlanilha();
 		void populaAtividades(List<Atividade> listaAtividades);
-		void populaInscricao();
 		void populaPapel(List<Papel> listaPapel);
 		EncontroPeriodo getPeriodoSelecionado();
 		TipoExibicaoPlanilhaEnum getTipoExibicaoPlanilhaSelecionado();
@@ -202,7 +201,6 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			@Override
 			protected void success(List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao) {
 				setListaEncontroAtividadeInscricao(listaEncontroAtividadeInscricao);
-				getDisplay().populaInscricao();
 				getDisplay().populaPlanilha();
 				getDisplay().showWaitMessage(false);
 			}
