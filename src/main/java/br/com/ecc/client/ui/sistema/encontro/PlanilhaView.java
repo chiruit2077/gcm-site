@@ -1722,12 +1722,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	}
 
 	private EncontroAtividadeInscricao getEncontroAtividadeInscricao(EncontroAtividade atividade, EncontroInscricao inscricao){
-		List<EncontroAtividadeInscricao> atividadeInscricao = null;
-		if ( listaParticipantesInscritos != null)
-			atividadeInscricao = listaParticipantesInscritos;
-		else
-			atividadeInscricao = presenter.getListaEncontroAtividadeInscricao();
-		for (EncontroAtividadeInscricao encontroAtividadeInscricao : atividadeInscricao) {
+		for (EncontroAtividadeInscricao encontroAtividadeInscricao : listaParticipantesInscritos) {
 			if (encontroAtividadeInscricao.getEncontroAtividade().equals(atividade) && encontroAtividadeInscricao.getEncontroInscricao().equals(inscricao)){
 				return encontroAtividadeInscricao;
 			}
@@ -1736,9 +1731,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	}
 
 	private EncontroAtividadeInscricao getEncontroAtividadeInscricaoFull(EncontroAtividade atividade, EncontroInscricao inscricao){
-		List<EncontroAtividadeInscricao> atividadeInscricao = null;
-		atividadeInscricao = presenter.getListaEncontroAtividadeInscricao();
-		for (EncontroAtividadeInscricao encontroAtividadeInscricao : atividadeInscricao) {
+		for (EncontroAtividadeInscricao encontroAtividadeInscricao : presenter.getListaEncontroAtividadeInscricao()) {
 			if (encontroAtividadeInscricao.getEncontroAtividade().equals(atividade) && encontroAtividadeInscricao.getEncontroInscricao().equals(inscricao)){
 				return encontroAtividadeInscricao;
 			}
