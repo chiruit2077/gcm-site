@@ -76,11 +76,15 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 	@Transient
 	private List<String> infoErro;
 
+	@Transient
+	private List<String> infoAtencao;
+
 	@Version
 	private Integer version;
 
 	public EncontroAtividadeInscricao() {
 		setInfoErro(new ArrayList<String>());
+		setInfoAtencao(new ArrayList<String>());
 	}
 
 	public Integer getId() {
@@ -149,5 +153,13 @@ public class EncontroAtividadeInscricao extends _WebBaseEntity {
 
 	public void setRevisado(Boolean revisado) {
 		this.revisado = revisado;
+	}
+
+	public List<String> getInfoAtencao() {
+		return infoAtencao;
+	}
+
+	public void setInfoAtencao(List<String> infoAtencao) {
+		this.infoAtencao = infoAtencao;
 	}
 }

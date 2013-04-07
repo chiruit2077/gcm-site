@@ -23,6 +23,8 @@ public class EncontroVO implements Serializable {
 	private List<AgrupamentoVO> listaAgrupamentoVOEncontro;
 	private List<EncontroOrganogramaVO> listaOrganogramaEncontroVO;
 	private List<EncontroConviteResponsavel> listaResponsavelConvite;
+	private Integer qtdeInscricao;
+	private Integer qtdeInscricaoExterno;
 
 	public Encontro getEncontro() {
 		return encontro;
@@ -75,6 +77,7 @@ public class EncontroVO implements Serializable {
 		this.listaResponsavelConvite = listaResponsavelConvite;
 	}
 	public int getQuantidadeInscricao(){
+		if (qtdeInscricao!=null) return qtdeInscricao;
 		int qtde=0;
 		if (getListaInscricao()!= null){
 			for (EncontroInscricao inscricao : getListaInscricao()) {
@@ -82,8 +85,26 @@ public class EncontroVO implements Serializable {
 					qtde++;
 			}
 		}
+		qtdeInscricao = qtde;
 		return qtde;
 	}
+	public int getQuantidadeInscricaoExterno(){
+		if (qtdeInscricaoExterno!=null) return qtdeInscricaoExterno;
+		int qtde=0;
+		if (getListaInscricao()!= null){
+			for (EncontroInscricao inscricao : getListaInscricao()) {
+				if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO))
+					qtde++;
+			}
+		}
+		qtdeInscricaoExterno = qtde;
+		return qtde;
+	}
+
+	public int getQuantidadeInscricaoTotal(){
+		return getListaInscricao().size();
+	}
+
 	public List<EncontroOrganogramaVO> getListaOrganogramaEncontroVO() {
 		return listaOrganogramaEncontroVO;
 	}

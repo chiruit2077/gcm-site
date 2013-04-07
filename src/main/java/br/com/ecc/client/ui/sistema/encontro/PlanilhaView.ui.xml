@@ -159,10 +159,10 @@
 										<g:Label ui:field="entidadeEditadaTituloLabel" width="180px"/>
 									</td>
 									<td>
-										<g:Label ui:field="entidadeEditadaLabel" width="400px" styleName="{style.negrito}"/>
+										<g:Label ui:field="entidadeEditadaLabel" width="300px" styleName="{style.negrito}"/>
 									</td>
 									<td>
-										<g:Label ui:field="entidadeInfoLabel" width="200px" styleName="{style.negrito}"/>
+										<g:Label ui:field="entidadeInfoLabel" width="300px" styleName="{style.negrito}"/>
 									</td>
 								</tr>
 							</table>
@@ -261,7 +261,7 @@
 				</g:VerticalPanel>
 			</g:DialogBox>
 			<g:DialogBox ui:field="selecaoInscricaoDialogBox" visible="false"
-				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Seleciona Inscrição Sugestiva">
+				         width="100%" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Seleciona Inscrição Sugestiva">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" spacing="5">
 						<g:VerticalPanel width="100%">
@@ -269,16 +269,36 @@
 							<table cellpadding="3" align="left">
 								<tr>
 									<td align="left">
-										<g:CheckBox ui:field="mostraChoqueCheckBox" text="Mostra Choque"/>
+										<g:CheckBox  width="150px" ui:field="mostraChoqueCheckBox" text="Mostra Choque"/>
 									</td>
 									<td align="left">
-										<g:CheckBox ui:field="mostraCoordenacaoCheckBox" text="Mostra Coordenadores"/>
+										<g:CheckBox width="150px"  ui:field="mostraCoordenacaoCheckBox" text="Mostra Coordenadores"/>
 									</td>
 									<td align="left">
-										<g:CheckBox ui:field="naomostraPadrinhoCheckBox" text="Não Mostra Padrinhos"/>
+										<g:CheckBox width="150px"  ui:field="naomostraPadrinhoCheckBox" text="Não Mostra Padrinhos"/>
+									</td>
+									<td align="right">
+										<g:Label ui:field="mediaLabel" width="150px" styleName="portal-rowCountLabel"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Qtde. Max:</td>
+									<td>
+										<cn:NumberTextBox ui:field="qtdeMaximaNumberTextBox" width="50" textAlignment="center"/>
+									</td>
+									<td align="left">
+										<g:CheckBox width="150px"  ui:field="naomostraAtividadeCheckBox" text="Não Mostra quem esta na Atividade:"/>
+									</td>
+									<td colpsan="3">
+										<g:ListBox ui:field="filtroAtividadeListBox" width="400px"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<g:Button ui:field="selecionaTodosButton">Seleciona Todos</g:Button>
 									</td>
 									<td>
-										<g:Label ui:field="mediaLabel" styleName="portal-rowCountLabel"/>
+										<g:Button ui:field="desmarcaTodosButton">Desmarca Todos</g:Button>
 									</td>
 								</tr>
 							</table>
