@@ -1207,7 +1207,18 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		papelHTMLPanel.setVisible(true);
 		entidadeEditadaTituloLabel.setText("Atividade:");
 		entidadeEditadaLabel.setText(encontroAtividade.toString());
-		entidadeInfoLabel.setText("Tipo Preenchimento: " + encontroAtividade.getTipoPreenchimento().getNome() + (encontroAtividade.getQuantidadeDesejada()==null?"":" Quantidade: " + encontroAtividade.getQuantidadeDesejada()));
+		Integer quantidade = encontroAtividade.getQuantidadeDesejada();
+		if (encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricao();
+		else if (encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOSEXTERNO))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricaoTotal();
+		else if (encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.EXTERNO))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricaoExterno();
+		else if (encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.PADRINHOS))
+			quantidade = presenter.getEncontroVO().getEncontro().getQuantidadeAfilhados();
+		else if (encontroAtividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.METADE))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricao()/2;
+		entidadeInfoLabel.setText("Tipo Preenchimento: " + encontroAtividade.getTipoPreenchimento().getNome() + (quantidade==null?"":" Quantidade: " + quantidade));
 		entidadeInfoLabel.setTitle(convertListToStringLinhas(encontroAtividade.getInfoErro()) + convertListToStringLinhas(encontroAtividade.getInfoAtencao()));
 
 		preencheAutomaticoInscricaoButton.setVisible(true);
@@ -1437,7 +1448,18 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	public void populaParticipantesPorAtividade() {
 		verificaInconsistenciasAtividadeEditada();
-		entidadeInfoLabel.setText("Tipo Preenchimento: " + encontroAtividadeEditada.getTipoPreenchimento().getNome() + (encontroAtividadeEditada.getQuantidadeDesejada()==null?"":" Quantidade: " + encontroAtividadeEditada.getQuantidadeDesejada()));
+		Integer quantidade = encontroAtividadeEditada.getQuantidadeDesejada();
+		if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricao();
+		else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOSEXTERNO))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricaoTotal();
+		else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.EXTERNO))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricaoExterno();
+		else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.PADRINHOS))
+			quantidade = presenter.getEncontroVO().getEncontro().getQuantidadeAfilhados();
+		else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.METADE))
+			quantidade = presenter.getEncontroVO().getQuantidadeInscricao()/2;
+		entidadeInfoLabel.setText("Tipo Preenchimento: " + encontroAtividadeEditada.getTipoPreenchimento().getNome() + (quantidade==null?"":" Quantidade: " + quantidade));
 		entidadeInfoLabel.setTitle(convertListToStringLinhas(encontroAtividadeEditada.getInfoErro()) + convertListToStringLinhas(encontroAtividadeEditada.getInfoAtencao()));
 		LabelTotalUtil.setTotal(itemTotal, listaParticipantesInscritos.size(), "participante", "participantes", "");
 		encontroInscricaoTableUtil.clearData();
@@ -1911,12 +1933,24 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					}else if (presenter.getEncontroVO().getQuantidadeInscricao() < quantidade ){
 						ea.getInfoErro().add("Esta passando " + (quantidade-presenter.getEncontroVO().getQuantidadeInscricao()) + " participantes");
 					}
+				}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOSEXTERNO)){
+					if (presenter.getEncontroVO().getQuantidadeInscricaoTotal() > quantidade ){
+						ea.getInfoErro().add("Faltam " + (presenter.getEncontroVO().getQuantidadeInscricaoTotal() - quantidade) + " participantes");
+					}else if (presenter.getEncontroVO().getQuantidadeInscricaoTotal() < quantidade ){
+						ea.getInfoErro().add("Esta passando " + (quantidade-presenter.getEncontroVO().getQuantidadeInscricaoTotal()) + " participantes");
+					}
+				}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.EXTERNO)){
+					if (presenter.getEncontroVO().getQuantidadeInscricaoExterno() > quantidade ){
+						ea.getInfoErro().add("Faltam " + (presenter.getEncontroVO().getQuantidadeInscricaoExterno() - quantidade) + " participantes");
+					}else if (presenter.getEncontroVO().getQuantidadeInscricaoExterno() < quantidade ){
+						ea.getInfoErro().add("Esta passando " + (quantidade-presenter.getEncontroVO().getQuantidadeInscricaoExterno()) + " participantes");
+					}
 				}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.METADE)){
-					if ((presenter.getEncontroVO().getQuantidadeInscricao()/2+1) > quantidade ){
-						ea.getInfoErro().add("Faltam " + (presenter.getEncontroVO().getQuantidadeInscricao() - quantidade) + " participantes");
+					if ((presenter.getEncontroVO().getQuantidadeInscricao()/2) > quantidade ){
+						ea.getInfoErro().add("Faltam " + ((presenter.getEncontroVO().getQuantidadeInscricao()/2) - quantidade) + " participantes");
 					}
 					else if ((presenter.getEncontroVO().getQuantidadeInscricao()/2+1) < quantidade ){
-						ea.getInfoErro().add("Esta passando " + (presenter.getEncontroVO().getQuantidadeInscricao() - quantidade) + " participantes");
+						ea.getInfoAtencao().add("Esta passando " + (quantidade - (presenter.getEncontroVO().getQuantidadeInscricao()/2+1)) + " participantes");
 					}
 				}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.PADRINHOS)){
 					if (ea.getEncontro().getQuantidadeAfilhados() > quantidade ){
@@ -1954,6 +1988,25 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				}else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS)){
 					if (presenter.getEncontroVO().getQuantidadeInscricao() > quantidade ){
 						encontroAtividadeEditada.getInfoErro().add("Faltam " + (presenter.getEncontroVO().getQuantidadeInscricao() - quantidade) + " participantes");
+					}
+				}else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOSEXTERNO)){
+					if (presenter.getEncontroVO().getQuantidadeInscricaoTotal() > quantidade ){
+						encontroAtividadeEditada.getInfoErro().add("Faltam " + (presenter.getEncontroVO().getQuantidadeInscricaoTotal() - quantidade) + " participantes");
+					}else if (presenter.getEncontroVO().getQuantidadeInscricaoTotal() < quantidade ){
+						encontroAtividadeEditada.getInfoErro().add("Esta passando " + (quantidade-presenter.getEncontroVO().getQuantidadeInscricaoTotal()) + " participantes");
+					}
+				}else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.EXTERNO)){
+					if (presenter.getEncontroVO().getQuantidadeInscricaoExterno() > quantidade ){
+						encontroAtividadeEditada.getInfoErro().add("Faltam " + (presenter.getEncontroVO().getQuantidadeInscricaoExterno() - quantidade) + " participantes");
+					}else if (presenter.getEncontroVO().getQuantidadeInscricaoExterno() < quantidade ){
+						encontroAtividadeEditada.getInfoErro().add("Esta passando " + (quantidade-presenter.getEncontroVO().getQuantidadeInscricaoExterno()) + " participantes");
+					}
+				}else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.METADE)){
+					if ((presenter.getEncontroVO().getQuantidadeInscricao()/2) > quantidade ){
+						encontroAtividadeEditada.getInfoErro().add("Faltam " + ((presenter.getEncontroVO().getQuantidadeInscricao()/2) - quantidade) + " participantes");
+					}
+					else if ((presenter.getEncontroVO().getQuantidadeInscricao()/2+1) < quantidade ){
+						encontroAtividadeEditada.getInfoAtencao().add("Esta passando " + (quantidade - (presenter.getEncontroVO().getQuantidadeInscricao()/2+1)) + " participantes");
 					}
 				}else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.PADRINHOS)){
 					if (encontroAtividadeEditada.getEncontro().getQuantidadeAfilhados() > quantidade ){
@@ -2256,6 +2309,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		naomostraPadrinhoCheckBox.setValue(false);
 		naomostraAtividadeCheckBox.setValue(false);
 		qtdeMaximaNumberTextBox.setValue(null);
+		ListBoxUtil.populate(filtroAtividadeListBox,false,presenter.getEncontroVO().getListaEncontroAtividade());
 	}
 
 	@Override

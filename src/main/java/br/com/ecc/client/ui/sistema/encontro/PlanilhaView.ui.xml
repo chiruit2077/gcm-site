@@ -159,9 +159,9 @@
 										<g:Label ui:field="entidadeEditadaTituloLabel" width="180px"/>
 									</td>
 									<td>
-										<g:Label ui:field="entidadeEditadaLabel" width="300px" styleName="{style.negrito}"/>
+										<g:Label ui:field="entidadeEditadaLabel" width="400px" styleName="{style.negrito}"/>
 									</td>
-									<td>
+									<td align="right">
 										<g:Label ui:field="entidadeInfoLabel" width="300px" styleName="{style.negrito}"/>
 									</td>
 								</tr>
