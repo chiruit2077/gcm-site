@@ -86,6 +86,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	@UiField ListBox periodoListBox;
 	@UiField ListBox planilhaListBox;
+	@UiField ListBox planilhaAtividadeListBox;
 
 	@UiField DialogBox selecaoInscricaoDialogBox;
 	@UiField Button salvarSelecaoButton;
@@ -1037,16 +1038,12 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			periodoListBox.addItem(periodo.toString());
 		}
 	}
-	@UiHandler("planilhaListBox")
+	@UiHandler(value={"planilhaListBox","periodoListBox","planilhaAtividadeListBox"})
 	public void planilhaListBoxChangeHandler(ChangeEvent event) {
 		planilhaPanel.clear();
 		if(getTipoExibicaoPlanilhaSelecionado()!=null){
 			presenter.buscaDadosPlanilha();
 		}
-	}
-	@UiHandler("periodoListBox")
-	public void periodoListBoxChangeHandler(ChangeEvent event) {
-		planilhaListBoxChangeHandler(null);
 	}
 
 	@UiHandler("tipoListBox")
@@ -2147,8 +2144,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 	@SuppressWarnings("deprecation")
 	public List<EncontroAtividade> montaListaAtividadesPorPeriodoSelecionado(List<EncontroAtividade> listaEncontroAtividade, EncontroPeriodo periodo){
+		List<EncontroAtividade> listaEncontroAtividadePeriodo = new ArrayList<EncontroAtividade>();
+		Atividade atividade = (Atividade) ListBoxUtil.getItemSelected(planilhaAtividadeListBox, presenter.getGrupoEncontroVO().getListaAtividade());
 		if(periodo!=null){
-			List<EncontroAtividade> listaEncontroAtividadePeriodo = new ArrayList<EncontroAtividade>();
 			Date inicio = null, fim = new Date(3000,1,1);
 			boolean achou = false;
 			inicio = periodo.getInicio();
@@ -2171,13 +2169,18 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 
 			for (EncontroAtividade ea : listaEncontroAtividade) {
 				if (ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
-					listaEncontroAtividadePeriodo.add(ea);
+					if (atividade == null || atividade.getId().equals(ea.getAtividade().getId()))
+						listaEncontroAtividadePeriodo.add(ea);
 				}
 			}
 			return listaEncontroAtividadePeriodo;
 
 		}else{
-			return listaEncontroAtividade;
+			for (EncontroAtividade ea : listaEncontroAtividade) {
+				if (atividade == null || atividade.getId().equals(ea.getAtividade().getId()))
+						listaEncontroAtividadePeriodo.add(ea);
+			}
+			return listaEncontroAtividadePeriodo;
 		}
 	}
 
@@ -2376,6 +2379,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@Override
 	public void populaAtividades(List<Atividade> listaAtividades) {
 		ListBoxUtil.populate(atividadeListBox, false, listaAtividades);
+		ListBoxUtil.populate(planilhaAtividadeListBox, true, listaAtividades);
 	}
 
 }
