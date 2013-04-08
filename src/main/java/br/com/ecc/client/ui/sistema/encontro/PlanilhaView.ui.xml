@@ -57,7 +57,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td colspan="7" align="center">
 								<g:Button ui:field="imprimirButton">Imprimir Planilha [PDF]</g:Button>
 								<g:Button ui:field="baixarButton">Baixar Planilha [Excel]</g:Button>
 								<g:Button ui:field="limparPlanilhaButton" visible="false">Limpar Toda Planilha</g:Button>
@@ -90,18 +90,6 @@
 										<g:ListBox ui:field="atividadeListBox" width="300px"/>
 									</td>
 								</tr>
-								<!-- <tr>
-									<td class="portal-formLabel">Ocorrência:</td>
-									<td>
-										<g:ListBox ui:field="ocorrenciaListBox" width="200px"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Programa:</td>
-									<td>
-										<g:ListBox ui:field="programaListBox" width="200px"/>
-									</td>
-								</tr> -->
 								<tr>
 									<td class="portal-formLabel">Inicio:</td>
 									<td>
@@ -280,6 +268,9 @@
 									</td>
 									<td align="left">
 										<g:CheckBox width="150px"  ui:field="naomostraPadrinhoCheckBox" text="Não Mostra Padrinhos"/>
+									</td>
+									<td align="left">
+										<g:CheckBox width="150px"  ui:field="naomostraApoioCheckBox" text="Não Mostra Apoio"/>
 									</td>
 									<td align="right">
 										<g:Label ui:field="mediaLabel" width="150px" styleName="portal-rowCountLabel"/>

@@ -89,6 +89,9 @@ public class EncontroAtividade extends _WebBaseEntity {
 	@Transient
 	private List<EncontroAtividadeInscricao> encontroAtividadeInscricaos;
 
+	@Transient
+	private Integer quantidadeInscricoes;
+
 	@Version
 	private Integer version;
 
@@ -240,6 +243,14 @@ public class EncontroAtividade extends _WebBaseEntity {
 	public void setEncontroAtividadeInscricaos(
 			List<EncontroAtividadeInscricao> encontroAtividadeInscricaos) {
 		this.encontroAtividadeInscricaos = encontroAtividadeInscricaos;
+	}
+
+	public Integer getQuantidadeInscricoes() {
+		return quantidadeInscricoes;
+	}
+
+	public void setQuantidadeInscricoes(Integer quantidadeInscricoes) {
+		this.quantidadeInscricoes = quantidadeInscricoes;
 	}
 
 }

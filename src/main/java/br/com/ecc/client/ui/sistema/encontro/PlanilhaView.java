@@ -113,6 +113,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	@UiField CheckBox mostraCoordenacaoCheckBox;
 	@UiField CheckBox mostraChoqueCheckBox;
 	@UiField CheckBox naomostraPadrinhoCheckBox;
+	@UiField CheckBox naomostraApoioCheckBox;
 	@UiField CheckBox naomostraAtividadeCheckBox;
 	@UiField ListBox filtroAtividadeListBox;
 	@UiField DateBox inicioDateBox;
@@ -505,94 +506,101 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				participanteVO.getTags().clear();
 			}
 
-			html.append("<tr style='background-color:#cdffbf;'>");
-			html.append("<td colspan='" + (colspan+listaParticipantes.size()) + "' class='portal-celulaPlanilha' style='text-align:left;'> Atividades para \"" + encontroPeriodo.getNome() + "\"</td>");
-			html.append("</tr>");
 
 			List<EncontroAtividade> listaEA = montaListaAtividadesPorPeriodoSelecionado(listaEncontroAtividade,encontroPeriodo);
-			listaEncontroAtividadeExibidas.addAll(listaEA);
-
-			for (EncontroAtividade ea : listaEA) {
-				ea.getEncontroAtividadeInscricaos().clear();
-				if(ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE)){
-					tipoAtividade = "color:blue;";
-				} else {
-					tipoAtividade = "";
-				}
-				if(linha % 2 == 0) {
-					parLinha = "style='"+ tipoAtividade +"'";
-				} else {
-					parLinha = "style='background-color:#e3e3e3;"+ tipoAtividade +"'";
-				}
-				html.append("<tr " + parLinha + ">");
-				html.append("<td class='portal-celulaPlanilhaDia'>" + dfDia.format(ea.getInicio()).toUpperCase() + "</td>");
-				html.append("<td class='portal-celulaPlanilhaHora'>" + dfHora.format(ea.getInicio()) + "</td>");
-				html.append("<td class='portal-celulaPlanilhaHora'>" + dfHora.format(ea.getFim()) + "</td>");
-				if(bCoordenador){
-					html.append("<td id='editA_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
-				}
-				html.append("<td class='portal-celulaPlanilhaTipo' style='text-align:left;'>" + ea.getTipoAtividade().getNome() + "</td>");
-				html.append("<td class='portal-celulaPlanilhaAtividade' style='text-align:left;white-space: nowrap;'>" + ea.getAtividade().getNome() + "</td>");
-				html.append("<td id='add_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
-				html.append("<td id='info_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
-				participante = new StringBuffer("");
-				lista.clear();
-				coluna = 0;
-				for (ParticipanteVO participanteVO : listaParticipantes) {
-					boolean achou = false;
-					if(coluna% 2 == 0) {
-						parColuna = "style='background-color:#f0f0f0;'";
-					} else {
-						parColuna = "";
+			if (listaEA.size()>0){
+				listaEncontroAtividadeExibidas.addAll(listaEA);
+				html.append("<tr style='background-color:#cdffbf;'>");
+				html.append("<td colspan='" + (colspan+listaParticipantes.size()) + "' class='portal-celulaPlanilha' style='text-align:left;'> Atividades para \"" + encontroPeriodo.getNome() + "\"</td>");
+				html.append("</tr>");
+				for (EncontroAtividade ea : listaEA) {
+					ea.getEncontroAtividadeInscricaos().clear();
+					ea.setQuantidadeInscricoes(0);
+					lista.clear();
+					for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
+						if(eai.getEncontroAtividade().getId().equals(ea.getId())){
+							ea.setQuantidadeInscricoes(ea.getQuantidadeInscricoes()+1);
+							lista.add(eai.getEncontroInscricao().toStringApelidos() + " - " + eai.getPapel().toString());
+						}
 					}
-					if(participanteVO.getEncontroInscricao().getCasal()!=null && participanteVO.getEncontroInscricao().getCasal().getId().equals(presenter.getCasal().getId()) ||
-							participanteVO.getEncontroInscricao().getPessoa()!=null && participanteVO.getEncontroInscricao().getPessoa().getId().equals(presenter.getUsuario().getPessoa().getId())){
-						parColuna = "style= 'background-color: #ffbf95;'";
+					if(ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE)){
+						tipoAtividade = "color:blue;";
 					} else {
-						if(participanteVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.PADRINHO)){
-							parColuna = "style= 'background-color: #fdf3b5;'";
-						}else if(participanteVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.EXTERNO)){
-							parColuna = "style= 'background-color: #CD853F;'";
-						}else {
+						tipoAtividade = "";
+					}
+					if(linha % 2 == 0) {
+						parLinha = "style='"+ tipoAtividade +"'";
+					} else {
+						parLinha = "style='background-color:#e3e3e3;"+ tipoAtividade +"'";
+					}
+					html.append("<tr " + parLinha + ">");
+					html.append("<td class='portal-celulaPlanilhaDia'>" + dfDia.format(ea.getInicio()).toUpperCase() + "</td>");
+					html.append("<td class='portal-celulaPlanilhaHora'>" + dfHora.format(ea.getInicio()) + "</td>");
+					html.append("<td class='portal-celulaPlanilhaHora'>" + dfHora.format(ea.getFim()) + "</td>");
+					if(bCoordenador){
+						html.append("<td id='editA_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
+					}
+					html.append("<td class='portal-celulaPlanilhaTipo' style='text-align:left;'>" + ea.getTipoAtividade().getNome() + "</td>");
+					html.append("<td class='portal-celulaPlanilhaAtividade' style='text-align:left;white-space: nowrap;'>" + ea.getAtividade().getNome() + "</td>");
+					html.append("<td id='add_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
+					html.append("<td id='info_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
+					participante = new StringBuffer("");
+					coluna = 0;
+					for (ParticipanteVO participanteVO : listaParticipantes) {
+						boolean achou = false;
+						if(coluna% 2 == 0) {
+							parColuna = "style='background-color:#f0f0f0;'";
+						} else {
 							parColuna = "";
 						}
-					}
-					for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
-						if(participanteVO.getEncontroInscricao().getId().equals(eai.getEncontroInscricao().getId())){
-							if(eai.getEncontroAtividade().getId().equals(ea.getId())){
-								ea.getEncontroAtividadeInscricaos().add(eai);
-								participanteVO.getEncontroAtividadeInscricaos().add(eai);
-								if(bCoordenador){
-									participante.append("<td id='edit_" + eai.getId() + "' class='portal-celulaPlanilha' " + parColuna + "></td>");
-								} else {
-									participante.append("<td class='portal-celulaPlanilha' " + parColuna + ">" + eai.getPapel().getSigla() + "</td>");
-								}
-								lista.add(eai.getEncontroInscricao().toStringApelidos() + " - " + eai.getPapel().toString());
-								participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
-								if (participanteVO.getTags()!=null)
-									participanteVO.getTags().add(eai.getEncontroAtividade().toString() + " - " + eai.getPapel().toString());
-								achou= true;
-								break;
+						if(participanteVO.getEncontroInscricao().getCasal()!=null && participanteVO.getEncontroInscricao().getCasal().getId().equals(presenter.getCasal().getId()) ||
+								participanteVO.getEncontroInscricao().getPessoa()!=null && participanteVO.getEncontroInscricao().getPessoa().getId().equals(presenter.getUsuario().getPessoa().getId())){
+							parColuna = "style= 'background-color: #ffbf95;'";
+						} else {
+							if(participanteVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.PADRINHO)){
+								parColuna = "style= 'background-color: #fdf3b5;'";
+							}else if(participanteVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+								parColuna = "style= 'background-color: #CD853F;'";
+							}else {
+								parColuna = "";
 							}
 						}
+						for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
+							if(participanteVO.getEncontroInscricao().getId().equals(eai.getEncontroInscricao().getId())){
+								if(eai.getEncontroAtividade().getId().equals(ea.getId())){
+									ea.getEncontroAtividadeInscricaos().add(eai);
+									participanteVO.getEncontroAtividadeInscricaos().add(eai);
+									if(bCoordenador){
+										participante.append("<td id='edit_" + eai.getId() + "' class='portal-celulaPlanilha' " + parColuna + "></td>");
+									} else {
+										participante.append("<td class='portal-celulaPlanilha' " + parColuna + ">" + eai.getPapel().getSigla() + "</td>");
+									}
+									participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
+									if (participanteVO.getTags()!=null)
+										participanteVO.getTags().add(eai.getEncontroAtividade().toString() + " - " + eai.getPapel().toString());
+									achou= true;
+									break;
+								}
+							}
+						}
+						if(!achou){
+							participante.append("<td class='portal-celulaPlanilha' " + parColuna + "/>");
+						}
+						coluna++;
 					}
-					if(!achou){
-						participante.append("<td class='portal-celulaPlanilha' " + parColuna + "/>");
-					}
-					coluna++;
+					html.append("<td class='portal-celulaPlanilha' title='Participantes:" + convertListToStringLinhas(lista) +"'>" + ea.getQuantidadeInscricoes() + "</td>");
+					html.append(participante);
+					html.append("</tr>");
+					linha++;
 				}
-				html.append("<td class='portal-celulaPlanilha' title='Participantes:" + convertListToStringLinhas(lista) +"'>" + ea.getEncontroAtividadeInscricaos().size() + "</td>");
-				html.append(participante);
-				html.append("</tr>");
-				linha++;
+				html.append("<tr style='background-color:#cdffbf;'>");
+				html.append("<td colspan='" + colspan + "' class='portal-celulaPlanilha' style='text-align:left;'> Total de atividades para \"" + encontroPeriodo.getNome() + "\":</td>");
+				for (ParticipanteVO participanteVO : listaParticipantes) {
+					html.append("<td class='portal-celulaPlanilha' title='" + participanteVO.getEncontroInscricao().toStringApelidos() + convertListToStringLinhas(participanteVO.getTags()) + "'>"  +
+							participanteVO.getQtdeAtividades() + "</td>");
+				}
+				html.append("</tr><tr><td colspan='" + (colspan+listaParticipantes.size()) + "' class='portal-celulaPlanilha'>&nbsp;</td></tr>");
 			}
-			html.append("<tr style='background-color:#cdffbf;'>");
-			html.append("<td colspan='" + colspan + "' class='portal-celulaPlanilha' style='text-align:left;'> Total de atividades para \"" + encontroPeriodo.getNome() + "\":</td>");
-			for (ParticipanteVO participanteVO : listaParticipantes) {
-				html.append("<td class='portal-celulaPlanilha' title='" + participanteVO.getEncontroInscricao().toStringApelidos() + convertListToStringLinhas(participanteVO.getTags()) + "'>"  +
-						participanteVO.getQtdeAtividades() + "</td>");
-			}
-			html.append("</tr><tr><td colspan='" + (colspan+listaParticipantes.size()) + "' class='portal-celulaPlanilha'>&nbsp;</td></tr>");
 		}
 		if (listaPeriodos.size()==0){
 			List<String> lista = new ArrayList<String>();
@@ -608,6 +616,14 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			}
 			for (EncontroAtividade ea : listaEA) {
 				ea.getEncontroAtividadeInscricaos().clear();
+				ea.setQuantidadeInscricoes(0);
+				lista.clear();
+				for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
+					if(eai.getEncontroAtividade().getId().equals(ea.getId())){
+						ea.setQuantidadeInscricoes(ea.getQuantidadeInscricoes()+1);
+						lista.add(eai.getEncontroInscricao().toStringApelidos() + " - " + eai.getPapel().toString());
+					}
+				}
 				if(ea.getTipoAtividade().equals(TipoAtividadeEnum.ATIVIDADE)){
 					tipoAtividade = "color:blue;";
 				} else {
@@ -630,7 +646,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				html.append("<td id='add_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
 				html.append("<td id='info_" + ea.getId() + "' class='portal-celulaPlanilha'></td>");
 				participante = new StringBuffer("");
-				lista.clear();
 				coluna = 0;
 				for (ParticipanteVO participanteVO : listaParticipantes) {
 					boolean achou = false;
@@ -661,7 +676,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 								} else {
 									participante.append("<td class='portal-celulaPlanilha' " + parColuna + ">" + eai.getPapel().getSigla() + "</td>");
 								}
-								lista.add(eai.getEncontroInscricao().toStringApelidos() + " - " + eai.getPapel().toString());
 								participanteVO.setQtdeAtividades(participanteVO.getQtdeAtividades()+1);
 								if (participanteVO.getTags()!=null)
 									participanteVO.getTags().add(eai.getEncontroAtividade().toString() + " - " + eai.getPapel().toString());
@@ -675,7 +689,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					}
 					coluna++;
 				}
-				html.append("<td class='portal-celulaPlanilha' title='Participantes:" + convertListToStringLinhas(lista) +"'>" + ea.getEncontroAtividadeInscricaos().size() + "</td>");
+				html.append("<td class='portal-celulaPlanilha' title='Participantes:" + convertListToStringLinhas(lista) +"'>" + ea.getQuantidadeInscricoes() + "</td>");
 				html.append(participante);
 				html.append("</tr>");
 				linha++;
@@ -1918,7 +1932,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		ea.getInfoErro().clear();
 
 		if (!ea.getRevisado()){
-			int quantidade = ea.getEncontroAtividadeInscricaos().size();
+			int quantidade = ea.getQuantidadeInscricoes();
 			if (quantidade==0){
 				ea.getInfoErro().add("Sem participantes");
 			}else{
@@ -2209,6 +2223,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				if ( naomostraPadrinhoCheckBox.getValue() && ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
 					ok=false;
 				}
+				if ( naomostraPadrinhoCheckBox.getValue() && ei.getTipo().equals(TipoInscricaoEnum.APOIO)){
+					ok=false;
+				}
 				if ( naomostraAtividadeCheckBox.getValue() && atividade != null && getEncontroAtividadeInscricaoFull(atividade, ei) != null){
 					ok=false;
 				}
@@ -2369,6 +2386,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		mostraChoqueCheckBox.setValue(false);
 		mostraCoordenacaoCheckBox.setValue(true);
 		naomostraPadrinhoCheckBox.setValue(false);
+		naomostraApoioCheckBox.setValue(false);
 		naomostraAtividadeCheckBox.setValue(false);
 		qtdeMaximaNumberTextBox.setValue(null);
 		qtdeMesmaNumberTextBox.setValue(null);
