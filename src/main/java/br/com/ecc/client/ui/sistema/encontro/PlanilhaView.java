@@ -375,10 +375,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		editaInscricaoDialogBox.hide();
 		selecaoInscricaoDialogBox.hide();
 		planilhaPanel.clear();
-		if(presenter.isCoordenador()){
-			limparPlanilhaButton.setVisible(true);
-			preencherAutomaticoButton.setVisible(true);
-		}
 	}
 
 	@Override
@@ -1963,7 +1959,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					}
 				}else if (ea.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.METADE)){
 					if ((presenter.getEncontroVO().getQuantidadeInscricao()/2) > quantidade ){
-						ea.getInfoErro().add("Faltam " + ((presenter.getEncontroVO().getQuantidadeInscricao()/2) - quantidade) + " participantes");
+						ea.getInfoAtencao().add("Faltam " + ((presenter.getEncontroVO().getQuantidadeInscricao()/2) - quantidade) + " participantes");
 					}
 					else if ((presenter.getEncontroVO().getQuantidadeInscricao()/2+1) < quantidade ){
 						ea.getInfoAtencao().add("Esta passando " + (quantidade - (presenter.getEncontroVO().getQuantidadeInscricao()/2+1)) + " participantes");
@@ -1973,7 +1969,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						ea.getInfoErro().add("Faltam " + (ea.getEncontro().getQuantidadeAfilhados() - quantidade) + " participantes");
 					}
 					if (ea.getEncontro().getQuantidadeAfilhados() < quantidade ){
-						ea.getInfoAtencao().add("Esta passando " + (quantidade-ea.getEncontro().getQuantidadeAfilhados()) + " participantes");
+						ea.getInfoErro().add("Esta passando " + (quantidade-ea.getEncontro().getQuantidadeAfilhados()) + " participantes");
 					}
 				}
 			}
@@ -2019,7 +2015,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					}
 				}else if (encontroAtividadeEditada.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.METADE)){
 					if ((presenter.getEncontroVO().getQuantidadeInscricao()/2) > quantidade ){
-						encontroAtividadeEditada.getInfoErro().add("Faltam " + ((presenter.getEncontroVO().getQuantidadeInscricao()/2) - quantidade) + " participantes");
+						encontroAtividadeEditada.getInfoAtencao().add("Faltam " + ((presenter.getEncontroVO().getQuantidadeInscricao()/2) - quantidade) + " participantes");
 					}
 					else if ((presenter.getEncontroVO().getQuantidadeInscricao()/2+1) < quantidade ){
 						encontroAtividadeEditada.getInfoAtencao().add("Esta passando " + (quantidade - (presenter.getEncontroVO().getQuantidadeInscricao()/2+1)) + " participantes");
@@ -2029,7 +2025,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						encontroAtividadeEditada.getInfoErro().add("Faltam " + (encontroAtividadeEditada.getEncontro().getQuantidadeAfilhados() - quantidade) + " participantes");
 					}
 					if (encontroAtividadeEditada.getEncontro().getQuantidadeAfilhados() < quantidade ){
-						encontroAtividadeEditada.getInfoAtencao().add("Esta passando " + (quantidade-encontroAtividadeEditada.getEncontro().getQuantidadeAfilhados()) + " participantes");
+						encontroAtividadeEditada.getInfoErro().add("Esta passando " + (quantidade-encontroAtividadeEditada.getEncontro().getQuantidadeAfilhados()) + " participantes");
 					}
 				}
 			}

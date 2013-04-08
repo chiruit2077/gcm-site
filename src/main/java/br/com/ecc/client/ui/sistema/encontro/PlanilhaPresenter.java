@@ -269,7 +269,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 			bco = true;
 		}
 		if(!bco){
-			for (Casal c : encontroVO.getListaCoordenadores()) {
+			for (Casal c : getEncontroVO().getListaCoordenadores()) {
 				if(c.getId().equals(casal.getId())){
 					bco=true;
 					break;

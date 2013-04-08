@@ -51,6 +51,7 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 	private Encontro encontroSelecionado;
 	private DadosLoginVO dadosLoginVO;
 	private List<Casal> listaCasal = new ArrayList<Casal>();
+	private List<Agrupamento> lista = new ArrayList<Agrupamento>();
 
 	@Override
 	public void bind() {
@@ -84,11 +85,9 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 						serviceAgrupamento.lista(grupoSelecionado, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
 							@Override
 							protected void success(List<AgrupamentoVO> listavo) {
-								ArrayList<Agrupamento> lista = new ArrayList<Agrupamento>();
 								for (AgrupamentoVO vo : listavo) {
 									lista.add(vo.getAgrupamento());
 								}
-								getDisplay().populaAgrupamento(lista);
 								buscaEncontros();
 							}
 						});
@@ -107,6 +106,16 @@ public class ListagemPresenter extends BasePresenter<ListagemPresenter.Display> 
 				for (Encontro encontro : listaEncontro) {
 					if(encontro.toString().equals(cookie)){
 						setEncontroSelecionado(encontro);
+						AgrupamentoServiceAsync serviceAgrupamento = GWT.create(AgrupamentoService.class);
+						serviceAgrupamento.lista(encontro, new WebAsyncCallback<List<AgrupamentoVO>>(getDisplay()) {
+							@Override
+							protected void success(List<AgrupamentoVO> listavo) {
+								for (AgrupamentoVO vo : listavo) {
+									lista.add(vo.getAgrupamento());
+								}
+								getDisplay().populaAgrupamento(lista);
+							}
+						});
 						getDisplay().showWaitMessage(false);
 						break;
 					}
