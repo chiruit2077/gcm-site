@@ -2146,7 +2146,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	}
 
 
-	@UiHandler(value={"mostraChoqueCheckBox", "mostraCoordenacaoCheckBox","naomostraPadrinhoCheckBox","naomostraAtividadeCheckBox"})
+	@UiHandler(value={"mostraChoqueCheckBox", "mostraCoordenacaoCheckBox","naomostraPadrinhoCheckBox","naomostraApoioCheckBox","naomostraAtividadeCheckBox"})
 	public void filtroClickHandler(ClickEvent event){
 		defineCamposSelecao();
 	}
