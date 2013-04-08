@@ -96,7 +96,7 @@
 	<detail>
 		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement uuid="8db3f9e0-2a0a-4130-887d-d3c2b772b08b" isPrintRepeatedValues="false" mode="Opaque" x="0" y="0" width="361" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF">
+				<reportElement uuid="8db3f9e0-2a0a-4130-887d-d3c2b772b08b" style="Style1" isPrintRepeatedValues="false" x="0" y="0" width="361" height="12" isPrintInFirstWholeBand="true">
 					<property name="local_mesure_unitheight" value="pixel"/>
 				</reportElement>
 				<textElement>
