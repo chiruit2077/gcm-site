@@ -286,10 +286,14 @@
 									<td>
 										<cn:NumberTextBox ui:field="qtdeMaximaNumberTextBox" width="50" textAlignment="center"/>
 									</td>
+									<td class="portal-formLabel">Qtde. M.A.:</td>
+									<td>
+										<cn:NumberTextBox ui:field="qtdeMesmaNumberTextBox" width="50" textAlignment="center"/>
+									</td>
 									<td align="left">
 										<g:CheckBox width="150px"  ui:field="naomostraAtividadeCheckBox" text="Não Mostra quem esta na Atividade:"/>
 									</td>
-									<td colpsan="3">
+									<td>
 										<g:ListBox ui:field="filtroAtividadeListBox" width="400px"/>
 									</td>
 								</tr>

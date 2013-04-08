@@ -12,6 +12,7 @@ public class ParticipanteVO implements Serializable {
 
 	private EncontroInscricao encontroInscricao;
 	private Integer qtdeAtividades;
+	private Integer qtdeMesmaAtividades;
 	private List<String> tags = new ArrayList<String>();
 	private Boolean selecionado=false;
 	private List<EncontroAtividadeInscricao> encontroAtividadeInscricaos = new ArrayList<EncontroAtividadeInscricao>();
@@ -46,5 +47,11 @@ public class ParticipanteVO implements Serializable {
 	public void setEncontroAtividadeInscricaos(
 			List<EncontroAtividadeInscricao> encontroAtividadeInscricaos) {
 		this.encontroAtividadeInscricaos = encontroAtividadeInscricaos;
+	}
+	public Integer getQtdeMesmaAtividades() {
+		return qtdeMesmaAtividades;
+	}
+	public void setQtdeMesmaAtividades(Integer qtdeMesmaAtividades) {
+		this.qtdeMesmaAtividades = qtdeMesmaAtividades;
 	}
 }
