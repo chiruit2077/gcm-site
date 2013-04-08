@@ -1284,7 +1284,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		encontroInscricaoTableUtil.clearData();
 		revisadoInscricaoCheckBox.setVisible(false);
 		inscricaoSuggestBox1.setValue(null);
-		casalRadio.setValue(true);
 		itemTotal.setText(null);
 		entidadeEditadaLabel.setText(null);
 		entidadeEditadaTituloLabel.setText(null);
@@ -1293,6 +1292,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		inscricaoSuggestBox1.setEnabled(true);
 		casalRadio.setEnabled(true);
 		pessoaRadio.setEnabled(true);
+		casalRadio.setValue(true);
 		ListBoxUtil.setItemSelected(papelListBox, presenter.getPapelPadrao().toString());
 		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
 		HashMap<String, Object> params = new HashMap<String, Object>();
