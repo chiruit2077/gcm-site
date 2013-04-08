@@ -39,6 +39,7 @@ public class Papel extends _WebBaseEntity {
 
 	private Boolean padrao;
 	private Boolean padrinho;
+	private Boolean coordenacao;
 
 	@Version
 	private Integer version;
@@ -135,5 +136,14 @@ public class Papel extends _WebBaseEntity {
 	}
 	public void setChocaPlanilha(Boolean chocaPlanilha) {
 		this.chocaPlanilha = chocaPlanilha;
+	}
+
+	public Boolean getCoordenacao() {
+		if (coordenacao==null) return false;
+		return coordenacao;
+	}
+
+	public void setCoordenacao(Boolean coordenacao) {
+		this.coordenacao = coordenacao;
 	}
 }

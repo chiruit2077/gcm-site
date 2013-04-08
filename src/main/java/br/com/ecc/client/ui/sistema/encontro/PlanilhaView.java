@@ -394,6 +394,9 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao = presenter.getListaEncontroAtividadeInscricao();
 
 		if(tipoExibicao.equals(TipoExibicaoPlanilhaEnum.COMPLETA)){
+			listaEncontroInscricao = montaListaEncontroInscricaoSemExterno();
+			listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
+		} else if(tipoExibicao.equals(TipoExibicaoPlanilhaEnum.COMPLETAEXTERNO)){
 			listaEncontroInscricao = presenter.getEncontroVO().getListaInscricao();
 			listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
 		} else if (tipoExibicao.equals(TipoExibicaoPlanilhaEnum.MINHA_ATIVIDADE_MINHA_COLUNA)){
@@ -407,18 +410,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
 		}
 
-/*		Collections.sort(presenter.getListaEncontroAtividadeInscricao(), new Comparator<EncontroAtividadeInscricao>() {
-			@Override
-			public int compare(EncontroAtividadeInscricao o1, EncontroAtividadeInscricao o2) {
-				String s1, s2;
-				if(o1.getEncontroInscricao().getCasal()!=null) s1 = o1.getEncontroInscricao().getCasal().getApelidos(null);
-				else s1 = o1.getEncontroInscricao().getPessoa().getApelido();
-
-				if(o2.getEncontroInscricao().getCasal()!=null) s2 = o2.getEncontroInscricao().getCasal().getApelidos(null);
-				else s2 = o2.getEncontroInscricao().getPessoa().getApelido();
-				return s1.compareTo(s2);
-			}
-		});*/
 		Collections.sort(listaEncontroAtividade, new Comparator<EncontroAtividade>() {
 			@Override
 			public int compare(EncontroAtividade o1, EncontroAtividade o2) {
@@ -1019,6 +1010,16 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 					listaEncontroInscricao.add(encontroInscricao);
 					break;
 				}
+			}
+		}
+		return listaEncontroInscricao;
+	}
+
+	private List<EncontroInscricao> montaListaEncontroInscricaoSemExterno() {
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao encontroInscricao : presenter.getEncontroVO().getListaInscricao()) {
+			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+				listaEncontroInscricao.add(encontroInscricao);
 			}
 		}
 		return listaEncontroInscricao;

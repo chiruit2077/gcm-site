@@ -2,52 +2,71 @@ package br.com.ecc.model.vo;
 
 import java.io.Serializable;
 
+import br.com.ecc.model.EncontroAtividade;
+import br.com.ecc.model.EncontroAtividadeInscricao;
+import br.com.ecc.model.EncontroInscricao;
+
 public class PlanilhaEncontroInscricaoVO implements Serializable {
 
 	private static final long serialVersionUID = 6874537373434370960L;
 
-	private String ele;
-	private String ela;
+	private String nome;
 	private String tipo;
-	private String papel;
-	private Integer qtde;
-	private Integer media;
+	private EncontroInscricao encontroInscricao;
+	private String atividade;
+	private EncontroAtividade encontroAtividade;
+	private String participante;
+	private Boolean coordenacao;
+	private EncontroAtividadeInscricao encontroAtividadeInscricao;
 
-	public String getEle() {
-		return ele;
-	}
-	public void setEle(String ele) {
-		this.ele = ele;
-	}
-	public String getEla() {
-		return ela;
-	}
-	public void setEla(String ela) {
-		this.ela = ela;
-	}
 	public String getTipo() {
 		return tipo;
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	public String getPapel() {
-		return papel;
+	public String getNome() {
+		return nome;
 	}
-	public void setPapel(String papel) {
-		this.papel = papel;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
-	public Integer getQtde() {
-		return qtde;
+	public EncontroInscricao getEncontroInscricao() {
+		return encontroInscricao;
 	}
-	public void setQtde(Integer qtde) {
-		this.qtde = qtde;
+	public void setEncontroInscricao(EncontroInscricao encontroInscricao) {
+		this.encontroInscricao = encontroInscricao;
 	}
-	public Integer getMedia() {
-		return media;
+	public String getAtividade() {
+		return atividade;
 	}
-	public void setMedia(Integer media) {
-		this.media = media;
+	public void setAtividade(String atividade) {
+		this.atividade = atividade;
+	}
+	public EncontroAtividade getEncontroAtividade() {
+		return encontroAtividade;
+	}
+	public void setEncontroAtividade(EncontroAtividade encontroAtividade) {
+		this.encontroAtividade = encontroAtividade;
+	}
+	public String getParticipante() {
+		return participante;
+	}
+	public void setParticipante(String participante) {
+		this.participante = participante;
+	}
+	public EncontroAtividadeInscricao getEncontroAtividadeInscricao() {
+		return encontroAtividadeInscricao;
+	}
+	public void setEncontroAtividadeInscricao(
+			EncontroAtividadeInscricao encontroAtividadeInscricao) {
+		this.encontroAtividadeInscricao = encontroAtividadeInscricao;
+	}
+	public Boolean getCoordenacao() {
+		return coordenacao;
+	}
+	public void setCoordenacao(Boolean coordenacao) {
+		this.coordenacao = coordenacao;
 	}
 
 }

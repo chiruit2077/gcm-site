@@ -26,6 +26,7 @@ import br.com.ecc.model.tipo.TipoPreenchimentoAtividadeEnum;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+
 @Entity
 @SequenceGenerator(name="SQ_ATIVIDADE", sequenceName="SQ_ATIVIDADE")
 @NamedQueries({
@@ -95,7 +96,7 @@ public class EncontroAtividade extends _WebBaseEntity {
 	public String toString() {
 		if(atividade!=null){
 			return DateTimeFormat.getFormat("E").format(inicio) + " " +
-		         DateTimeFormat.getFormat("HH:mm").format(inicio) + " " + DateTimeFormat.getFormat("HH:mm").format(fim) + " " + tipoAtividade.getNome() + " - " + atividade.getNome();
+					DateTimeFormat.getFormat("HH:mm").format(inicio) + " " + DateTimeFormat.getFormat("HH:mm").format(fim) + " " + tipoAtividade.getNome() + " - " + atividade.getNome();
 		}
 		return super.toString();
 	}

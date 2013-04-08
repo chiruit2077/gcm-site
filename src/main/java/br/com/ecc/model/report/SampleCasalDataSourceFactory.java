@@ -10,11 +10,11 @@ public class SampleCasalDataSourceFactory {
 		Vector<PlanilhaEncontroInscricaoVO> coll = new Vector<PlanilhaEncontroInscricaoVO>();
 
 		PlanilhaEncontroInscricaoVO casal = new PlanilhaEncontroInscricaoVO();
-		casal.setEle("FULANO DE TAL");
+		/*casal.setEle("FULANO DE TAL");
 		casal.setEla("FULANA DE TAL");
 		casal.setTipo("FULANO");
 		casal.setPapel("FULANA");
-		casal.setQtde(1);
+		casal.setQtde(1);*/
 		coll.add(casal);
 
 		return coll;

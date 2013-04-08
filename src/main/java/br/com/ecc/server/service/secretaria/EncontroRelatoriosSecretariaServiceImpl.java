@@ -1,15 +1,13 @@
 package br.com.ecc.server.service.secretaria;
 
-import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaService;
 import br.com.ecc.model.Agrupamento;
@@ -17,6 +15,8 @@ import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.ArquivoDigital;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
+import br.com.ecc.model.EncontroAtividade;
+import br.com.ecc.model.EncontroAtividadeInscricao;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroHotelQuarto;
 import br.com.ecc.model.EncontroInscricao;
@@ -25,9 +25,11 @@ import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.tipo.TipoArquivoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.vo.EncontroVO;
 import br.com.ecc.model.vo.PlanilhaEncontroInscricaoVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.command.ArquivoDigitalSalvarCommand;
+import br.com.ecc.server.command.EncontroCarregaVOCommand;
 import br.com.ecc.server.command.EncontroRelatoriosSecretariaImprimirCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 
@@ -96,7 +98,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		return cmdRelatorio.call();
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo) throws Exception {
 		EncontroPeriodo periodofim = null;
@@ -291,19 +293,154 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		cmdRelatorio.setNome("listagemplanilha");
 		cmdRelatorio.setTitulo("LISTAGEM PLANILHA ATRIBUIÇÕES POR CASAL");
 		return cmdRelatorio.call();
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
-	private EncontroPeriodo getPeriodoFim(EncontroPeriodo periodo) {
-		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
-		cmd.setNamedQuery("encontroPeriodo.porEncontro");
-		cmd.addParameter("encontro", periodo.getEncontro());
-		List<EncontroPeriodo> list = cmd.call();
-		for (EncontroPeriodo encontroPeriodo : list) {
-			if (periodo.getInicio().before(encontroPeriodo.getInicio()))
-				return encontroPeriodo;
+	@Override
+	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo) throws Exception {
+		EncontroCarregaVOCommand cmd = injector.getInstance(EncontroCarregaVOCommand.class);
+		cmd.setEncontro(encontro);
+		EncontroVO vo =  cmd.call();
+
+		GetEntityListCommand cmdList = injector.getInstance(GetEntityListCommand.class);
+		cmdList.setNamedQuery("encontroAtividadeInscricao.porEncontro");
+		cmdList.addParameter("encontro", encontro);
+		List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao = cmdList.call();
+
+		List<EncontroAtividade> listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(vo, periodo);
+		Collections.sort(listaEncontroAtividade, new Comparator<EncontroAtividade>() {
+			@Override
+			public int compare(EncontroAtividade o1, EncontroAtividade o2) {
+				if(o1.getInicio().equals(o2.getInicio())){
+					if(o1.getFim().equals(o2.getFim())){
+						return o1.getAtividade().getNome().compareTo(o2.getAtividade().getNome());
+					}
+					return o1.getFim().compareTo(o2.getFim());
+				}
+				return o1.getInicio().compareTo(o2.getInicio());
+			}
+		});
+
+		List<PlanilhaEncontroInscricaoVO> listaCasal = new ArrayList<PlanilhaEncontroInscricaoVO>();
+
+		for (EncontroAtividade ea : listaEncontroAtividade) {
+			ea.getEncontroAtividadeInscricaos().clear();
+			for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
+				if (eai.getEncontroAtividade().getId().equals(ea.getId()))
+					ea.getEncontroAtividadeInscricaos().add(eai);
+			}
 		}
-		return null;
+
+		for (EncontroInscricao ei : vo.getListaInscricao()) {
+			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO) && !ei.getTipo().equals(TipoInscricaoEnum.COORDENADOR) && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+				for (EncontroAtividade ea : listaEncontroAtividade) {
+					String atividade = (new SimpleDateFormat("E")).format(ea.getInicio()) + " " +
+						(new SimpleDateFormat("HH:mm")).format(ea.getInicio()) + " " + (new SimpleDateFormat("HH:mm")).format(ea.getFim()) + " " + ea.getTipoAtividade().getNome() + " - " + ea.getAtividade().getNome();
+					boolean coordenacao = false;
+					for (EncontroAtividadeInscricao eai : ea.getEncontroAtividadeInscricaos()) {
+						if (eai.getEncontroInscricao().getId().equals(ei.getId())){
+							PlanilhaEncontroInscricaoVO vop = new PlanilhaEncontroInscricaoVO();
+							vop.setTipo(ei.getTipo().toString());
+							vop.setNome(ei.toStringApelidos());
+							vop.setEncontroInscricao(ei);
+							vop.setEncontroAtividade(ea);
+							vop.setAtividade(atividade);
+							vop.setEncontroAtividadeInscricao(eai);
+							vop.setParticipante(eai.getPapel().getNome());
+							coordenacao = eai.getPapel().getCoordenacao();
+							vop.setCoordenacao(coordenacao);
+							listaCasal.add(vop);
+							break;
+						}
+					}
+					if (coordenacao){
+						for (EncontroAtividadeInscricao eai : ea.getEncontroAtividadeInscricaos()) {
+							if (!eai.getEncontroInscricao().getId().equals(ei.getId())){
+								PlanilhaEncontroInscricaoVO vop = new PlanilhaEncontroInscricaoVO();
+								vop.setTipo(ei.getTipo().toString());
+								vop.setNome(ei.toStringApelidos());
+								vop.setEncontroInscricao(ei);
+								vop.setEncontroAtividade(ea);
+								vop.setAtividade(atividade);
+								vop.setEncontroAtividadeInscricao(eai);
+								vop.setParticipante(eai.getPapel().getNome() + " - " + eai.getEncontroInscricao().toStringApelidos());
+								vop.setCoordenacao(coordenacao);
+								listaCasal.add(vop);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		Collections.sort(listaCasal, new Comparator<PlanilhaEncontroInscricaoVO>() {
+			@Override
+			public int compare(PlanilhaEncontroInscricaoVO o1, PlanilhaEncontroInscricaoVO o2) {
+				if (!o1.getTipo().equals(o2.getTipo())) return o1.getTipo().compareTo(o2.getTipo());
+				else if (!o1.getNome().equals(o2.getNome())) return o1.getNome().compareTo(o2.getNome());
+				else if (!o1.getEncontroAtividade().getId().equals(o2.getEncontroAtividade().getId())) {
+					if(o1.getEncontroAtividade().getInicio().equals(o2.getEncontroAtividade().getInicio())){
+						if(o1.getEncontroAtividade().getFim().equals(o2.getEncontroAtividade().getFim())){
+							return o1.getEncontroAtividade().getAtividade().getNome().compareTo(o2.getEncontroAtividade().getAtividade().getNome());
+						}
+						return o1.getEncontroAtividade().getFim().compareTo(o2.getEncontroAtividade().getFim());
+					}
+					return o1.getEncontroAtividade().getInicio().compareTo(o2.getEncontroAtividade().getInicio());
+				}
+				else if (!o1.getParticipante().equals(o2.getParticipante())) {
+					if (o1.getEncontroInscricao().equals(o2.getEncontroAtividadeInscricao().getEncontroInscricao()))
+						return 0;
+					else
+						return o1.getParticipante().compareTo(o2.getParticipante());
+				}
+				else return 0;
+			}
+		});
+
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemplanilha.jrxml");
+		cmdRelatorio.setNome("listagemplanilha");
+		cmdRelatorio.setTitulo("LISTAGEM PLANILHA ATRIBUIÇÕES POR CASAL");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("deprecation")
+	private List<EncontroAtividade> montaListaAtividadesPorPeriodoSelecionado(EncontroVO vo, EncontroPeriodo periodo){
+		if(periodo!=null){
+			List<EncontroAtividade> listaEncontroAtividadePeriodo = new ArrayList<EncontroAtividade>();
+			Date inicio = null, fim = new Date(3000,1,1);
+			boolean achou = false;
+			inicio = periodo.getInicio();
+			List<EncontroPeriodo> listaPeriodo = vo.getListaPeriodo();
+			Collections.sort(listaPeriodo, new Comparator<EncontroPeriodo>() {
+				@Override
+				public int compare(EncontroPeriodo o1, EncontroPeriodo o2) {
+					return o1.getInicio().compareTo(o2.getInicio());
+				}
+			});
+			for (EncontroPeriodo ep : listaPeriodo) {
+				if(ep.getId().equals(periodo.getId())){
+					achou = true;
+				}
+				if(achou && ep.getInicio().after(inicio)){
+					fim = ep.getInicio();
+					break;
+				}
+			}
+
+			for (EncontroAtividade ea : vo.getListaEncontroAtividade()) {
+				if (ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
+					listaEncontroAtividadePeriodo.add(ea);
+				}
+			}
+			return listaEncontroAtividadePeriodo;
+
+		}else{
+			return vo.getListaEncontroAtividade();
+		}
 	}
 
 	@SuppressWarnings("unchecked")

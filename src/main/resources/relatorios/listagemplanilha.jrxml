@@ -7,137 +7,111 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
 	<import value="br.com.ecc.model.*"/>
 	<import value="java.util.*"/>
+	<style name="Style1" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF">
+		<pen lineWidth="1.0"/>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{coordenacao}?Boolean.TRUE:Boolean.FALSE]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#C0C0C0"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="TITULO" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="ela" class="java.lang.String">
-		<fieldDescription><![CDATA[ela]]></fieldDescription>
-	</field>
-	<field name="ele" class="java.lang.String">
-		<fieldDescription><![CDATA[ele]]></fieldDescription>
-	</field>
-	<field name="papel" class="java.lang.String">
-		<fieldDescription><![CDATA[papel]]></fieldDescription>
-	</field>
-	<field name="qtde" class="java.lang.Integer">
-		<fieldDescription><![CDATA[qtde]]></fieldDescription>
-	</field>
 	<field name="tipo" class="java.lang.String">
 		<fieldDescription><![CDATA[tipo]]></fieldDescription>
 	</field>
-	<field name="media" class="java.lang.Integer">
-		<fieldDescription><![CDATA[media]]></fieldDescription>
+	<field name="encontroInscricao" class="br.com.ecc.model.EncontroInscricao">
+		<fieldDescription><![CDATA[encontroInscricao]]></fieldDescription>
 	</field>
-	<group name="Group1">
-		<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[nome]]></fieldDescription>
+	</field>
+	<field name="atividade" class="java.lang.String">
+		<fieldDescription><![CDATA[atividade]]></fieldDescription>
+	</field>
+	<field name="encontroAtividade" class="br.com.ecc.model.EncontroAtividade">
+		<fieldDescription><![CDATA[encontroAtividade]]></fieldDescription>
+	</field>
+	<field name="encontroAtividadeInscricao" class="br.com.ecc.model.EncontroAtividadeInscricao">
+		<fieldDescription><![CDATA[encontroAtividadeInscricao]]></fieldDescription>
+	</field>
+	<field name="participante" class="java.lang.String">
+		<fieldDescription><![CDATA[participante]]></fieldDescription>
+	</field>
+	<field name="coordenacao" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[coordenacao]]></fieldDescription>
+	</field>
+	<group name="Nome" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{encontroInscricao}]]></groupExpression>
 		<groupHeader>
-			<band height="26">
+			<band height="34">
 				<textField>
-					<reportElement uuid="6faa7279-b450-4013-8dd0-9e8b87d08568" x="0" y="6" width="170" height="15">
+					<reportElement uuid="edd5e352-423b-4726-95d1-7df350d2001f" mode="Opaque" x="0" y="19" width="555" height="15" backcolor="#C0C0C0">
 						<property name="local_mesure_unitheight" value="pixel"/>
 					</reportElement>
-					<textElement/>
-					<textFieldExpression><![CDATA["Tipo: " + $F{tipo}]]></textFieldExpression>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA["Participante: " + $F{nome}  + "   -  Tipo: " + $F{tipo}]]></textFieldExpression>
 				</textField>
-			</band>
-		</groupHeader>
-	</group>
-	<group name="Group2">
-		<groupExpression><![CDATA[$F{ele}+$F{ela}]]></groupExpression>
-		<groupHeader>
-			<band height="15">
-				<textField>
-					<reportElement uuid="d9189dc2-b8d3-4d78-a14b-e7de1405265e" mode="Opaque" x="0" y="0" width="555" height="15" backcolor="#C0C0C0"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12"/>
-					</textElement>
-				</textField>
-				<textField>
-					<reportElement uuid="edd5e352-423b-4726-95d1-7df350d2001f" x="10" y="0" width="210" height="15">
-						<property name="local_mesure_unitheight" value="pixel"/>
-					</reportElement>
-					<textElement/>
-					<textFieldExpression><![CDATA["Casal: " + $F{ele} + " e " + $F{ela}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement uuid="16b4a5ed-953d-41e8-9b78-f8a79d820546" x="230" y="0" width="200" height="15">
-						<property name="local_mesure_unitheight" value="pixel"/>
+				<image isUsingCache="true" onErrorType="Blank">
+					<reportElement uuid="2bea49c1-bfd4-4584-9f8d-d2be1e2322e0" x="0" y="0" width="34" height="34">
 						<property name="local_mesure_unitwidth" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					</reportElement>
-					<textElement/>
-					<textFieldExpression><![CDATA["Papel"]]></textFieldExpression>
+					<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+				</image>
+				<textField pattern="">
+					<reportElement uuid="0b2a2781-667b-4a50-9d85-a601af7d7118" mode="Transparent" x="421" y="19" width="134" height="15" backcolor="#FFFFFF">
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<property name="local_mesure_unity" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA["Página: " + $V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="15">
 				<textField>
-					<reportElement uuid="1f0d98b3-9623-4f12-96f9-a8c3b76c978f" x="430" y="0" width="60" height="15">
+					<reportElement uuid="f6a92747-a3ab-4ff5-bd00-5f5d7c2a9ff2" mode="Transparent" x="361" y="0" width="194" height="15" backcolor="#FFFFFF">
 						<property name="local_mesure_unitheight" value="pixel"/>
 					</reportElement>
 					<textElement textAlignment="Right"/>
-					<textFieldExpression><![CDATA["Quantidade"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Quantidade de Atividades: " + $V{Nome_COUNT}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement uuid="4ba95847-5b9e-481a-80f7-e40c6736f587" x="0" y="0" width="555" height="1">
+					<reportElement uuid="4af55413-e19c-4280-8b8d-26bba877d7ce" x="0" y="0" width="555" height="1">
 						<property name="local_mesure_unitheight" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 				</line>
-				<textField>
-					<reportElement uuid="84e41770-f8f3-4d81-8d70-b25af4cfcc97" x="494" y="0" width="60" height="15">
-						<property name="local_mesure_unitheight" value="pixel"/>
-					</reportElement>
-					<textElement textAlignment="Right"/>
-					<textFieldExpression><![CDATA["Media"]]></textFieldExpression>
-				</textField>
 			</band>
-		</groupHeader>
+		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<pageHeader>
-		<band height="35" splitType="Stretch">
-			<textField>
-				<reportElement uuid="2d40beb8-ab76-4e46-9357-42724286d2e1" mode="Opaque" x="0" y="15" width="555" height="20" backcolor="#C0C0C0"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
-			</textField>
-			<image isUsingCache="true" onErrorType="Blank">
-				<reportElement uuid="2bea49c1-bfd4-4584-9f8d-d2be1e2322e0" x="0" y="1" width="34" height="34">
-					<property name="local_mesure_unitwidth" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
-			</image>
-		</band>
-	</pageHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement uuid="6488a3e0-3a2e-4438-9471-fbf8185d319a" x="230" y="0" width="200" height="15">
+				<reportElement uuid="8db3f9e0-2a0a-4130-887d-d3c2b772b08b" isPrintRepeatedValues="false" mode="Opaque" x="0" y="0" width="361" height="12" isPrintInFirstWholeBand="true" backcolor="#FFFFFF">
 					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="local_mesure_unitwidth" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{papel}]]></textFieldExpression>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Atividade: " + $F{atividade}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="34074e55-c7f0-4186-9760-62ee732db2bc" x="430" y="0" width="60" height="15">
+				<reportElement uuid="a3aee063-489f-44c4-85ce-056c4985e54a" style="Style1" x="361" y="0" width="194" height="12">
 					<property name="local_mesure_unitheight" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{qtde}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="fa1c6984-65c4-404e-9e19-f8da3484ccd0" x="494" y="0" width="60" height="15">
-					<property name="local_mesure_unitheight" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{media}]]></textFieldExpression>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{participante}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
