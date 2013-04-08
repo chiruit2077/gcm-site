@@ -2085,6 +2085,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			if (widget instanceof CheckBox){
 				((CheckBox)widget).setValue(true);
 			}
+			i++;
 		}
 	}
 
@@ -2097,6 +2098,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			if (widget instanceof CheckBox){
 				((CheckBox)widget).setValue(false);
 			}
+			i++;
 		}
 	}
 
