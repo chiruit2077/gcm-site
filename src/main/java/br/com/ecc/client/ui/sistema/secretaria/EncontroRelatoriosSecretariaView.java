@@ -1,12 +1,17 @@
 package br.com.ecc.client.ui.sistema.secretaria;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
+import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.sistema.secretaria.EncontroRelatoriosSecretariaPresenter.ProcessaOpcao;
 import br.com.ecc.client.util.ListBoxUtil;
+import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.EncontroHotel;
+import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
 
 import com.google.gwt.core.client.GWT;
@@ -19,6 +24,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -51,12 +57,22 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField ListBox agrupamentosCrachaAgrupamentoListBox;
 	@UiField ListBox agrupamentosOnibusListBox;
 	@UiField ListBox periodoListBox;
+	@UiField(provided = true) RadioButton casalRadio;
+	@UiField(provided = true) RadioButton pessoaRadio;
+
+	@UiField(provided = true) SuggestBox inscricaoSuggestBox1;
+	private final GenericEntitySuggestOracle inscricaoSuggest1 = new GenericEntitySuggestOracle();
 
 	private List<Agrupamento> agrupamentos;
 	private List<EncontroHotel> encontroHoteis;
 	private List<EncontroPeriodo> listaPeriodo;
 
 	public EncontroRelatoriosSecretariaView() {
+		casalRadio = new RadioButton("tipo", "Por Casal");
+		pessoaRadio = new RadioButton("tipo", "Por Pessoa");
+		inscricaoSuggest1.setMinimoCaracteres(2);
+		inscricaoSuggestBox1 = new SuggestBox(inscricaoSuggest1);
+
 		initWidget(uiBinder.createAndBindUi(this));
 		tituloFormularioLabel.setText(getDisplayTitle());
 	}
@@ -127,7 +143,11 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMRECEPCAOFINAL);
 		else if (relatorioPlanilhaRadioButton.getValue()){
 			EncontroPeriodo periodo = (EncontroPeriodo) ListBoxUtil.getItemSelected(periodoListBox, getListaPeriodo());
-			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.LISTAGEMPLANILHA, periodo);
+			EncontroInscricao inscricao = (EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue());
+			List<Object> params = new ArrayList<Object>();
+			params.add(inscricao);
+			params.add(periodo);
+			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.LISTAGEMPLANILHA, params);
 		}
 		else
 			Window.alert("Escolha uma Opção!");
@@ -197,6 +217,32 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 
 	public void setListaPeriodo(List<EncontroPeriodo> listaPeriodo) {
 		this.listaPeriodo = listaPeriodo;
+	}
+
+	@UiHandler("casalRadio")
+	public void casalRadioClickHandler(ClickEvent event){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+	}
+
+	@UiHandler("pessoaRadio")
+	public void pessoaRadioClickHandler(ClickEvent event){
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroPessoaNomeLike");
+	}
+
+
+	@Override
+	public void setSuggestInscricao() {
+		casalRadio.setValue(true);
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
 	}
 
 }

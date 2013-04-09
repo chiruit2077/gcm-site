@@ -15,7 +15,7 @@ public class ParticipanteVO implements Serializable {
 	private Integer qtdeMesmaAtividades;
 	private List<String> tags = new ArrayList<String>();
 	private Boolean selecionado=false;
-	private List<EncontroAtividadeInscricao> encontroAtividadeInscricaos = new ArrayList<EncontroAtividadeInscricao>();
+	private List<EncontroAtividadeInscricao> encontroAtividadeInscricoes = new ArrayList<EncontroAtividadeInscricao>();
 
 	public Integer getQtdeAtividades() {
 		return qtdeAtividades;
@@ -41,12 +41,12 @@ public class ParticipanteVO implements Serializable {
 	public void setSelecionado(Boolean selecionado) {
 		this.selecionado = selecionado;
 	}
-	public List<EncontroAtividadeInscricao> getEncontroAtividadeInscricaos() {
-		return encontroAtividadeInscricaos;
+	public List<EncontroAtividadeInscricao> getEncontroAtividadeInscricoes() {
+		return encontroAtividadeInscricoes;
 	}
-	public void setEncontroAtividadeInscricaos(
-			List<EncontroAtividadeInscricao> encontroAtividadeInscricaos) {
-		this.encontroAtividadeInscricaos = encontroAtividadeInscricaos;
+	public void setEncontroAtividadeInscricoes(
+			List<EncontroAtividadeInscricao> encontroAtividadeInscricoes) {
+		this.encontroAtividadeInscricoes = encontroAtividadeInscricoes;
 	}
 	public Integer getQtdeMesmaAtividades() {
 		return qtdeMesmaAtividades;

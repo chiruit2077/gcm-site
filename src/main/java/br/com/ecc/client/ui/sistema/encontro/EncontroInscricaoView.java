@@ -619,9 +619,9 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			totais += " / " + desistencia + " desistencias";
 		}
 		if((coordenador+apoio+padrinho)==1 || (coordenador+apoio+padrinho)==0){
-			totais += (coordenador+apoio+padrinho) + " encontrista";
+			totais += " / " + (coordenador+apoio+padrinho) + " encontrista";
 		} else {
-			totais += (coordenador+apoio+padrinho) + " encontristas";
+			totais += " / " + (coordenador+apoio+padrinho) + " encontristas";
 		}
 		totalLabel.setText(totais);
 		encontroInscricaoTableUtil.applyDataRowStyles();

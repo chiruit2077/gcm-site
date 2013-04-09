@@ -80,5 +80,4 @@ public class EncontroRestaurante extends _WebBaseEntity {
 	public void setRestuarante(Restaurante restaurante) {
 		this.restaurante = restaurante;
 	}
-
 }

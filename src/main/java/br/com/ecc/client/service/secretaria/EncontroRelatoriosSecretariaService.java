@@ -3,6 +3,7 @@ package br.com.ecc.client.service.secretaria;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
+import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -24,5 +25,5 @@ public interface EncontroRelatoriosSecretariaService extends RemoteService {
 	public Integer imprimeRelatorioRecepcaoFinal(Encontro encontro) throws Exception;
 	public Integer imprimeRelatorioOracaoAmor(Encontro encontro) throws Exception;
 	public Integer imprimeRelatorioAfilhadosPadrinhos(Encontro encontro) throws Exception;
-	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo) throws Exception;
+	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo, EncontroInscricao inscricao) throws Exception;
 }

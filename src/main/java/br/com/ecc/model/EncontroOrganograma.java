@@ -80,5 +80,4 @@ public class EncontroOrganograma extends _WebBaseEntity {
 			return false;
 		return true;
 	}
-
 }

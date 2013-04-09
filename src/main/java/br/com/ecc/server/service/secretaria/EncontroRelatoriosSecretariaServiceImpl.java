@@ -14,6 +14,7 @@ import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.ArquivoDigital;
 import br.com.ecc.model.Casal;
+import br.com.ecc.model.CasalContato;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroAtividade;
 import br.com.ecc.model.EncontroAtividadeInscricao;
@@ -98,214 +99,26 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		return cmdRelatorio.call();
 	}
 
-	/*@SuppressWarnings("unchecked")
-	@Override
-	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo) throws Exception {
-		EncontroPeriodo periodofim = null;
-		String sql = "";
-		String sqlatoa = "";
-		if (periodo==null){
-			sql = "select ele.apelido as ele, ela.apelido as ela, d.tipo, f.nome as papel, count(*) as qtde " +
-				" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f " +
-				" where a.encontro = :encontro and " +
-				" a.atividade = b.id and " +
-				" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
-				" a.encontro = d.encontro and " +
-				" d.casal = e.id and " +
-				" e.ele = ele.id and " +
-				" e.ela = ela.id and " +
-				" f.id = c.papel " +
-				" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
-				" order by d.tipo, ele.apelido, f.nome ";
-			sqlatoa = "select ele, ela, tipo from ( select d.id, ele.apelido as ele, ela.apelido as ela, d.tipo " +
-					" from encontroinscricao d, casal e, pessoa ele, pessoa ela " +
-					" where " +
-					" d.encontro = :encontro and " +
-					" d.casal = e.id and  " +
-					" e.ele = ele.id and  " +
-					" e.ela = ela.id and d.tipo in ('APOIO', 'PADRINHO') and d.tipoConfirmacao = 'CONFIRMADO' " +
-					" ) as x left outer join ( " +
-					" select d.id as idaux " +
-					" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f " +
-					" where a.encontro = :encontro and  " +
-					" a.atividade = b.id and  " +
-					" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
-					" a.encontro = d.encontro and " +
-					" d.casal = e.id and " +
-					" e.ele = ele.id and  " +
-					" e.ela = ela.id and  " +
-					" f.id = c.papel " +
-					" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
-					" order by d.tipo, ele.apelido, f.nome)  " +
-					" as teste on x.id = teste.idaux and teste.idaux is not null " +
-					" where idaux is null " +
-					" order by tipo, ele, ela ";
-		}else{
-			periodofim = getPeriodoFim(periodo);
-			if (periodofim != null){
-				sql = "select ele.apelido as ele, ela.apelido as ela, d.tipo, f.nome as papel, count(*) as qtde " +
-						" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f, encontroperiodo g, encontroperiodo h " +
-						" where a.encontro = :encontro and " +
-						" a.atividade = b.id and " +
-						" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
-						" a.encontro = d.encontro and " +
-						" d.casal = e.id and " +
-						" e.ele = ele.id and " +
-						" e.ela = ela.id and " +
-						" f.id = c.papel and " +
-						" a.encontro = g.encontro and " +
-						" a.encontro = h.encontro and " +
-						" a.inicio >= g.inicio and a.fim < h.inicio and g.id = :periodo and h.id = :periodofim " +
-						" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
-						" order by d.tipo, ele.apelido, f.nome ";
-				sqlatoa = "select ele, ela, tipo from ( select d.id, ele.apelido as ele, ela.apelido as ela, d.tipo " +
-						" from encontroinscricao d, casal e, pessoa ele, pessoa ela " +
-						" where " +
-						" d.encontro = :encontro and " +
-						" d.casal = e.id and  " +
-						" e.ele = ele.id and  " +
-						" e.ela = ela.id and d.tipo in ('APOIO', 'PADRINHO') and d.tipoConfirmacao = 'CONFIRMADO' " +
-						" ) as x left outer join ( " +
-						" select d.id as idaux " +
-						" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f, encontroperiodo g, encontroperiodo h " +
-						" where a.encontro = :encontro and  " +
-						" a.atividade = b.id and  " +
-						" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
-						" a.encontro = d.encontro and " +
-						" d.casal = e.id and " +
-						" e.ele = ele.id and  " +
-						" e.ela = ela.id and  " +
-						" f.id = c.papel and  " +
-						" a.encontro = g.encontro and  " +
-						" a.encontro = h.encontro and  " +
-						" a.inicio >= g.inicio and a.fim < h.inicio and g.id = :periodo and h.id = :periodofim " +
-						" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
-						" order by d.tipo, ele.apelido, f.nome)  " +
-						" as teste on x.id = teste.idaux and teste.idaux is not null " +
-						" where idaux is null " +
-						" order by tipo, ele, ela ";
-			}else{
-				sql = "select ele.apelido as ele, ela.apelido as ela, d.tipo, f.nome as papel, count(*) as qtde " +
-						" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f, encontroperiodo g " +
-						" where a.encontro = :encontro and " +
-						" a.atividade = b.id and " +
-						" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
-						" a.encontro = d.encontro and " +
-						" d.casal = e.id and " +
-						" e.ele = ele.id and " +
-						" e.ela = ela.id and " +
-						" f.id = c.papel and " +
-						" a.encontro = g.encontro and " +
-						" a.inicio >= g.inicio and g.id = :periodo " +
-						" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
-						" order by d.tipo, ele.apelido, f.nome ";
-				sqlatoa = "select ele, ela, tipo from ( select d.id, ele.apelido as ele, ela.apelido as ela, d.tipo " +
-						" from encontroinscricao d, casal e, pessoa ele, pessoa ela " +
-						" where " +
-						" d.encontro = :encontro and " +
-						" d.casal = e.id and  " +
-						" e.ele = ele.id and  " +
-						" e.ela = ela.id and d.tipo in ('APOIO', 'PADRINHO') and d.tipoConfirmacao = 'CONFIRMADO' " +
-						" ) as x left outer join ( " +
-						" select d.id as idaux " +
-						" from encontroatividade a, atividade b, encontroatividadeinscricao c, encontroinscricao d, casal e, pessoa ele, pessoa ela, papel f, encontroperiodo g " +
-						" where a.encontro = :encontro and  " +
-						" a.atividade = b.id and  " +
-						" a.id = c.encontroAtividade and d.id = c.encontroInscricao and " +
-						" a.encontro = d.encontro and " +
-						" d.casal = e.id and " +
-						" e.ele = ele.id and  " +
-						" e.ela = ela.id and  " +
-						" f.id = c.papel and  " +
-						" a.encontro = g.encontro and  " +
-						" a.inicio >= g.inicio and g.id = :periodo " +
-						" group by ele.apelido, ela.apelido, d.tipo, f.nome " +
-						" order by d.tipo, ele.apelido, f.nome)  " +
-						" as teste on x.id = teste.idaux and teste.idaux is not null " +
-						" where idaux is null " +
-						" order by tipo, ele, ela ";
-			}
-		}
-		List<PlanilhaEncontroInscricaoVO> listaCasal = new ArrayList<PlanilhaEncontroInscricaoVO>();
-		Query query = em.createNativeQuery(sql);
-		query.setParameter("encontro", encontro.getId());
-		if (periodo!=null)
-			query.setParameter("periodo", periodo.getId());
-		if (periodofim != null)
-			query.setParameter("periodofim", periodofim.getId());
-		Map<String,Integer> count = new HashMap<String,Integer>();
-		Map<String,Integer> qtde = new HashMap<String,Integer>();
-		List<Object[]> resultList = query.getResultList();
-		for (Object[] object : resultList) {
-			PlanilhaEncontroInscricaoVO vo = new PlanilhaEncontroInscricaoVO();
-			vo.setEle((String) object[0]);
-			vo.setEla((String) object[1]);
-			vo.setTipo((String) object[2]);
-			vo.setPapel((String) object[3]);
-			vo.setQtde(new Integer(((BigInteger) object[4]).intValue()));
-			listaCasal.add(vo);
-			Integer countaux = count.get(vo.getPapel());
-			if (countaux != null) count.put(vo.getPapel(), countaux+vo.getQtde());
-			else count.put(vo.getPapel(), vo.getQtde());
-			Integer qtdeaux = qtde.get(vo.getPapel());
-			if (qtdeaux != null) qtde.put(vo.getPapel(), qtdeaux+1);
-			else qtde.put(vo.getPapel(), 1);
-		}
-
-		for (String papel : count.keySet()) {
-			count.put(papel, count.get(papel) / qtde.get(papel));
-		}
-
-		for (PlanilhaEncontroInscricaoVO vo : listaCasal) {
-			vo.setMedia(count.get(vo.getPapel()));
-		}
-
-		Query queryatoa = em.createNativeQuery(sqlatoa);
-		queryatoa.setParameter("encontro", encontro.getId());
-		if (periodo!=null)
-			queryatoa.setParameter("periodo", periodo.getId());
-		if (periodofim != null)
-			queryatoa.setParameter("periodofim", periodofim.getId());
-		List<Object[]> resultListAtoa = queryatoa.getResultList();
-		for (Object[] object : resultListAtoa) {
-			PlanilhaEncontroInscricaoVO vo = new PlanilhaEncontroInscricaoVO();
-			vo.setEle((String) object[0]);
-			vo.setEla((String) object[1]);
-			vo.setTipo((String) object[2]);
-			vo.setPapel("SEM ATIVIDADE");
-			vo.setQtde(0);
-			listaCasal.add(vo);
-		}
-
-		Collections.sort(listaCasal, new Comparator<PlanilhaEncontroInscricaoVO>() {
-			@Override
-			public int compare(PlanilhaEncontroInscricaoVO o1, PlanilhaEncontroInscricaoVO o2) {
-				if (o1.getTipo() != null && o2.getTipo() != null ) return o1.getTipo().compareTo(o2.getTipo());
-				if (o1.getTipo() == null && o2.getTipo() != null && !o2.getTipo().equals("") ) return -1;
-				return o1.getEle().compareTo(o2.getEle());
-			}
-		});
-
-		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
-		cmdRelatorio.setListaObjects(listaCasal);
-		cmdRelatorio.setEncontro(encontro);
-		cmdRelatorio.setReport("listagemplanilha.jrxml");
-		cmdRelatorio.setNome("listagemplanilha");
-		cmdRelatorio.setTitulo("LISTAGEM PLANILHA ATRIBUIÇÕES POR CASAL");
-		return cmdRelatorio.call();
-	}*/
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo) throws Exception {
+	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo, EncontroInscricao inscricao) throws Exception {
 		EncontroCarregaVOCommand cmd = injector.getInstance(EncontroCarregaVOCommand.class);
 		cmd.setEncontro(encontro);
 		EncontroVO vo =  cmd.call();
+
+
 
 		GetEntityListCommand cmdList = injector.getInstance(GetEntityListCommand.class);
 		cmdList.setNamedQuery("encontroAtividadeInscricao.porEncontro");
 		cmdList.addParameter("encontro", encontro);
 		List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao = cmdList.call();
+
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		if (inscricao==null){
+			listaEncontroInscricao.addAll(vo.getListaInscricao());
+		}else{
+			listaEncontroInscricao.add(inscricao);
+		}
 
 		List<EncontroAtividade> listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(vo, periodo);
 		Collections.sort(listaEncontroAtividade, new Comparator<EncontroAtividade>() {
@@ -324,20 +137,21 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		List<PlanilhaEncontroInscricaoVO> listaCasal = new ArrayList<PlanilhaEncontroInscricaoVO>();
 
 		for (EncontroAtividade ea : listaEncontroAtividade) {
-			ea.getEncontroAtividadeInscricaos().clear();
+			ea.getEncontroAtividadeInscricoes().clear();
 			for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
 				if (eai.getEncontroAtividade().getId().equals(ea.getId()))
-					ea.getEncontroAtividadeInscricaos().add(eai);
+					ea.getEncontroAtividadeInscricoes().add(eai);
 			}
 		}
 
-		for (EncontroInscricao ei : vo.getListaInscricao()) {
-			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO) && !ei.getTipo().equals(TipoInscricaoEnum.COORDENADOR) && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+		for (EncontroInscricao ei : listaEncontroInscricao) {
+			ei.setQtdeAtividades(0);
+			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO) && (inscricao!=null || (inscricao == null && !ei.getTipo().equals(TipoInscricaoEnum.COORDENADOR) && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)))){
 				for (EncontroAtividade ea : listaEncontroAtividade) {
 					String atividade = (new SimpleDateFormat("E")).format(ea.getInicio()) + " " +
 						(new SimpleDateFormat("HH:mm")).format(ea.getInicio()) + " " + (new SimpleDateFormat("HH:mm")).format(ea.getFim()) + " " + ea.getTipoAtividade().getNome() + " - " + ea.getAtividade().getNome();
 					boolean coordenacao = false;
-					for (EncontroAtividadeInscricao eai : ea.getEncontroAtividadeInscricaos()) {
+					for (EncontroAtividadeInscricao eai : ea.getEncontroAtividadeInscricoes()) {
 						if (eai.getEncontroInscricao().getId().equals(ei.getId())){
 							PlanilhaEncontroInscricaoVO vop = new PlanilhaEncontroInscricaoVO();
 							vop.setTipo(ei.getTipo().toString());
@@ -350,11 +164,12 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 							coordenacao = eai.getPapel().getCoordenacao();
 							vop.setCoordenacao(coordenacao);
 							listaCasal.add(vop);
+							ei.setQtdeAtividades(ei.getQtdeAtividades()+1);
 							break;
 						}
 					}
 					if (coordenacao){
-						for (EncontroAtividadeInscricao eai : ea.getEncontroAtividadeInscricaos()) {
+						for (EncontroAtividadeInscricao eai : ea.getEncontroAtividadeInscricoes()) {
 							if (!eai.getEncontroInscricao().getId().equals(ei.getId())){
 								PlanilhaEncontroInscricaoVO vop = new PlanilhaEncontroInscricaoVO();
 								vop.setTipo(ei.getTipo().toString());
@@ -376,8 +191,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		Collections.sort(listaCasal, new Comparator<PlanilhaEncontroInscricaoVO>() {
 			@Override
 			public int compare(PlanilhaEncontroInscricaoVO o1, PlanilhaEncontroInscricaoVO o2) {
-				if (!o1.getTipo().equals(o2.getTipo())) return o1.getTipo().compareTo(o2.getTipo());
-				else if (!o1.getNome().equals(o2.getNome())) return o1.getNome().compareTo(o2.getNome());
+				if (!o1.getNome().equals(o2.getNome())) return o1.getNome().compareTo(o2.getNome());
 				else if (!o1.getEncontroAtividade().getId().equals(o2.getEncontroAtividade().getId())) {
 					if(o1.getEncontroAtividade().getInicio().equals(o2.getEncontroAtividade().getInicio())){
 						if(o1.getEncontroAtividade().getFim().equals(o2.getEncontroAtividade().getFim())){
@@ -840,15 +654,64 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 	@Override
 	public Integer imprimeRelatorioRecepcaoInicial(Encontro encontro)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		@SuppressWarnings("unchecked")
+		List<EncontroInscricao> lista = cmd.call();
+		List<Casal> listaCasal = new ArrayList<Casal>();
+		for (EncontroInscricao encontroInscricao : lista) {
+			listaCasal.add(encontroInscricao.getCasal());
+		}
+		Collections.sort(listaCasal, new Comparator<Casal>() {
+			@Override
+			public int compare(Casal o1, Casal o2) {
+				return o1.getEle().getApelido().compareTo(o2.getEle().getApelido());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemrecepcaoinicial.jrxml");
+		cmdRelatorio.setNome("listagemrecepcaoinicial");
+		cmdRelatorio.setTitulo("LISTAGEM DE RECEPÇÃO INICIAL");
+		return cmdRelatorio.call();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Integer imprimeRelatorioRecepcaoFinal(Encontro encontro)
 			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		List<Casal> listaCasal = new ArrayList<Casal>();
+		for (EncontroInscricao encontroInscricao : lista) {
+			listaCasal.add(encontroInscricao.getCasal());
+		}
+
+		GetEntityListCommand cmdContato = injector.getInstance(GetEntityListCommand.class);
+		cmdContato.setNamedQuery("casalContato.porListaCasal");
+		cmdContato.addParameter("casal", listaCasal);
+		List<CasalContato> listaContato = cmdContato.call();
+
+
+		Collections.sort(listaContato, new Comparator<CasalContato>() {
+			@Override
+			public int compare(CasalContato o1, CasalContato o2) {
+				return o1.getCasal().getEle().getApelido().compareTo(o2.getCasal().getEle().getApelido());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaContato);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemrecepcaofinal.jrxml");
+		cmdRelatorio.setNome("listagemrecepcaofinal");
+		cmdRelatorio.setTitulo("LISTAGEM DE RECEPÇÃO FINAL");
+		return cmdRelatorio.call();
 	}
 
 }

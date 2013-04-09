@@ -22,6 +22,7 @@ import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
+import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.vo.AgrupamentoVO;
@@ -37,6 +38,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		void setListaAgrupamentos(List<Agrupamento> result);
 		void setListaHoteis(List<EncontroHotel> result);
 		void setListaPeriodos(List<EncontroPeriodo> result);
+		void setSuggestInscricao();
 	}
 
 	public enum ProcessaOpcao {
@@ -101,6 +103,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 				for (Encontro encontro : listaEncontro) {
 					if(encontro.toString().equals(cookie)){
 						setEncontroSelecionado(encontro);
+						getDisplay().setSuggestInscricao();
 						getDisplay().showWaitMessage(false);
 						buscaAgrupamentos();
 						buscaHoteis();
@@ -277,10 +280,36 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 			}
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMPLANILHA)){
 			EncontroPeriodo periodo = null;
-			if (object instanceof EncontroPeriodo){
-				periodo = (EncontroPeriodo) object;
+			EncontroInscricao inscricao = null;
+			if (object instanceof List){
+				@SuppressWarnings("unchecked")
+				List<Object> params = (List<Object>) object;
+				for (Object obj : params) {
+					if (obj instanceof EncontroPeriodo){
+						periodo = (EncontroPeriodo) obj;
+					}
+					if (obj instanceof EncontroInscricao){
+						inscricao = (EncontroInscricao) obj;
+					}
+				}
 			}
-			service.imprimeRelatorioPlanilha(encontro, periodo, new WebAsyncCallback<Integer>(getDisplay()) {
+			service.imprimeRelatorioPlanilha(encontro, periodo, inscricao, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport){
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+				}
+			} );
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMRECEPCAOINICIAL)){
+			service.imprimeRelatorioRecepcaoInicial(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport){
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+				}
+			} );
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMRECEPCAOFINAL)){
+			service.imprimeRelatorioRecepcaoFinal(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport){
 					getDisplay().showWaitMessage(false);

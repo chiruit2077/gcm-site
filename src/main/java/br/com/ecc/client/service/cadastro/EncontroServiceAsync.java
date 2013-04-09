@@ -12,7 +12,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface EncontroServiceAsync {
 	public void lista(Grupo grupo, AsyncCallback<List<Encontro>> callback);
-	public void salva(EncontroVO encontroVO, AsyncCallback<Void> callback);
+	public void salvaVO(EncontroVO encontroVO, AsyncCallback<Void> callback);
+	public void salvaEntity(Encontro encontro, AsyncCallback<Void> callback);
 	public void exclui(Encontro encontro, AsyncCallback<Void> asyncCallback);
 	public void getVO(Encontro encontro, Boolean ignorarAfilhados, AsyncCallback<EncontroVO> callback);
 	public void listaInscricoes(Encontro encontroSelecionado, Boolean exibeRecusados, AsyncCallback<List<EncontroInscricao>> callback);

@@ -689,13 +689,15 @@ public class DistribuicaoQuartosView extends BaseView<DistribuicaoQuartosPresent
 						quartoWidget.add(numquartoWidget);
 						quartoWidget.add(quartoNomeWidget);
 					}
-					focusPanel.addClickHandler(new ClickHandler() {
-						@Override
-						public void onClick(ClickEvent event) {
-							edita(encontroHotelQuarto);
-							quartoWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(quartoNomeWidget)));
-						}
-					});
+					if (presenter.getEncontroSelecionado().getDataPublicacaoHotelaria()==null){
+						focusPanel.addClickHandler(new ClickHandler() {
+							@Override
+							public void onClick(ClickEvent event) {
+								edita(encontroHotelQuarto);
+								quartoWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(quartoNomeWidget)));
+							}
+						});
+					}
 					quartosPanel.add(focusPanel);
 				}
 			}

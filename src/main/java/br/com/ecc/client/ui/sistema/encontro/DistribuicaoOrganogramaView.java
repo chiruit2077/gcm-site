@@ -373,13 +373,15 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		}
 		coordenacaoWidget.add(coordenacaoNomeWidget);
 		coordenacaoWidget.add(tituloCoordenacaoWidget);
-		focusPanel.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				editaCoordenacao(encontrocoordenacao);
-				coordenacaoWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(coordenacaoNomeWidget)));
-			}
-		});
+		if (presenter.getEncontroSelecionado().getDataPublicacaoOrganograma()==null){
+			focusPanel.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					editaCoordenacao(encontrocoordenacao);
+					coordenacaoWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(coordenacaoNomeWidget)));
+				}
+			});
+		}
 		return focusPanel;
 	}
 
@@ -405,13 +407,15 @@ public class DistribuicaoOrganogramaView extends BaseView<DistribuicaoOrganogram
 		}else
 			coordenacaoNomeWidget.add(new Label("VAGO"));
 		coordenacaoWidget.add(coordenacaoNomeWidget);
-		focusPanel.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				editaArea(encontrocoarea);
-				coordenacaoAreaWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(coordenacaoNomeWidget)));
-			}
-		});
+		if (presenter.getEncontroSelecionado().getDataPublicacaoOrganograma()==null){
+			focusPanel.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					editaArea(encontrocoarea);
+					coordenacaoAreaWidgetEditado = (VerticalPanel) ((VerticalPanel) focusPanel.getWidget()).getWidget((((VerticalPanel) focusPanel.getWidget()).getWidgetIndex(coordenacaoNomeWidget)));
+				}
+			});
+		}
 		return focusPanel;
 	}
 

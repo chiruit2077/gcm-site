@@ -20,9 +20,11 @@ import br.com.ecc.model.tipo.TipoCasalContatoEnum;
 @SequenceGenerator(name="SQ_CASALCONTATO", sequenceName="SQ_CASALCONTATO")
 @NamedQueries({
 	@NamedQuery(name="casalContato.porCasal", query="select u from CasalContato u where u.casal = :casal"),
-	@NamedQuery(name="casalContato.deletePorCasal", 
+	@NamedQuery(name="casalContato.porListaCasal", query="select u from CasalContato u where u.casal in (:casal) " +
+			" and ( telefoneResidencial is not null or telefoneComercial is not null or telefoneCelular is not null ) "),
+	@NamedQuery(name="casalContato.deletePorCasal",
 		query="delete from CasalContato u where u.casal = :casal"),
-	@NamedQuery(name="casalContato.deletePorCasalNotIn", 
+	@NamedQuery(name="casalContato.deletePorCasalNotIn",
 		query="delete from CasalContato u where u.casal = :casal and u not in (:lista)")
 })
 public class CasalContato extends _WebBaseEntity {
@@ -31,32 +33,32 @@ public class CasalContato extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_CASALCONTATO", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="casal")
 	private Casal casal;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoCasalContatoEnum tipoContato;
-	
+
 	@Column(length=150)
 	private String nome;
-	
+
 	private Integer idade;
-	
+
 	@Column(length=50)
 	private String telefoneResidencial;
-	
+
 	@Column(length=50)
 	private String telefoneComercial;
-	
+
 	@Column(length=50)
 	private String telefoneCelular;
-	
+
 	@Column(length=150)
 	private String email;
-	
+
 	@Version
 	private Integer version;
 

@@ -1,5 +1,6 @@
 package br.com.ecc.client.ui.sistema.encontro;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.event.ExecutaMenuEvent;
@@ -16,6 +17,8 @@ import br.com.ecc.client.service.encontro.EncontroAtividadeInscricaoService;
 import br.com.ecc.client.service.encontro.EncontroAtividadeInscricaoServiceAsync;
 import br.com.ecc.client.service.encontro.EncontroAtividadeService;
 import br.com.ecc.client.service.encontro.EncontroAtividadeServiceAsync;
+import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaService;
+import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaServiceAsync;
 import br.com.ecc.client.util.DownloadResourceHelper;
 import br.com.ecc.core.mvp.WebResource;
 import br.com.ecc.model.Atividade;
@@ -23,6 +26,7 @@ import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroAtividade;
 import br.com.ecc.model.EncontroAtividadeInscricao;
+import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.Papel;
@@ -49,6 +53,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	EncontroAtividadeServiceAsync serviceEncontroAtividade = GWT.create(EncontroAtividadeService.class);
 	EncontroAtividadeInscricaoServiceAsync serviceEncontroInscricaoAtividade = GWT.create(EncontroAtividadeInscricaoService.class);
+	EncontroServiceAsync serviceEncontro = GWT.create(EncontroService.class);
 
 	private List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao;
 	private List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricaoFull;
@@ -105,6 +110,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		serviceEncontroAtividade.salva(encontroAtividade, new WebAsyncCallback<EncontroAtividade>(getDisplay()) {
 			@Override
 			public void success(EncontroAtividade encontroAtividade) {
+				getDadosEncontroVO(encontroSelecionado);
 				buscaDadosPlanilha();
 			}
 		});
@@ -115,6 +121,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		serviceEncontroAtividade.exclui(encontroAtividade, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
+				getDadosEncontroVO(encontroSelecionado);
 				buscaDadosPlanilha();
 			}
 		});
@@ -232,6 +239,18 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	}
 
+	public void imprimirAtividades(EncontroInscricao inscricao) {
+		getDisplay().showWaitMessage(true);
+		EncontroRelatoriosSecretariaServiceAsync service = GWT.create(EncontroRelatoriosSecretariaService.class);
+		service.imprimeRelatorioPlanilha(getEncontroSelecionado(), getDisplay().getPeriodoSelecionado(), inscricao, new WebAsyncCallback<Integer>(getDisplay()) {
+			@Override
+			protected void success(Integer idReport){
+				getDisplay().showWaitMessage(false);
+				DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+			}
+		} );
+	}
+
 	public GrupoVO getGrupoEncontroVO() {
 		return grupoEncontroVO;
 	}
@@ -268,7 +287,7 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		if(usuario.getNivel()!=null && usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 			bco = true;
 		}
-		if(!bco){
+		if(!bco && getEncontroVO()!=null){
 			for (Casal c : getEncontroVO().getListaCoordenadores()) {
 				if(c.getId().equals(casal.getId())){
 					bco=true;
@@ -318,5 +337,29 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	public void setPapelPadrinho(Papel papelPadrinho) {
 		this.papelPadrinho = papelPadrinho;
+	}
+
+	public void gravapublicacaoPlanilha() {
+		getEncontroVO().getEncontro().setDataPublicacaoPlanilha(new Date());
+		final Encontro encontro = getEncontroVO().getEncontro();
+		serviceEncontro.salvaVO(getEncontroVO(), new WebAsyncCallback<Void>(getDisplay()) {
+			@Override
+			public void success(Void resposta) {
+				getDadosEncontroVO(encontro);
+				buscaDadosPlanilha();
+			}
+		});
+	}
+
+	public void excluiPublicacaoPlanilha() {
+		getEncontroVO().getEncontro().setDataPublicacaoPlanilha(null);
+		final Encontro encontro = getEncontroVO().getEncontro();
+		serviceEncontro.salvaVO(getEncontroVO(), new WebAsyncCallback<Void>(getDisplay()) {
+			@Override
+			public void success(Void resposta) {
+				getDadosEncontroVO(encontro);
+				buscaDadosPlanilha();
+			}
+		});
 	}
 }

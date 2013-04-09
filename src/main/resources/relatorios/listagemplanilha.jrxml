@@ -5,12 +5,16 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
-	<import value="br.com.ecc.model.*"/>
 	<import value="java.util.*"/>
-	<style name="Style1" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF">
-		<pen lineWidth="1.0"/>
+	<import value="br.com.ecc.model.*"/>
+	<style name="Style1" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" isBlankWhenNull="true">
+		<pen lineWidth="0.0"/>
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$F{coordenacao}?Boolean.TRUE:Boolean.FALSE]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#80FFFF"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 1]]></conditionExpression>
 			<style mode="Opaque" forecolor="#000000" backcolor="#C0C0C0"/>
 		</conditionalStyle>
 	</style>
@@ -46,11 +50,17 @@
 	<group name="Nome" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{encontroInscricao}]]></groupExpression>
 		<groupHeader>
-			<band height="34">
+			<band height="41">
 				<textField>
 					<reportElement uuid="edd5e352-423b-4726-95d1-7df350d2001f" mode="Opaque" x="0" y="19" width="555" height="15" backcolor="#C0C0C0">
 						<property name="local_mesure_unitheight" value="pixel"/>
 					</reportElement>
+					<box bottomPadding="0">
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
 					<textElement textAlignment="Center"/>
 					<textFieldExpression><![CDATA["Participante: " + $F{nome}  + "   -  Tipo: " + $F{tipo}]]></textFieldExpression>
 				</textField>
@@ -79,7 +89,7 @@
 						<property name="local_mesure_unitheight" value="pixel"/>
 					</reportElement>
 					<textElement textAlignment="Right"/>
-					<textFieldExpression><![CDATA["Quantidade de Atividades: " + $V{Nome_COUNT}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Quantidade de Atividades: " + $F{encontroInscricao}.getQtdeAtividades()]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement uuid="4af55413-e19c-4280-8b8d-26bba877d7ce" x="0" y="0" width="555" height="1">
@@ -102,7 +112,7 @@
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Atividade: " + $F{atividade}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{atividade}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="a3aee063-489f-44c4-85ce-056c4985e54a" style="Style1" x="361" y="0" width="194" height="12">

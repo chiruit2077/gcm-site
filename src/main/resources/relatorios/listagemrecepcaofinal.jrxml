@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listatemrecepcaofinal" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3455ea0d-5ab8-41d5-b887-25104a61aa86">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
+	<import value="br.com.ecc.model.*"/>
+	<import value="java.util.*"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="casal" class="br.com.ecc.model.Casal">
+		<fieldDescription><![CDATA[casal]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[nome]]></fieldDescription>
+	</field>
+	<field name="telefoneCelular" class="java.lang.String">
+		<fieldDescription><![CDATA[telefoneCelular]]></fieldDescription>
+	</field>
+	<field name="telefoneComercial" class="java.lang.String">
+		<fieldDescription><![CDATA[telefoneComercial]]></fieldDescription>
+	</field>
+	<field name="telefoneResidencial" class="java.lang.String">
+		<fieldDescription><![CDATA[telefoneResidencial]]></fieldDescription>
+	</field>
+	<field name="tipoContato" class="br.com.ecc.model.tipo.TipoCasalContatoEnum">
+		<fieldDescription><![CDATA[tipoContato]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2d40beb8-ab76-4e46-9357-42724286d2e1" mode="Opaque" x="0" y="15" width="555" height="20" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+			<image isUsingCache="true" onErrorType="Blank">
+				<reportElement uuid="268e1949-fd06-4d7d-9bf1-05ca04dc65b1" x="0" y="1" width="34" height="34">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0442e52c-24b7-4a9f-a6ba-a35a6e8c3a37" x="363" y="6" width="96" height="20">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Tel. Comercial]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="79d995a9-7d79-4b8d-bb42-32f1443f3fac" x="0" y="25" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="52b0aebf-2b5b-4d29-a2d4-b569b9eca083" x="459" y="6" width="96" height="20">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Tel. Res]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5895831-7f49-457d-ab8d-f7723e65385e" x="137" y="6" width="130" height="20">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Contato]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ab932742-a2a8-4ec5-929f-d79d0a143b98" x="0" y="6" width="137" height="20">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Casal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f22f32fe-e805-448f-b991-f1413ea12d22" x="267" y="6" width="96" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tel. Celular]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="0549f731-2c2b-4fd0-85e9-4003df66a149" isPrintRepeatedValues="false" mode="Opaque" x="0" y="0" width="555" height="16" backcolor="#C0C0C0"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{casal}.getEle().getApelido() + " e " + $F{casal}.getEla().getApelido()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="00755b14-25fc-4a62-a7aa-0ec7579749d1" x="363" y="0" width="96" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefoneComercial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="16463275-898b-42ad-a78b-aed9572d6924" x="267" y="0" width="96" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefoneCelular}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7389f197-b279-4807-b85f-01a750abe521" x="459" y="0" width="96" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefoneResidencial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="15c999cc-fd5b-4fdd-8ee7-819d39f5e573" x="137" y="0" width="130" height="16"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome} + "-" + $F{tipoContato}.getNome()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

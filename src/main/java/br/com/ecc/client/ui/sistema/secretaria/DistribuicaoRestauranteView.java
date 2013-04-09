@@ -353,13 +353,14 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			final EncontroRestauranteMesa encontroRestauranteMesa = getEncontroRestauranteMesa(vo,mesa,getRestauranteSelecionado());
 
 			populaMesa(mesa, mesaPanel, encontroRestauranteMesa, afilhadoEle1, afilhadoEla1, afilhadoEle2, afilhadoEla2, garcon);
-
-			focusPanel.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					edita(encontroRestauranteMesa);
-				}
-			});
+			if (presenter.getEncontroSelecionado().getDataPublicacaoRestaurante()==null){
+				focusPanel.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						edita(encontroRestauranteMesa);
+					}
+				});
+			}
 			return mesaPanel;
 		}else if (mesa.getRestaurante().getQuantidadeCasaisPorMesa()==1){
 			final VerticalPanel mesaPanel = new VerticalPanel();
@@ -398,12 +399,14 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 			populaMesa(mesa, mesaPanel, encontroRestauranteMesa, afilhadoEle1, afilhadoEla1, null, null, garcon);
 
-			focusPanel.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					edita(encontroRestauranteMesa);
-				}
-			});
+			if (presenter.getEncontroSelecionado().getDataPublicacaoRestaurante()==null){
+				focusPanel.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						edita(encontroRestauranteMesa);
+					}
+				});
+			}
 			return mesaPanel;
 
 		}else {
@@ -795,6 +798,10 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	public void setListaRestaurantes(List<EncontroRestaurante> lista) {
 		this.listaRestaurantes = lista;
 		ListBoxUtil.populate(restauranteListBox, false, lista );
+		if (presenter.getEncontroSelecionado().getDataPublicacaoRestaurante()==null){
+			gerarDistribuicaoButton.setVisible(true);
+			limpaDistribuicaoButton.setVisible(true);
+		}
 	}
 
 	public List<EncontroRestaurante> getListaRestaurantes() {

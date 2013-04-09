@@ -49,7 +49,7 @@ public class EncontroAtividade extends _WebBaseEntity {
 	public EncontroAtividade() {
 		infoErro = new ArrayList<String>();
 		infoAtencao = new ArrayList<String>();
-		encontroAtividadeInscricaos = new ArrayList<EncontroAtividadeInscricao>();
+		encontroAtividadeInscricoes = new ArrayList<EncontroAtividadeInscricao>();
 	}
 
 	@ManyToOne
@@ -87,7 +87,7 @@ public class EncontroAtividade extends _WebBaseEntity {
 	private List<String> infoAtencao;
 
 	@Transient
-	private List<EncontroAtividadeInscricao> encontroAtividadeInscricaos;
+	private List<EncontroAtividadeInscricao> encontroAtividadeInscricoes;
 
 	@Transient
 	private Integer quantidadeInscricoes;
@@ -236,13 +236,13 @@ public class EncontroAtividade extends _WebBaseEntity {
 		this.porcentagem = porcentagem;
 	}
 
-	public List<EncontroAtividadeInscricao> getEncontroAtividadeInscricaos() {
-		return encontroAtividadeInscricaos;
+	public List<EncontroAtividadeInscricao> getEncontroAtividadeInscricoes() {
+		return encontroAtividadeInscricoes;
 	}
 
-	public void setEncontroAtividadeInscricaos(
-			List<EncontroAtividadeInscricao> encontroAtividadeInscricaos) {
-		this.encontroAtividadeInscricaos = encontroAtividadeInscricaos;
+	public void setEncontroAtividadeInscricoes(
+			List<EncontroAtividadeInscricao> encontroAtividadeInscricoes) {
+		this.encontroAtividadeInscricoes = encontroAtividadeInscricoes;
 	}
 
 	public Integer getQuantidadeInscricoes() {

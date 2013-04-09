@@ -19,6 +19,7 @@ import br.com.ecc.server.command.EncontroCarregaVOCommand;
 import br.com.ecc.server.command.EncontroSalvarCommand;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
+import br.com.ecc.server.command.basico.SaveEntityCommand;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -26,7 +27,8 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class EncontroServiceImpl extends SecureRemoteServiceServlet implements EncontroService {
-	private static final long serialVersionUID = 8739734601403901436L;
+
+	private static final long serialVersionUID = 1944513084207357906L;
 
 	@Inject Injector injector;
 	@Inject EntityManager em;
@@ -44,17 +46,24 @@ public class EncontroServiceImpl extends SecureRemoteServiceServlet implements E
 	@Override
 	@Permissao(nomeOperacao="Excluir encontro", operacao=Operacao.EXCLUIR)
 	public void exclui(Encontro encontro) throws Exception {
-		//exclusão
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(encontro);
 		cmd.call();
 	}
 
 	@Override
-	@Permissao(nomeOperacao="Salvar encontro", operacao=Operacao.SALVAR)
-	public void salva(EncontroVO encontroVO) throws Exception {
+	@Permissao(nomeOperacao="Salvar encontro vo", operacao=Operacao.SALVAR)
+	public void salvaVO(EncontroVO encontroVO) throws Exception {
 		EncontroSalvarCommand cmd = injector.getInstance(EncontroSalvarCommand.class);
 		cmd.setEncontroVO(encontroVO);
+		cmd.call();
+	}
+
+	@Override
+	@Permissao(nomeOperacao="Salvar encontro", operacao=Operacao.SALVAR)
+	public void salvaEntity(Encontro encontro) throws Exception {
+		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
+		cmd.setBaseEntity(encontro);
 		cmd.call();
 	}
 

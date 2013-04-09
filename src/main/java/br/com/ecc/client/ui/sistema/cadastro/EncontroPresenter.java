@@ -92,7 +92,7 @@ public class EncontroPresenter extends BasePresenter<EncontroPresenter.Display> 
 	}
 	public void salvar(EncontroVO encontroVO) {
 		getDisplay().showWaitMessage(true);
-		service.salva(encontroVO, new WebAsyncCallback<Void>(getDisplay()) {
+		service.salvaVO(encontroVO, new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
 				getDisplay().reset();

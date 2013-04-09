@@ -133,6 +133,9 @@ public class EncontroInscricao extends _WebBaseEntity {
 	@Column(length=20)
 	private TipoConfirmacaoEnum tipoConfirmacao;
 
+	@Transient
+	private Integer qtdeAtividades;
+
 	@Version
 	private Integer version;
 
@@ -254,6 +257,14 @@ public class EncontroInscricao extends _WebBaseEntity {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Integer getQtdeAtividades() {
+		return qtdeAtividades;
+	}
+
+	public void setQtdeAtividades(Integer qtdeAtividades) {
+		this.qtdeAtividades = qtdeAtividades;
 	}
 
 }

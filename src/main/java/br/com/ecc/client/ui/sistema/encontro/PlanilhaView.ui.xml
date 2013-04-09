@@ -38,7 +38,7 @@
 		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center" height="100%">
 			<g:HorizontalPanel ui:field="opcoesPanel" styleName="formulario-opcoes" width="100%" horizontalAlignment="center" height="100%">
 				<g:HTMLPanel width="100%">
-					<table cellpadding="3" cellspacing="0" border="0">
+					<table cellpadding="5" cellspacing="0" border="0">
 						<tr>
 							<td>
 								<g:Label ui:field="itemLabel" width="100%"/>
@@ -51,17 +51,24 @@
 							<td>
 								<g:ListBox ui:field="planilhaListBox" width="300px"/>
 							</td>
-							<td class="portal-formLabel">Atividade:</td>
-							<td>
-								<g:ListBox ui:field="planilhaAtividadeListBox" width="300px"/>
+							<td align="center">
+								<g:Button ui:field="imprimirPlanilhaButton">Imprimir Planilha [PDF]</g:Button>
+								<g:Button ui:field="imprimirAtividadesButton">Imprimir Lista Atividades</g:Button>
+								<g:Button ui:field="baixarPlanilhaButton">Baixar Planilha [Excel]</g:Button>
 							</td>
 						</tr>
 						<tr>
-							<td colspan="7" align="center">
-								<g:Button ui:field="imprimirButton">Imprimir Planilha [PDF]</g:Button>
-								<g:Button ui:field="baixarButton">Baixar Planilha [Excel]</g:Button>
-								<g:Button ui:field="limparPlanilhaButton" visible="false">Limpar Toda Planilha</g:Button>
-								<g:Button ui:field="preencherAutomaticoButton" visible="false">Preencher Planilha Automática</g:Button>
+							<td colspan="6" align="center">
+								<g:HorizontalPanel ui:field="panelCoordenacao" visible="false" horizontalAlignment="center" spacing="5">
+									<g:Label text="Tipo Filtro:" horizontalAlignment="right" styleName="portal-formLabel"/>
+									<g:ListBox ui:field="planilhaTipoAtividadeListBox" width="150px"/>
+									<g:Label text="Atividade Filtro:" horizontalAlignment="right" styleName="portal-formLabel"/>
+									<g:ListBox ui:field="planilhaAtividadeListBox" width="300px"/>
+									<g:Button ui:field="limparPlanilhaButton">Limpar Toda Planilha</g:Button>
+									<g:Button ui:field="preencherAutomaticoButton">Preencher Planilha Automática</g:Button>
+									<g:Button ui:field="planilhaPublicacaoGravarButton" visible="false">Grava Publicação</g:Button>
+									<g:Button ui:field="planilhaPublicacaaExcluirButton" visible="false">Exclui Publicação</g:Button>
+								</g:HorizontalPanel>
 							</td>
 						</tr>
 					</table>

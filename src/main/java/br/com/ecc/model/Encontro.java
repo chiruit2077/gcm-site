@@ -26,7 +26,8 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 	@NamedQuery(name="encontro.porGrupo", query="select u from Encontro u where u.grupo =:grupo order by u.inicio desc")
 })
 public class Encontro extends _WebBaseEntity {
-	private static final long serialVersionUID = -8111395743922320149L;
+
+	private static final long serialVersionUID = 1719248291172014483L;
 
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTRO", strategy=GenerationType.AUTO)
@@ -63,6 +64,18 @@ public class Encontro extends _WebBaseEntity {
 
 	@Temporal(TemporalType.DATE)
 	private Date dataMaximaPagamento;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataPublicacaoPlanilha;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataPublicacaoRestaurante;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataPublicacaoOrganograma;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataPublicacaoHotelaria;
 
 	@Version
 	private Integer version;
@@ -150,5 +163,54 @@ public class Encontro extends _WebBaseEntity {
 	}
 	public void setUsaFichaPagamento(Integer usaFichaPagamento) {
 		this.usaFichaPagamento = usaFichaPagamento;
+	}
+
+	public Date getDataPublicacaoPlanilha() {
+		return dataPublicacaoPlanilha;
+	}
+
+	public void setDataPublicacaoPlanilha(Date dataPublicacaoPlanilha) {
+		this.dataPublicacaoPlanilha = dataPublicacaoPlanilha;
+	}
+
+	public Date getDataPublicacaoRestaurante() {
+		return dataPublicacaoRestaurante;
+	}
+
+	public void setDataPublicacaoRestaurante(Date dataPublicacaoRestaurante) {
+		this.dataPublicacaoRestaurante = dataPublicacaoRestaurante;
+	}
+
+	public Date getDataPublicacaoOrganograma() {
+		return dataPublicacaoOrganograma;
+	}
+
+	public void setDataPublicacaoOrganograma(Date dataPublicacaoOrganograma) {
+		this.dataPublicacaoOrganograma = dataPublicacaoOrganograma;
+	}
+
+	public Date getDataPublicacaoHotelaria() {
+		return dataPublicacaoHotelaria;
+	}
+
+	public void setDataPublicacaoHotelaria(Date dataPublicacaoHotelaria) {
+		this.dataPublicacaoHotelaria = dataPublicacaoHotelaria;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Encontro other = (Encontro) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }

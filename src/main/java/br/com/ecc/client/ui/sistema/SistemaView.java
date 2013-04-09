@@ -56,6 +56,12 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		boolean administrador = presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR);
 		boolean convidado = presenter.getCasal().getTipoCasal()==null || presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO);
 
+		boolean publicacaoplanilha = presenter.getEncontroSelecionado().getDataPublicacaoPlanilha() != null;
+		boolean publicacaorestaurante = presenter.getEncontroSelecionado().getDataPublicacaoRestaurante() != null;
+		boolean publicacaohotelaria = presenter.getEncontroSelecionado().getDataPublicacaoHotelaria() != null;
+		boolean publicacaoorganograma = presenter.getEncontroSelecionado().getDataPublicacaoOrganograma() != null;
+
+		sistemaMenuBar.clearItems();
 		//Cadastro
 		menuItem = new MenuItem("Cadastro", new MenuBar(true));
 		sistemaMenuBar.addItem(menuItem);
@@ -116,10 +122,20 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 			sistemaMenuBar.addItem(menuItem);
 			menuItem.getSubMenu().addItem("Convites ao Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_CONVITE); } });
 			menuItem.getSubMenu().addItem("Inscrição no Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_INSCRICAO); } });
-			menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
 			if(administrador){
+				menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
 				menuItem.getSubMenu().addItem("Organogramas do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_ENCONTRO); } });
 				menuItem.getSubMenu().addItem("Distribuição dos Organogramas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_DISTRIBUICAO); } });
+			}else{
+				if (publicacaoplanilha)
+					menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
+				if (publicacaoorganograma)
+					menuItem.getSubMenu().addItem("Distribuição dos Organogramas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_DISTRIBUICAO); } });
+				if (publicacaorestaurante)
+					menuItem.getSubMenu().addItem("Distribuição dos Restaurantes", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE_DISTRIBUICAO); } });
+				if (publicacaohotelaria)
+					menuItem.getSubMenu().addItem("Distribuição dos Quartos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.HOTEL_DISTRIBUICAO); } });
+
 			}
 		}
 
