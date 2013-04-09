@@ -2,6 +2,7 @@ package br.com.ecc.client.ui.sistema.cadastro;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
@@ -37,6 +38,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -55,58 +57,62 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	@UiTemplate("EncontroView.ui.xml")
 	interface EncontroViewUiBinder extends UiBinder<Widget, EncontroView> {}
 	private EncontroViewUiBinder uiBinder = GWT.create(EncontroViewUiBinder.class);
-	
+
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
-	
+
 	@UiField DateBox inicioDateBox;
 	@UiField DateBox fimDateBox;
 	@UiField(provided=true) NumberTextBox afilhadosNumberTextBox;
-	
-	
+
+
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
-	
+	@UiField CheckBox publicaPlanilhaCheckBox;
+	@UiField CheckBox publicaOrganogramaCheckBox;
+	@UiField CheckBox publicaRestauranteCheckBox;
+	@UiField CheckBox publicaHotelariaCheckBox;
+
 	@UiField(provided=true) FlexTable periodoFlexTable;
 	private FlexTableUtil periodoTableUtil = new FlexTableUtil();
 	@UiField Label itemPeriodoTotal;
-	
+
 	@UiField(provided=true) FlexTable totalizacaoFlexTable;
 	private FlexTableUtil totalizacaoTableUtil = new FlexTableUtil();
 	@UiField Label itemTotalizacaoTotal;
-	
+
 	@UiField DialogBox editaPeriodoDialogBox;
 	@UiField TextBox nomePeriodoTextBox;
 	@UiField DateBox inicioPeriodoDateBox;
 	@UiField Button salvarPeriodoButton;
 	@UiField Button fecharPeriodoButton;
-	
+
 	@UiField(provided=true) FlexTable totalizacaoAtividadeFlexTable;
 	private FlexTableUtil totalizacaoAtividadeTableUtil = new FlexTableUtil();
 	@UiField Label totalizacaoAtividadeTotal;
-	
+
 	@UiField ListBox tipoAtividadeListBox;
-	
+
 	@UiField ListBox atividadeListBox;
-	
+
 	@UiField DialogBox editaTotalizacaoDialogBox;
 	@UiField TextBox nomeTotalizacaoTextBox;
 	@UiField Button salvarTotalizacaoButton;
 	@UiField Button fecharTotalizacaoButton;
-	
+
 	@UiField(provided=true) FlexTable encontroFlexTable;
 	private FlexTableUtil encontroTableUtil = new FlexTableUtil();
-	
+
 	//responsavel convite
 	@UiField(provided=true) FlexTable responsavelFlexTable;
 	private FlexTableUtil responsavelTableUtil = new FlexTableUtil();
 	@UiField Label itemResponsavelTotal;
-	
+
 	@UiField(provided = true) SuggestBox casalSuggestBox;
 	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
-	
+
 	//financeiro
 	@UiField(provided=true) NumberTextBox valorAfilhadoNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorPadrinhoNumberTextBox;
@@ -117,102 +123,102 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 
 	DateTimeFormat dfGlobal = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
 	DateTimeFormat dfGlobalTempo = DateTimeFormat.getFormat("dd-MM-yyyy HH:mm");
-	
+
 	private EncontroVO entidadeEditada;
 	private EncontroPeriodo entidadePeriodoEditado;
 	private EncontroTotalizacaoVO entidadeTotalizacaoVOEditado;
 
 	private List<Atividade> listaAtividade;
-	
+
 	public EncontroView() {
 		criaTabela();
 		criaTabelaResponsavel();
 		criaTabelaPeriodo();
 		criaTabelaTotalizacao();
 		criaTabelaTotalizacaoAtividade();
-		
+
 		casalSuggest.setMinimoCaracteres(2);
 		casalSuggest.setSuggestQuery("casal.porNomeLike");
 		casalSuggestBox = new SuggestBox(casalSuggest);
-		
+
 		afilhadosNumberTextBox = new NumberTextBox(false, false, 5, 5);
 		valorAfilhadoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorPadrinhoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorApoioNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorInscricaoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
-		
+
 		initWidget(uiBinder.createAndBindUi(this));
-		
+
 		tituloFormularioLabel.setText(getDisplayTitle());
-		
+
 		inicioDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM)));
 		inicioDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		fimDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM)));
 		fimDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		dataVencimentoInscricaoDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM)));
 		dataVencimentoInscricaoDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		dataVencimentoDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM)));
 		dataVencimentoDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		inicioPeriodoDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		inicioPeriodoDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
-		
+
 		ListBoxUtil.populate(tipoAtividadeListBox, true, TipoAtividadeEnum.values());
 	}
-	
+
 	private void criaTabela() {
 		encontroFlexTable = new FlexTable();
 		encontroFlexTable.setStyleName("portal-formSmall");
 		encontroTableUtil.initialize(encontroFlexTable);
-		
+
 		encontroTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		encontroTableUtil.addColumn("Nome", "200", HasHorizontalAlignment.ALIGN_LEFT);
 		encontroTableUtil.addColumn("Inicio", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy");
 		encontroTableUtil.addColumn("Fim", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy");
 	}
-	
+
 	private void criaTabelaResponsavel() {
 		responsavelFlexTable = new FlexTable();
 		responsavelFlexTable.setStyleName("portal-formSmall");
 		responsavelTableUtil.initialize(responsavelFlexTable);
-		
+
 		responsavelTableUtil.addColumn("", "20", HasHorizontalAlignment.ALIGN_CENTER);
 		responsavelTableUtil.addColumn("Nome", "250", HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	private void criaTabelaPeriodo() {
 		periodoFlexTable = new FlexTable();
 		periodoFlexTable.setStyleName("portal-formSmall");
 		periodoTableUtil.initialize(periodoFlexTable);
-		
+
 		periodoTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		periodoTableUtil.addColumn("Nome", "150", HasHorizontalAlignment.ALIGN_LEFT);
 		periodoTableUtil.addColumn("Inicio", "120", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 	}
-	
+
 	private void criaTabelaTotalizacao() {
 		totalizacaoFlexTable = new FlexTable();
 		totalizacaoFlexTable.setStyleName("portal-formSmall");
 		totalizacaoTableUtil.initialize(totalizacaoFlexTable);
-		
+
 		totalizacaoTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		totalizacaoTableUtil.addColumn("Nome", null, HasHorizontalAlignment.ALIGN_LEFT);
 		totalizacaoTableUtil.addColumn("Atividades", "50", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.NUMBER, null);
 	}
-	
+
 	private void criaTabelaTotalizacaoAtividade() {
 		totalizacaoAtividadeFlexTable = new FlexTable();
 		totalizacaoAtividadeFlexTable.setStyleName("portal-formSmall");
 		totalizacaoAtividadeTableUtil.initialize(totalizacaoAtividadeFlexTable);
-		
+
 		totalizacaoAtividadeTableUtil.addColumn("", "20", HasHorizontalAlignment.ALIGN_CENTER);
 		totalizacaoAtividadeTableUtil.addColumn("Tipo", "150", HasHorizontalAlignment.ALIGN_LEFT);
 		totalizacaoAtividadeTableUtil.addColumn("Atividade", null, HasHorizontalAlignment.ALIGN_LEFT);
 	}
-	
+
 	@UiHandler("fecharButton")
 	public void fecharButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
@@ -225,32 +231,42 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	public void fecharImageClickHandler(ClickEvent event){
 		presenter.fechar();
 	}
-	
+
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		entidadeEditada.getEncontro().setInicio(inicioDateBox.getValue());
 		entidadeEditada.getEncontro().setFim(fimDateBox.getValue());
 		entidadeEditada.getEncontro().setQuantidadeAfilhados(null);
 		if(afilhadosNumberTextBox.getNumber()!=null){
-			entidadeEditada.getEncontro().setQuantidadeAfilhados(afilhadosNumberTextBox.getNumber().intValue());	
+			entidadeEditada.getEncontro().setQuantidadeAfilhados(afilhadosNumberTextBox.getNumber().intValue());
 		}
 		entidadeEditada.getEncontro().setGrupo(presenter.getGrupoSelecionado());
-		
+
 		if(valorAfilhadoNumberTextBox.getNumber()!=null){
-			entidadeEditada.getEncontro().setValorAfilhado(new BigDecimal(valorAfilhadoNumberTextBox.getNumber().doubleValue()));	
+			entidadeEditada.getEncontro().setValorAfilhado(new BigDecimal(valorAfilhadoNumberTextBox.getNumber().doubleValue()));
 		}
 		if(valorPadrinhoNumberTextBox.getNumber()!=null){
-			entidadeEditada.getEncontro().setValorPadrinho(new BigDecimal(valorPadrinhoNumberTextBox.getNumber().doubleValue()));	
+			entidadeEditada.getEncontro().setValorPadrinho(new BigDecimal(valorPadrinhoNumberTextBox.getNumber().doubleValue()));
 		}
 		if(valorApoioNumberTextBox.getNumber()!=null){
-			entidadeEditada.getEncontro().setValorApoio(new BigDecimal(valorApoioNumberTextBox.getNumber().doubleValue()));	
+			entidadeEditada.getEncontro().setValorApoio(new BigDecimal(valorApoioNumberTextBox.getNumber().doubleValue()));
 		}
 		if(valorInscricaoNumberTextBox.getNumber()!=null){
-			entidadeEditada.getEncontro().setValorInscricao(new BigDecimal(valorInscricaoNumberTextBox.getNumber().doubleValue()));	
+			entidadeEditada.getEncontro().setValorInscricao(new BigDecimal(valorInscricaoNumberTextBox.getNumber().doubleValue()));
 		}
 		entidadeEditada.getEncontro().setDataMaximaPagamento(dataVencimentoDateBox.getValue());
 		entidadeEditada.getEncontro().setDataPagamentoInscricao(dataVencimentoInscricaoDateBox.getValue());
-		
+
+
+		if (publicaPlanilhaCheckBox.getValue()) entidadeEditada.getEncontro().setDataPublicacaoPlanilha(new Date());
+		else entidadeEditada.getEncontro().setDataPublicacaoPlanilha(null);
+		if (publicaOrganogramaCheckBox.getValue()) entidadeEditada.getEncontro().setDataPublicacaoOrganograma(new Date());
+		else entidadeEditada.getEncontro().setDataPublicacaoOrganograma(null);
+		if (publicaRestauranteCheckBox.getValue()) entidadeEditada.getEncontro().setDataPublicacaoRestaurante(new Date());
+		else entidadeEditada.getEncontro().setDataPublicacaoRestaurante(null);
+		if (publicaHotelariaCheckBox.getValue()) entidadeEditada.getEncontro().setDataPublicacaoHotelaria(new Date());
+		else entidadeEditada.getEncontro().setDataPublicacaoHotelaria(null);
+
 		presenter.salvar(entidadeEditada);
 	}
 	private void edita(Encontro encontro) {
@@ -270,7 +286,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			presenter.getVO(encontro);
 		}
 	}
-	
+
 	public void limpaCampos(){
 		afilhadosNumberTextBox.setNumber(null);
 		inicioDateBox.setValue(null);
@@ -282,7 +298,11 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		itemResponsavelTotal.setText(null);
 		responsavelTableUtil.clearData();
 		casalSuggestBox.setValue(null);
-		
+		publicaPlanilhaCheckBox.setValue(false);
+		publicaOrganogramaCheckBox.setValue(false);
+		publicaRestauranteCheckBox.setValue(false);
+		publicaHotelariaCheckBox.setValue(false);
+
 		valorAfilhadoNumberTextBox.setNumber(null);
 		valorPadrinhoNumberTextBox.setNumber(null);
 		valorApoioNumberTextBox.setNumber(null);
@@ -295,7 +315,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		inicioDateBox.setValue(encontroVO.getEncontro().getInicio());
 		fimDateBox.setValue(encontroVO.getEncontro().getFim());
 		afilhadosNumberTextBox.setNumber(encontroVO.getEncontro().getQuantidadeAfilhados());
-		
+
 		if(encontroVO.getEncontro().getValorAfilhado()!=null){
 			valorAfilhadoNumberTextBox.setNumber(encontroVO.getEncontro().getValorAfilhado());
 		}
@@ -310,12 +330,17 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		dataVencimentoInscricaoDateBox.setValue(encontroVO.getEncontro().getDataPagamentoInscricao());
 		dataVencimentoDateBox.setValue(encontroVO.getEncontro().getDataMaximaPagamento());
-		
+
+		publicaPlanilhaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoPlanilha()!=null);
+		publicaOrganogramaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoOrganograma()!=null);
+		publicaRestauranteCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoRestaurante()!=null);
+		publicaHotelariaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoHotelaria()!=null);
+
 		populaPeriodos();
 		populaTotalizacoes();
 		populaResponsaveis();
 	}
-	
+
 	@Override
 	public String getDisplayTitle() {
 		return "Cadastro de Encontros";
@@ -335,7 +360,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		HorizontalPanel hp;
 		for (final Encontro encontro: lista) {
 			Object dados[] = new Object[4];
-			
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -359,9 +384,9 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			hp.setSpacing(1);
 			hp.add(editar);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
-			
+
 			dados[1] = encontro.toString();
 			dados[2] = encontro.getInicio()==null?"":dfGlobal.format(encontro.getInicio());
 			dados[3] = encontro.getFim()==null?"":dfGlobal.format(encontro.getFim());
@@ -370,7 +395,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		encontroTableUtil.applyDataRowStyles();
 	}
-	
+
 	@Override
 	public void setVO(EncontroVO encontroVO) {
 		entidadeEditada = encontroVO;
@@ -378,7 +403,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		editaDialogBox.center();
 		editaDialogBox.show();
 	}
-	
+
 	public void populaPeriodos() {
 		LabelTotalUtil.setTotal(itemPeriodoTotal, entidadeEditada.getListaPeriodo().size(), "periodo", "periodos", "");
 		periodoTableUtil.clearData();
@@ -387,7 +412,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		HorizontalPanel hp;
 		for (final EncontroPeriodo encontroPeriodo: entidadeEditada.getListaPeriodo()) {
 			Object dados[] = new Object[3];
-			
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -412,7 +437,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			hp.setSpacing(1);
 			hp.add(editar);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
 			dados[1] = encontroPeriodo.getNome();
 			dados[2] = encontroPeriodo.getInicio()==null?"":dfGlobalTempo.format(encontroPeriodo.getInicio());
@@ -421,7 +446,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		periodoTableUtil.applyDataRowStyles();
 	}
-	
+
 	//periodos
 	private void editaPeriodo(EncontroPeriodo encontroPeriodo) {
 		limpaCamposPeriodo();
@@ -460,7 +485,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	public void addPeriodoImageClickHandler(ClickEvent event){
 		editaPeriodo(null);
 	}
-	
+
 	//totalizacoes
 	private void editaTotalizacao(EncontroTotalizacaoVO encontroTotalizacaoVO) {
 		limpaCamposTotalizacao();
@@ -505,7 +530,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	public void addTotalizacaoImageClickHandler(ClickEvent event){
 		editaTotalizacao(null);
 	}
-	
+
 	public void populaTotalizacoes() {
 		LabelTotalUtil.setTotal(itemTotalizacaoTotal, entidadeEditada.getListaTotalizacao().size(), "totalização", "totalizações", "a");
 		totalizacaoTableUtil.clearData();
@@ -514,7 +539,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		HorizontalPanel hp;
 		for (final EncontroTotalizacaoVO encontroTotalizacao: entidadeEditada.getListaTotalizacao()) {
 			Object dados[] = new Object[3];
-			
+
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -539,7 +564,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			hp.setSpacing(1);
 			hp.add(editar);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
 			dados[1] = encontroTotalizacao.getEncontroTotalizacao().getNome();
 			dados[2] = encontroTotalizacao.getListaAtividade()==null?"":encontroTotalizacao.getListaAtividade().size();
@@ -548,7 +573,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		totalizacaoTableUtil.applyDataRowStyles();
 	}
-	
+
 	public void populaTotalizacaoAtividades() {
 		LabelTotalUtil.setTotal(totalizacaoAtividadeTotal, entidadeTotalizacaoVOEditado.getListaAtividade(), "atividade", "atividades", "a");
 		totalizacaoAtividadeTableUtil.clearData();
@@ -556,7 +581,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		Image excluir;
 		for (final EncontroTotalizacaoAtividade atividade: entidadeTotalizacaoVOEditado.getListaAtividade()) {
 			Object dados[] = new Object[3];
-			
+
 			excluir = new Image("images/delete.png");
 			excluir.setStyleName("portal-ImageCursor");
 			excluir.addClickHandler(new ClickHandler() {
@@ -568,7 +593,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 					}
 				}
 			});
-			
+
 			dados[0] = excluir;
 			dados[1] = atividade.getTipoAtividade()==null?"Todos":atividade.getTipoAtividade().getNome();
 			dados[2] = atividade.getAtividade()==null?"Todas":atividade.getAtividade().getNome();
@@ -586,7 +611,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			entidadeTotalizacaoVOEditado.setListaAtividade(new ArrayList<EncontroTotalizacaoAtividade>());
 		}
 		for (EncontroTotalizacaoAtividade a : entidadeTotalizacaoVOEditado.getListaAtividade()) {
-			if(a.getAtividade()!=null && a.getAtividade().equals(atividade) && 
+			if(a.getAtividade()!=null && a.getAtividade().equals(atividade) &&
 			   a.getTipoAtividade()!=null && a.getTipoAtividade().equals(tipoAtividade)){
 				Window.alert("Esta atividade já foi adicionada a esta totalização");
 				return;
@@ -605,7 +630,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		ListBoxUtil.populate(atividadeListBox, true, listaAtividade);
 		this.listaAtividade = listaAtividade;
 	}
-	
+
 	public void populaResponsaveis() {
 		LabelTotalUtil.setTotal(itemResponsavelTotal, entidadeEditada.getListaResponsavelConvite().size(), "responsável", "responsáveis", "");
 		responsavelTableUtil.clearData();
@@ -614,7 +639,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		HorizontalPanel hp;
 		for (final EncontroConviteResponsavel responsavel: entidadeEditada.getListaResponsavelConvite()) {
 			Object dados[] = new Object[2];
-			
+
 			excluir = new Image("images/delete.png");
 			excluir.setStyleName("portal-ImageCursor");
 			excluir.addClickHandler(new ClickHandler() {
@@ -630,7 +655,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
 			hp.add(excluir);
-			
+
 			dados[0] = hp;
 			dados[1] = responsavel.getCasal().getApelidos("e");
 			responsavelTableUtil.addRow(dados,row+1);
@@ -638,7 +663,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		responsavelTableUtil.applyDataRowStyles();
 	}
-	
+
 	@UiHandler("adicionaResponsavelButton")
 	public void adicionaResponsavelButtonClickHandler(ClickEvent event){
 		Casal casal = (Casal)ListUtil.getEntidadePorNome(casalSuggest.getListaEntidades(), casalSuggestBox.getValue());

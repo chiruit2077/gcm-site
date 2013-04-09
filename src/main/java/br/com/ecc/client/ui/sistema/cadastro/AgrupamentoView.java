@@ -145,7 +145,7 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoCasalEnum.values());
 		ListBoxUtil.populate(tipoAtividadeListBox, true, TipoAtividadeEnum.values());
-		formularioFlowPanel.setHeight((this.getWindowHeight() - 150) + "px");
+		formularioFlowPanel.setHeight((this.getWindowHeight() - 300) + "px");
 	}
 
 	private void criaTabela() {

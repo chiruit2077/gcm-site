@@ -140,7 +140,7 @@
 													</tr>
 												</table>
 											</g:HTMLPanel>
-											<g:FlowPanel styleName="portal-FlowPanel" height="230px">
+											<g:FlowPanel styleName="portal-FlowPanel" height="100%">
 												<g:FlexTable ui:field="membroFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
 											</g:FlowPanel>
 										</g:VerticalPanel>
