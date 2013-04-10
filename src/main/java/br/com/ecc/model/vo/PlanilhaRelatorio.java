@@ -6,7 +6,7 @@ import java.util.List;
 
 public class PlanilhaRelatorio implements Serializable {
 	private static final long serialVersionUID = -635188537247277536L;
-	
+
 	private Date inicio;
 	private Date fim;
 	private String dia;
@@ -17,6 +17,7 @@ public class PlanilhaRelatorio implements Serializable {
 	private List<String> papel;
 	private List<Boolean> padrinho;
 	private List<Boolean> nos;
+	private List<Boolean> print;
 	private Integer qtdeParticipantes;
 	private String legenda;
 	private Boolean minhaAtividade;
@@ -98,5 +99,11 @@ public class PlanilhaRelatorio implements Serializable {
 	}
 	public void setMinhaAtividade(Boolean minhaAtividade) {
 		this.minhaAtividade = minhaAtividade;
+	}
+	public List<Boolean> getPrint() {
+		return print;
+	}
+	public void setPrint(List<Boolean> print) {
+		this.print = print;
 	}
 }

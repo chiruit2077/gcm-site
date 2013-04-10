@@ -1,5 +1,6 @@
 package br.com.ecc.server.command;
 
+import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.ecc.core.mvp.infra.exception.WebException;
+import br.com.ecc.model.ArquivoDigital;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroAtividade;
@@ -39,12 +41,13 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 
 	private Encontro encontro;
 	private EncontroPeriodo encontroPeriodo;
+	private List<EncontroPeriodo> listaPeriodo;
 	private TipoExibicaoPlanilhaEnum tipoExibicaoPlanilhaEnum;
 	private Usuario usuarioAtual;
 	private Casal casalAtual = null;
 	private Boolean exportaExcel;
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	@Transactional
 	public Integer call() throws Exception {
@@ -66,51 +69,14 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		cmdVO.setEncontro(encontro);
 		EncontroVO encontroVO = cmdVO.call();
 
-		List<EncontroInscricao> lei = new ArrayList<EncontroInscricao>();
-		for (EncontroInscricao ei : encontroVO.getListaInscricao()) {
-			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
-				lei.add(ei);
+		listaPeriodo = encontroVO.getListaPeriodo();
+
+		Collections.sort(listaPeriodo, new Comparator<EncontroPeriodo>() {
+			@Override
+			public int compare(EncontroPeriodo o1, EncontroPeriodo o2) {
+				return o1.getInicio().compareTo(o2.getInicio());
 			}
-		}
-		encontroVO.setListaInscricao(lei);
-
-		EncontroPlanilhaCommand cmdEP = injector.getInstance(EncontroPlanilhaCommand.class);
-		cmdEP.setEncontro(encontro);
-		cmdEP.setEncontroPeriodo(encontroPeriodo);
-		cmdEP.setTipoExibicaoPlanilhaEnum(tipoExibicaoPlanilhaEnum);
-		cmdEP.setUsuarioAtual(usuarioAtual);
-		List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao = cmdEP.call();
-
-		Date inicio = null, fim = new Date(3000,1,1);
-		if(encontroPeriodo!=null){
-			boolean achou = false;
-			inicio = encontroPeriodo.getInicio();
-			for (EncontroPeriodo ep : encontroVO.getListaPeriodo()) {
-				if(ep.getId().equals(encontroPeriodo.getId())){
-					achou = true;
-				}
-				if(achou && ep.getInicio().after(inicio)){
-					fim = ep.getInicio();
-					break;
-				}
-			}
-		}
-
-		List<EncontroAtividade> listaEncontroAtividade = new ArrayList<EncontroAtividade>();
-		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
-		if(tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.COMPLETA)){
-			listaEncontroInscricao = encontroVO.getListaInscricao();
-			listaEncontroAtividade = encontroVO.getListaEncontroAtividade();
-		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.MINHA_ATIVIDADE_MINHA_COLUNA)){
-			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual(encontroVO);
-			listaEncontroAtividade = montaListaEncontroAtividadeusuarioAtual(listaEncontroAtividadeInscricao);
-		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.MINHA_ATIVIDADE_TODAS_COLUNAS)){
-			listaEncontroInscricao = encontroVO.getListaInscricao();
-			listaEncontroAtividade = montaListaEncontroAtividadeusuarioAtual(listaEncontroAtividadeInscricao);
-		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.TODAS_ATIVIDADES_MINHA_COLUNA)){
-			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual(encontroVO);
-			listaEncontroAtividade = encontroVO.getListaEncontroAtividade();
-		}
+		});
 
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("datas", dfEncontro.format(encontroVO.getEncontro().getInicio()));
@@ -125,22 +91,43 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 			legenda += papel.getSigla() + ": " + papel.getNome();
 		}
 		parametros.put("legenda", legenda);
+		if (encontroVO.getEncontro() != null) {
+			ArquivoDigital logo = (ArquivoDigital)em.find(ArquivoDigital.class, getEncontro().getGrupo().getIdArquivoDigital());
+			if (logo != null) {
+				parametros.put("LOGO", new ByteArrayInputStream(logo.getDados()));
+			}
+		}
+
+
+		EncontroPlanilhaCommand cmdEP = injector.getInstance(EncontroPlanilhaCommand.class);
+		cmdEP.setEncontro(encontro);
+		cmdEP.setEncontroPeriodo(encontroPeriodo);
+		cmdEP.setTipoExibicaoPlanilhaEnum(tipoExibicaoPlanilhaEnum);
+		cmdEP.setUsuarioAtual(usuarioAtual);
+		List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao = cmdEP.call();
+
+		List<EncontroAtividade> listaEncontroAtividade = new ArrayList<EncontroAtividade>();
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		if(tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.COMPLETA)){
+			listaEncontroInscricao = montaListaEncontroInscricaoSemExterno(encontroVO.getListaInscricao());
+			listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(encontroVO.getListaEncontroAtividade());
+		} else if(tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.COMPLETAEXTERNO)){
+			listaEncontroInscricao = montaListaEncontroInscricao(encontroVO.getListaInscricao());
+			listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(encontroVO.getListaEncontroAtividade());
+		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.MINHA_ATIVIDADE_MINHA_COLUNA)){
+			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual(encontroVO.getListaInscricao());
+			listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(montaListaEncontroAtividadeUsuarioAtual(listaEncontroAtividadeInscricao));
+		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.MINHA_ATIVIDADE_TODAS_COLUNAS)){
+			listaEncontroInscricao = encontroVO.getListaInscricao();
+			listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(montaListaEncontroAtividadeUsuarioAtual(listaEncontroAtividadeInscricao));
+		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.TODAS_ATIVIDADES_MINHA_COLUNA)){
+			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual(encontroVO.getListaInscricao());
+			listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(encontroVO.getListaEncontroAtividade());
+		}
 
 		List<PlanilhaRelatorio> dadosRelatorio = new ArrayList<PlanilhaRelatorio>();
 		PlanilhaRelatorio planilhaRelatorio;
 
-		Collections.sort(listaEncontroAtividadeInscricao, new Comparator<EncontroAtividadeInscricao>() {
-			@Override
-			public int compare(EncontroAtividadeInscricao o1, EncontroAtividadeInscricao o2) {
-				String s1, s2;
-				if(o1.getEncontroInscricao().getCasal()!=null) s1 = o1.getEncontroInscricao().getCasal().getApelidos(null);
-				else s1 = o1.getEncontroInscricao().getPessoa().getApelido();
-
-				if(o2.getEncontroInscricao().getCasal()!=null) s2 = o2.getEncontroInscricao().getCasal().getApelidos(null);
-				else s2 = o2.getEncontroInscricao().getPessoa().getApelido();
-				return s1.compareTo(s2);
-			}
-		});
 		Collections.sort(listaEncontroAtividade, new Comparator<EncontroAtividade>() {
 			@Override
 			public int compare(EncontroAtividade o1, EncontroAtividade o2) {
@@ -161,107 +148,79 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 				return n1.compareTo(n2.toString());
 			}
 		});
-		EncontroPeriodo periodo = null, periodoAnterior = null;
-		if(encontroVO.getListaPeriodo().size()>0){
-			periodo = encontroVO.getListaPeriodo().get(0);
-			periodoAnterior = periodo;
-		}
 
-		String tipo = "";
-		boolean achou = false, ok = false, padrinho = false, nos = false, minhaAtividade=false;
+		boolean achou = false, padrinho = false, nos = false, minhaAtividade=false;
 		int i=0;
 		int participantes = 0;
 		for (EncontroAtividade atividade : listaEncontroAtividade) {
-			ok = true;
-			if(encontroPeriodo!=null){
-				ok = false;
-				if(atividade.getInicio().compareTo(inicio)>=0 && atividade.getInicio().compareTo(fim)<0){
-					ok = true;
-				}
-			}
-			if(ok){
-				if(periodo!=null){
-					for (EncontroPeriodo p : encontroVO.getListaPeriodo()) {
-						if(atividade.getInicio().compareTo(p.getInicio())>=0){
-							periodo = p;
-						}
+			planilhaRelatorio = new PlanilhaRelatorio();
+			planilhaRelatorio.setPeriodo(getPeriodo(atividade));
+			planilhaRelatorio.setTipoAtividade(atividade.getTipoAtividade().getNome());
+			planilhaRelatorio.setAtividade(atividade.getAtividade().getNome());
+			planilhaRelatorio.setDia(dfDia.format(atividade.getInicio()).toUpperCase());
+			planilhaRelatorio.setInicio(atividade.getInicio());
+			planilhaRelatorio.setFim(atividade.getFim());
+			planilhaRelatorio.setParticipante(new ArrayList<String>());
+			planilhaRelatorio.setPapel(new ArrayList<String>());
+			planilhaRelatorio.setNos(new ArrayList<Boolean>());
+			planilhaRelatorio.setPrint(new ArrayList<Boolean>());
+			planilhaRelatorio.setPadrinho(new ArrayList<Boolean>());
+			i=0;
+			participantes = 0;
+			minhaAtividade = false;
+			for (EncontroInscricao inscricao : listaEncontroInscricao) {
+				padrinho = false;
+				nos = false;
+				if(inscricao.getCasal()!=null){
+					planilhaRelatorio.getParticipante().add(inscricao.getCasal().getApelidos("e"));
+					if(inscricao.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
+						padrinho = true;
 					}
-					if(encontroPeriodo==null && periodoAnterior!=null && !periodo.getId().equals(periodoAnterior.getId())){
-						periodoAnterior = periodo;
+					if(inscricao.getCasal().getId().equals(casalAtual.getId())){
+						nos = true;
 					}
-				}
-				if(atividade.getTipoAtividade()!=null){
-					tipo = atividade.getTipoAtividade().getNome();
 				} else {
-					tipo="";
-				}
-				planilhaRelatorio = new PlanilhaRelatorio();
-				//TODO VERFICAR JUAN
-				if (periodo != null ) planilhaRelatorio.setPeriodo(periodo.getNome());
-				planilhaRelatorio.setTipoAtividade(tipo);
-				planilhaRelatorio.setAtividade(atividade.getAtividade().getNome());
-				planilhaRelatorio.setDia(dfDia.format(atividade.getInicio()).toUpperCase());
-				planilhaRelatorio.setInicio(atividade.getInicio());
-				planilhaRelatorio.setFim(atividade.getFim());
-				planilhaRelatorio.setParticipante(new ArrayList<String>());
-				planilhaRelatorio.setPapel(new ArrayList<String>());
-				planilhaRelatorio.setNos(new ArrayList<Boolean>());
-				planilhaRelatorio.setPadrinho(new ArrayList<Boolean>());
-				i=0;
-				participantes = 0;
-				minhaAtividade = false;
-				for (EncontroInscricao inscricao : listaEncontroInscricao) {
-					padrinho = false;
-					nos = false;
-					if(inscricao.getCasal()!=null){
-						planilhaRelatorio.getParticipante().add(inscricao.getCasal().getApelidos("e"));
-						if(inscricao.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
-							padrinho = true;
-						}
-						if(inscricao.getCasal().getId().equals(casalAtual.getId())){
-							nos = true;
-						}
-					} else {
-						planilhaRelatorio.getParticipante().add(inscricao.getPessoa().getApelido());
-						if(inscricao.getPessoa().getId().equals(usuarioAtual.getPessoa().getId())){
-							nos = true;
-						}
+					planilhaRelatorio.getParticipante().add(inscricao.getPessoa().getApelido());
+					if(inscricao.getPessoa().getId().equals(usuarioAtual.getPessoa().getId())){
+						nos = true;
 					}
-					achou = false;
-					for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
-						if(eai.getEncontroAtividade().getId().equals(atividade.getId()) &&
-						   eai.getEncontroInscricao().getId().equals(inscricao.getId())){
-							planilhaRelatorio.getPapel().add(eai.getPapel().getSigla());
+				}
+				achou = false;
+				for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao ) {
+					if(eai.getEncontroAtividade().getId().equals(atividade.getId()) &&
+							eai.getEncontroInscricao().getId().equals(inscricao.getId())){
+						planilhaRelatorio.getPapel().add(eai.getPapel().getSigla());
 
-							if(inscricao.getCasal()!=null && inscricao.getCasal().getId().equals(casalAtual.getId())){
-								minhaAtividade = true;
-							} else if(inscricao.getPessoa()!=null && inscricao.getPessoa().getId().equals(usuarioAtual.getPessoa().getId())){
-								minhaAtividade = true;
-							}
-							achou = true;
-							break;
+						if(inscricao.getCasal()!=null && inscricao.getCasal().getId().equals(casalAtual.getId())){
+							minhaAtividade = true;
+						} else if(inscricao.getPessoa()!=null && inscricao.getPessoa().getId().equals(usuarioAtual.getPessoa().getId())){
+							minhaAtividade = true;
 						}
+						achou = true;
+						break;
 					}
-					if(!achou){
-						planilhaRelatorio.getPapel().add(null);
-					} else {
-						participantes++;
-					}
-					planilhaRelatorio.getPadrinho().add(padrinho);
-					planilhaRelatorio.getNos().add(nos);
-					i++;
 				}
-				while(i<70){
-					planilhaRelatorio.getParticipante().add(null);
+				if(!achou){
 					planilhaRelatorio.getPapel().add(null);
-					planilhaRelatorio.getPadrinho().add(false);
-					planilhaRelatorio.getNos().add(false);
-					i++;
+				} else {
+					participantes++;
 				}
-				planilhaRelatorio.setMinhaAtividade(minhaAtividade);
-				planilhaRelatorio.setQtdeParticipantes(participantes);
-				dadosRelatorio.add(planilhaRelatorio);
+				planilhaRelatorio.getPadrinho().add(padrinho);
+				planilhaRelatorio.getNos().add(nos);
+				planilhaRelatorio.getPrint().add(true);
+				i++;
 			}
+			while(i<71){
+				planilhaRelatorio.getParticipante().add(null);
+				planilhaRelatorio.getPapel().add(null);
+				planilhaRelatorio.getPadrinho().add(false);
+				planilhaRelatorio.getNos().add(false);
+				planilhaRelatorio.getPrint().add(false);
+				i++;
+			}
+			planilhaRelatorio.setMinhaAtividade(minhaAtividade);
+			planilhaRelatorio.setQtdeParticipantes(participantes);
+			dadosRelatorio.add(planilhaRelatorio);
 		}
 		if(dadosRelatorio.size()>0){
 			ImprimirCommand cmd = injector.getInstance(ImprimirCommand.class);
@@ -277,7 +236,71 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		}
 	}
 
-	private List<EncontroAtividade> montaListaEncontroAtividadeusuarioAtual(List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao) {
+	private String getPeriodo(EncontroAtividade atividade) {
+		if(encontroPeriodo!=null){
+			return encontroPeriodo.getNome();
+		}
+		else{
+			for (EncontroPeriodo ep : listaPeriodo) {
+				if(atividade.getInicio().after(ep.getInicio()) || atividade.getInicio().equals(ep.getInicio())){
+					return ep.getNome();
+				}
+			}
+			return "TODOS";
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public List<EncontroAtividade> montaListaAtividadesPorPeriodoSelecionado(List<EncontroAtividade> listaEncontroAtividade){
+		List<EncontroAtividade> listaEncontroAtividadePeriodo = new ArrayList<EncontroAtividade>();
+		if(encontroPeriodo!=null){
+			Date inicio = null, fim = new Date(3000,1,1);
+			boolean achou = false;
+			inicio = encontroPeriodo.getInicio();
+			for (EncontroPeriodo ep : listaPeriodo) {
+				if(ep.getId().equals(encontroPeriodo.getId())){
+					achou = true;
+				}
+				if(achou && ep.getInicio().after(inicio)){
+					fim = ep.getInicio();
+					break;
+				}
+			}
+
+			for (EncontroAtividade ea : listaEncontroAtividade) {
+				if (ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
+					listaEncontroAtividadePeriodo.add(ea);
+				}
+			}
+			return listaEncontroAtividadePeriodo;
+
+		}else{
+			return listaEncontroAtividade;
+		}
+	}
+
+	private List<EncontroInscricao> montaListaEncontroInscricaoSemExterno(List<EncontroInscricao> listaInscricao) {
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao encontroInscricao : listaInscricao) {
+			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
+				listaEncontroInscricao.add(encontroInscricao);
+			}
+		}
+		return listaEncontroInscricao;
+	}
+
+	private List<EncontroInscricao> montaListaEncontroInscricao(List<EncontroInscricao> listaInscricao) {
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao encontroInscricao : listaInscricao) {
+			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
+				listaEncontroInscricao.add(encontroInscricao);
+			}
+		}
+		return listaEncontroInscricao;
+	}
+
+
+	private List<EncontroAtividade> montaListaEncontroAtividadeUsuarioAtual(List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao) {
 		List<EncontroAtividade> listaAtividades = new ArrayList<EncontroAtividade>();
 		for (EncontroAtividadeInscricao eai : listaEncontroAtividadeInscricao) {
 			if(casalAtual!=null){
@@ -293,9 +316,9 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		return listaAtividades;
 	}
 
-	private List<EncontroInscricao> montaListaEncontroInscricaoUsuarioAtual(EncontroVO encontroVO) {
+	private List<EncontroInscricao> montaListaEncontroInscricaoUsuarioAtual(List<EncontroInscricao> listInscricao) {
 		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
-		for (EncontroInscricao encontroInscricao : encontroVO.getListaInscricao()) {
+		for (EncontroInscricao encontroInscricao : listInscricao) {
 			if(encontroInscricao.getCasal()!=null){
 				if(encontroInscricao.getCasal().getId().equals(casalAtual.getId())){
 					listaEncontroInscricao.add(encontroInscricao);
