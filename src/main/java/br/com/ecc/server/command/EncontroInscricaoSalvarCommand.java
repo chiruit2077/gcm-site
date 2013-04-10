@@ -62,13 +62,22 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			}
 		} else {
 			if (usuarioAtual.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
-				if (encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario() != null &&
+				if (encontroInscricaoVO.getEncontroInscricao().getCasal() != null &&
+					encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario() != null &&
 					encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario().getDataEnvio() != null &&
 					encontroInscricaoVO.getEncontroInscricao().getDataPrenchimentoFicha()==null &&
 					encontroInscricaoVO.getEncontroInscricao().getCasal().getAtualizacaoCadastro() != null &&
 					encontroInscricaoVO.getEncontroInscricao().getCasal().getAtualizacaoCadastro().after(getEncontroInscricaoVO().getEncontroInscricao().getMensagemDestinatario().getDataEnvio())){
 					encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(getEncontroInscricaoVO().getEncontroInscricao().getCasal().getAtualizacaoCadastro());
 				}
+				if (encontroInscricaoVO.getEncontroInscricao().getPessoa() != null &&
+						encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario() != null &&
+						encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario().getDataEnvio() != null &&
+						encontroInscricaoVO.getEncontroInscricao().getDataPrenchimentoFicha()==null &&
+						encontroInscricaoVO.getEncontroInscricao().getPessoa().getDataAtualizacao() != null &&
+						encontroInscricaoVO.getEncontroInscricao().getPessoa().getDataAtualizacao().after(getEncontroInscricaoVO().getEncontroInscricao().getMensagemDestinatario().getDataEnvio())){
+						encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(getEncontroInscricaoVO().getEncontroInscricao().getPessoa().getDataAtualizacao());
+					}
 				if (encontroInscricaoVO.getMarcaFichaPreenchida() && encontroInscricaoVO.getEncontroInscricao().getDataPrenchimentoFicha()==null)
 					encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(new Date());
 			}

@@ -17,7 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.shared.DateTimeFormat;
 
 @Entity
 @SequenceGenerator(name="SQ_ENCONTRO", sequenceName="SQ_ENCONTRO")

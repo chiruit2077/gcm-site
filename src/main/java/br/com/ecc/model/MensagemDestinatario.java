@@ -28,6 +28,7 @@ import javax.persistence.Version;
 		query="delete from MensagemDestinatario u where u.mensagem = :mensagem and u not in (:lista)")
 })
 public class MensagemDestinatario extends _WebBaseEntity {
+	
 	private static final long serialVersionUID = 2307179341978434950L;
 
 	@Id

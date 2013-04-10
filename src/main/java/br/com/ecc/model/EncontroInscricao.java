@@ -83,6 +83,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 			  "   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " )
 })
 public class EncontroInscricao extends _WebBaseEntity {
+
 	private static final long serialVersionUID = 7982370030939310990L;
 
 	@Id
