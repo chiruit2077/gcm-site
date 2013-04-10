@@ -5,6 +5,7 @@
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.wrap.text" value="false"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -1471,9 +1472,6 @@
 			</band>
 		</groupFooter>
 	</group>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
 	<pageHeader>
 		<band height="79" splitType="Stretch">
 			<frame>
@@ -1522,7 +1520,7 @@
 					<rightPen lineWidth="0.5" lineColor="#828181"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Arial" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Atividade]]></text>
 			</staticText>
@@ -1536,7 +1534,7 @@
 					<rightPen lineWidth="0.5" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Arial" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Fim]]></text>
 			</staticText>
@@ -1550,7 +1548,7 @@
 					<rightPen lineWidth="0.5" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Arial" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Início]]></text>
 			</staticText>
@@ -1564,7 +1562,7 @@
 					<rightPen lineWidth="0.5" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Arial" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Dia]]></text>
 			</staticText>
@@ -1578,7 +1576,7 @@
 					<rightPen lineWidth="0.5" lineColor="#828181"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Arial" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Tipo]]></text>
 			</staticText>
@@ -4224,7 +4222,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+					<font fontName="Arial" size="6" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{atividade}]]></textFieldExpression>
 			</textField>
@@ -4238,7 +4236,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+					<font fontName="Arial" size="6" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inicio}]]></textFieldExpression>
 			</textField>
@@ -4252,7 +4250,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+					<font fontName="Arial" size="6" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fim}]]></textFieldExpression>
 			</textField>
@@ -4266,7 +4264,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+					<font fontName="Arial" size="6" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dia}]]></textFieldExpression>
 			</textField>
@@ -4280,7 +4278,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#828181"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica"/>
+					<font fontName="Arial" size="6" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipoAtividade}]]></textFieldExpression>
 			</textField>
@@ -4299,7 +4297,7 @@
 				<textFieldExpression><![CDATA[$F{qtdeParticipantes}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f3e98898-c6dd-4de6-b3df-5c4a422a332a" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="222" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="f3e98898-c6dd-4de6-b3df-5c4a422a332a" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="222" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(0)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4315,7 +4313,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(0)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="973bba38-b630-4688-a2b6-b5fdb6ac375f" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="232" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="973bba38-b630-4688-a2b6-b5fdb6ac375f" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="232" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(1)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4331,7 +4329,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(1)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a18675ce-d5d0-4c8e-adbf-8aa4d3dbd512" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="242" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="a18675ce-d5d0-4c8e-adbf-8aa4d3dbd512" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="242" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(2)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4347,7 +4345,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(2)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f3a76c3e-0389-4535-aced-678165e4badd" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="252" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="f3a76c3e-0389-4535-aced-678165e4badd" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="252" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(3)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4363,7 +4361,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(3)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="88d52f65-2fe5-4659-988c-ccb5a1e4adf0" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="262" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="88d52f65-2fe5-4659-988c-ccb5a1e4adf0" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="262" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(4)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4379,7 +4377,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(4)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5d235d5f-511f-4993-8359-f40bf610710c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="272" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="5d235d5f-511f-4993-8359-f40bf610710c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="272" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(5)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4395,7 +4393,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(5)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="21872710-0156-48ca-b72b-60c9cc23b1cd" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="282" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="21872710-0156-48ca-b72b-60c9cc23b1cd" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="282" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(6)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4411,7 +4409,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(6)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="866bbb7c-aae6-4645-98ae-27ccf802b214" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="292" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="866bbb7c-aae6-4645-98ae-27ccf802b214" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="292" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(7)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4427,7 +4425,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(7)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e12d86a3-cca2-4fc2-9205-38dd5d6f43c8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="302" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="e12d86a3-cca2-4fc2-9205-38dd5d6f43c8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="302" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(8)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4443,7 +4441,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(8)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8ee801e4-17a8-4876-a60e-99f9b433216f" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="312" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="8ee801e4-17a8-4876-a60e-99f9b433216f" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="312" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(9)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4459,7 +4457,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(9)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f8691d57-792a-48fe-af12-bedeb19a4493" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="322" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="f8691d57-792a-48fe-af12-bedeb19a4493" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="322" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(10)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4475,7 +4473,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(10)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9d963763-6ff5-4034-8eb2-85998480ea7c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="332" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="9d963763-6ff5-4034-8eb2-85998480ea7c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="332" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(11)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4491,7 +4489,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(11)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="4f3d0df0-a57a-42a3-85a3-62251a6bf108" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="342" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="4f3d0df0-a57a-42a3-85a3-62251a6bf108" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="342" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(12)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4507,7 +4505,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(12)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="30d0bea0-5f66-4b98-9b35-eaab5f236439" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="352" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="30d0bea0-5f66-4b98-9b35-eaab5f236439" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="352" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(13)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4523,7 +4521,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(13)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="77a9cdb2-a8b7-4391-808f-dc5e9f886219" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="362" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="77a9cdb2-a8b7-4391-808f-dc5e9f886219" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="362" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(14)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4539,7 +4537,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(14)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5d769164-bcb6-4e6b-8158-85526d105646" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="372" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="5d769164-bcb6-4e6b-8158-85526d105646" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="372" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(15)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4555,7 +4553,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(15)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a2104cea-c9d0-410b-a83e-d9bb4428c7ad" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="382" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="a2104cea-c9d0-410b-a83e-d9bb4428c7ad" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="382" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(16)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4571,7 +4569,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(16)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9d88fec0-a02e-4dcb-8635-dd53177941bf" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="392" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="9d88fec0-a02e-4dcb-8635-dd53177941bf" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="392" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(17)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4587,7 +4585,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(17)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="42e86ab5-ca2b-4adf-820a-5959a26fe853" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="402" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="42e86ab5-ca2b-4adf-820a-5959a26fe853" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="402" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(18)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4603,7 +4601,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(18)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="37e538e9-24fd-42f8-a19c-f5694e4d2e17" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="412" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="37e538e9-24fd-42f8-a19c-f5694e4d2e17" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="412" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(19)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4619,7 +4617,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(19)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="4416a53f-6db8-4f90-912d-1b5447b6224c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="422" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="4416a53f-6db8-4f90-912d-1b5447b6224c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="422" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(20)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4635,7 +4633,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(20)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="fba15934-dd2f-47ce-aa24-ddcbfbaaa9c6" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="432" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="fba15934-dd2f-47ce-aa24-ddcbfbaaa9c6" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="432" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(21)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4651,7 +4649,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(21)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8a00d6e3-c6fa-4faa-b455-561377785a5c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="442" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="8a00d6e3-c6fa-4faa-b455-561377785a5c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="442" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(22)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4667,7 +4665,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(22)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8f93a95f-95dc-4799-95b9-bffa1ff19af3" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="452" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="8f93a95f-95dc-4799-95b9-bffa1ff19af3" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="452" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(23)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4683,7 +4681,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(23)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="95a73bf0-17d1-48d1-b06b-5cedd858a09a" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="462" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="95a73bf0-17d1-48d1-b06b-5cedd858a09a" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="462" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(24)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4699,7 +4697,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(24)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e13de15a-d245-4c96-87fe-8c5aa3b0e200" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="472" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="e13de15a-d245-4c96-87fe-8c5aa3b0e200" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="472" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(25)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4715,7 +4713,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(25)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="919244a2-8034-4d8e-8dda-0a1a15692265" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="482" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="919244a2-8034-4d8e-8dda-0a1a15692265" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="482" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(26)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4731,7 +4729,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(26)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="cf047aab-bbb8-48a3-9a5d-004b6fc00671" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="492" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="cf047aab-bbb8-48a3-9a5d-004b6fc00671" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="492" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(27)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4747,7 +4745,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(27)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="b595338a-69c5-483c-8f0b-4b26d3cc8474" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="502" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="b595338a-69c5-483c-8f0b-4b26d3cc8474" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="502" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(28)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4763,7 +4761,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(28)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="2b1de892-3f19-41b8-adbd-883c76925f65" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="512" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="2b1de892-3f19-41b8-adbd-883c76925f65" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="512" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(29)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4779,7 +4777,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(29)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="74f0730c-62e2-420c-8598-ed2286959be8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="522" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="74f0730c-62e2-420c-8598-ed2286959be8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="522" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(30)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4795,7 +4793,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(30)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="1ac90e4f-3a23-41e8-a2f9-0a40e7e4ec5a" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="532" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="1ac90e4f-3a23-41e8-a2f9-0a40e7e4ec5a" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="532" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(31)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4811,7 +4809,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(31)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8f6b2fd6-95a0-4862-ad81-ed69375cc0c7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="542" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="8f6b2fd6-95a0-4862-ad81-ed69375cc0c7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="542" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(32)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4827,7 +4825,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(32)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9225d26a-4922-4f3f-b492-12c1a7ac9de7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="552" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="9225d26a-4922-4f3f-b492-12c1a7ac9de7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="552" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(33)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4843,7 +4841,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(33)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="916aa765-c4c7-4963-b3f8-3d58b91e56a9" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="562" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="916aa765-c4c7-4963-b3f8-3d58b91e56a9" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="562" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(34)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4859,7 +4857,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(34)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a06221d3-0dbb-4e35-b406-e0168dca0600" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="572" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="a06221d3-0dbb-4e35-b406-e0168dca0600" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="572" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(35)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4875,7 +4873,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(35)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f4f42537-543d-4b7c-8d61-37b6e0da2631" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="582" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="f4f42537-543d-4b7c-8d61-37b6e0da2631" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="582" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(36)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4891,7 +4889,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(36)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a717a364-5a82-4f7a-b69c-eb90d348caf7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="592" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="a717a364-5a82-4f7a-b69c-eb90d348caf7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="592" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(37)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4907,7 +4905,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(37)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="618e7521-7611-4872-a914-d92a9ac5b8c8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="602" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="618e7521-7611-4872-a914-d92a9ac5b8c8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="602" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(38)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4923,7 +4921,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(38)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="d236a825-2aab-45dd-989d-19dc88f63aab" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="612" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="d236a825-2aab-45dd-989d-19dc88f63aab" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="612" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(39)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4939,7 +4937,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(39)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="593b1fbb-f0cc-4ed0-839f-5cfd7c34744b" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="622" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="593b1fbb-f0cc-4ed0-839f-5cfd7c34744b" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="622" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(40)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4955,7 +4953,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(40)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="f0656e6b-7a57-41a6-8c20-7b7c82847bc0" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="632" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="f0656e6b-7a57-41a6-8c20-7b7c82847bc0" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="632" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(41)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4971,7 +4969,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(41)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="400263aa-1850-464b-8fbc-63490306ba32" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="642" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="400263aa-1850-464b-8fbc-63490306ba32" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="642" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(42)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -4987,7 +4985,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(42)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="144b0258-1fdb-45b0-8ed8-604a4f16ea1c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="652" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="144b0258-1fdb-45b0-8ed8-604a4f16ea1c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="652" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(43)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5003,7 +5001,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(43)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="e96e5729-7cfb-4981-be7b-701b94078a15" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="662" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="e96e5729-7cfb-4981-be7b-701b94078a15" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="662" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(44)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5019,7 +5017,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(44)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="88d92c26-6a6a-473d-8295-94abbcba8253" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="672" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="88d92c26-6a6a-473d-8295-94abbcba8253" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="672" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(45)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5035,7 +5033,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(45)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3073d4fe-421e-4b70-84cb-b26e90ca22a1" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="682" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="3073d4fe-421e-4b70-84cb-b26e90ca22a1" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="682" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(46)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5051,7 +5049,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(46)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="17c103d2-472c-4cce-bc60-5fbb18c867b8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="692" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="17c103d2-472c-4cce-bc60-5fbb18c867b8" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="692" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(47)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5067,7 +5065,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(47)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="c24fe243-c4b6-4a1f-aa06-7de7b5aea231" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="702" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="c24fe243-c4b6-4a1f-aa06-7de7b5aea231" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="702" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(48)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5083,7 +5081,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(48)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="88bfb80a-0031-4786-ad4f-f9628f65475b" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="712" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="88bfb80a-0031-4786-ad4f-f9628f65475b" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="712" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(49)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5099,7 +5097,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(49)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="414fa758-93d9-4333-8221-f2dfc8ae6371" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="722" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="414fa758-93d9-4333-8221-f2dfc8ae6371" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="722" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(50)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5115,7 +5113,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(50)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="224297a9-508d-466e-b2c9-d470bc87792c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="732" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="224297a9-508d-466e-b2c9-d470bc87792c" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="732" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(51)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5131,7 +5129,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(51)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="12e0e114-2779-429b-966f-9a92eb358676" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="742" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="12e0e114-2779-429b-966f-9a92eb358676" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="742" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(52)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5147,7 +5145,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(52)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="900bbe86-a60a-4715-89dc-e527599d2fb7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="752" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="900bbe86-a60a-4715-89dc-e527599d2fb7" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="752" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(53)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5163,7 +5161,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(53)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="4645428b-4efe-4d27-af6d-a47508857c62" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="762" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="4645428b-4efe-4d27-af6d-a47508857c62" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="762" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(54)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5179,7 +5177,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(54)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="772" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="772" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(55)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5195,7 +5193,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(55)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="782" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="782" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(56)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5211,7 +5209,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(56)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="792" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="792" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(57)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5227,7 +5225,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(57)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="802" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="802" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(58)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5243,7 +5241,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(58)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="812" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="812" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(59)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5259,7 +5257,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(59)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="822" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="822" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(60)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5275,7 +5273,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(60)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="832" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="832" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(61)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5291,7 +5289,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(61)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="842" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="842" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(62)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5307,7 +5305,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(62)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="852" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="852" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(63)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5323,7 +5321,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(63)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="862" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="862" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(64)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5339,7 +5337,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(64)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="872" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="872" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(65)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5355,7 +5353,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(65)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="882" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="882" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(66)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5371,7 +5369,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(66)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="892" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="892" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(67)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5387,7 +5385,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(67)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="902" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="902" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(68)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5403,7 +5401,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(68)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="912" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="912" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(69)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5419,7 +5417,7 @@
 				<textFieldExpression><![CDATA[$F{papel}.get(69)]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="922" y="0" width="10" height="10" backcolor="#FFFFFF">
+				<reportElement uuid="97528519-b4c5-4391-839f-ed6118114c5e" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="922" y="0" width="10" height="10">
 					<printWhenExpression><![CDATA[$F{print}.get(70)]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="0">
@@ -5440,12 +5438,9 @@
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="10" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="7ef26f5c-6d5d-4cd3-a940-6242295e13cc" key="textField-7" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="0" width="932" height="10" backcolor="#FFFFFF"/>
+				<reportElement uuid="600fdd55-c7dc-4c3c-9eed-1037d240e019" key="textField-7" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="932" height="20" backcolor="#FFFFFF"/>
 				<box leftPadding="2" rightPadding="0">
 					<pen lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
@@ -5453,11 +5448,11 @@
 					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{legenda}]]></textFieldExpression>
 			</textField>
 		</band>
-	</summary>
+	</pageFooter>
 </jasperReport>

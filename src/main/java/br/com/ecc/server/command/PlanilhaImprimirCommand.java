@@ -149,6 +149,13 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 			}
 		});
 
+		Collections.sort(listaPeriodo, new Comparator<EncontroPeriodo>() {
+			@Override
+			public int compare(EncontroPeriodo o1, EncontroPeriodo o2) {
+				return -1*o1.getInicio().compareTo(o2.getInicio());
+			}
+		});
+
 		boolean achou = false, padrinho = false, nos = false, minhaAtividade=false;
 		int i=0;
 		int participantes = 0;
