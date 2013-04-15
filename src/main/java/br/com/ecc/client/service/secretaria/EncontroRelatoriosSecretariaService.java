@@ -5,6 +5,7 @@ import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
+import br.com.ecc.model.EncontroRestaurante;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -17,6 +18,8 @@ public interface EncontroRelatoriosSecretariaService extends RemoteService {
 	public Integer imprimeRelatorioAgrupamento(Encontro encontro, Agrupamento agrupamento) throws Exception;
 	public Integer imprimeRelatorioOnibus(Encontro encontro, Agrupamento agrupamento) throws Exception;
 	public Integer imprimeRelatorioAlbum(Encontro encontro) throws Exception;
+	public Integer imprimeRelatorioMalas(Encontro encontro) throws Exception;
+	public Integer imprimeRelatorioCamarim(EncontroRestaurante restaurante) throws Exception;
 	public Integer imprimeRelatorioNecessidadesEspeciais(Encontro encontro) throws Exception;
 	public Integer imprimeRelatorioDiabeticosVegetarianos(Encontro encontro) throws Exception;
 	public Integer imprimeRelatorioHotelAfilhados(Encontro encontro) throws Exception;

@@ -126,6 +126,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 				menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
 				menuItem.getSubMenu().addItem("Organogramas do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_ENCONTRO); } });
 				menuItem.getSubMenu().addItem("Distribuição dos Organogramas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_DISTRIBUICAO); } });
+				menuItem.getSubMenu().addItem("Monitor de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_MONITOR); } });
 			}else{
 				if (publicacaoplanilha)
 					menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });

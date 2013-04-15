@@ -21,7 +21,7 @@ import br.com.ecc.model.tipo.TipoEncontroQuartoEnum;
 @NamedQueries({
 		@NamedQuery(name="encontroHotelQuarto.porEncontroHotel", query="select u from EncontroHotelQuarto u where u.encontroHotel = :encontrohotel order by u.quarto.ordem "),
 		@NamedQuery(name="encontroHotelQuarto.porListaInscricao", query="select u from EncontroHotelQuarto u where u.encontroInscricao1 in (:encontroinscricao1) order by u.quarto.ordem "),
-		@NamedQuery(name="encontroHotelQuarto.porEncontroHotelListaInscricao", query="select u from EncontroHotelQuarto u where u.encontroHotel = :encontrohotel and u.encontroInscricao1 in (:encontroinscricao1) order by u.quarto.ordem "),
+		@NamedQuery(name="encontroHotelQuarto.porEncontroHotelListaInscricao", query="select u from EncontroHotelQuarto u where u.encontroInscricao1 in (:encontroinscricao1) order by u.quarto.ordem "),
 		@NamedQuery(name="encontroHotelQuarto.porEncontroHotelInscricao",
 			query="select u from EncontroHotelQuarto u where u.encontroHotel.encontro = :encontro and encontroInscricao1 = :encontroinscricao1 "),
 		@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao1",

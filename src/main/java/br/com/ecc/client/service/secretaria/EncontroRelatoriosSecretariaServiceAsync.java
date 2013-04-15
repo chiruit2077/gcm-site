@@ -5,6 +5,7 @@ import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
+import br.com.ecc.model.EncontroRestaurante;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -24,4 +25,6 @@ public interface EncontroRelatoriosSecretariaServiceAsync {
 	void imprimeRelatorioRecepcaoInicial(Encontro encontro, AsyncCallback<Integer> callback);
 	void imprimeRelatorioAfilhadosPadrinhos(Encontro encontro, AsyncCallback<Integer> callback);
 	void imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo, EncontroInscricao inscricao, AsyncCallback<Integer> callback);
+	void imprimeRelatorioMalas(Encontro encontro, AsyncCallback<Integer> callback);
+	void imprimeRelatorioCamarim(EncontroRestaurante restaurante, AsyncCallback<Integer> callback);
 }

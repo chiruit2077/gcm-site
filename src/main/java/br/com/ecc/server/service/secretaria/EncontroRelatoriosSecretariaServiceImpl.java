@@ -22,6 +22,7 @@ import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroHotelQuarto;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
+import br.com.ecc.model.EncontroRestaurante;
 import br.com.ecc.model.Pessoa;
 import br.com.ecc.model.tipo.TipoArquivoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
@@ -96,6 +97,33 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		cmdRelatorio.setReport("listagemalbum.jrxml");
 		cmdRelatorio.setNome("listagemalbum");
 		cmdRelatorio.setTitulo("LISTAGEM DE ENTREGA DOS ÁLBUNS");
+		return cmdRelatorio.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer imprimeRelatorioMalas(Encontro encontro) throws Exception {
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
+		cmd.addParameter("encontro", encontro);
+		List<EncontroInscricao> lista = cmd.call();
+		List<Casal> listaCasal = new ArrayList<Casal>();
+		for (EncontroInscricao encontroInscricao : lista) {
+			listaCasal.add(encontroInscricao.getCasal());
+		}
+		Collections.sort(listaCasal, new Comparator<Casal>() {
+			@Override
+			public int compare(Casal o1, Casal o2) {
+				return o1.getEle().getApelido().compareTo(o2.getEle().getApelido());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaCasal);
+		cmdRelatorio.setEncontro(encontro);
+		cmdRelatorio.setReport("listagemmalas.jrxml");
+		cmdRelatorio.setNome("listagemalas");
+		cmdRelatorio.setTitulo("LISTAGEM DE ENTREGA DE MALAS");
 		return cmdRelatorio.call();
 	}
 
@@ -266,6 +294,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		List<EncontroInscricao> lista = cmd.call();
 		GetEntityListCommand cmdQuarto = injector.getInstance(GetEntityListCommand.class);
 		cmdQuarto.setNamedQuery("encontroHotelQuarto.porEncontroHotelListaInscricao");
+		cmdQuarto.addParameter("encontro", lista);
 		cmdQuarto.addParameter("encontroinscricao1", lista);
 		List<EncontroHotelQuarto> listaQuarto = cmdQuarto.call();
 
@@ -649,6 +678,43 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		cmdRelatorio.setNome("listagemhotelencontristas");
 		cmdRelatorio.setTitulo("LISTAGEM ENCONTRISTAS HOTEL - " + encontroHotel);
 		return cmdRelatorio.call();
+	}
+
+	@Override
+	public Integer imprimeRelatorioCamarim(EncontroRestaurante restaurante)
+			throws Exception {
+		/*GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontroInscricao.porEncontroEncontristas");
+		cmd.addParameter("encontro", encontroHotel.getEncontro());
+		List<EncontroInscricao> lista = cmd.call();
+		GetEntityListCommand cmdQuarto = injector.getInstance(GetEntityListCommand.class);
+		cmdQuarto.setNamedQuery("encontroHotelQuarto.porEncontroHotelListaInscricao");
+		cmdQuarto.addParameter("encontrohotel", encontroHotel);
+		cmdQuarto.addParameter("encontroinscricao1", lista);
+		List<EncontroHotelQuarto> listaQuarto = cmdQuarto.call();
+
+		Collections.sort(listaQuarto, new Comparator<EncontroHotelQuarto>() {
+			@Override
+			public int compare(EncontroHotelQuarto o1, EncontroHotelQuarto o2) {
+				String num1 = ("0000000000" + o1.getQuarto().getNumeroQuarto());
+				num1 = num1.substring(num1.length() - 10, num1.length());
+				String num2 = ("0000000000" + o2.getQuarto().getNumeroQuarto());
+				num2 = num2.substring(num2.length() - 10, num2.length());
+				if (o1.getEncontroHotel().equals(o2.getEncontroHotel()))
+					return num1.compareTo(num2);
+				else
+					return o1.getEncontroHotel().getId().compareTo(o2.getEncontroHotel().getId());
+			}
+		});
+
+		EncontroRelatoriosSecretariaImprimirCommand cmdRelatorio = injector.getInstance(EncontroRelatoriosSecretariaImprimirCommand.class);
+		cmdRelatorio.setListaObjects(listaQuarto);
+		cmdRelatorio.setEncontro(encontroHotel.getEncontro());
+		cmdRelatorio.setReport("listagemhotelencontristas.jrxml");
+		cmdRelatorio.setNome("listagemhotelencontristas");
+		cmdRelatorio.setTitulo("LISTAGEM ENCONTRISTAS HOTEL - " + encontroHotel);
+		return cmdRelatorio.call();*/
+		return null;
 	}
 
 	@Override

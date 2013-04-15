@@ -13,6 +13,7 @@ import br.com.ecc.model.Agrupamento;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
+import br.com.ecc.model.EncontroRestaurante;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -51,8 +52,13 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton relatorioHotelEncontristasRadioButton;
 	@UiField RadioButton relatorioRecepcaoInicialRadioButton;
 	@UiField RadioButton relatorioRecepcaoFinalRadioButton;
+	@UiField RadioButton relatorioPlanilhaAtividadesRadioButton;
 	@UiField RadioButton relatorioPlanilhaRadioButton;
+	@UiField RadioButton excelPlanilhaRadioButton;
+	@UiField RadioButton relatorioMalasRadioButton;
+	@UiField RadioButton relatorioCamarimRadioButton;
 	@UiField ListBox hoteisListBox;
+	@UiField ListBox restaurantesListBox;
 	@UiField ListBox agrupamentosListBox;
 	@UiField ListBox agrupamentosCrachaAgrupamentoListBox;
 	@UiField ListBox agrupamentosOnibusListBox;
@@ -65,6 +71,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 
 	private List<Agrupamento> agrupamentos;
 	private List<EncontroHotel> encontroHoteis;
+	private List<EncontroRestaurante> encontroRestaurantes;
 	private List<EncontroPeriodo> listaPeriodo;
 
 	public EncontroRelatoriosSecretariaView() {
@@ -121,6 +128,8 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 		}
 		else if (relatorioAlbumRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMALBUM);
+		else if (relatorioMalasRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMMALAS);
 		else if (relatorioOracaoAmorRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMORACAOAMOR);
 		else if (relatorioNecessidadesEspeciaisRadioButton.getValue())
@@ -137,17 +146,49 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 				Window.alert("Escolha um Hotel");
 
 		}
+		else if (relatorioCamarimRadioButton.getValue()){
+			EncontroRestaurante encontroRestaurante = (EncontroRestaurante) ListBoxUtil.getItemSelected(restaurantesListBox, getEncontroRestaurantes());
+			if (encontroRestaurante != null)
+				presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMCAMARIM,encontroRestaurante);
+			else
+				Window.alert("Escolha um Restaurante");
+
+		}
 		else if (relatorioRecepcaoInicialRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMRECEPCAOINICIAL);
 		else if (relatorioRecepcaoFinalRadioButton.getValue())
 			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMRECEPCAOFINAL);
-		else if (relatorioPlanilhaRadioButton.getValue()){
+		else if (relatorioPlanilhaAtividadesRadioButton.getValue()){
 			EncontroPeriodo periodo = (EncontroPeriodo) ListBoxUtil.getItemSelected(periodoListBox, getListaPeriodo());
 			EncontroInscricao inscricao = (EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue());
 			List<Object> params = new ArrayList<Object>();
 			params.add(inscricao);
 			params.add(periodo);
-			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.LISTAGEMPLANILHA, params);
+			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.LISTAGEMPLANILHAATIVIDADES, params);
+		}
+		else if (relatorioCamarimRadioButton.getValue()){
+			EncontroRestaurante encontroRestaurante = (EncontroRestaurante) ListBoxUtil.getItemSelected(restaurantesListBox, getEncontroRestaurantes());
+			if (encontroRestaurante != null)
+				presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMCAMARIM,encontroRestaurante);
+			else
+				Window.alert("Escolha um Restaurante");
+
+		}
+		else if (relatorioPlanilhaRadioButton.getValue()){
+			EncontroPeriodo periodo = (EncontroPeriodo) ListBoxUtil.getItemSelected(periodoListBox, getListaPeriodo());
+			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.PLANILHAPDF, periodo);
+		}
+		else if (excelPlanilhaRadioButton.getValue()){
+			EncontroPeriodo periodo = (EncontroPeriodo) ListBoxUtil.getItemSelected(periodoListBox, getListaPeriodo());
+			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.PLANILHAEXCEL, periodo);
+		}
+		else if (relatorioCamarimRadioButton.getValue()){
+			EncontroRestaurante encontroRestaurante = (EncontroRestaurante) ListBoxUtil.getItemSelected(restaurantesListBox, getEncontroRestaurantes());
+			if (encontroRestaurante != null)
+				presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMCAMARIM,encontroRestaurante);
+			else
+				Window.alert("Escolha um Restaurante");
+
 		}
 		else
 			Window.alert("Escolha uma Opção!");
@@ -243,6 +284,26 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 		params.put("encontro", presenter.getEncontroSelecionado());
 		inscricaoSuggest1.setQueryParams(params);
 		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+	}
+
+
+	public List<EncontroRestaurante> getEncontroRestaurantes() {
+		return encontroRestaurantes;
+	}
+
+
+	public void setEncontroRestaurantes(List<EncontroRestaurante> encontroRestaurantes) {
+		this.encontroRestaurantes = encontroRestaurantes;
+	}
+
+
+	@Override
+	public void setListaRestaurantes(List<EncontroRestaurante> result) {
+		setEncontroRestaurantes(result);
+		ListBoxUtil.populate(restaurantesListBox, false, result);
+		if (encontroRestaurantes.size()>0)
+			restaurantesListBox.setSelectedIndex(0);
+
 	}
 
 }

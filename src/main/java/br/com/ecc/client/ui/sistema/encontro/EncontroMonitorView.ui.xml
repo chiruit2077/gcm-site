@@ -1,0 +1,106 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:dp="urn:import:com.google.gwt.user.datepicker.client" >
+  <ui:style>
+  		.panelHtml{
+			font-family: Tahoma, Arial, Verdana;
+			background-color: white;
+			width: 100%;
+			height: 100%;
+			padding: 2px;
+			overflow-y: hidden;
+			overflow-x: hidden;
+			table-layout:fixed;
+		}
+		.panelAtividade1{
+			border: 20px solid green;
+			background-color: black;
+			color: white;
+			font-size: large;
+			font-weight: bold;
+			padding: 2px;
+			overflow-y: hidden;
+			overflow-x: hidden;
+		}
+		.panelAtividade2{
+			border: 10px solid yellow;
+			background-color: lightgray;
+			padding: 2px;
+		}
+		.panelAtividade3{
+			border: 10px solid blue;
+			background-color: gray;
+			padding: 2px;
+		}
+		.panelAtividade4{
+			border: 10px solid black;
+			background-color: lightgray;
+			padding: 2px;
+		}
+		.formulario{
+			font-family: Tahoma, Arial, Verdana;
+			overflow-y: hidden;
+			overflow-x: hidden;
+		}
+  </ui:style>
+
+  	<g:VerticalPanel horizontalAlignment="center" width="100%" height="100%" styleName="{style.formulario}">
+		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
+			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
+				<tr>
+					<td>
+				  		<g:Label ui:field="tituloFormularioLabel" width="100%"/>
+					</td>
+					<td width="100px" align="right">
+						<g:Label text="Delay:"/>
+						<g:TextBox ui:field="delayTextBox" width="20px"/>
+					</td>
+					<td width="30px" align="right">
+						<g:Image ui:field="fecharImage" url="images/close.png" styleName="portal-ImageCursor" width="20px"/>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+		<!-- <g:HTMLPanel ui:field="htmlPanel" styleName="{style.panelHtml}">
+			<table cellpadding="3" cellspacing="3" align="center" height="100%" width="100%">
+				<tr>
+					<td>
+				  		<g:VerticalPanel ui:field="atividadePanel" styleName="{style.panelAtividade1}" horizontalAlignment="center">
+						</g:VerticalPanel>
+					</td>
+					<td>
+						<g:VerticalPanel ui:field="paralelaAtividadePanel" styleName="{style.panelAtividade3}" horizontalAlignment="center">
+						</g:VerticalPanel>
+					</td>
+				</tr>
+				<tr>
+					<td>
+				  		<g:VerticalPanel ui:field="atividadeProximaPanel" styleName="{style.panelAtividade2}" horizontalAlignment="center">
+						</g:VerticalPanel>
+					</td>
+					<td>
+						<g:VerticalPanel ui:field="proximasAtividadesPanel" styleName="{style.panelAtividade4}" horizontalAlignment="center">
+						</g:VerticalPanel>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel> -->
+		<g:VerticalPanel ui:field="htmlPanel" styleName="{style.panelHtml}">
+				<g:HorizontalPanel ui:field="row1Panel">
+					<g:VerticalPanel ui:field="atividadePanel" styleName="{style.panelAtividade1}" horizontalAlignment="center">
+						</g:VerticalPanel>
+					<g:VerticalPanel ui:field="paralelaAtividadePanel" styleName="{style.panelAtividade3}" horizontalAlignment="center">
+						</g:VerticalPanel>
+				</g:HorizontalPanel>
+				<g:HorizontalPanel ui:field="row2Panel">
+					<g:VerticalPanel ui:field="atividadeProximaPanel" styleName="{style.panelAtividade2}" horizontalAlignment="center">
+						</g:VerticalPanel>
+					<g:VerticalPanel ui:field="proximasAtividadesPanel" styleName="{style.panelAtividade4}" horizontalAlignment="center">
+						</g:VerticalPanel>
+				</g:HorizontalPanel>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>

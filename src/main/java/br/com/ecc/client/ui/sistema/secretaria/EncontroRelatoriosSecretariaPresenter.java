@@ -13,8 +13,12 @@ import br.com.ecc.client.service.cadastro.EncontroService;
 import br.com.ecc.client.service.cadastro.EncontroServiceAsync;
 import br.com.ecc.client.service.cadastro.GrupoService;
 import br.com.ecc.client.service.cadastro.GrupoServiceAsync;
+import br.com.ecc.client.service.encontro.EncontroAtividadeInscricaoService;
+import br.com.ecc.client.service.encontro.EncontroAtividadeInscricaoServiceAsync;
 import br.com.ecc.client.service.encontro.EncontroHotelService;
 import br.com.ecc.client.service.encontro.EncontroHotelServiceAsync;
+import br.com.ecc.client.service.encontro.EncontroRestauranteService;
+import br.com.ecc.client.service.encontro.EncontroRestauranteServiceAsync;
 import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaService;
 import br.com.ecc.client.service.secretaria.EncontroRelatoriosSecretariaServiceAsync;
 import br.com.ecc.client.util.DownloadResourceHelper;
@@ -24,7 +28,9 @@ import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroHotel;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
+import br.com.ecc.model.EncontroRestaurante;
 import br.com.ecc.model.Grupo;
+import br.com.ecc.model.tipo.TipoExibicaoPlanilhaEnum;
 import br.com.ecc.model.vo.AgrupamentoVO;
 
 import com.google.gwt.core.client.GWT;
@@ -37,6 +43,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		void init();
 		void setListaAgrupamentos(List<Agrupamento> result);
 		void setListaHoteis(List<EncontroHotel> result);
+		void setListaRestaurantes(List<EncontroRestaurante> result);
 		void setListaPeriodos(List<EncontroPeriodo> result);
 		void setSuggestInscricao();
 	}
@@ -56,7 +63,11 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		LISTAGEMHOTELENCONTRISTAS,
 		LISTAGEMRECEPCAOINICIAL,
 		LISTAGEMRECEPCAOFINAL,
-		LISTAGEMPLANILHA;
+		LISTAGEMMALAS,
+		LISTAGEMCAMARIM,
+		LISTAGEMPLANILHAATIVIDADES,
+		PLANILHAPDF,
+		PLANILHAEXCEL;
 	}
 
 	public EncontroRelatoriosSecretariaPresenter(Display display, WebResource portalResource) {
@@ -64,6 +75,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 	}
 
 	EncontroRelatoriosSecretariaServiceAsync service = GWT.create(EncontroRelatoriosSecretariaService.class);
+	EncontroAtividadeInscricaoServiceAsync serviceEncontroInscricaoAtividade = GWT.create(EncontroAtividadeInscricaoService.class);
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
 
@@ -108,6 +120,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 						buscaAgrupamentos();
 						buscaHoteis();
 						buscaPeriodos();
+						buscaRestaurantes();
 						break;
 					}
 				}
@@ -147,6 +160,17 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 			@Override
 			protected void success(List<EncontroPeriodo> lista) {
 				getDisplay().setListaPeriodos(lista);
+
+			}
+		});
+	}
+
+	public void buscaRestaurantes() {
+		EncontroRestauranteServiceAsync servicoEncontroRestaurante = GWT.create(EncontroRestauranteService.class);
+		servicoEncontroRestaurante.lista(getEncontroSelecionado(), new WebAsyncCallback<List<EncontroRestaurante>>(getDisplay()) {
+			@Override
+			protected void success(List<EncontroRestaurante> lista) {
+				getDisplay().setListaRestaurantes(lista);
 
 			}
 		});
@@ -235,6 +259,14 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMMALAS)){
+			service.imprimeRelatorioMalas(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+				}
+			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMORACAOAMOR)){
 			service.imprimeRelatorioOracaoAmor(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
@@ -278,7 +310,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					}
 				} );
 			}
-		}else if (opcao.equals(ProcessaOpcao.LISTAGEMPLANILHA)){
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMPLANILHAATIVIDADES)){
 			EncontroPeriodo periodo = null;
 			EncontroInscricao inscricao = null;
 			if (object instanceof List){
@@ -300,6 +332,42 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
 				}
 			} );
+		}else if (opcao.equals(ProcessaOpcao.PLANILHAPDF)){
+			EncontroPeriodo periodo = null;
+			if (object instanceof EncontroPeriodo){
+				periodo = (EncontroPeriodo) object;
+			}
+			getDisplay().showWaitMessage(true);
+			serviceEncontroInscricaoAtividade.imprimePlanilha(
+					encontroSelecionado,
+					periodo,
+					TipoExibicaoPlanilhaEnum.COMPLETA,
+					false,
+					new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idRelatorio) {
+					DownloadResourceHelper.showReport(idRelatorio, getDisplay().getDisplayTitle(), "");
+					getDisplay().showWaitMessage(false);
+				}
+			});
+		}else if (opcao.equals(ProcessaOpcao.PLANILHAEXCEL)){
+			EncontroPeriodo periodo = null;
+			if (object instanceof EncontroPeriodo){
+				periodo = (EncontroPeriodo) object;
+			}
+			getDisplay().showWaitMessage(true);
+			serviceEncontroInscricaoAtividade.imprimePlanilha(
+					encontroSelecionado,
+					periodo,
+					TipoExibicaoPlanilhaEnum.COMPLETA,
+					true,
+					new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idRelatorio) {
+					DownloadResourceHelper.showReport(idRelatorio, getDisplay().getDisplayTitle(), "");
+					getDisplay().showWaitMessage(false);
+				}
+			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMRECEPCAOINICIAL)){
 			service.imprimeRelatorioRecepcaoInicial(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override

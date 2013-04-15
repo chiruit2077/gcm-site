@@ -13,7 +13,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PresenterShow {
-	
+
 	@SuppressWarnings("rawtypes")
 	public static void showPresenter(StateHistory state, final VerticalPanel contentPortlet, final Presenter presenter ) {
 		if(contentPortlet!=null){
@@ -24,7 +24,7 @@ public class PresenterShow {
 			@Override
 			public void finished(Presenter presenterInterno) {
 				BaseView display = (BaseView) presenterInterno.getDisplay();
-				//contentPortlet.setTitle(display.getDisplayTitle());
+				contentPortlet.setTitle(display.getDisplayTitle());
 				contentPortlet.add(display.asWidget());
 				for (PresenterCodeEnum presenterEnum : PresenterCodeEnum.values()) {
 					String pname = presenterEnum.getPresenter().toString();
