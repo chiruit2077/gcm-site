@@ -37,7 +37,7 @@ public class EncontroRestaurante extends _WebBaseEntity {
 
 	@Override
 	public String toString() {
-		return restaurante.getNome();
+		return getRestaurante().getNome();
 	}
 	public Integer getId() {
 		return id;
@@ -77,7 +77,7 @@ public class EncontroRestaurante extends _WebBaseEntity {
 	public Restaurante getRestaurante() {
 		return restaurante;
 	}
-	public void setRestuarante(Restaurante restaurante) {
+	public void setRestaurante(Restaurante restaurante) {
 		this.restaurante = restaurante;
 	}
 }

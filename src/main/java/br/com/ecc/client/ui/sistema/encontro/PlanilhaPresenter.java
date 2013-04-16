@@ -1,6 +1,5 @@
 package br.com.ecc.client.ui.sistema.encontro;
 
-import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.event.ExecutaMenuEvent;
@@ -53,7 +52,6 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	EncontroAtividadeServiceAsync serviceEncontroAtividade = GWT.create(EncontroAtividadeService.class);
 	EncontroAtividadeInscricaoServiceAsync serviceEncontroInscricaoAtividade = GWT.create(EncontroAtividadeInscricaoService.class);
-	EncontroServiceAsync serviceEncontro = GWT.create(EncontroService.class);
 
 	private List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao;
 	private List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricaoFull;
@@ -339,27 +337,4 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 		this.papelPadrinho = papelPadrinho;
 	}
 
-	public void gravapublicacaoPlanilha() {
-		getEncontroVO().getEncontro().setDataPublicacaoPlanilha(new Date());
-		final Encontro encontro = getEncontroVO().getEncontro();
-		serviceEncontro.salvaVO(getEncontroVO(), new WebAsyncCallback<Void>(getDisplay()) {
-			@Override
-			public void success(Void resposta) {
-				getDadosEncontroVO(encontro);
-				buscaDadosPlanilha();
-			}
-		});
-	}
-
-	public void excluiPublicacaoPlanilha() {
-		getEncontroVO().getEncontro().setDataPublicacaoPlanilha(null);
-		final Encontro encontro = getEncontroVO().getEncontro();
-		serviceEncontro.salvaVO(getEncontroVO(), new WebAsyncCallback<Void>(getDisplay()) {
-			@Override
-			public void success(Void resposta) {
-				getDadosEncontroVO(encontro);
-				buscaDadosPlanilha();
-			}
-		});
-	}
 }

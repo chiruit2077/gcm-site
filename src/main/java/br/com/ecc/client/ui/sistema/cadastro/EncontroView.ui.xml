@@ -170,6 +170,7 @@
 					</g:VerticalPanel>
 					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
 						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="copiaButton" visible="false">Copia Configurações do Ultimo Encontro</g:Button>
 							<g:Button ui:field="salvarButton">Salvar</g:Button>
 							<g:Button ui:field="fecharButton">Cancelar</g:Button>
 						</g:HorizontalPanel>

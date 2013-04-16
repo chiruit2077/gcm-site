@@ -80,7 +80,7 @@ public class EncontroRestauranteView extends BaseView<EncontroRestaurantePresent
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
 		Restaurante restaurante = (Restaurante) ListBoxUtil.getItemSelected(restauranteListBox, presenter.getListaRestaurantes());
-		entidadeEditada.setRestuarante(restaurante);
+		entidadeEditada.setRestaurante(restaurante);
 		presenter.salvar(entidadeEditada);
 	}
 	private void edita(EncontroRestaurante restaurante) {

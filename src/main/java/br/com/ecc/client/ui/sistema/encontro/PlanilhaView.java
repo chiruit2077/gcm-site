@@ -2472,14 +2472,4 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		ListBoxUtil.populate(planilhaAtividadeListBox, true, listaAtividades);
 	}
 
-	@UiHandler("planilhaPublicacaoGravarButton")
-	public void planilhaPublicacaoGravarButtonClickEvent(ClickEvent event){
-		presenter.gravapublicacaoPlanilha();
-	}
-
-	@UiHandler("planilhaPublicacaaExcluirButton")
-	public void planilhaPublicacaaExcluirButtonClickEvent(ClickEvent event){
-		presenter.excluiPublicacaoPlanilha();
-	}
-
 }

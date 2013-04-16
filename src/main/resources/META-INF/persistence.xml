@@ -6,7 +6,6 @@
 	<persistence-unit name="grpUnit" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<non-jta-data-source>java:comp/env/jdbc/eccDataSource</non-jta-data-source>
-		<!-- <mapping-file>META-INF/persistence-ecc.xml</mapping-file> -->
 
 		<properties>
 			<property name="javax.persistence.validation.mode" value="none" />

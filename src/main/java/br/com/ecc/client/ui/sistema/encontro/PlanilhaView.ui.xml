@@ -66,8 +66,6 @@
 									<g:ListBox ui:field="planilhaAtividadeListBox" width="300px"/>
 									<g:Button ui:field="limparPlanilhaButton">Limpar Toda Planilha</g:Button>
 									<g:Button ui:field="preencherAutomaticoButton">Preencher Planilha Automática</g:Button>
-									<g:Button ui:field="planilhaPublicacaoGravarButton" visible="false">Grava Publicação</g:Button>
-									<g:Button ui:field="planilhaPublicacaaExcluirButton" visible="false">Exclui Publicação</g:Button>
 								</g:HorizontalPanel>
 							</td>
 						</tr>

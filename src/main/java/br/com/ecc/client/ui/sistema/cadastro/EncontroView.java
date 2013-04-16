@@ -30,6 +30,7 @@ import br.com.ecc.model.vo.EncontroVO;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -70,6 +71,8 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
+	@UiField Button copiaButton;
+
 	@UiField CheckBox publicaPlanilhaCheckBox;
 	@UiField CheckBox publicaOrganogramaCheckBox;
 	@UiField CheckBox publicaRestauranteCheckBox;
@@ -127,6 +130,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	private EncontroVO entidadeEditada;
 	private EncontroPeriodo entidadePeriodoEditado;
 	private EncontroTotalizacaoVO entidadeTotalizacaoVOEditado;
+	private Boolean copia = false;
 
 	private List<Atividade> listaAtividade;
 
@@ -267,7 +271,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		if (publicaHotelariaCheckBox.getValue()) entidadeEditada.getEncontro().setDataPublicacaoHotelaria(new Date());
 		else entidadeEditada.getEncontro().setDataPublicacaoHotelaria(null);
 
-		presenter.salvar(entidadeEditada);
+		presenter.salvar(entidadeEditada,copia);
 	}
 	private void edita(Encontro encontro) {
 		limpaCampos();
@@ -276,9 +280,11 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			entidadeEditada.setEncontro(new Encontro());
 			entidadeEditada.setListaCoordenadores(new ArrayList<Casal>());
 			entidadeEditada.setListaEncontroAtividade(new ArrayList<EncontroAtividade>());
+			entidadeEditada.setListaResponsavelConvite(new ArrayList<EncontroConviteResponsavel>());
 			entidadeEditada.setListaInscricao(new ArrayList<EncontroInscricao>());
 			entidadeEditada.setListaPeriodo(new ArrayList<EncontroPeriodo>());
 			entidadeEditada.setListaTotalizacao(new ArrayList<EncontroTotalizacaoVO>());
+			copiaButton.setVisible(true);
 			editaDialogBox.center();
 			editaDialogBox.show();
 			inicioDateBox.setFocus(true);
@@ -287,7 +293,41 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 	}
 
+	@UiHandler("copiaButton")
+	public void copiaButtonClickHandler(ClickEvent event){
+		if (inicioDateBox.getValue() != null){
+			presenter.getVOUltimo();
+		}
+	}
+
+	@UiHandler("inicioDateBox")
+	public void inicioDateBoxValueChangeHandler(ValueChangeEvent<Date> event){
+		if (inicioDateBox.getValue()!=null)
+			fimDateBox.setValue(new Date(inicioDateBox.getValue().getTime()+172800000));
+	}
+
+	@Override
+	public void copiaUltimo(EncontroVO vo) {
+		if (inicioDateBox.getValue() != null){
+			entidadeEditada.getListaPeriodo().clear();
+			long tempoacrescimo = inicioDateBox.getValue().getTime() - vo.getEncontro().getInicio().getTime();
+			List<EncontroPeriodo> listaPeriodo = vo.getListaPeriodo();
+			for (EncontroPeriodo encontroPeriodo : listaPeriodo) {
+				EncontroPeriodo novo = new EncontroPeriodo();
+				novo.setInicio(new Date(encontroPeriodo.getInicio().getTime()+tempoacrescimo));
+				novo.setVersion(0);
+				novo.setNome(encontroPeriodo.getNome());
+				novo.setEncontro(entidadeEditada.getEncontro());
+				entidadeEditada.getListaPeriodo().add(novo);
+			}
+			copia = true;
+			defineCampos(vo);
+		}
+	}
+
+
 	public void limpaCampos(){
+		copia = false;
 		afilhadosNumberTextBox.setNumber(null);
 		inicioDateBox.setValue(null);
 		fimDateBox.setValue(null);
@@ -311,9 +351,24 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		dataVencimentoDateBox.setValue(null);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void defineCampos(EncontroVO encontroVO){
-		inicioDateBox.setValue(encontroVO.getEncontro().getInicio());
-		fimDateBox.setValue(encontroVO.getEncontro().getFim());
+		if (copia){
+			if (inicioDateBox.getValue() != null){
+				dataVencimentoDateBox.setValue(new Date(inicioDateBox.getValue().getYear(),inicioDateBox.getValue().getMonth(), 10));
+			}
+		}else{
+			inicioDateBox.setValue(encontroVO.getEncontro().getInicio());
+			fimDateBox.setValue(encontroVO.getEncontro().getFim());
+			publicaPlanilhaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoPlanilha()!=null);
+			publicaOrganogramaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoOrganograma()!=null);
+			publicaRestauranteCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoRestaurante()!=null);
+			publicaHotelariaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoHotelaria()!=null);
+			dataVencimentoInscricaoDateBox.setValue(encontroVO.getEncontro().getDataPagamentoInscricao());
+			dataVencimentoDateBox.setValue(encontroVO.getEncontro().getDataMaximaPagamento());
+			populaTotalizacoes();
+			populaResponsaveis();
+		}
 		afilhadosNumberTextBox.setNumber(encontroVO.getEncontro().getQuantidadeAfilhados());
 
 		if(encontroVO.getEncontro().getValorAfilhado()!=null){
@@ -328,17 +383,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		if(encontroVO.getEncontro().getValorInscricao()!=null){
 			valorInscricaoNumberTextBox.setNumber(encontroVO.getEncontro().getValorInscricao());
 		}
-		dataVencimentoInscricaoDateBox.setValue(encontroVO.getEncontro().getDataPagamentoInscricao());
-		dataVencimentoDateBox.setValue(encontroVO.getEncontro().getDataMaximaPagamento());
-
-		publicaPlanilhaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoPlanilha()!=null);
-		publicaOrganogramaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoOrganograma()!=null);
-		publicaRestauranteCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoRestaurante()!=null);
-		publicaHotelariaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoHotelaria()!=null);
-
 		populaPeriodos();
-		populaTotalizacoes();
-		populaResponsaveis();
 	}
 
 	@Override
@@ -677,4 +722,5 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		casalSuggestBox.setValue(null);
 		casalSuggestBox.setFocus(true);
 	}
+
 }

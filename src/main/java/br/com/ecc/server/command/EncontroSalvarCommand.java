@@ -17,18 +17,19 @@ import br.com.ecc.model.vo.EncontroVO;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 
-public class EncontroSalvarCommand implements Callable<Void>{
+public class EncontroSalvarCommand implements Callable<EncontroVO>{
 
 	@Inject EntityManager em;
 	private EncontroVO encontroVO;
+	private Boolean copia = false;
 
 	@Override
 	@Transactional
-	public Void call() throws Exception {
+	public EncontroVO call() throws Exception {
 		Query q;
 
 		encontroVO.setEncontro(em.merge(encontroVO.getEncontro()));
-		
+
 		//periodos
 		List<EncontroPeriodo> novaLista = new ArrayList<EncontroPeriodo>();
 		if(encontroVO.getListaPeriodo()!=null){
@@ -49,12 +50,13 @@ public class EncontroSalvarCommand implements Callable<Void>{
 			q.executeUpdate();
 		}
 		if(encontroVO.getListaPeriodo()!=null){
-			for (EncontroPeriodo encontroPeriodo : encontroVO.getListaPeriodo()) {
-				encontroPeriodo.setEncontro(encontroVO.getEncontro());
-				encontroPeriodo = em.merge(encontroPeriodo);
+			for (int i = 0; i < encontroVO.getListaPeriodo().size(); i++) {
+				EncontroPeriodo ep = encontroVO.getListaPeriodo().get(i);
+				ep.setEncontro(encontroVO.getEncontro());
+				encontroVO.getListaPeriodo().set(i, em.merge(ep));
 			}
 		}
-		
+
 		//totalizações
 		List<EncontroTotalizacao> novaListaTotalizacao = new ArrayList<EncontroTotalizacao>();
 		if(encontroVO.getListaTotalizacao()!=null){
@@ -84,10 +86,12 @@ public class EncontroSalvarCommand implements Callable<Void>{
 			q.executeUpdate();
 		}
 		if(encontroVO.getListaTotalizacao()!=null){
-			for (EncontroTotalizacaoVO encontroTotalizacao : encontroVO.getListaTotalizacao()) {
+			for (int i = 0; i < encontroVO.getListaTotalizacao().size(); i++) {
+				EncontroTotalizacaoVO encontroTotalizacao = encontroVO.getListaTotalizacao().get(i);
 				encontroTotalizacao.getEncontroTotalizacao().setEncontro(encontroVO.getEncontro());
 				encontroTotalizacao.setEncontroTotalizacao(em.merge(encontroTotalizacao.getEncontroTotalizacao()));
-				
+				encontroVO.getListaTotalizacao().set(i,encontroTotalizacao);
+
 				//participantes
 				List<EncontroTotalizacaoAtividade> novaListaTotalizacaoAtividade = new ArrayList<EncontroTotalizacaoAtividade>();
 				if(encontroTotalizacao.getListaAtividade()!=null){
@@ -108,14 +112,15 @@ public class EncontroSalvarCommand implements Callable<Void>{
 					q.executeUpdate();
 				}
 				if(encontroTotalizacao.getListaAtividade()!=null){
-					for (EncontroTotalizacaoAtividade eai : encontroTotalizacao.getListaAtividade()) {
+					for (int j = 0; j < encontroTotalizacao.getListaAtividade().size(); j++) {
+						EncontroTotalizacaoAtividade eai = encontroTotalizacao.getListaAtividade().get(j);
 						eai.setEncontroTotalizacao(encontroTotalizacao.getEncontroTotalizacao());
-						em.merge(eai);
+						encontroTotalizacao.getListaAtividade().set(j, em.merge(eai));
 					}
 				}
 			}
 		}
-		
+
 		//responsaveis
 		List<EncontroConviteResponsavel> novaListaResponsavel = new ArrayList<EncontroConviteResponsavel>();
 		if(encontroVO.getListaResponsavelConvite()!=null){
@@ -136,13 +141,13 @@ public class EncontroSalvarCommand implements Callable<Void>{
 			q.executeUpdate();
 		}
 		if(encontroVO.getListaResponsavelConvite()!=null){
-			for (EncontroConviteResponsavel responsavelPeriodo : encontroVO.getListaResponsavelConvite()) {
+			for (int j = 0; j < encontroVO.getListaResponsavelConvite().size(); j++) {
+				EncontroConviteResponsavel responsavelPeriodo = encontroVO.getListaResponsavelConvite().get(j);
 				responsavelPeriodo.setEncontro(encontroVO.getEncontro());
-				responsavelPeriodo = em.merge(responsavelPeriodo);
+				encontroVO.getListaResponsavelConvite().set(j, em.merge(responsavelPeriodo));
 			}
 		}
-		
-		return null;
+		return encontroVO;
 	}
 
 	public EncontroVO getEncontroVO() {
@@ -151,5 +156,13 @@ public class EncontroSalvarCommand implements Callable<Void>{
 
 	public void setEncontroVO(EncontroVO encontroVO) {
 		this.encontroVO = encontroVO;
+	}
+
+	public Boolean getCopia() {
+		return copia;
+	}
+
+	public void setCopia(Boolean copia) {
+		this.copia = copia;
 	}
 }

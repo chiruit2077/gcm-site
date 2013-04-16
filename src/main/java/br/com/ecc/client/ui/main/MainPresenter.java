@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.PresenterCodeEnum;
+import br.com.ecc.client.core.event.ChangeEncontroEvent;
+import br.com.ecc.client.core.event.ChangeEncontroEventHandler;
+import br.com.ecc.client.core.event.ChangeGrupoEvent;
+import br.com.ecc.client.core.event.ChangeGrupoEventHandler;
 import br.com.ecc.client.core.event.LoggedEvent;
 import br.com.ecc.client.core.event.LoggedEventHandler;
 import br.com.ecc.client.core.event.LoginEvent;
@@ -104,6 +108,22 @@ public class MainPresenter extends BasePresenter<MainPresenter.Display>{
 				getDisplay().wait(event.getWait());
 			}
 		});
+
+		getWebResource().getEventBus().addHandler(ChangeEncontroEvent.TYPE, new ChangeEncontroEventHandler() {
+			@Override
+			public void onChange(ChangeEncontroEvent event) {
+				getDisplay().defineGrupo();
+				getDisplay().defineEncontro();
+			}
+		});
+
+		getWebResource().getEventBus().addHandler(ChangeGrupoEvent.TYPE, new ChangeGrupoEventHandler() {
+			@Override
+			public void onChange(ChangeGrupoEvent event) {
+				getDisplay().defineGrupo();
+			}
+		});
+
 	}
 
 	@Override
