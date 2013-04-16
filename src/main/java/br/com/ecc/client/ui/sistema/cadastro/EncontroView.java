@@ -65,6 +65,8 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	@UiField DateBox inicioDateBox;
 	@UiField DateBox fimDateBox;
 	@UiField(provided=true) NumberTextBox afilhadosNumberTextBox;
+	@UiField(provided=true) NumberTextBox refeicoesNumberTextBox;
+	@UiField(provided=true) NumberTextBox diariasNumberTextBox;
 
 
 	@UiField DialogBox editaDialogBox;
@@ -77,6 +79,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	@UiField CheckBox publicaOrganogramaCheckBox;
 	@UiField CheckBox publicaRestauranteCheckBox;
 	@UiField CheckBox publicaHotelariaCheckBox;
+	@UiField CheckBox encerramentoCheckBox;
 
 	@UiField(provided=true) FlexTable periodoFlexTable;
 	private FlexTableUtil periodoTableUtil = new FlexTableUtil();
@@ -121,6 +124,15 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	@UiField(provided=true) NumberTextBox valorPadrinhoNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorApoioNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorInscricaoNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorApoioSolteiroNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorInscricaoSolteiroNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorDiariaCasalNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorDiariaSolteiroNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorTaxaCasalNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorTaxaCasalApoioNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorTaxaSolteiroNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorAlimentacaoNumberTextBox;
+
 	@UiField DateBox dataVencimentoInscricaoDateBox;
 	@UiField DateBox dataVencimentoDateBox;
 
@@ -146,10 +158,21 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		casalSuggestBox = new SuggestBox(casalSuggest);
 
 		afilhadosNumberTextBox = new NumberTextBox(false, false, 5, 5);
+		refeicoesNumberTextBox = new NumberTextBox(false, false, 5, 5);
+		diariasNumberTextBox = new NumberTextBox(false, false, 5, 5);
+
 		valorAfilhadoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorPadrinhoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorApoioNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorApoioSolteiroNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorInscricaoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorInscricaoSolteiroNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorDiariaCasalNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorDiariaSolteiroNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorTaxaCasalNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorTaxaCasalApoioNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorTaxaSolteiroNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorAlimentacaoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -241,10 +264,30 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		entidadeEditada.getEncontro().setInicio(inicioDateBox.getValue());
 		entidadeEditada.getEncontro().setFim(fimDateBox.getValue());
 		entidadeEditada.getEncontro().setQuantidadeAfilhados(null);
+		entidadeEditada.getEncontro().setQuantidadeRefeicoes(null);
+		entidadeEditada.getEncontro().setQuantidadeDiarias(null);
 		if(afilhadosNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setQuantidadeAfilhados(afilhadosNumberTextBox.getNumber().intValue());
 		}
+		if(refeicoesNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setQuantidadeRefeicoes(refeicoesNumberTextBox.getNumber().intValue());
+		}
+		if(diariasNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setQuantidadeDiarias(diariasNumberTextBox.getNumber().intValue());
+		}
 		entidadeEditada.getEncontro().setGrupo(presenter.getGrupoSelecionado());
+		entidadeEditada.getEncontro().setValorAfilhado(null);
+		entidadeEditada.getEncontro().setValorPadrinho(null);
+		entidadeEditada.getEncontro().setValorApoio(null);
+		entidadeEditada.getEncontro().setValorInscricao(null);
+		entidadeEditada.getEncontro().setValorApoioSolteiro(null);
+		entidadeEditada.getEncontro().setValorInscricaoSolteiro(null);
+		entidadeEditada.getEncontro().setValorTaxaEncontroCasal(null);
+		entidadeEditada.getEncontro().setValorTaxaEncontroCasalApoio(null);
+		entidadeEditada.getEncontro().setValorTaxaEncontroSolteiro(null);
+		entidadeEditada.getEncontro().setValorDiariaCasal(null);
+		entidadeEditada.getEncontro().setValorDiariaSolteiro(null);
+		entidadeEditada.getEncontro().setValorAlimentacao(null);
 
 		if(valorAfilhadoNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorAfilhado(new BigDecimal(valorAfilhadoNumberTextBox.getNumber().doubleValue()));
@@ -258,6 +301,30 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		if(valorInscricaoNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorInscricao(new BigDecimal(valorInscricaoNumberTextBox.getNumber().doubleValue()));
 		}
+		if(valorApoioSolteiroNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorApoioSolteiro(new BigDecimal(valorApoioSolteiroNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorInscricaoSolteiroNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorInscricaoSolteiro(new BigDecimal(valorInscricaoSolteiroNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorTaxaCasalNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorTaxaEncontroCasal(new BigDecimal(valorTaxaCasalNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorTaxaCasalApoioNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorTaxaEncontroCasalApoio(new BigDecimal(valorTaxaCasalApoioNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorTaxaSolteiroNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorTaxaEncontroSolteiro(new BigDecimal(valorTaxaSolteiroNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorDiariaCasalNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorDiariaCasal(new BigDecimal(valorDiariaCasalNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorDiariaSolteiroNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorDiariaSolteiro(new BigDecimal(valorDiariaSolteiroNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorAlimentacaoNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorAlimentacao(new BigDecimal(valorAlimentacaoNumberTextBox.getNumber().doubleValue()));
+		}
 		entidadeEditada.getEncontro().setDataMaximaPagamento(dataVencimentoDateBox.getValue());
 		entidadeEditada.getEncontro().setDataPagamentoInscricao(dataVencimentoInscricaoDateBox.getValue());
 
@@ -270,6 +337,8 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		else entidadeEditada.getEncontro().setDataPublicacaoRestaurante(null);
 		if (publicaHotelariaCheckBox.getValue()) entidadeEditada.getEncontro().setDataPublicacaoHotelaria(new Date());
 		else entidadeEditada.getEncontro().setDataPublicacaoHotelaria(null);
+		if (encerramentoCheckBox.getValue()) entidadeEditada.getEncontro().setDataEncerramento(new Date());
+		else entidadeEditada.getEncontro().setDataEncerramento(null);
 
 		presenter.salvar(entidadeEditada,copia);
 	}
@@ -284,11 +353,14 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			entidadeEditada.setListaInscricao(new ArrayList<EncontroInscricao>());
 			entidadeEditada.setListaPeriodo(new ArrayList<EncontroPeriodo>());
 			entidadeEditada.setListaTotalizacao(new ArrayList<EncontroTotalizacaoVO>());
+			entidadeEditada.getEncontro().setUsaFichaPagamento(1);
+			entidadeEditada.getEncontro().setGrupo(presenter.getGrupoSelecionado());
 			copiaButton.setVisible(true);
 			editaDialogBox.center();
 			editaDialogBox.show();
 			inicioDateBox.setFocus(true);
 		} else {
+			copiaButton.setVisible(false);
 			presenter.getVO(encontro);
 		}
 	}
@@ -329,6 +401,8 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	public void limpaCampos(){
 		copia = false;
 		afilhadosNumberTextBox.setNumber(null);
+		refeicoesNumberTextBox.setNumber(null);
+		diariasNumberTextBox.setNumber(null);
 		inicioDateBox.setValue(null);
 		fimDateBox.setValue(null);
 		periodoTableUtil.clearData();
@@ -342,11 +416,22 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		publicaOrganogramaCheckBox.setValue(false);
 		publicaRestauranteCheckBox.setValue(false);
 		publicaHotelariaCheckBox.setValue(false);
+		encerramentoCheckBox.setValue(false);
 
 		valorAfilhadoNumberTextBox.setNumber(null);
 		valorPadrinhoNumberTextBox.setNumber(null);
 		valorApoioNumberTextBox.setNumber(null);
 		valorInscricaoNumberTextBox.setNumber(null);
+		valorApoioSolteiroNumberTextBox.setNumber(null);
+		valorInscricaoSolteiroNumberTextBox.setNumber(null);
+		valorDiariaCasalNumberTextBox.setNumber(null);
+		valorDiariaSolteiroNumberTextBox.setNumber(null);
+		valorTaxaCasalNumberTextBox.setNumber(null);
+		valorTaxaCasalApoioNumberTextBox.setNumber(null);
+		valorTaxaSolteiroNumberTextBox.setNumber(null);
+		valorAlimentacaoNumberTextBox.setNumber(null);
+
+
 		dataVencimentoInscricaoDateBox.setValue(null);
 		dataVencimentoDateBox.setValue(null);
 	}
@@ -364,12 +449,15 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			publicaOrganogramaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoOrganograma()!=null);
 			publicaRestauranteCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoRestaurante()!=null);
 			publicaHotelariaCheckBox.setValue(encontroVO.getEncontro().getDataPublicacaoHotelaria()!=null);
+			encerramentoCheckBox.setValue(encontroVO.getEncontro().getDataEncerramento()!=null);
 			dataVencimentoInscricaoDateBox.setValue(encontroVO.getEncontro().getDataPagamentoInscricao());
 			dataVencimentoDateBox.setValue(encontroVO.getEncontro().getDataMaximaPagamento());
 			populaTotalizacoes();
 			populaResponsaveis();
 		}
 		afilhadosNumberTextBox.setNumber(encontroVO.getEncontro().getQuantidadeAfilhados());
+		refeicoesNumberTextBox.setNumber(encontroVO.getEncontro().getQuantidadeRefeicoes());
+		diariasNumberTextBox.setNumber(encontroVO.getEncontro().getQuantidadeDiarias());
 
 		if(encontroVO.getEncontro().getValorAfilhado()!=null){
 			valorAfilhadoNumberTextBox.setNumber(encontroVO.getEncontro().getValorAfilhado());
@@ -382,6 +470,30 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		if(encontroVO.getEncontro().getValorInscricao()!=null){
 			valorInscricaoNumberTextBox.setNumber(encontroVO.getEncontro().getValorInscricao());
+		}
+		if(encontroVO.getEncontro().getValorApoioSolteiro()!=null){
+			valorApoioSolteiroNumberTextBox.setNumber(encontroVO.getEncontro().getValorApoioSolteiro());
+		}
+		if(encontroVO.getEncontro().getValorInscricaoSolteiro()!=null){
+			valorInscricaoSolteiroNumberTextBox.setNumber(encontroVO.getEncontro().getValorInscricaoSolteiro());
+		}
+		if(encontroVO.getEncontro().getValorTaxaEncontroCasal()!=null){
+			valorTaxaCasalNumberTextBox.setNumber(encontroVO.getEncontro().getValorTaxaEncontroCasal());
+		}
+		if(encontroVO.getEncontro().getValorTaxaEncontroCasalApoio()!=null){
+			valorTaxaCasalApoioNumberTextBox.setNumber(encontroVO.getEncontro().getValorTaxaEncontroCasalApoio());
+		}
+		if(encontroVO.getEncontro().getValorTaxaEncontroSolteiro()!=null){
+			valorTaxaSolteiroNumberTextBox.setNumber(encontroVO.getEncontro().getValorTaxaEncontroSolteiro());
+		}
+		if(encontroVO.getEncontro().getValorDiariaCasal()!=null){
+			valorDiariaCasalNumberTextBox.setNumber(encontroVO.getEncontro().getValorDiariaCasal());
+		}
+		if(encontroVO.getEncontro().getValorDiariaSolteiro()!=null){
+			valorDiariaSolteiroNumberTextBox.setNumber(encontroVO.getEncontro().getValorDiariaSolteiro());
+		}
+		if(encontroVO.getEncontro().getValorAlimentacao()!=null){
+			valorAlimentacaoNumberTextBox.setNumber(encontroVO.getEncontro().getValorAlimentacao());
 		}
 		populaPeriodos();
 	}

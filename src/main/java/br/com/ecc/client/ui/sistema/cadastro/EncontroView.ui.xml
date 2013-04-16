@@ -35,25 +35,33 @@
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do encontro">
+				         width="800px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do Encontro">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" align="center" width="100%">
 								<tr>
 									<td class="portal-formLabel">Inicio:</td>
-									<td>
+									<td colspan="2">
 										<dp:DateBox ui:field="inicioDateBox" width="80px"/>
 									</td>
 									<td class="portal-formLabel">Fim:</td>
-									<td>
+									<td colspan="2">
 										<dp:DateBox ui:field="fimDateBox" width="80px"/>
 									</td>
 								</tr>
 								<tr>
 									<td class="portal-formLabel">Qtde Afilhados:</td>
-									<td colspan="3">
+									<td>
 										<cn:NumberTextBox ui:field="afilhadosNumberTextBox" width="50px" alignment="CENTER"/>
+									</td>
+									<td class="portal-formLabel">Qtde Refeições:</td>
+									<td>
+										<cn:NumberTextBox ui:field="refeicoesNumberTextBox" width="50px" alignment="CENTER"/>
+									</td>
+									<td class="portal-formLabel">Qtde Diárias:</td>
+									<td>
+										<cn:NumberTextBox ui:field="diariasNumberTextBox" width="50px" alignment="CENTER"/>
 									</td>
 								</tr>
 								<tr>
@@ -69,10 +77,15 @@
 									<td>
 										<g:CheckBox ui:field="publicaHotelariaCheckBox" text="Publica Hotelaria"/>
 									</td>
+									<td>
+										<g:CheckBox ui:field="encerramentoCheckBox" text="Encerramento do Encontro"/>
+									</td>
+									<td>
+									</td>
 								</tr>
 								<tr>
-									<td colspan="4">
-										<g:TabLayoutPanel ui:field="despesaTabLayoutPanel" barHeight="22" barUnit="PX" height="290px" width="100%">
+									<td colspan="6">
+										<g:TabLayoutPanel ui:field="despesaTabLayoutPanel" barHeight="22" barUnit="PX" height="360px" width="100%">
 											<g:tab>
 												<g:header>Responsáveis por convites</g:header>
 												<g:VerticalPanel width="100%">
@@ -92,7 +105,7 @@
 													<g:HorizontalPanel spacing="3" width="100%" horizontalAlignment="right">
 														<g:Label ui:field="itemResponsavelTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
 													</g:HorizontalPanel>
-													<g:FlowPanel styleName="portal-FlowPanel" height="230px">
+													<g:FlowPanel styleName="portal-FlowPanel" height="300px">
 														<g:FlexTable ui:field="responsavelFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
 													</g:FlowPanel>
 												</g:VerticalPanel>
@@ -103,25 +116,66 @@
 													<g:HTMLPanel width="100%">
 														<table cellpadding="3" align="center" width="100%">
 															<tr>
-																<td class="portal-formLabel">Valor afilhado:</td>
+																<td class="portal-formLabel">Valor Afilhado:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorAfilhadoNumberTextBox" width="150" textAlignment="right"/>
 																</td>
-																<td class="portal-formLabel">Valor padrinho:</td>
+																<td class="portal-formLabel">Valor Padrinho:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorPadrinhoNumberTextBox" width="150" textAlignment="right"/>
 																</td>
 															</tr>
 															<tr>
-																<td class="portal-formLabel">Valor apoio:</td>
+																<td class="portal-formLabel">Valor Apoio:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorApoioNumberTextBox" width="150" textAlignment="right"/>
 																</td>
-																<td class="portal-formLabel">Valor inscrição:</td>
+																<td class="portal-formLabel">Valor Apoio Solteiro:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorApoioSolteiroNumberTextBox" width="150" textAlignment="right"/>
+																</td>
+															</tr>
+															<tr>
+																<td class="portal-formLabel">Valor Inscrição:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorInscricaoNumberTextBox" width="150" textAlignment="right"/>
 																</td>
+																<td class="portal-formLabel">Valor Inscrição Solteiro:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorInscricaoSolteiroNumberTextBox" width="150" textAlignment="right"/>
+																</td>
 															</tr>
+															<tr>
+																<td class="portal-formLabel">Valor Diária Casal:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorDiariaCasalNumberTextBox" width="150" textAlignment="right"/>
+																</td>
+																<td class="portal-formLabel">Valor Diária Solteiro:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorDiariaSolteiroNumberTextBox" width="150" textAlignment="right"/>
+																</td>
+															</tr>
+															<tr>
+																<td class="portal-formLabel">Valor Taxa Encontro Padrinho:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorTaxaCasalNumberTextBox" width="150" textAlignment="right"/>
+																</td>
+																<td class="portal-formLabel">Valor Taxa Encontro Apoio:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorTaxaCasalApoioNumberTextBox" width="150" textAlignment="right"/>
+																</td>
+															</tr>
+															<tr>
+																<td class="portal-formLabel">Valor Taxa Encontro Solteiro:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorTaxaSolteiroNumberTextBox" width="150" textAlignment="right"/>
+																</td>
+																<td class="portal-formLabel">Valor Alimentção Individual:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorAlimentacaoNumberTextBox" width="150" textAlignment="right"/>
+																</td>
+															</tr>
+
 															<tr>
 																<td colspan="3" class="portal-formLabel">Data limite para pagamento da inscrição:</td>
 																<td>
@@ -145,7 +199,7 @@
 														<g:Label ui:field="itemPeriodoTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
 														<g:Image url="images/add.png" ui:field="addPeriodoImage" title="Adicionar novo periodo" styleName="portal-ImageCursor"/>
 													</g:HorizontalPanel>
-													<g:FlowPanel styleName="portal-FlowPanel" height="230px">
+													<g:FlowPanel styleName="portal-FlowPanel" height="300px">
 														<g:FlexTable ui:field="periodoFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
 													</g:FlowPanel>
 												</g:VerticalPanel>
@@ -157,7 +211,7 @@
 														<g:Label ui:field="itemTotalizacaoTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
 														<g:Image url="images/add.png" ui:field="addTotalizacaoImage" title="Adicionar nova totalização" styleName="portal-ImageCursor"/>
 													</g:HorizontalPanel>
-													<g:FlowPanel styleName="portal-FlowPanel" height="230px">
+													<g:FlowPanel styleName="portal-FlowPanel" height="300px">
 														<g:FlexTable ui:field="totalizacaoFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
 													</g:FlowPanel>
 												</g:VerticalPanel>

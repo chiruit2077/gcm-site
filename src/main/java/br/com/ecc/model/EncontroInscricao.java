@@ -130,6 +130,8 @@ public class EncontroInscricao extends _WebBaseEntity {
 
 	private Boolean esconderPlanoPagamento;
 
+	private Boolean hospedagemParticular;
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoConfirmacaoEnum tipoConfirmacao;
@@ -266,6 +268,15 @@ public class EncontroInscricao extends _WebBaseEntity {
 
 	public void setQtdeAtividades(Integer qtdeAtividades) {
 		this.qtdeAtividades = qtdeAtividades;
+	}
+
+	public Boolean getHospedagemParticular() {
+		if (hospedagemParticular==null) return false;
+		return hospedagemParticular;
+	}
+
+	public void setHospedagemParticular(Boolean hospedagemParticular) {
+		this.hospedagemParticular = hospedagemParticular;
 	}
 
 }

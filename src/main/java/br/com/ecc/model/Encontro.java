@@ -45,7 +45,13 @@ public class Encontro extends _WebBaseEntity {
 
 	private Integer quantidadeAfilhados;
 
+	private Integer quantidadeRefeicoes;
+
+	private Integer quantidadeDiarias;
+
 	private Integer usaFichaPagamento;
+
+	private Integer usaDetalheAutomatico;
 
 	@Column(precision=15, scale=2)
 	private BigDecimal valorAfilhado;
@@ -57,7 +63,31 @@ public class Encontro extends _WebBaseEntity {
 	private BigDecimal valorApoio;
 
 	@Column(precision=15, scale=2)
+	private BigDecimal valorApoioSolteiro;
+
+	@Column(precision=15, scale=2)
 	private BigDecimal valorInscricao;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorInscricaoSolteiro;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorDiariaCasal;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorDiariaSolteiro;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorAlimentacao;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorTaxaEncontroCasal;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorTaxaEncontroCasalApoio;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorTaxaEncontroSolteiro;
 
 	@Temporal(TemporalType.DATE)
 	private Date dataPagamentoInscricao;
@@ -76,6 +106,9 @@ public class Encontro extends _WebBaseEntity {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataPublicacaoHotelaria;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataEncerramento;
 
 	@Version
 	private Integer version;
@@ -159,6 +192,7 @@ public class Encontro extends _WebBaseEntity {
 		this.dataMaximaPagamento = dataMaximaPagamento;
 	}
 	public Integer getUsaFichaPagamento() {
+		if (usaFichaPagamento==null) return 0;
 		return usaFichaPagamento;
 	}
 	public void setUsaFichaPagamento(Integer usaFichaPagamento) {
@@ -213,4 +247,103 @@ public class Encontro extends _WebBaseEntity {
 			return false;
 		return true;
 	}
+
+	public Date getDataEncerramento() {
+		return dataEncerramento;
+	}
+
+	public void setDataEncerramento(Date dataEncerramento) {
+		this.dataEncerramento = dataEncerramento;
+	}
+
+	public BigDecimal getValorApoioSolteiro() {
+		return valorApoioSolteiro;
+	}
+
+	public void setValorApoioSolteiro(BigDecimal valorApoioSolteiro) {
+		this.valorApoioSolteiro = valorApoioSolteiro;
+	}
+
+	public BigDecimal getValorInscricaoSolteiro() {
+		return valorInscricaoSolteiro;
+	}
+
+	public void setValorInscricaoSolteiro(BigDecimal valorInscricaoSolteiro) {
+		this.valorInscricaoSolteiro = valorInscricaoSolteiro;
+	}
+
+	public BigDecimal getValorDiariaCasal() {
+		return valorDiariaCasal;
+	}
+
+	public void setValorDiariaCasal(BigDecimal valorDiariaCasal) {
+		this.valorDiariaCasal = valorDiariaCasal;
+	}
+
+	public BigDecimal getValorDiariaSolteiro() {
+		return valorDiariaSolteiro;
+	}
+
+	public void setValorDiariaSolteiro(BigDecimal valorDiariaSolteiro) {
+		this.valorDiariaSolteiro = valorDiariaSolteiro;
+	}
+
+	public BigDecimal getValorAlimentacao() {
+		return valorAlimentacao;
+	}
+
+	public void setValorAlimentacao(BigDecimal valorAlimentacao) {
+		this.valorAlimentacao = valorAlimentacao;
+	}
+
+	public BigDecimal getValorTaxaEncontroCasal() {
+		return valorTaxaEncontroCasal;
+	}
+
+	public void setValorTaxaEncontroCasal(BigDecimal valorTaxaEncontroCasal) {
+		this.valorTaxaEncontroCasal = valorTaxaEncontroCasal;
+	}
+
+	public BigDecimal getValorTaxaEncontroSolteiro() {
+		return valorTaxaEncontroSolteiro;
+	}
+
+	public void setValorTaxaEncontroSolteiro(BigDecimal valorTaxaEncontroSolteiro) {
+		this.valorTaxaEncontroSolteiro = valorTaxaEncontroSolteiro;
+	}
+
+	public Integer getQuantidadeRefeicoes() {
+		return quantidadeRefeicoes;
+	}
+
+	public void setQuantidadeRefeicoes(Integer quantidadeRefeicoes) {
+		this.quantidadeRefeicoes = quantidadeRefeicoes;
+	}
+
+	public BigDecimal getValorTaxaEncontroCasalApoio() {
+		return valorTaxaEncontroCasalApoio;
+	}
+
+	public void setValorTaxaEncontroCasalApoio(
+			BigDecimal valorTaxaEncontroCasalApoio) {
+		this.valorTaxaEncontroCasalApoio = valorTaxaEncontroCasalApoio;
+	}
+
+	public Integer getQuantidadeDiarias() {
+		return quantidadeDiarias;
+	}
+
+	public void setQuantidadeDiarias(Integer quantidadeDiarias) {
+		this.quantidadeDiarias = quantidadeDiarias;
+	}
+
+	public Integer getUsaDetalheAutomatico() {
+		if (usaDetalheAutomatico==null) return 0;
+		return usaDetalheAutomatico;
+	}
+
+	public void setUsaDetalheAutomatico(Integer usaDetalheAutomatico) {
+		this.usaDetalheAutomatico = usaDetalheAutomatico;
+	}
+
 }

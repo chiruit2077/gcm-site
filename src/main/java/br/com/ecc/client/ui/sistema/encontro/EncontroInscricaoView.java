@@ -18,6 +18,7 @@ import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
 import br.com.ecc.client.util.NavegadorUtil;
 import br.com.ecc.model.Casal;
+import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroInscricaoPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
@@ -81,6 +82,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiField ListBox mensagemListBox;
 	@UiField DateBox dataMaxParcelaDateBox;
 	@UiField CheckBox esconderPagamentoCheckBox;
+	@UiField CheckBox hospedagemParticularCheckBox;
 	@UiField CheckBox marcaPreenchimentoFichaCheckBox;
 
 	@UiField HTMLPanel participanteHTMLPanel;
@@ -115,6 +117,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	//detalhe
 	@UiField DialogBox detalheDialogBox;
 	@UiField TextBox descricaoDetalheTextBox;
+	@UiField(provided=true) NumberTextBox valorUnitarioDetalheNumberTextBox;
+	@UiField(provided=true) NumberTextBox quantidadeDetalheNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorDetalheNumberTextBox;
 	@UiField Button salvarDetalheButton;
 	@UiField Label valorLabel;
@@ -146,7 +150,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		pessoaSuggestBox = new SuggestBox(pessoaSuggest);
 
 		codigoNumberTextBox = new NumberTextBox(false, false, 2, 2);
+		valorUnitarioDetalheNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		quantidadeDetalheNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorDetalheNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorDetalheNumberTextBox.setEnabled(false);
 
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -223,6 +230,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 		detalheTableUtil.addColumn("", "10px", HasHorizontalAlignment.ALIGN_CENTER);
 		detalheTableUtil.addColumn("Descrição", "300px", HasHorizontalAlignment.ALIGN_LEFT);
+		detalheTableUtil.addColumn("Valor Unitario", "100px", HasHorizontalAlignment.ALIGN_RIGHT, TipoColuna.NUMBER, null);
+		detalheTableUtil.addColumn("Qtde", "50px", HasHorizontalAlignment.ALIGN_RIGHT, TipoColuna.NUMBER, null);
 		detalheTableUtil.addColumn("Valor", "100px", HasHorizontalAlignment.ALIGN_RIGHT, TipoColuna.NUMBER, null);
 	}
 	@Override
@@ -319,6 +328,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			entidadeEditada.setEncontroInscricao(new EncontroInscricao());
 			entidadeEditada.getEncontroInscricao().setEncontro(presenter.getEncontroSelecionado());
 			entidadeEditada.setListaPagamento(new ArrayList<EncontroInscricaoPagamento>());
+			entidadeEditada.getEncontroInscricao().setHospedagemParticular(false);
 
 			dadosPagamentoComponent.setEncontroInscricaoVO(entidadeEditada);
 			dadosPagamentoComponent.setUsuario(presenter.getDadosLoginVO().getUsuario());
@@ -349,6 +359,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		participanteLabel.setText(null);
 		dataMaxParcelaDateBox.setValue(null);
 		esconderPagamentoCheckBox.setValue(false);
+		hospedagemParticularCheckBox.setValue(false);
 		valorLabel.setText(null);
 		detalheTableUtil.clearData();
 		confirmacaoListBox.setSelectedIndex(0);
@@ -554,7 +565,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 					excluir.addClickHandler(new ClickHandler() {
 						@Override
 						public void onClick(ClickEvent arg0) {
-							if(Window.confirm("Deseja excluir esta inscrição ?\n(Todas as informações de pagamento\n e das atividades adicionadas na planilha serão removidas)")){
+							if(Window.confirm("Deseja excluir esta inscrição ?\n(Todas as informações de pagamento\n e das atividades relacionadas serão removidas)")){
 								presenter.excluir(encontroInscricao);
 							}
 						}
@@ -684,8 +695,11 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiHandler("tipoListBox")
 	public void tipoListBoxChangeHandler(ChangeEvent event) {
 		TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values());
-		//dadosPagamentoComponent.setTipoInscricao(tipo);
-		//valorLabel.setText(dfCurrency.format(dadosPagamentoComponent.getEncontroInscricaoVO().getEncontroInscricao().getValorEncontro()));
+		dadosPagamentoComponent.setTipoInscricao(tipo);
+		if (tipo!=null && presenter.getEncontroSelecionado().getUsaDetalheAutomatico().equals(1)){
+			geraPagamentoDetalhe();
+			populaDetalhes(dadosPagamentoComponent.getEncontroInscricaoVO().getListaPagamentoDetalhe());
+		}
 		buscaMensagem(tipo);
 	}
 
@@ -732,12 +746,12 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		double valor = 0;
 		HorizontalPanel hp;
 		for (final EncontroInscricaoPagamentoDetalhe detalhe: lista) {
-			Object dados[] = new Object[3];
+			Object dados[] = new Object[5];
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			hp.setSpacing(1);
 
-			if(podeEditar){
+			if(podeEditar && detalhe.getEditavel()){
 				editar = new Image(NavegadorUtil.makeUrlResource("images/edit.png"));
 				editar.setTitle("Editar este detalhe");
 				editar.setStyleName("portal-ImageCursor");
@@ -750,7 +764,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				hp.add(editar);
 			}
 
-			if(podeEditar){
+			if(podeEditar && detalhe.getEditavel()){
 				excluir = new Image(NavegadorUtil.makeUrlResource("images/delete.png"));
 				excluir.setTitle("Excluir este detalhe");
 				excluir.setStyleName("portal-ImageCursor");
@@ -768,11 +782,16 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 			dados[0] = hp;
 			dados[1] = detalhe.getDescricao();
-			if( detalhe.getValor()!=null){
+			if( detalhe.getValorUnitario()!=null){
 				dados[2] = dfCurrency.format(detalhe.getValor());
+			}
+			if( detalhe.getQuantidade()!=null){
+				dados[3] = detalhe.getQuantidade().toString();
+			}
+			if( detalhe.getValor()!=null){
+				dados[4] = dfCurrency.format(detalhe.getValor());
 				valor += detalhe.getValor().doubleValue();
 			}
-
 			detalheTableUtil.addRow(dados,row+1);
 			row++;
 		}
@@ -784,10 +803,14 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 	public void limpaCamposDetalhe(){
 		descricaoDetalheTextBox.setValue(null);
+		valorUnitarioDetalheNumberTextBox.setValue(null);
+		quantidadeDetalheNumberTextBox.setNumber(1);
 		valorDetalheNumberTextBox.setValue(null);
 	}
 	public void defineCamposDetalhe(EncontroInscricaoPagamentoDetalhe detalhe){
 		descricaoDetalheTextBox.setValue(detalhe.getDescricao());
+		valorUnitarioDetalheNumberTextBox.setNumber(detalhe.getValorUnitario());
+		quantidadeDetalheNumberTextBox.setNumber(detalhe.getQuantidade());
 		valorDetalheNumberTextBox.setNumber(detalhe.getValor());
 	}
 
@@ -796,7 +819,9 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		if(detalhe == null){
 			entidadeEditadaDetalhe = new EncontroInscricaoPagamentoDetalhe();
 			entidadeEditadaDetalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+			entidadeEditadaDetalhe.setEditavel(true);
 		} else {
+			if (!detalhe.getEditavel()) return;
 			entidadeEditadaDetalhe = detalhe;
 			defineCamposDetalhe(detalhe);
 		}
@@ -824,5 +849,145 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		entidadeEditada.getListaPagamentoDetalhe().add(entidadeEditadaDetalhe);
 		detalheDialogBox.hide();
 		populaDetalhes(entidadeEditada.getListaPagamentoDetalhe());
+	}
+
+	private void geraPagamentoDetalhe(){
+		Encontro encontro = presenter.getEncontroSelecionado();
+		TipoInscricaoEnum tipo = (TipoInscricaoEnum)ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values());
+		List<EncontroInscricaoPagamentoDetalhe> pagamentoDetalheNovo = new ArrayList<EncontroInscricaoPagamentoDetalhe>();
+		List<EncontroInscricaoPagamentoDetalhe> pagamentoDetalhe = dadosPagamentoComponent.getEncontroInscricaoVO().getListaPagamentoDetalhe();
+		if (pagamentoDetalhe!=null){
+			for (EncontroInscricaoPagamentoDetalhe encontroInscricaoPagamentoDetalhe : pagamentoDetalhe) {
+				if (encontroInscricaoPagamentoDetalhe.getEditavel()){
+					pagamentoDetalheNovo.add(encontroInscricaoPagamentoDetalhe);
+				}
+			}
+		}
+		if (tipo.equals(TipoInscricaoEnum.AFILHADO)){
+			EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
+			detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+			detalhe.setDescricao("VALOR DO ENCONTRO");
+			detalhe.setValor(encontro.getValorAfilhado());
+			detalhe.setValorUnitario(encontro.getValorAfilhado());
+			detalhe.setQuantidade(1);
+			detalhe.setEditavel(false);
+			pagamentoDetalheNovo.add(detalhe);
+		}else if (tipo.equals(TipoInscricaoEnum.PADRINHO)){
+			EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
+			detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+			detalhe.setDescricao("VALOR DA TAXA ENCONTRO");
+			detalhe.setValor(encontro.getValorTaxaEncontroCasal());
+			detalhe.setValorUnitario(encontro.getValorTaxaEncontroCasal());
+			detalhe.setQuantidade(1);
+			detalhe.setEditavel(false);
+			pagamentoDetalheNovo.add(detalhe);
+			if (!hospedagemParticularCheckBox.getValue()){
+				detalhe = new EncontroInscricaoPagamentoDetalhe();
+				detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+				detalhe.setDescricao("VALOR DA HOSPEDAGEM");
+				detalhe.setValorUnitario(encontro.getValorDiariaCasal());
+				detalhe.setEditavel(false);
+				detalhe.setQuantidade(encontro.getQuantidadeDiarias());
+				detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+				pagamentoDetalheNovo.add(detalhe);
+			}
+			detalhe = new EncontroInscricaoPagamentoDetalhe();
+			detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+			detalhe.setDescricao("VALOR DA ALIMENTACAO");
+			detalhe.setEditavel(false);
+			detalhe.setValorUnitario(encontro.getValorAlimentacao());
+			detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+			detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			pagamentoDetalheNovo.add(detalhe);
+		}else if (tipo.equals(TipoInscricaoEnum.COORDENADOR)){
+			EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
+			detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+			detalhe.setDescricao("VALOR DA TAXA ENCONTRO");
+			detalhe.setValor(encontro.getValorTaxaEncontroCasalApoio());
+			detalhe.setValorUnitario(encontro.getValorTaxaEncontroCasalApoio());
+			detalhe.setEditavel(false);
+			detalhe.setQuantidade(1);
+			pagamentoDetalheNovo.add(detalhe);
+			if (!hospedagemParticularCheckBox.getValue()){
+				detalhe = new EncontroInscricaoPagamentoDetalhe();
+				detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+				detalhe.setDescricao("VALOR DA HOSPEDAGEM");
+				detalhe.setValorUnitario(encontro.getValorDiariaCasal());
+				detalhe.setQuantidade(encontro.getQuantidadeDiarias());
+				detalhe.setEditavel(false);
+				detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+				pagamentoDetalheNovo.add(detalhe);
+			}
+			detalhe = new EncontroInscricaoPagamentoDetalhe();
+			detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+			detalhe.setDescricao("VALOR DA ALIMENTACAO");
+			detalhe.setValorUnitario(encontro.getValorAlimentacao());
+			detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+			detalhe.setEditavel(false);
+			detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			pagamentoDetalheNovo.add(detalhe);
+		}else if (tipo.equals(TipoInscricaoEnum.APOIO)){
+			if (dadosPagamentoComponent.getEncontroInscricaoVO().getEncontroInscricao().getCasal() != null){
+				EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
+				detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+				detalhe.setDescricao("VALOR DA TAXA ENCONTRO");
+				detalhe.setValor(encontro.getValorTaxaEncontroCasalApoio());
+				detalhe.setValorUnitario(encontro.getValorTaxaEncontroCasalApoio());
+				detalhe.setQuantidade(1);
+				detalhe.setEditavel(false);
+				pagamentoDetalheNovo.add(detalhe);
+				if (!hospedagemParticularCheckBox.getValue()){
+					detalhe = new EncontroInscricaoPagamentoDetalhe();
+					detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+					detalhe.setDescricao("VALOR DA HOSPEDAGEM");
+					detalhe.setValorUnitario(encontro.getValorDiariaCasal());
+					detalhe.setQuantidade(encontro.getQuantidadeDiarias());
+					detalhe.setEditavel(false);
+					detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+					pagamentoDetalheNovo.add(detalhe);
+				}
+				detalhe = new EncontroInscricaoPagamentoDetalhe();
+				detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+				detalhe.setDescricao("VALOR DA ALIMENTACAO");
+				detalhe.setValorUnitario(encontro.getValorAlimentacao());
+				detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+				detalhe.setEditavel(false);
+				detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+				pagamentoDetalheNovo.add(detalhe);
+			}else{
+				EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
+				detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+				detalhe.setDescricao("VALOR DA TAXA ENCONTRO");
+				detalhe.setValor(encontro.getValorTaxaEncontroSolteiro());
+				detalhe.setValorUnitario(encontro.getValorTaxaEncontroSolteiro());
+				detalhe.setQuantidade(1);
+				detalhe.setEditavel(false);
+				pagamentoDetalheNovo.add(detalhe);
+				if (!hospedagemParticularCheckBox.getValue()){
+					detalhe = new EncontroInscricaoPagamentoDetalhe();
+					detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+					detalhe.setDescricao("VALOR DA HOSPEDAGEM");
+					detalhe.setValorUnitario(encontro.getValorDiariaSolteiro());
+					detalhe.setEditavel(false);
+					detalhe.setQuantidade(encontro.getQuantidadeDiarias());
+					detalhe.setValor(new BigDecimal(encontro.getValorDiariaSolteiro().doubleValue()*encontro.getQuantidadeDiarias()));
+					pagamentoDetalheNovo.add(detalhe);
+				}
+				detalhe = new EncontroInscricaoPagamentoDetalhe();
+				detalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
+				detalhe.setDescricao("VALOR DA ALIMENTACAO");
+				detalhe.setValorUnitario(encontro.getValorAlimentacao());
+				detalhe.setQuantidade(encontro.getQuantidadeRefeicoes());
+				detalhe.setEditavel(false);
+				detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()));
+				pagamentoDetalheNovo.add(detalhe);
+			}
+		}
+		dadosPagamentoComponent.getEncontroInscricaoVO().setListaPagamentoDetalhe(pagamentoDetalheNovo);
+	}
+
+	@UiHandler("valorUnitarioDetalheNumberTextBox")
+	public void valorChangeEvent(ChangeEvent event){
+		valorDetalheNumberTextBox.setNumber(valorUnitarioDetalheNumberTextBox.getNumber().doubleValue()*quantidadeDetalheNumberTextBox.getNumber().intValue());
 	}
 }
