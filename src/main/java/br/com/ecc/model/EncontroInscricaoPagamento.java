@@ -20,16 +20,16 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_FORMAPAGAMENTO", sequenceName="SQ_FORMAPAGAMENTO")
 @NamedQueries({
-	@NamedQuery(name="encontroInscricaoPagamento.porEncontroInscricao", 
+	@NamedQuery(name="encontroInscricaoPagamento.porEncontroInscricao",
 		query="select u from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao order by u.parcela"),
 	@NamedQuery(name="encontroInscricaoPagamento.listaPagamentosPorEncontro",
 		query="select u from EncontroInscricaoPagamento u " +
 			  "where u.encontroInscricao.encontro = :encontro and" +
 			  "      u.dataPagamento is not null " +
 			  "order by u.encontroInscricao.codigo, u.parcela"),
-	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontroInscricao", 
+	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontroInscricao",
 		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao"),
-	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontroInscricaoNotIn", 
+	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontroInscricaoNotIn",
 		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao and u not in (:lista)")
 })
 public class EncontroInscricaoPagamento extends _WebBaseEntity {
@@ -38,25 +38,27 @@ public class EncontroInscricaoPagamento extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_FORMAPAGAMENTO", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontroInscricao")
 	private EncontroInscricao encontroInscricao;
-	
+
 	private Integer parcela;
-	
+
 	@Column(precision=15, scale=2)
 	private BigDecimal valor;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date dataVencimento;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date dataPagamento;
-	
+
+	private Boolean valorAlterado;
+
 	@Version
 	private Integer version;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -98,5 +100,12 @@ public class EncontroInscricaoPagamento extends _WebBaseEntity {
 	}
 	public void setDataPagamento(Date dataPagamento) {
 		this.dataPagamento = dataPagamento;
+	}
+	public Boolean getValorAlterado() {
+		if (valorAlterado==null) return false;
+		return valorAlterado;
+	}
+	public void setValorAlterado(Boolean valorAlterado) {
+		this.valorAlterado = valorAlterado;
 	}
 }

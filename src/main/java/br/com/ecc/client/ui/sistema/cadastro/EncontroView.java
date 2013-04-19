@@ -128,6 +128,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 	@UiField(provided=true) NumberTextBox valorInscricaoSolteiroNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorDiariaCasalNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorDiariaSolteiroNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorTaxaAfilhadoNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorTaxaCasalNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorTaxaCasalApoioNumberTextBox;
 	@UiField(provided=true) NumberTextBox valorTaxaSolteiroNumberTextBox;
@@ -169,6 +170,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		valorInscricaoSolteiroNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorDiariaCasalNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorDiariaSolteiroNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorTaxaAfilhadoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorTaxaCasalNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorTaxaCasalApoioNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 		valorTaxaSolteiroNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
@@ -283,6 +285,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		entidadeEditada.getEncontro().setValorApoioSolteiro(null);
 		entidadeEditada.getEncontro().setValorInscricaoSolteiro(null);
 		entidadeEditada.getEncontro().setValorTaxaEncontroCasal(null);
+		entidadeEditada.getEncontro().setValorTaxaEncontroAfilhado(null);
 		entidadeEditada.getEncontro().setValorTaxaEncontroCasalApoio(null);
 		entidadeEditada.getEncontro().setValorTaxaEncontroSolteiro(null);
 		entidadeEditada.getEncontro().setValorDiariaCasal(null);
@@ -306,6 +309,9 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		if(valorInscricaoSolteiroNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorInscricaoSolteiro(new BigDecimal(valorInscricaoSolteiroNumberTextBox.getNumber().doubleValue()));
+		}
+		if(valorTaxaAfilhadoNumberTextBox.getNumber()!=null){
+			entidadeEditada.getEncontro().setValorTaxaEncontroAfilhado(new BigDecimal(valorTaxaAfilhadoNumberTextBox.getNumber().doubleValue()));
 		}
 		if(valorTaxaCasalNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorTaxaEncontroCasal(new BigDecimal(valorTaxaCasalNumberTextBox.getNumber().doubleValue()));
@@ -354,6 +360,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 			entidadeEditada.setListaPeriodo(new ArrayList<EncontroPeriodo>());
 			entidadeEditada.setListaTotalizacao(new ArrayList<EncontroTotalizacaoVO>());
 			entidadeEditada.getEncontro().setUsaFichaPagamento(1);
+			entidadeEditada.getEncontro().setUsaDetalheAutomatico(1);
 			entidadeEditada.getEncontro().setGrupo(presenter.getGrupoSelecionado());
 			copiaButton.setVisible(true);
 			editaDialogBox.center();
@@ -426,6 +433,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		valorInscricaoSolteiroNumberTextBox.setNumber(null);
 		valorDiariaCasalNumberTextBox.setNumber(null);
 		valorDiariaSolteiroNumberTextBox.setNumber(null);
+		valorTaxaAfilhadoNumberTextBox.setNumber(null);
 		valorTaxaCasalNumberTextBox.setNumber(null);
 		valorTaxaCasalApoioNumberTextBox.setNumber(null);
 		valorTaxaSolteiroNumberTextBox.setNumber(null);
@@ -476,6 +484,9 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		}
 		if(encontroVO.getEncontro().getValorInscricaoSolteiro()!=null){
 			valorInscricaoSolteiroNumberTextBox.setNumber(encontroVO.getEncontro().getValorInscricaoSolteiro());
+		}
+		if(encontroVO.getEncontro().getValorTaxaEncontroAfilhado()!=null){
+			valorTaxaAfilhadoNumberTextBox.setNumber(encontroVO.getEncontro().getValorTaxaEncontroAfilhado());
 		}
 		if(encontroVO.getEncontro().getValorTaxaEncontroCasal()!=null){
 			valorTaxaCasalNumberTextBox.setNumber(encontroVO.getEncontro().getValorTaxaEncontroCasal());

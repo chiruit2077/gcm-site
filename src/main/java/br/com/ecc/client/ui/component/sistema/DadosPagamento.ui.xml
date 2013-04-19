@@ -1,5 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder 
+<ui:UiBinder
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox"
@@ -32,19 +32,16 @@
 									<td width="80px">
 										<g:ListBox ui:field="parcelaListBox" width="80px"/>
 									</td>
-									<td>
-										<g:Button ui:field="addParcelaButton">Adicionar opção de pagamento</g:Button>
-									</td>
 									<td align="right">
 										<g:Label ui:field="itemPagamentoTotal" styleName="portal-rowCountLabel" text="Nenhuma parcela adicionada"/>
 									</td>
 								</tr>
 							</table>
 						</g:HTMLPanel>
-						<g:FlowPanel styleName="portal-FlowPanel" height="138px">
+						<g:FlowPanel styleName="portal-FlowPanel" height="200px">
 							<g:FlexTable ui:field="pagamentoFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
 						</g:FlowPanel>
-						<!-- 
+						<!--
 						<g:FlowPanel styleName="portal-FlowPanel" height="140px">
 						 -->
 							<g:HTMLPanel width="100%">
@@ -70,12 +67,12 @@
 									</tr>
 									<tr>
 										<td class="portal-formLabel">Favorecido:</td>
-										<td  colspan="5" style="font-size: 11px;">
+										<td  colspan="5" style="font-size: 12px;">
 											<g:Label ui:field="favorecidoLabel"/>
 										</td>
 									</tr>
 								</table>
-								<table cellpadding="0" cellspacing="0" width="100%" style="background-color: #fcfdbb; border: 1px solid gray; font-size: 10px; color: blue;">
+								<table cellpadding="0" cellspacing="0" width="100%" style="background-color: #fcfdbb; border: 1px solid gray; font-size: 12px; color: blue;">
 									<tr>
 										<td colspan="2" style="font-weight:bold;">
 											Observações
@@ -108,7 +105,7 @@
 									</tr>
 								</table>
 							</g:HTMLPanel>
-						<!-- 
+						<!--
 						</g:FlowPanel>
 						 -->
 					</td>

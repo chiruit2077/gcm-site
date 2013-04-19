@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
+
+import br.com.ecc.model.tipo.TipoPagamentoDetalheEnum;
+import br.com.ecc.model.tipo.TipoPagamentoLancamentoEnum;
 
 @Entity
 @SequenceGenerator(name="SQ_FORMAPAGAMENTODET", sequenceName="SQ_FORMAPAGAMENTODET")
@@ -36,6 +41,18 @@ public class EncontroInscricaoPagamentoDetalhe extends _WebBaseEntity {
 	private EncontroInscricao encontroInscricao;
 
 	private String descricao;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length=50)
+	private TipoPagamentoDetalheEnum tipoDetalhe;
+
+	@Enumerated(EnumType.STRING)
+	@Column(length=50)
+	private TipoPagamentoLancamentoEnum tipoLancamento;
+
+	@ManyToOne
+	@JoinColumn(name="encontroInscricaoOutra")
+	private EncontroInscricao encontroInscricaoOutro;
 
 	@Column(precision=15, scale=2)
 	private BigDecimal valor;
@@ -100,5 +117,25 @@ public class EncontroInscricaoPagamentoDetalhe extends _WebBaseEntity {
 	}
 	public void setEditavel(Boolean editavel) {
 		this.editavel = editavel;
+	}
+	public TipoPagamentoDetalheEnum getTipoDetalhe() {
+		if (tipoDetalhe==null) return TipoPagamentoDetalheEnum.AVULSO;
+		return tipoDetalhe;
+	}
+	public void setTipoDetalhe(TipoPagamentoDetalheEnum tipoDetalhe) {
+		this.tipoDetalhe = tipoDetalhe;
+	}
+	public TipoPagamentoLancamentoEnum getTipoLancamento() {
+		if (tipoLancamento==null) return TipoPagamentoLancamentoEnum.DEBITO;
+		return tipoLancamento;
+	}
+	public void setTipoLancamento(TipoPagamentoLancamentoEnum tipoLancamento) {
+		this.tipoLancamento = tipoLancamento;
+	}
+	public EncontroInscricao getEncontroInscricaoOutro() {
+		return encontroInscricaoOutro;
+	}
+	public void setEncontroInscricaoOutro(EncontroInscricao encontroInscricaoOutro) {
+		this.encontroInscricaoOutro = encontroInscricaoOutro;
 	}
 }

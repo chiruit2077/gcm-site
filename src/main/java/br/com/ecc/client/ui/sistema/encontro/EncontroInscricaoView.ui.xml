@@ -63,11 +63,11 @@
 		<g:FlexTable ui:field="encontroInscricaoFlexTable" cellPadding="0" cellSpacing="0" />
 		<g:VerticalPanel visible="false">
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="800px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Inscrição">
+				         width="800px"  height="100%" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da Inscrição">
 				<g:VerticalPanel width="100%">
 					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" horizontalAlignment="CENTER" spacing="2">
 						<g:VerticalPanel height="5px"/>
-						<g:TabLayoutPanel barHeight="22" barUnit="PX" height="600px" width="99%">
+						<g:TabLayoutPanel ui:field="tabPanel" barHeight="22" barUnit="PX" height="500px" width="99%">
 							<g:tab>
 								<g:header>Dados do participante</g:header>
 								<g:VerticalPanel horizontalAlignment="CENTER">
@@ -75,7 +75,7 @@
 									<g:HTMLPanel width="100%">
 										<table cellpadding="2" cellspacing="0" width="100%">
 											<tr>
-												<td class="portal-formLabel">Código de indentificação:</td>
+												<td class="portal-formLabel">Código de Indentificação:</td>
 												<td  width="60%">
 													<cn:NumberTextBox ui:field="codigoNumberTextBox" width="80px" textAlignment="center"/>
 												</td>
@@ -87,7 +87,7 @@
 											<tr>
 												<td class="portal-formLabel" width="80px">Casal:</td>
 												<td>
-													<g:SuggestBox ui:field="casalSuggestBox" width="400px"/>
+													<g:SuggestBox ui:field="casalSuggestBox" width="100%"/>
 												</td>
 											</tr>
 										</table>
@@ -97,7 +97,7 @@
 											<tr>
 												<td class="portal-formLabel" width="80px">Pessoa:</td>
 												<td>
-													<g:SuggestBox ui:field="pessoaSuggestBox" width="400px"/>
+													<g:SuggestBox ui:field="pessoaSuggestBox" width="100%"/>
 												</td>
 											</tr>
 										</table>
@@ -107,45 +107,55 @@
 											<tr>
 												<td class="portal-formLabel" width="80px">Nome:</td>
 												<td>
-													<g:Label ui:field="participanteLabel" width="400px"/>
+													<g:Label ui:field="participanteLabel" width="100%"/>
 												</td>
 											</tr>
 										</table>
 									</g:HTMLPanel>
-									<g:HTMLPanel width="100%">
+									<g:HTMLPanel width="100%" height="100%">
 										<table cellpadding="2" cellspacing="0" width="100%">
 											<tr>
 												<td class="portal-formLabel" width="80px">Email:</td>
 												<td colspan="3">
-													<g:Label ui:field="emailLabel" width="400px"/>
+													<g:Label ui:field="emailLabel" width="100%"/>
 												</td>
 											</tr>
 											<tr>
 												<td class="portal-formLabel">Tipo:</td>
 												<td>
-													<g:Label ui:field="tipoLabel" width="150px"/>
-													<g:ListBox ui:field="tipoListBox" width="150px" visible="false"/>
+													<g:Label ui:field="tipoLabel" width="100%"/>
+													<g:ListBox ui:field="tipoListBox" width="100%" visible="false"/>
 												</td>
 												<td class="portal-formLabel">Confirmação:</td>
 												<td>
-													<g:ListBox ui:field="confirmacaoListBox" width="150px"/>
+													<g:ListBox ui:field="confirmacaoListBox" width="100%"/>
 												</td>
 											</tr>
+											</table>
+								</g:HTMLPanel>
+								<g:HTMLPanel  ui:field="detalheHTMLPanel" width="100%" height="100%">
+										<table cellpadding="2" cellspacing="0" width="100%">
 											<tr>
 												<td style='vertical-align:top;' class="portal-formLabel">
 													Detalhamento:
+												</td>
+												<td style='vertical-align:top;' class="portal-formLabel">
 													<g:Image ui:field="addDetalheImage" url="images/add.png" title="Adicionar detalhe" styleName="portal-ImageCursor"/>
 												</td>
-												<td  colspan="3" style='vertical-align:top;' align="right">
+												<td style="vertical-align:top;">
 													<g:FlowPanel styleName="portal-FlowPanel" height="200px" width="100%">
 														<g:FlexTable ui:field="detalheFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
 													</g:FlowPanel>
 												</td>
 											</tr>
-											<tr>
-												<td class="portal-formLabel">Valor Total:</td>
-												<td  colspan="3" style="color:blue;font-weight:bold;">
-													<g:Label ui:field="valorLabel" width="150px"/>
+										</table>
+									</g:HTMLPanel>
+									<g:HTMLPanel  ui:field="valorHTMLPanel" width="100%" height="100%">
+										<table cellpadding="2" cellspacing="0" width="100%">
+											<tr style="text-align:right; align:right;">
+												<td>Valor:</td>
+												<td>
+													<g:TextBox ui:field="valorLabel" width="120px" styleName="portal-formField" textAlignment="right" readOnly="true"/>
 												</td>
 											</tr>
 										</table>
@@ -178,7 +188,7 @@
 												<tr>
 													<td class="portal-formLabel">Mensagem:</td>
 													<td colspan="3">
-														<g:ListBox ui:field="mensagemListBox" width="350px"/>
+														<g:ListBox ui:field="mensagemListBox" width="100%"/>
 													</td>
 												</tr>
 												<tr>
@@ -238,6 +248,18 @@
 									</td>
 								</tr>
 								<tr>
+									<td class="portal-formLabel">Tipo Detalhe:</td>
+									<td>
+										<g:ListBox ui:field="tipoDetalheListBox" width="100%"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Tipo Lançamento:</td>
+									<td>
+										<g:ListBox ui:field="tipoLancamentoListBox" width="100%"/>
+									</td>
+								</tr>
+								<tr>
 									<td class="portal-formLabel">Valor Unitario:</td>
 									<td  width="60%">
 										<cn:NumberTextBox ui:field="valorUnitarioDetalheNumberTextBox" width="80px" textAlignment="center"/>
@@ -253,6 +275,22 @@
 									<td class="portal-formLabel">Valor:</td>
 									<td  width="60%">
 										<cn:NumberTextBox ui:field="valorDetalheNumberTextBox" width="80px" textAlignment="center"/>
+									</td>
+								</tr>
+								 <tr>
+							    	<td>
+					    				<g:RadioButton ui:field="casalRadio"/>
+					    			</td>
+					    			<td>
+				    					<g:RadioButton ui:field="pessoaRadio"/>
+					    			</td>
+							    </tr>
+								<tr>
+									<td>
+					    				<g:Label ui:field="labelOutraInscricao" styleName="portal-formLabel" text="Casal:" />
+					    			</td>
+									<td>
+				    					<g:SuggestBox ui:field="inscricaoOutraSuggestBox" width="350px"/>
 									</td>
 								</tr>
 							</table>

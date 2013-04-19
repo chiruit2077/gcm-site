@@ -156,34 +156,37 @@
 																</td>
 															</tr>
 															<tr>
+																<td class="portal-formLabel">Valor Taxa Encontro Afilhado:</td>
+																<td>
+																	<cn:NumberTextBox ui:field="valorTaxaAfilhadoNumberTextBox" width="150" textAlignment="right"/>
+																</td>
 																<td class="portal-formLabel">Valor Taxa Encontro Padrinho:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorTaxaCasalNumberTextBox" width="150" textAlignment="right"/>
 																</td>
+															</tr>
+															<tr>
 																<td class="portal-formLabel">Valor Taxa Encontro Apoio:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorTaxaCasalApoioNumberTextBox" width="150" textAlignment="right"/>
 																</td>
-															</tr>
-															<tr>
 																<td class="portal-formLabel">Valor Taxa Encontro Solteiro:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorTaxaSolteiroNumberTextBox" width="150" textAlignment="right"/>
 																</td>
-																<td class="portal-formLabel">Valor Alimentção Individual:</td>
+															</tr>
+															<tr>
+																<td colspan="3" class="portal-formLabel">Valor Alimentção Individual:</td>
 																<td>
 																	<cn:NumberTextBox ui:field="valorAlimentacaoNumberTextBox" width="150" textAlignment="right"/>
 																</td>
 															</tr>
-
 															<tr>
-																<td colspan="3" class="portal-formLabel">Data limite para pagamento da inscrição:</td>
+																<td class="portal-formLabel">Data limite para pagamento da inscrição:</td>
 																<td>
 																	<dp:DateBox ui:field="dataVencimentoInscricaoDateBox" width="100px" styleName="portal-formField"/>
 																</td>
-															</tr>
-															<tr>
-																<td colspan="3" class="portal-formLabel">Data limite para pagamento de parcelas:</td>
+																<td class="portal-formLabel">Data limite para pagamento de parcelas:</td>
 																<td>
 																	<dp:DateBox ui:field="dataVencimentoDateBox" width="100px" styleName="portal-formField"/>
 																</td>

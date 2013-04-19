@@ -84,6 +84,9 @@ public class Encontro extends _WebBaseEntity {
 	private BigDecimal valorTaxaEncontroCasal;
 
 	@Column(precision=15, scale=2)
+	private BigDecimal valorTaxaEncontroAfilhado;
+
+	@Column(precision=15, scale=2)
 	private BigDecimal valorTaxaEncontroCasalApoio;
 
 	@Column(precision=15, scale=2)
@@ -344,6 +347,14 @@ public class Encontro extends _WebBaseEntity {
 
 	public void setUsaDetalheAutomatico(Integer usaDetalheAutomatico) {
 		this.usaDetalheAutomatico = usaDetalheAutomatico;
+	}
+
+	public BigDecimal getValorTaxaEncontroAfilhado() {
+		return valorTaxaEncontroAfilhado;
+	}
+
+	public void setValorTaxaEncontroAfilhado(BigDecimal valorTaxaEncontroAfilhado) {
+		this.valorTaxaEncontroAfilhado = valorTaxaEncontroAfilhado;
 	}
 
 }
