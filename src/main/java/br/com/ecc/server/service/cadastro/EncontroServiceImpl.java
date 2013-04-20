@@ -57,6 +57,7 @@ public class EncontroServiceImpl extends SecureRemoteServiceServlet implements E
 
 	@Override
 	@Permissao(nomeOperacao="Excluir encontro", operacao=Operacao.EXCLUIR)
+	@Transactional
 	public void exclui(Encontro encontro) throws Exception {
 		ExecuteUpdateCommand cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);
 		cmdDelete.addParameter("encontro", encontro);
@@ -71,6 +72,66 @@ public class EncontroServiceImpl extends SecureRemoteServiceServlet implements E
 		cmdDelete.call();
 
 		cmdDelete.setNamedQuery("encontroTotalizacaoAtividade.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroHotelQuarto.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroHotel.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroRestauranteMesa.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroRestaurante.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroOrganogramaCoordenacao.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroOrganogramaArea.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroOrganograma.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroFila.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroConvite.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroInscricao.updateFichaNullPorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroInscricaoFichaPagamento.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroAtividadeInscricao.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroAtividade.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroInscricaoPagamento.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroInscricaoPagamentoDetalhe.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("encontroInscricao.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("mensagem.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("agrupamentoMembro.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("agrupamento.deletePorEncontro");
+		cmdDelete.call();
+
+		cmdDelete.setNamedQuery("agenda.deletePorEncontro");
 		cmdDelete.call();
 
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);

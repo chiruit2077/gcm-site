@@ -21,7 +21,8 @@ import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
 @SequenceGenerator(name="SQ_AGRUPAMENTO", sequenceName="SQ_AGRUPAMENTO")
 @NamedQueries({
 	@NamedQuery(name="agrupamento.porGrupo", query="select u from Agrupamento u where u.grupo = :grupo order by u.nome"),
-	@NamedQuery(name="agrupamento.porEncontro", query="select u from Agrupamento u where u.encontro = :encontro order by u.tipo, u.nome")
+	@NamedQuery(name="agrupamento.porEncontro", query="select u from Agrupamento u where u.encontro = :encontro order by u.tipo, u.nome"),
+	@NamedQuery(name="agrupamento.deletePorEncontro", query="delete from Agrupamento u where u.encontro = :encontro")
 })
 public class Agrupamento extends _WebBaseEntity {
 	private static final long serialVersionUID = -5803383402599264292L;

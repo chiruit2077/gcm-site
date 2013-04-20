@@ -27,10 +27,12 @@ import javax.persistence.Version;
 			  "where u.encontroInscricao.encontro = :encontro and" +
 			  "      u.dataPagamento is not null " +
 			  "order by u.encontroInscricao.codigo, u.parcela"),
+	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontro",
+		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao in ( select a from EncontroInscricao a where a.encontro = :encontro ) and u.dataPagamento is null"),
 	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontroInscricao",
-		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao"),
+		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao and u.dataPagamento is null"),
 	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontroInscricaoNotIn",
-		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao and u not in (:lista)")
+		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao and u not in (:lista) and u.dataPagamento is null ")
 })
 public class EncontroInscricaoPagamento extends _WebBaseEntity {
 	private static final long serialVersionUID = -1928028525899583308L;

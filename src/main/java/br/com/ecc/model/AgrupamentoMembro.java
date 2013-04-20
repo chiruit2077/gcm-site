@@ -18,6 +18,8 @@ import javax.persistence.Version;
 	@NamedQuery(name="agrupamentoMembro.porAgrupamento", query="select u from AgrupamentoMembro u where u.agrupamento = :agrupamento"),
 	@NamedQuery(name="agrupamentoMembro.deletePorAgrupamento",
 		query="delete from AgrupamentoMembro u where u.agrupamento = :agrupamento"),
+	@NamedQuery(name="agrupamentoMembro.deletePorEncontro",
+		query="delete from AgrupamentoMembro u where u.agrupamento in ( select a from Agrupamento a where a.encontro = :encontro )"),
 	@NamedQuery(name="agrupamentoMembro.deletePorAgrupamentoNotIn",
 		query="delete from AgrupamentoMembro u where u.agrupamento = :agrupamento and u not in (:lista)")
 })

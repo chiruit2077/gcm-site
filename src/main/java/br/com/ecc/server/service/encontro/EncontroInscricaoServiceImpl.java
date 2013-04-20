@@ -24,6 +24,7 @@ import br.com.ecc.server.command.basico.SaveEntityCommand;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import com.google.inject.persist.Transactional;
 
 @Singleton
 public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet implements EncontroInscricaoService {
@@ -60,6 +61,7 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 
 	@Override
 	@Permissao(nomeOperacao="Excluir encontroInscricao", operacao=Operacao.EXCLUIR)
+	@Transactional
 	public void exclui(EncontroInscricao encontroInscricao) throws Exception {
 		//removendo participações no encontro
 		ExecuteUpdateCommand cmdDelete = injector.getInstance(ExecuteUpdateCommand.class);

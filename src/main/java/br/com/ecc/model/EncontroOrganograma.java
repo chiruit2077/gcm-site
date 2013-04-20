@@ -14,7 +14,8 @@ import javax.persistence.Version;
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROORGANOGRAMA", sequenceName="SQ_ENCONTROORGANOGRAMA")
 @NamedQueries({
-	@NamedQuery(name="encontroOrganograma.porEncontro", query="select u from EncontroOrganograma u where u.encontro = :encontro order by u.organograma.nome")
+	@NamedQuery(name="encontroOrganograma.porEncontro", query="select u from EncontroOrganograma u where u.encontro = :encontro order by u.organograma.nome"),
+	@NamedQuery(name="encontroOrganograma.deletePorEncontro", query="delete from EncontroOrganograma u where u.encontro = :encontro")
 })
 public class EncontroOrganograma extends _WebBaseEntity {
 

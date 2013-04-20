@@ -31,6 +31,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 @SequenceGenerator(name="SQ_ATIVIDADE", sequenceName="SQ_ATIVIDADE")
 @NamedQueries({
 	@NamedQuery(name="encontroAtividade.porEncontro", query="select u from EncontroAtividade u where u.encontro = :encontro order by u.inicio"),
+	@NamedQuery(name="encontroAtividade.deletePorEncontro", query="delete from EncontroAtividade u where u.encontro = :encontro"),
 	@NamedQuery(name="encontroAtividade.porEncontroCasal",
 		query="select u from EncontroAtividade u " +
 			  "where u.encontro = :encontro and" +

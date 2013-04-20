@@ -35,7 +35,9 @@ import br.com.ecc.model.tipo.TipoEncontroQuartoEnum;
 					"where u.encontroInscricao3 = :encontroInscricao " ),
 		@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao4",
 			query="update EncontroHotelQuarto u set u.encontroInscricao4 = null " +
-				"where u.encontroInscricao4 = :encontroInscricao " )
+				"where u.encontroInscricao4 = :encontroInscricao " ),
+		@NamedQuery(name="encontroHotelQuarto.deletePorEncontro",
+		    query="delete from EncontroHotelQuarto u where u.encontroHotel in ( select a from EncontroHotel a where a.encontro = :encontro ) "),
 
 })
 

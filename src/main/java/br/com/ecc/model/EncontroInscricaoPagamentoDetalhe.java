@@ -26,6 +26,8 @@ import br.com.ecc.model.tipo.TipoPagamentoLancamentoEnum;
 		query="select u from EncontroInscricaoPagamentoDetalhe u where u.encontroInscricao = :encontroInscricao"),
 	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.porEncontroInscricaoOutraCredito",
 		query="select u from EncontroInscricaoPagamentoDetalhe u where u.encontroInscricaoOutra = :encontroInscricao and u.tipoDetalhe='OUTRAINSCRICAO' and u.tipoLancamento = 'CREDITO' "),
+	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.deletePorEncontro",
+		query="delete from EncontroInscricaoPagamentoDetalhe u where u.encontroInscricao in ( select a from EncontroInscricao a where a.encontro = :encontro )"),
 	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.deletePorEncontroInscricao",
 		query="delete from EncontroInscricaoPagamentoDetalhe u where u.encontroInscricao = :encontroInscricao"),
 	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.deletePorEncontroInscricaoNotIn",

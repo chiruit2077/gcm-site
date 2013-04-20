@@ -23,15 +23,17 @@ import br.com.ecc.model.tipo.TipoMensagemEnum;
 @Entity
 @SequenceGenerator(name="SQ_MENSAGEM", sequenceName="SQ_MENSAGEM")
 @NamedQueries({
-	@NamedQuery(name="mensagem.porGrupo", 
+	@NamedQuery(name="mensagem.porGrupo",
 		query="select u from Mensagem u where u.grupo = :grupo order by u.data desc"),
-	@NamedQuery(name="mensagem.porGrupoTipoEspecial", 
+	@NamedQuery(name="mensagem.deletePorEncontro",
+		query="delete from Mensagem u where u.encontro = :encontro "),
+	@NamedQuery(name="mensagem.porGrupoTipoEspecial",
 		query="select u from Mensagem u " +
 			  "where u.grupo = :grupo and " +
 			  "      u.encontro = :encontro and " +
 			  "	     u.tipoMensagem != 'NORMAL' " +
 			  "order by u.data desc"),
-	@NamedQuery(name="mensagem.porDestinatario", 
+	@NamedQuery(name="mensagem.porDestinatario",
 		query="Select distinct m.mensagem " +
 				"from MensagemDestinatario m " +
 				"where m.casal = :casal or" +
@@ -44,34 +46,34 @@ public class Mensagem extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_MENSAGEM", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="grupo")
 	private Grupo grupo;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date data;
-	
+
 	@Column(length=254)
 	private String titulo;
-	
+
 	@Column(length=254)
 	private String descricao;
-	
+
 	@Column(columnDefinition="TEXT")
 	private char[] mensagem;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoMensagemEnum tipoMensagem;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontro")
 	private Encontro encontro;
-	
+
 	@Version
 	private Integer version;
-	
+
 	@Override
 	public String toString() {
 		String ret = "";

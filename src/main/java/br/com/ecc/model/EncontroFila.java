@@ -20,7 +20,8 @@ import br.com.ecc.model.tipo.TipoFilaEnum;
 @SequenceGenerator(name="SQ_ENCONTROFILA", sequenceName="SQ_ENCONTROFILA")
 @NamedQueries({
 	@NamedQuery(name="encontroFila.porEncontro", query="select u from EncontroFila u where u.encontro = :encontro order by u.ordem, u.nome"),
-	@NamedQuery(name="encontroFila.porEncontroFilaNormal", query="select u from EncontroFila u where u.encontro = :encontro and u.tipoFila = 'NORMAL'")
+	@NamedQuery(name="encontroFila.porEncontroFilaNormal", query="select u from EncontroFila u where u.encontro = :encontro and u.tipoFila = 'NORMAL'"),
+	@NamedQuery(name="encontroFila.deletePorEncontro", query="delete from EncontroFila u where u.encontro = :encontro")
 })
 public class EncontroFila extends _WebBaseEntity {
 	private static final long serialVersionUID = 7634193874228521460L;
@@ -28,25 +29,25 @@ public class EncontroFila extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTROFILA", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontro")
 	private Encontro encontro;
-	
+
 	@Column(length=250)
 	private String nome;
-	
+
 	private Integer quantidadeVagas;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoFilaEnum tipoFila;
-	
+
 	private Integer ordem;
 
 	@Version
 	private Integer version;
-	
+
 	@Override
 	public String toString() {
 		return nome;

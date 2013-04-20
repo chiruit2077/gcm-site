@@ -25,8 +25,8 @@ import br.com.ecc.model.tipo.TipoRespostaConviteEnum;
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROCONVITE", sequenceName="SQ_ENCONTROCONVITE")
 @NamedQueries({
-	@NamedQuery(name="encontroConvite.porEncontro", 
-			query="select u from EncontroConvite u where u.encontro = :encontro order by u.encontroFila.ordem, u.ordem")
+	@NamedQuery(name="encontroConvite.porEncontro", query="select u from EncontroConvite u where u.encontro = :encontro order by u.encontroFila.ordem, u.ordem"),
+	@NamedQuery(name="encontroConvite.deletePorEncontro", query="delete from EncontroConvite u where u.encontro = :encontro")
 })
 public class EncontroConvite extends _WebBaseEntity {
 	private static final long serialVersionUID = 5575143873350086182L;
@@ -34,61 +34,61 @@ public class EncontroConvite extends _WebBaseEntity {
 	@Id
 	@GeneratedValue(generator="SQ_ENCONTROCONVITE", strategy=GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontro")
 	private Encontro encontro;
-	
+
 	@ManyToOne
 	@JoinColumn(name="casal")
 	private Casal casal;
-	
+
 	@ManyToOne
 	@JoinColumn(name="casalConvidado")
 	private Casal casalConvidado;
-	
+
 	@ManyToOne
 	@JoinColumn(name="casalResponsavel")
 	private Casal casalResponsavel;
-	
+
 	@ManyToOne
 	@JoinColumn(name="encontroFila")
 	private EncontroFila encontroFila;
-	
+
 	private Integer ordem;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataConvite;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataResposta;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoRespostaConviteEnum tipoResposta;
-	
+
 	private Boolean esconderPlanoPagamento;
-	
+
 	@Column(length=500)
 	private String observacao;
-	
+
 	@ManyToOne
 	@JoinColumn(name="mensagemDestinatarioFicha")
 	private MensagemDestinatario mensagemDestinatarioFicha;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoConfirmacaoEnum tipoConfirmacao;
 
 	@Version
 	private Integer version;
-	
+
 	@Transient
 	private Boolean gerarInscricao;
-	
+
 	@Transient
 	private Boolean moverFinalFila;
-	
+
 	public Integer getId() {
 		return id;
 	}

@@ -21,7 +21,9 @@ import javax.persistence.Version;
 						"where u.encontroInscricao1 = :encontroInscricao " ),
     	@NamedQuery(name="encontroOrganogramaCoordenacao.updatePorEncontroInscricao2",
 				query="update EncontroOrganogramaCoordenacao u set u.encontroInscricao2 = null " +
-						"where u.encontroInscricao2 = :encontroInscricao " )
+						"where u.encontroInscricao2 = :encontroInscricao " ),
+		@NamedQuery(name="encontroOrganogramaCoordenacao.deletePorEncontro", query="delete from EncontroOrganogramaCoordenacao u " +
+				" where u.encontroOrganograma in ( select a from EncontroOrganograma a where a.encontro = :encontro ) ")
 })
 
 public class EncontroOrganogramaCoordenacao extends _WebBaseEntity {

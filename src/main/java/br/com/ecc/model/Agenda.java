@@ -25,7 +25,8 @@ import br.com.ecc.model.tipo.TipoAgendaEventoEnum;
 @SequenceGenerator(name="SQ_AGENDA", sequenceName="SQ_AGENDA")
 @NamedQueries({
 	@NamedQuery(name="agenda.porEncontroPeriodo", query="select u from Agenda u where u.encontro = :encontro and u.dataInicio >= :dataInicio and u.dataFim <= :dataFim order by u.dataInicio "),
-	@NamedQuery(name="agenda.porEncontro", query="select u from Agenda u where u.encontro = :encontro order by u.dataInicio ")
+	@NamedQuery(name="agenda.porEncontro", query="select u from Agenda u where u.encontro = :encontro order by u.dataInicio "),
+	@NamedQuery(name="agenda.deletePorEncontro", query="delete from Agenda u where u.encontro = :encontro ")
 })
 public class Agenda extends _WebBaseEntity {
 

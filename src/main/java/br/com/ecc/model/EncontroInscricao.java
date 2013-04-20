@@ -27,6 +27,8 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 @SequenceGenerator(name="SQ_ENCONTROINSCRICAO", sequenceName="SQ_ENCONTROINSCRICAO")
 @NamedQueries({
 	@NamedQuery(name="encontroInscricao.porEncontro", query="select u from EncontroInscricao u where u.encontro = :encontro order by u.tipo"),
+	@NamedQuery(name="encontroInscricao.updateFichaNullPorEncontro", query="update EncontroInscricao u set u.fichaPagamento = null where u.encontro = :encontro"),
+	@NamedQuery(name="encontroInscricao.deletePorEncontro", query="delete from EncontroInscricao u where u.encontro = :encontro"),
 	@NamedQuery(name="encontroInscricao.porEncontroConfirmados",
 		query="select u from EncontroInscricao u " +
 				"where  u.encontro = :encontro and " +

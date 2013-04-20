@@ -11,14 +11,14 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public abstract class WebAsyncCallback <R> implements AsyncCallback<R>{
-	
+
 	BaseDisplay display;
-	
+
 	public WebAsyncCallback(BaseDisplay display) {
 		super();
 		this.display = display;
 	}
-	
+
 	@Override
 	public void onSuccess(R result) {
 		success(result);
@@ -42,13 +42,14 @@ public abstract class WebAsyncCallback <R> implements AsyncCallback<R>{
 				//display.showWaitMessage(false);
 				GWT.log(e.getMessage());
 				e.printStackTrace();
-				Window.alert("Erro inesperado. Contacte seu suporte técnico. \nERRO: " + e.getMessage());
+				Window.alert("Erro inesperado. Contacte seu suporte técnico. \nERRO: " + e.getMessage() + "\nCAUSA:" + StackTraceUtilClient.getStackTrace(e));
 				display.reset();
+				display.getPresenter().init();
 			}
 		}
 		finally {
 			display.showWaitMessage(false);
 		}
 	}
-	
+
 }
