@@ -14,10 +14,10 @@ import br.com.ecc.model.vo.EncontroInscricaoVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.SessionHelper;
 import br.com.ecc.server.auth.Permissao;
+import br.com.ecc.server.command.EncontroInscricaoCarregaVOCommand;
 import br.com.ecc.server.command.EncontroInscricaoSalvarCommand;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.ExecuteUpdateCommand;
-import br.com.ecc.server.command.basico.GetEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 import br.com.ecc.server.command.basico.SaveEntityCommand;
 
@@ -120,49 +120,19 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		cmd.call();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Busca VO", operacao=Operacao.VISUALIZAR)
 	public EncontroInscricaoVO getVO(EncontroInscricao encontroInscricao) throws Exception {
-		EncontroInscricaoVO vo = new EncontroInscricaoVO();
-
-		GetEntityCommand cmd = injector.getInstance(GetEntityCommand.class);
-		cmd.setClazz(EncontroInscricao.class);
-		cmd.setId(encontroInscricao.getId());
-		vo.setEncontroInscricao((EncontroInscricao) cmd.call());
-
-		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-		cmdEntidade.setNamedQuery("encontroInscricaoPagamento.porEncontroInscricao");
-		cmdEntidade.addParameter("encontroInscricao", vo.getEncontroInscricao());
-		vo.setListaPagamento(cmdEntidade.call());
-
-		cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-		cmdEntidade.setNamedQuery("encontroInscricaoPagamentoDetalhe.porEncontroInscricao");
-		cmdEntidade.addParameter("encontroInscricao", vo.getEncontroInscricao());
-		vo.setListaPagamentoDetalhe(cmdEntidade.call());
-
-		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		if(vo.getEncontroInscricao().getMensagemDestinatario()!=null){
-			if(vo.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()!=null){
-				vo.getEncontroInscricao().getMensagemDestinatario().setDataEnvioStr(df.format(vo.getEncontroInscricao().getMensagemDestinatario().getDataEnvio()));
-			}
-			if(vo.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()!=null){
-				vo.getEncontroInscricao().getMensagemDestinatario().setDataConfirmacaoStr(df.format(vo.getEncontroInscricao().getMensagemDestinatario().getDataConfirmacao()));
-			}
-		}
-		if(vo.getEncontroInscricao().getDataPrenchimentoFicha()!=null){
-			vo.getEncontroInscricao().setDataPrenchimentoFichaStr(df.format(vo.getEncontroInscricao().getDataPrenchimentoFicha()));
-		}
-
-		return vo;
+		EncontroInscricaoCarregaVOCommand cmd = injector.getInstance(EncontroInscricaoCarregaVOCommand.class);
+		cmd.setEncontroInscricao(encontroInscricao);
+		return cmd.call();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Busca inscricao pro casal - VO", operacao=Operacao.VISUALIZAR)
 	public EncontroInscricaoVO getVO(Encontro encontro, Casal casal) throws Exception {
-		EncontroInscricaoVO vo = null;
-
+		EncontroInscricaoVO vo=null;
 		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
 		cmdEntidade.setNamedQuery("encontroInscricao.porEncontroCasal");
 		cmdEntidade.addParameter("encontro", encontro);
@@ -184,7 +154,6 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 				vo.getEncontroInscricao().setDataPrenchimentoFichaStr(df.format(vo.getEncontroInscricao().getDataPrenchimentoFicha()));
 			}
 		}
-
 		return vo;
 	}
 

@@ -242,55 +242,55 @@
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" cellspacing="0" width="100%">
 								<tr>
-									<td class="portal-formLabel">Descrição:</td>
-									<td  width="60%">
+									<td width="200px" class="portal-formLabel">Descrição:</td>
+									<td>
 										<g:TextBox ui:field="descricaoDetalheTextBox" width="200px"/>
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel">Tipo Detalhe:</td>
+									<td width="200px" class="portal-formLabel">Tipo Detalhe:</td>
 									<td>
 										<g:ListBox ui:field="tipoDetalheListBox" width="100%"/>
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel">Tipo Lançamento:</td>
+									<td width="200px" class="portal-formLabel">Tipo Lançamento:</td>
 									<td>
-										<g:ListBox ui:field="tipoLancamentoListBox" width="100%"/>
+										<g:ListBox ui:field="tipoLancamentoListBox" width="50px"/>
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel">Valor Unitario:</td>
-									<td  width="60%">
-										<cn:NumberTextBox ui:field="valorUnitarioDetalheNumberTextBox" width="80px" textAlignment="center"/>
+									<td width="200px" class="portal-formLabel">Valor Unitario:</td>
+									<td>
+										<cn:NumberTextBox ui:field="valorUnitarioDetalheNumberTextBox" width="100px" textAlignment="right"/>
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel">Quantidade:</td>
-									<td  width="60%">
-										<cn:NumberTextBox ui:field="quantidadeDetalheNumberTextBox" width="80px" textAlignment="center"/>
+									<td width="200px" class="portal-formLabel">Quantidade:</td>
+									<td>
+										<cn:NumberTextBox ui:field="quantidadeDetalheNumberTextBox" width="80px" textAlignment="right"/>
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel">Valor:</td>
-									<td  width="60%">
-										<cn:NumberTextBox ui:field="valorDetalheNumberTextBox" width="80px" textAlignment="center"/>
+									<td width="200px" class="portal-formLabel">Valor:</td>
+									<td>
+										<cn:NumberTextBox ui:field="valorDetalheNumberTextBox" width="80px" textAlignment="right"/>
 									</td>
 								</tr>
-								 <tr>
-							    	<td>
+								<tr align="center">
+							    	<td width="200px" align="center">
 					    				<g:RadioButton ui:field="casalRadio"/>
 					    			</td>
-					    			<td>
+					    			<td align="center">
 				    					<g:RadioButton ui:field="pessoaRadio"/>
 					    			</td>
 							    </tr>
 								<tr>
-									<td>
+									<td width="200px">
 					    				<g:Label ui:field="labelOutraInscricao" styleName="portal-formLabel" text="Casal:" />
 					    			</td>
 									<td>
-				    					<g:SuggestBox ui:field="inscricaoOutraSuggestBox" width="350px"/>
+				    					<g:SuggestBox ui:field="inscricaoOutraSuggestBox" width="400px"/>
 									</td>
 								</tr>
 							</table>

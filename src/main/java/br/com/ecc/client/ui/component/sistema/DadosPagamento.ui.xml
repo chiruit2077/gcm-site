@@ -41,9 +41,28 @@
 						<g:FlowPanel styleName="portal-FlowPanel" height="200px">
 							<g:FlexTable ui:field="pagamentoFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
 						</g:FlowPanel>
-						<!--
-						<g:FlowPanel styleName="portal-FlowPanel" height="140px">
-						 -->
+						<g:HTMLPanel>
+							<table cellpadding="2" cellspacing="0" width="100%">
+								<tr style="text-align:right; align:right;">
+									<td>Valor Parcelas:</td>
+									<td>
+										<g:TextBox ui:field="valorParcelasTextBox" width="100px" styleName="portal-formField" textAlignment="right" readOnly="true"/>
+									</td>
+									<td>Valor Pago:</td>
+									<td>
+										<g:TextBox ui:field="valorPagoTextBox" width="100px" styleName="portal-formField" textAlignment="right" readOnly="true"/>
+									</td>
+									<td>Valor Pagar:</td>
+									<td>
+										<g:TextBox ui:field="valorPagarTextBox" width="100px" styleName="portal-formField" textAlignment="right" readOnly="true"/>
+									</td>
+									<td>Crédito:</td>
+									<td>
+										<g:TextBox ui:field="valorCreditoTextBox" width="100px" styleName="portal-formField" textAlignment="right" readOnly="true"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
 							<g:HTMLPanel width="100%">
 								<table cellpadding="1" cellspacing="0" width="100%" style="background-color: white;border: 1px solid gray;">
 									<tr>

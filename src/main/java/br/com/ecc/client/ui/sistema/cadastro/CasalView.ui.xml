@@ -107,7 +107,7 @@
 			    </g:VerticalPanel>
 			</g:DialogBox>
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="750px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass"
+				         width="800px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass"
 				         text="Informações do casal" >
 				<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
 					<g:FlowPanel ui:field="formularioFlowPanel" width="100%" styleName="{style.formulario}">
@@ -326,6 +326,10 @@
 												</tr>
 											</table>
 										</g:HTMLPanel>
+									</td>
+								</tr>
+								<tr>
+									<td style="vertical-align:top;">
 										<table cellpadding="2" cellspacing="0" align="center" border="0" width="100%">
 											<tr>
 												<td>Endereço:</td>

@@ -2,11 +2,9 @@ package br.com.ecc.client.ui.component.sistema;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
 import br.com.ecc.client.util.FlexTableUtil;
@@ -44,6 +42,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -71,6 +70,10 @@ public class DadosPagamento extends Composite {
 	@UiField Label contaLabel;
 	@UiField Label favorecidoLabel;
 	@UiField Label valorLabel;
+	@UiField TextBox valorParcelasTextBox;
+	@UiField TextBox valorPagoTextBox;
+	@UiField TextBox valorPagarTextBox;
+	@UiField TextBox valorCreditoTextBox;
 
 	@UiField DialogBox editaPagamentoDialogBox;
 	@UiField Label parcelaLabel;
@@ -85,7 +88,6 @@ public class DadosPagamento extends Composite {
 	private Usuario usuario;
 	private Casal casal;
 	private Boolean dadosAlterados = false;
-	private Integer maxParcela;
 
 	public DadosPagamento() {
 		criaTabelaPagamento();
@@ -97,16 +99,19 @@ public class DadosPagamento extends Composite {
 		dataVencimentoDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 	}
 
-	public void setValorEncontro(BigDecimal valor) {
-		if(entidadeEditada.getEncontroInscricao().getValorEncontro()!=null &&
-		   !entidadeEditada.getEncontroInscricao().getValorEncontro().equals(valor)){
-			dadosAlterados = true;
-		}
+	public void setValorEncontro(BigDecimal valor){
+		setValorEncontro(valor,true);
+		dadosAlterados = false;
+	}
+	public void setValorEncontro(BigDecimal valor, boolean geraparcelas) {
 		entidadeEditada.getEncontroInscricao().setValorEncontro(valor);
 		if(entidadeEditada.getEncontroInscricao().getValorEncontro()!=null){
 			valorLabel.setText(dfCurrency.format(entidadeEditada.getEncontroInscricao().getValorEncontro()));
 		}
-		geraParcelas();
+		if (geraparcelas) {
+			entidadeEditada.geraParcelas();
+			dadosAlterados = true;
+		}
 		populaPagamentos();
 	}
 
@@ -130,6 +135,10 @@ public class DadosPagamento extends Composite {
 		vencimentoMaximoLabel.setText(null);
 		inscricaoLabel.setText(null);
 		parcelaListBox.clear();
+		valorCreditoTextBox.setText(dfCurrency.format(0));
+		valorPagoTextBox.setText(dfCurrency.format(0));
+		valorPagarTextBox.setText(dfCurrency.format(0));
+		valorParcelasTextBox.setText(dfCurrency.format(0));
 
 		bancoLabel.setText(null);
 		agenciaLabel.setText(null);
@@ -204,7 +213,7 @@ public class DadosPagamento extends Composite {
 		parcelaListBox.clear();
 		parcelaListBox.addItem("");
 		vencimentoMaximoLabel.setText(null);
-		setMaxParcela(null);
+		entidadeEditada.setMaxParcela(null);
 		Date dataMaxima = entidadeEditada.getEncontroInscricao().getDataMaximaParcela();
 		int daybase = entidadeEditada.getEncontroInscricao().getEncontro().getDataMaximaPagamento().getDate();
 		if(dataMaxima==null){
@@ -220,7 +229,7 @@ public class DadosPagamento extends Composite {
 				parcelaListBox.addItem(parcelas+"");
 				hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase, 0, 0, 0);
 			}
-			setMaxParcela(parcelas);
+			entidadeEditada.setMaxParcela(parcelas);
 		}else{
 			Date hoje = new Date();
 			hoje = new Date(hoje.getYear(), hoje.getMonth(), daybase, 0, 0, 0);
@@ -230,7 +239,7 @@ public class DadosPagamento extends Composite {
 				parcelaListBox.addItem(parcelas+"");
 				hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase, 0, 0, 0);
 			}
-			setMaxParcela(parcelas);
+			entidadeEditada.setMaxParcela(parcelas);
 		}
 	}
 
@@ -242,6 +251,11 @@ public class DadosPagamento extends Composite {
 			}
 		});
 
+		double valorparcelas = 0;
+		double valorpago = 0;
+		double valorpagar = 0;
+		double valorcredito = 0;
+
 		if(usuario==null) return ;
 		boolean podeEditar = false;
 		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
@@ -250,38 +264,9 @@ public class DadosPagamento extends Composite {
 
 		pagamentoTableUtil.clearData();
 
-		if(entidadeEditada.getEncontroInscricao().getCodigo()==null){
-			entidadeEditada.setListaPagamento(new ArrayList<EncontroInscricaoPagamento>());
-			return;
-		}
 		if(entidadeEditada.getEncontroInscricao().getValorEncontro()==null){
 			return;
 		}
-
-		/*double valor = 0;
-		valor = entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue();
-		if(entidadeEditada.getListaPagamento().size()==0){
-			if( (entidadeEditada.getEncontroInscricao().getCasal()!=null && casal.getId().equals(entidadeEditada.getEncontroInscricao().getCasal().getId())) ||
-				(entidadeEditada.getEncontroInscricao().getPessoa()!=null && usuario.getPessoa().getId().equals(entidadeEditada.getEncontroInscricao().getPessoa().getId()))){
-				if(entidadeEditada.getEncontroInscricao().getEncontro().getValorInscricao()!=null &&
-						entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao()!=null){
-					EncontroInscricaoPagamento p = new EncontroInscricaoPagamento();
-					p.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
-					p.setDataVencimento(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
-					p.setParcela(0);
-					p.setValor(new BigDecimal(entidadeEditada.getEncontroInscricao().getEncontro().getValorInscricao().doubleValue()+(entidadeEditada.getEncontroInscricao().getCodigo().doubleValue()/100)));
-					entidadeEditada.getListaPagamento().add(p);
-				} else {
-					for (EncontroInscricaoPagamento pagamento: entidadeEditada.getListaPagamento()) {
-						if(pagamento.getParcela()==0 && pagamento.getDataPagamento()==null){
-							entidadeEditada.getListaPagamento().remove(pagamento);
-							break;
-						}
-					}
-				}
-			}
-		}
-		double total = 0;*/
 
 		LabelTotalUtil.setTotal(itemPagamentoTotal, entidadeEditada.getListaPagamento().size(), "parcela", "parcelas", "a");
 		int row = 0;
@@ -289,22 +274,6 @@ public class DadosPagamento extends Composite {
 		HorizontalPanel hp;
 		boolean ok;
 		for (final EncontroInscricaoPagamento pagamento: entidadeEditada.getListaPagamento()) {
-			/*if(total + new BigDecimal(pagamento.getValor().doubleValue()).setScale(0, RoundingMode.DOWN).doubleValue()>valor){
-				pagamento.setValor(new BigDecimal(valor-total + (entidadeEditada.getEncontroInscricao().getCodigo().doubleValue()/100)));
-			}
-			total += new BigDecimal(pagamento.getValor().doubleValue()).setScale(0, RoundingMode.DOWN).doubleValue();
-			if(row==entidadeEditada.getListaPagamento().size()-1 && !pagamento.getParcela().equals(0)){
-				if(total<valor){
-					total = new BigDecimal(pagamento.getValor().doubleValue()).setScale(0, RoundingMode.DOWN).doubleValue() + (valor-total);
-					pagamento.setValor(new BigDecimal(total + entidadeEditada.getEncontroInscricao().getCodigo().doubleValue()/100));
-				} else if(total<valor) {
-					break;
-				}
-			}
-			if(new BigDecimal(pagamento.getValor().doubleValue()).setScale(0, RoundingMode.DOWN).doubleValue()==0){
-				entidadeEditada.getListaPagamento().remove(pagamento);
-				break;
-			}*/
 			Object dados[] = new Object[5];
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -344,13 +313,15 @@ public class DadosPagamento extends Composite {
 							if(Window.confirm("Deseja excluir esta parcela ?")){
 								dadosAlterados = true;
 								entidadeEditada.getListaPagamento().remove(pagamento);
-								geraParcelas();
+								entidadeEditada.geraParcelas();
 								populaPagamentos();
 							}
 						}
 					});
 					hp.add(excluir);
 				}
+			}else{
+				valorpago += pagamento.getValor().setScale(0, RoundingMode.HALF_UP).doubleValue();
 			}
 			dados[0] = hp;
 			if(pagamento.getParcela().equals(0)){
@@ -363,6 +334,7 @@ public class DadosPagamento extends Composite {
 			}
 			if(pagamento.getValor()!=null){
 				dados[3] = dfCurrency.format(pagamento.getValor());
+				valorparcelas += pagamento.getValor().setScale(0, RoundingMode.DOWN).doubleValue();
 			}
 			if(pagamento.getDataPagamento()!=null){
 				dados[4] = dfGlobal.format(pagamento.getDataPagamento());
@@ -370,6 +342,11 @@ public class DadosPagamento extends Composite {
 			pagamentoTableUtil.addRow(dados,row+1);
 			row++;
 		}
+		if (valorpago > entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue())
+			valorcredito = valorpago - entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue();
+		if (entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue() > valorpago)
+			valorpagar = entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue() - valorpago;
+		entidadeEditada.setQtdeparcelas(row);
 		pagamentoTableUtil.applyDataRowStyles();
 		if (row>0){
 			ListBoxUtil.setItemSelected(parcelaListBox,row+"");
@@ -380,6 +357,10 @@ public class DadosPagamento extends Composite {
 		}
 		else
 			ListBoxUtil.setItemSelected(parcelaListBox,"1");
+		valorCreditoTextBox.setText(dfCurrency.format(valorcredito));
+		valorPagoTextBox.setText(dfCurrency.format(valorpago));
+		valorPagarTextBox.setText(dfCurrency.format(valorpagar));
+		valorParcelasTextBox.setText(dfCurrency.format(valorparcelas));
 	}
 
 	private void editaPagamento(EncontroInscricaoPagamento encontroInscricaoPagamento) {
@@ -446,7 +427,7 @@ public class DadosPagamento extends Composite {
 			pagamentoEditada.setValor(new BigDecimal(valorParcelaNumberTextBox.getNumber().doubleValue()+(centavos/100)));
 		}
 		entidadeEditada.getListaPagamento().add(pagamentoEditada);
-		geraParcelas();
+		entidadeEditada.geraParcelas();
 		populaPagamentos();
 		dadosAlterados = true;
 		editaPagamentoDialogBox.hide();
@@ -463,117 +444,9 @@ public class DadosPagamento extends Composite {
 		if(parcelaListBox.getValue(parcelaListBox.getSelectedIndex())==null || parcelaListBox.getValue(parcelaListBox.getSelectedIndex()).equals("") ){
 			return;
 		}
-		geraParcelas();
+		getEncontroInscricaoVO().setQtdeparcelas(Integer.parseInt(parcelaListBox.getValue(parcelaListBox.getSelectedIndex())));
+		getEncontroInscricaoVO().geraParcelas();
 		populaPagamentos();
-	}
-
-	@SuppressWarnings("deprecation")
-	public void geraParcelas() {
-		int daybase = entidadeEditada.getEncontroInscricao().getEncontro().getDataMaximaPagamento().getDate();
-		Date hoje = new Date();
-		double centavos = 0;
-		if(entidadeEditada.getEncontroInscricao().getCodigo()!=null){
-			centavos = entidadeEditada.getEncontroInscricao().getCodigo().intValue();
-		}
-
-		EncontroInscricaoPagamento parcelaInscricao = null;
-
-		double valorPago = 0;
-		List<EncontroInscricaoPagamento> listPagamento = new ArrayList<EncontroInscricaoPagamento>();
-		for (EncontroInscricaoPagamento pagamento : entidadeEditada.getListaPagamento()) {
-			if(pagamento.getDataPagamento()!=null || pagamento.getValorAlterado()){
-				listPagamento.add(pagamento);
-				valorPago += pagamento.getValor().doubleValue();
-			}
-		}
-		int qtdeparcelapagas=0;
-		for (EncontroInscricaoPagamento pagamento : listPagamento) {
-			qtdeparcelapagas++;
-			pagamento.setParcela(qtdeparcelapagas);
-		}
-		double valorTotal = entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue();
-		double valorApagar = valorTotal - valorPago;
-
-		int qtdeparcelas = Integer.valueOf(parcelaListBox.getValue(parcelaListBox.getSelectedIndex()));
-		int parcelasrestantes = qtdeparcelas - qtdeparcelapagas;
-
-		if (valorApagar > 0){
-			if (parcelasrestantes<0) {
-				parcelasrestantes = 1;
-				qtdeparcelas = qtdeparcelapagas + 1;
-				ListBoxUtil.setItemSelected(parcelaListBox,qtdeparcelas+"");
-				if (parcelaListBox.getSelectedIndex()==-1){
-					parcelaListBox.addItem(qtdeparcelas+"");
-					ListBoxUtil.setItemSelected(parcelaListBox,qtdeparcelas+"");
-				}
-			}
-			if (getMaxParcela() != null && parcelasrestantes+qtdeparcelapagas > getMaxParcela()){
-				parcelasrestantes = 1;
-				qtdeparcelas = qtdeparcelapagas + 1;
-				if (parcelaListBox.getSelectedIndex()==-1){
-					parcelaListBox.addItem(qtdeparcelas+"");
-					ListBoxUtil.setItemSelected(parcelaListBox,qtdeparcelas+"");
-				}
-			}
-			if (listPagamento.size()==0 && qtdeparcelas==1){
-					if(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao()!=null){
-						parcelaInscricao = new EncontroInscricaoPagamento();
-						parcelaInscricao.setDataVencimento(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
-						parcelaInscricao.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
-						parcelaInscricao.setValorAlterado(false);
-						parcelaInscricao.setParcela(1);
-						parcelaInscricao.setValor(new BigDecimal(entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue()+(centavos/100)));
-						listPagamento.add(parcelaInscricao);
-					}else{
-						parcelaInscricao = new EncontroInscricaoPagamento();
-						parcelaInscricao.setDataVencimento(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
-						parcelaInscricao.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
-						parcelaInscricao.setParcela(1);
-						parcelaInscricao.setValorAlterado(false);
-						parcelaInscricao.setValor(new BigDecimal(entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue()+(centavos/100)));
-						if(hoje.getDate()<daybase){
-							hoje = new Date(hoje.getYear(), hoje.getMonth(), daybase, 0, 0, 0);
-						} else {
-							hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase, 0, 0, 0);
-						}
-						parcelaInscricao.setDataVencimento(hoje);
-						listPagamento.add(parcelaInscricao);
-					}
-			}else{
-
-				double valor = valorApagar / parcelasrestantes;
-
-				EncontroInscricaoPagamento p;
-
-				BigDecimal valorParcela;
-				double total = 0;
-				for (int i = qtdeparcelapagas+1; i <= qtdeparcelas; i++) {
-					if(i==qtdeparcelas){
-						valorParcela = new BigDecimal(valorApagar-total);
-					} else {
-						valorParcela = new BigDecimal(valor);
-						valorParcela = valorParcela.setScale(0, RoundingMode.HALF_UP);
-						total += valorParcela.doubleValue();
-					}
-
-					p = new EncontroInscricaoPagamento();
-					p.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
-					p.setValorAlterado(false);
-
-					if(hoje.getDate() < daybase && i==qtdeparcelas){
-						hoje = new Date(hoje.getYear(), hoje.getMonth(), daybase, 0, 0, 0);
-					} else {
-						hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase, 0, 0, 0);
-					}
-					p.setDataVencimento(hoje);
-
-					p.setParcela(i);
-					p.setValor(new BigDecimal(valorParcela.doubleValue() + (centavos/100)));
-					listPagamento.add(p);
-				}
-			}
-			entidadeEditada.setListaPagamento(listPagamento);
-		}
 	}
 
 	private void setCodigo(Integer codigo){
@@ -628,13 +501,5 @@ public class DadosPagamento extends Composite {
 	}
 	public void setDadosAlterados(Boolean dadosAlterados) {
 		this.dadosAlterados = dadosAlterados;
-	}
-
-	public Integer getMaxParcela() {
-		return maxParcela;
-	}
-
-	public void setMaxParcela(Integer maxParcela) {
-		this.maxParcela = maxParcela;
 	}
 }

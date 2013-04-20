@@ -30,7 +30,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 
 public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoPresenter.Display> {
-	
+
 	public interface Display extends BaseDisplay {
 		void populaEntidades(List<EncontroInscricao> lista);
 		void init();
@@ -38,6 +38,7 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 		void setDadosFicha(EncontroInscricao result);
 		void edita(EncontroInscricao encontroInscricao);
 		void populaMensagem(List<Mensagem> result);
+		void setValorEncontroOutro(double valorEncontro);
 	}
 
 	public EncontroInscricaoPresenter(Display display, WebResource portalResource) {
@@ -48,7 +49,7 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 	private Grupo grupoSelecionado;
 	private Encontro encontroSelecionado;
 	private DadosLoginVO dadosLoginVO;
-	
+
 	@Override
 	public void bind() {
 	}
@@ -81,7 +82,19 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 			}
 		});
 	}
-	
+
+	public void getValorEncontroOutro(final EncontroInscricao inscricaoOrigem, EncontroInscricao inscricaoOutra){
+		getDisplay().showWaitMessage(true);
+		service.getVO(inscricaoOutra, new WebAsyncCallback<EncontroInscricaoVO>(getDisplay()) {
+			@Override
+			protected void success(EncontroInscricaoVO vo) {
+				getDisplay().showWaitMessage(false);
+				getDisplay().setValorEncontroOutro(vo.getValorEncontro(inscricaoOrigem));
+			}
+
+		});
+	}
+
 	public void buscaEncontroInscricao(){
 		getDisplay().showWaitMessage(true);
 		service.lista(encontroSelecionado, new WebAsyncCallback<List<EncontroInscricao>>(getDisplay()) {
@@ -89,16 +102,16 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 			protected void success(List<EncontroInscricao> lista) {
 				getDisplay().populaEntidades(lista);
 				if(dadosLoginVO.getParametrosRedirecionamentoVO()!=null &&
-				   dadosLoginVO.getParametrosRedirecionamentoVO().getPresenterCode()!=null && 
+				   dadosLoginVO.getParametrosRedirecionamentoVO().getPresenterCode()!=null &&
 				   dadosLoginVO.getParametrosRedirecionamentoVO().getPresenterCode().equals(PresenterCodeEnum.ENCONTRO_INSCRICAO)){
 					dadosLoginVO.getParametrosRedirecionamentoVO().setPresenterCode(null);
 					for (EncontroInscricao encontroInscricao : lista) {
-						if(dadosLoginVO.getParametrosRedirecionamentoVO().getCasal()!=null && 
+						if(dadosLoginVO.getParametrosRedirecionamentoVO().getCasal()!=null &&
 						   encontroInscricao.getCasal()!=null &&
 						   dadosLoginVO.getParametrosRedirecionamentoVO().getCasal().getId().equals(encontroInscricao.getCasal().getId())){
 							getDisplay().edita(encontroInscricao);
 							break;
-						} else if(dadosLoginVO.getParametrosRedirecionamentoVO().getPessoa()!=null && 
+						} else if(dadosLoginVO.getParametrosRedirecionamentoVO().getPessoa()!=null &&
 						   encontroInscricao.getPessoa()!=null &&
 						   dadosLoginVO.getParametrosRedirecionamentoVO().getPessoa().getId().equals(encontroInscricao.getPessoa().getId())){
 							getDisplay().edita(encontroInscricao);
@@ -109,7 +122,7 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 			}
 		});
 	}
-	
+
 	public void getVO(EncontroInscricao encontroInscricao){
 		getDisplay().showWaitMessage(true);
 		service.getVO(encontroInscricao, new WebAsyncCallback<EncontroInscricaoVO>(getDisplay()) {
@@ -130,7 +143,7 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 				getDisplay().populaMensagem(result);
 				getDisplay().showWaitMessage(false);
 			}
-		});		
+		});
 	}
 	public void salvar(EncontroInscricaoVO vo) {
 		getDisplay().showWaitMessage(true);
@@ -182,7 +195,7 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 				Window.alert("Ficha enviada com sucesso");
 			}
 		});
-		
+
 	}
 	public Grupo getGrupoSelecionado() {
 		return grupoSelecionado;

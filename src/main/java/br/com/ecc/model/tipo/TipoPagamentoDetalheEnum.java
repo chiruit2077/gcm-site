@@ -1,10 +1,10 @@
 package br.com.ecc.model.tipo;
 
 public enum TipoPagamentoDetalheEnum {
-	TAXAENCONTRO("VALOR DA TAXA ENCONTRO",false),
-	HOSPEDAGEM("VALOR DA HOSPEDAGEM",true),
-	ALIMENTACAO("VALOR DA ALIMENTACAO",true),
-	OUTRAINSCRICAO("VALOR PARA OUTRA INSCRIÇÃO",false),
+	TAXAENCONTRO("TAXA ECC",false),
+	HOSPEDAGEM("HOSPEDAGEM",true),
+	ALIMENTACAO("ALIMENTACAO",true),
+	OUTRAINSCRICAO("DOAÇÃO OUTRA INSCRIÇÃO",false),
 	AVULSO("AVULSO",true);
 
 	private String nome;

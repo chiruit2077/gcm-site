@@ -24,6 +24,8 @@ import br.com.ecc.model.tipo.TipoPagamentoLancamentoEnum;
 @NamedQueries({
 	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.porEncontroInscricao",
 		query="select u from EncontroInscricaoPagamentoDetalhe u where u.encontroInscricao = :encontroInscricao"),
+	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.porEncontroInscricaoOutraCredito",
+		query="select u from EncontroInscricaoPagamentoDetalhe u where u.encontroInscricaoOutra = :encontroInscricao and u.tipoDetalhe='OUTRAINSCRICAO' and u.tipoLancamento = 'CREDITO' "),
 	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.deletePorEncontroInscricao",
 		query="delete from EncontroInscricaoPagamentoDetalhe u where u.encontroInscricao = :encontroInscricao"),
 	@NamedQuery(name="encontroInscricaoPagamentoDetalhe.deletePorEncontroInscricaoNotIn",
@@ -52,7 +54,7 @@ public class EncontroInscricaoPagamentoDetalhe extends _WebBaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name="encontroInscricaoOutra")
-	private EncontroInscricao encontroInscricaoOutro;
+	private EncontroInscricao encontroInscricaoOutra;
 
 	@Column(precision=15, scale=2)
 	private BigDecimal valor;
@@ -132,10 +134,10 @@ public class EncontroInscricaoPagamentoDetalhe extends _WebBaseEntity {
 	public void setTipoLancamento(TipoPagamentoLancamentoEnum tipoLancamento) {
 		this.tipoLancamento = tipoLancamento;
 	}
-	public EncontroInscricao getEncontroInscricaoOutro() {
-		return encontroInscricaoOutro;
+	public EncontroInscricao getEncontroInscricaoOutra() {
+		return encontroInscricaoOutra;
 	}
-	public void setEncontroInscricaoOutro(EncontroInscricao encontroInscricaoOutro) {
-		this.encontroInscricaoOutro = encontroInscricaoOutro;
+	public void setEncontroInscricaoOutra(EncontroInscricao encontroInscricaoOutra) {
+		this.encontroInscricaoOutra = encontroInscricaoOutra;
 	}
 }

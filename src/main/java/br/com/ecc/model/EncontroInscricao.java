@@ -51,6 +51,15 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 	  "       ( upper(p.nome) like upper(:key) or" +
 	  "        upper(p.apelido) like upper(:key) ) " +
 	  "   order by p.apelido, p.nome  " ),
+  @NamedQuery(name="encontroInscricao.porEncontroCasalNomeLike",
+	query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
+	  "   where uc.encontro = :encontro and " +
+	  "        uc.tipoConfirmacao = 'CONFIRMADO' and " +
+	  "       ( upper(c.ele.nome) like upper(:key) or " +
+	  "        upper(c.ele.apelido) like upper(:key) or " +
+	  "        upper(c.ela.nome) like upper(:key) or" +
+	  "        upper(c.ela.apelido) like upper(:key) )  " +
+	  "   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
 	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLikeTipo",
 	query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
 	  "   where uc.encontro = :encontro and " +

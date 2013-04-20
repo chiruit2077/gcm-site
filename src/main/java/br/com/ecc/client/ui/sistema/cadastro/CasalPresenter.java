@@ -151,11 +151,11 @@ public class CasalPresenter extends BasePresenter<CasalPresenter.Display> {
 			@Override
 			protected void success(List<Casal> lista) {
 				getDisplay().populaEntidades(lista);
-				/*
+
 				if(dadosLoginVO.getParametrosRedirecionamentoVO()!=null && dadosLoginVO.getParametrosRedirecionamentoVO().getCasal()!=null){
 					getDisplay().edita(dadosLoginVO.getParametrosRedirecionamentoVO().getCasal());
 				}
-				*/
+
 				getDisplay().showWaitMessage(false);
 			}
 		});
