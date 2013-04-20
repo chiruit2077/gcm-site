@@ -263,6 +263,13 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
+		if (encerramentoCheckBox.getValue()){
+			Date hoje = new Date();
+			if (hoje.before(fimDateBox.getValue())){
+				Window.alert("Este encontro não pode ser encerrado !!!");
+				return;
+			}
+		}
 		entidadeEditada.getEncontro().setInicio(inicioDateBox.getValue());
 		entidadeEditada.getEncontro().setFim(fimDateBox.getValue());
 		entidadeEditada.getEncontro().setQuantidadeAfilhados(null);
@@ -270,12 +277,21 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 		entidadeEditada.getEncontro().setQuantidadeDiarias(null);
 		if(afilhadosNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setQuantidadeAfilhados(afilhadosNumberTextBox.getNumber().intValue());
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina quantidade de afilhados!!!");
+			return;
 		}
 		if(refeicoesNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setQuantidadeRefeicoes(refeicoesNumberTextBox.getNumber().intValue());
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina quantidade de refeições!!!");
+			return;
 		}
 		if(diariasNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setQuantidadeDiarias(diariasNumberTextBox.getNumber().intValue());
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina quantidade de diarias!!!");
+			return;
 		}
 		entidadeEditada.getEncontro().setGrupo(presenter.getGrupoSelecionado());
 		entidadeEditada.getEncontro().setValorAfilhado(null);
@@ -294,42 +310,84 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 
 		if(valorAfilhadoNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorAfilhado(new BigDecimal(valorAfilhadoNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Afilhado!!!");
+			return;
 		}
 		if(valorPadrinhoNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorPadrinho(new BigDecimal(valorPadrinhoNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Padrinho!!!");
+			return;
 		}
 		if(valorApoioNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorApoio(new BigDecimal(valorApoioNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Apoio!!!");
+			return;
 		}
 		if(valorInscricaoNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorInscricao(new BigDecimal(valorInscricaoNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Inscrição Casal!!!");
+			return;
 		}
 		if(valorApoioSolteiroNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorApoioSolteiro(new BigDecimal(valorApoioSolteiroNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Solteiro!!!");
+			return;
 		}
 		if(valorInscricaoSolteiroNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorInscricaoSolteiro(new BigDecimal(valorInscricaoSolteiroNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Inscrição Solteiro!!!");
+			return;
 		}
 		if(valorTaxaAfilhadoNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorTaxaEncontroAfilhado(new BigDecimal(valorTaxaAfilhadoNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Taxa Afilhado!!!");
+			return;
 		}
 		if(valorTaxaCasalNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorTaxaEncontroCasal(new BigDecimal(valorTaxaCasalNumberTextBox.getNumber().doubleValue()));
 		}
+		else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Taxa Padrinho!!!");
+			return;
+		}
 		if(valorTaxaCasalApoioNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorTaxaEncontroCasalApoio(new BigDecimal(valorTaxaCasalApoioNumberTextBox.getNumber().doubleValue()));
+		}
+		else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Taxa Apoio!!!");
+			return;
 		}
 		if(valorTaxaSolteiroNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorTaxaEncontroSolteiro(new BigDecimal(valorTaxaSolteiroNumberTextBox.getNumber().doubleValue()));
 		}
+		else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Taxa Solteiro!!!");
+			return;
+		}
 		if(valorDiariaCasalNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorDiariaCasal(new BigDecimal(valorDiariaCasalNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Diaria Casal!!!");
+			return;
 		}
 		if(valorDiariaSolteiroNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorDiariaSolteiro(new BigDecimal(valorDiariaSolteiroNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Diaria Solteiro!!!");
+			return;
 		}
 		if(valorAlimentacaoNumberTextBox.getNumber()!=null){
 			entidadeEditada.getEncontro().setValorAlimentacao(new BigDecimal(valorAlimentacaoNumberTextBox.getNumber().doubleValue()));
+		}else if (entidadeEditada.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			Window.alert("Defina valor Alimentação!!!");
+			return;
 		}
 		entidadeEditada.getEncontro().setDataMaximaPagamento(dataVencimentoDateBox.getValue());
 		entidadeEditada.getEncontro().setDataPagamentoInscricao(dataVencimentoInscricaoDateBox.getValue());

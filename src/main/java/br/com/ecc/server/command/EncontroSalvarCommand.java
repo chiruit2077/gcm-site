@@ -7,10 +7,16 @@ import java.util.concurrent.Callable;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroConviteResponsavel;
+import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroPeriodo;
 import br.com.ecc.model.EncontroTotalizacao;
 import br.com.ecc.model.EncontroTotalizacaoAtividade;
+import br.com.ecc.model.tipo.TipoCasalEnum;
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.tipo.TipoSituacaoEnum;
 import br.com.ecc.model.vo.EncontroTotalizacaoVO;
 import br.com.ecc.model.vo.EncontroVO;
 
@@ -29,6 +35,19 @@ public class EncontroSalvarCommand implements Callable<EncontroVO>{
 		Query q;
 
 		encontroVO.setEncontro(em.merge(encontroVO.getEncontro()));
+
+		if (encontroVO.getEncontro().getDataEncerramento()!=null){
+			List<EncontroInscricao> listaInscricao = encontroVO.getListaInscricao();
+			for (EncontroInscricao encontroInscricao : listaInscricao) {
+				if (encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO) &&
+						encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.CONFIRMADO)){
+					Casal casal = encontroInscricao.getCasal();
+					casal.setTipoCasal(TipoCasalEnum.ENCONTRISTA);
+					casal.setSituacao(TipoSituacaoEnum.ATIVO);
+					em.merge(casal);
+				}
+			}
+		}
 
 		//periodos
 		List<EncontroPeriodo> novaLista = new ArrayList<EncontroPeriodo>();
