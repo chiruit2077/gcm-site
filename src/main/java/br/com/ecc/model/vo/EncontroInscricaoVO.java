@@ -23,7 +23,7 @@ public class EncontroInscricaoVO implements Serializable {
 	private List<EncontroInscricaoPagamentoDetalhe> listaPagamentoDetalhe;
 	private Boolean marcaFichaPreenchida = false;
 	private Integer maxParcela;
-	private int qtdeparcelas;
+	private Integer qtdeparcelas;
 
 	public EncontroInscricao getEncontroInscricao() {
 		return encontroInscricao;
@@ -100,19 +100,19 @@ public class EncontroInscricaoVO implements Serializable {
 		double valorTotal = getEncontroInscricao().getValorEncontro().doubleValue();
 		double valorApagar = valorTotal - valorPago;
 
-		int parcelasrestantes = qtdeparcelas - qtdeparcelapagas;
+		int parcelasrestantes = getQtdeparcelas() - qtdeparcelapagas;
 
 		if (valorApagar > 0){
 			if (parcelasrestantes<0) {
 				parcelasrestantes = 1;
-				qtdeparcelas = qtdeparcelapagas + 1;
+				setQtdeparcelas(qtdeparcelapagas + 1);
 			}
 			if (getMaxParcela() != null && parcelasrestantes+qtdeparcelapagas > getMaxParcela()){
 				parcelasrestantes = 1;
-				qtdeparcelas = qtdeparcelapagas + 1;
+				setQtdeparcelas(qtdeparcelapagas + 1);
 
 			}
-			if (listPagamento.size()==0 && qtdeparcelas==1){
+			if (listPagamento.size()==0 && getQtdeparcelas().equals(1)){
 					if(getEncontroInscricao().getEncontro().getDataPagamentoInscricao()!=null){
 						parcelaInscricao = new EncontroInscricaoPagamento();
 						parcelaInscricao.setDataVencimento(getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
@@ -144,8 +144,8 @@ public class EncontroInscricaoVO implements Serializable {
 
 				BigDecimal valorParcela;
 				double total = 0;
-				for (int i = qtdeparcelapagas+1; i <= qtdeparcelas; i++) {
-					if(i==qtdeparcelas){
+				for (int i = qtdeparcelapagas+1; i <= getQtdeparcelas(); i++) {
+					if(getQtdeparcelas().equals(i)){
 						valorParcela = new BigDecimal(valorApagar-total);
 					} else {
 						valorParcela = new BigDecimal(valor);
@@ -157,7 +157,7 @@ public class EncontroInscricaoVO implements Serializable {
 					p.setEncontroInscricao(getEncontroInscricao());
 					p.setValorAlterado(false);
 
-					if(hoje.getDate() < daybase && i==qtdeparcelas){
+					if(hoje.getDate() < daybase && i==getQtdeparcelas()){
 						hoje = new Date(hoje.getYear(), hoje.getMonth(), daybase, 0, 0, 0);
 					} else {
 						hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase, 0, 0, 0);
@@ -174,15 +174,17 @@ public class EncontroInscricaoVO implements Serializable {
 	}
 
 	public Integer getMaxParcela() {
+		if (maxParcela==null) return 1;
 		return maxParcela;
 	}
 	public void setMaxParcela(Integer maxParcela) {
 		this.maxParcela = maxParcela;
 	}
-	public int getQtdeparcelas() {
+	public Integer getQtdeparcelas() {
+		if (qtdeparcelas==null) return 1;
 		return qtdeparcelas;
 	}
-	public void setQtdeparcelas(int qtdeparcelas) {
+	public void setQtdeparcelas(Integer qtdeparcelas) {
 		this.qtdeparcelas = qtdeparcelas;
 	}
 
@@ -213,11 +215,9 @@ public class EncontroInscricaoVO implements Serializable {
 		TipoInscricaoEnum tipo = getEncontroInscricao().getTipo();
 		List<EncontroInscricaoPagamentoDetalhe> pagamentoDetalheNovo = new ArrayList<EncontroInscricaoPagamentoDetalhe>();
 		List<EncontroInscricaoPagamentoDetalhe> pagamentoDetalhe = getListaPagamentoDetalhe();
-		if (pagamentoDetalhe!=null){
-			for (EncontroInscricaoPagamentoDetalhe encontroInscricaoPagamentoDetalhe : pagamentoDetalhe) {
-				if (encontroInscricaoPagamentoDetalhe.getEditavel()){
-					pagamentoDetalheNovo.add(encontroInscricaoPagamentoDetalhe);
-				}
+		for (EncontroInscricaoPagamentoDetalhe encontroInscricaoPagamentoDetalhe : pagamentoDetalhe) {
+			if (encontroInscricaoPagamentoDetalhe.getEditavel()){
+				pagamentoDetalheNovo.add(encontroInscricaoPagamentoDetalhe);
 			}
 		}
 		if (tipo.equals(TipoInscricaoEnum.AFILHADO)){

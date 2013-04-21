@@ -206,9 +206,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				dadosPagamentoComponent.setCasalInscrito(casalEditado);
 				if (casalEditado.getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA))
 					ListBoxUtil.setItemSelected(tipoListBox, TipoInscricaoEnum.APOIO.toString());
-				if (casalEditado.getTipoCasal().equals(TipoCasalEnum.CONVIDADO))
+				else if (casalEditado.getTipoCasal().equals(TipoCasalEnum.CONVIDADO))
 					ListBoxUtil.setItemSelected(tipoListBox, TipoInscricaoEnum.AFILHADO.toString());
 				tipoListBox.setEnabled(true);
+				entidadeEditada.getEncontroInscricao().setTipo((TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values()));
 				entidadeEditada.geraPagamentoDetalhe();
 				populaDetalhes(entidadeEditada.getListaPagamentoDetalhe(),true);
 			}
@@ -226,6 +227,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				dadosPagamentoComponent.setCasalInscrito(casalEditado);
 				ListBoxUtil.setItemSelected(tipoListBox, TipoInscricaoEnum.APOIO.toString());
 				tipoListBox.setEnabled(false);
+				entidadeEditada.getEncontroInscricao().setTipo((TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values()));
 				entidadeEditada.geraPagamentoDetalhe();
 				populaDetalhes(entidadeEditada.getListaPagamentoDetalhe(),true);
 			}
@@ -326,8 +328,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			entidadeEditada.getEncontroInscricao().setCodigo(codigoNumberTextBox.getNumber().intValue());
 		}
 		//salvando dados do pagamento
-		entidadeEditada.setListaPagamento(dadosPagamentoComponent.getEncontroInscricaoVO().getListaPagamento());
-		entidadeEditada.getEncontroInscricao().setValorEncontro(dadosPagamentoComponent.getEncontroInscricaoVO().getEncontroInscricao().getValorEncontro());
+		//entidadeEditada.setListaPagamento(dadosPagamentoComponent.getEncontroInscricaoVO().getListaPagamento());
+		//entidadeEditada.getEncontroInscricao().setValorEncontro(dadosPagamentoComponent.getEncontroInscricaoVO().getEncontroInscricao().getValorEncontro());
 		entidadeEditada.getEncontroInscricao().setDataMaximaParcela(dataMaxParcelaDateBox.getValue());
 		entidadeEditada.getEncontroInscricao().setEsconderPlanoPagamento(esconderPagamentoCheckBox.getValue());
 		entidadeEditada.getEncontroInscricao().setTipoConfirmacao((TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values()));
@@ -373,7 +375,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			entidadeEditada.setEncontroInscricao(new EncontroInscricao());
 			entidadeEditada.getEncontroInscricao().setEncontro(presenter.getEncontroSelecionado());
 			entidadeEditada.setListaPagamento(new ArrayList<EncontroInscricaoPagamento>());
+			entidadeEditada.setListaPagamentoDetalhe(new ArrayList<EncontroInscricaoPagamentoDetalhe>());
 			entidadeEditada.getEncontroInscricao().setHospedagemParticular(false);
+			dadosPagamentoComponent.setUsuario(presenter.getDadosLoginVO().getUsuario());
+			dadosPagamentoComponent.setCasal(presenter.getDadosLoginVO().getCasal());
 			dadosPagamentoComponent.setEncontroInscricaoVO(entidadeEditada);
 
 			casalSuggestBox.setEnabled(true);
@@ -414,6 +419,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		detalheHTMLPanel.setVisible(false);
 		valorHTMLPanel.setVisible(false);
 		confirmacaoListBox.setSelectedIndex(0);
+		ListBoxUtil.setItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.CONFIRMADO.toString());
 		tabPanel.setHeight("200px");
 
 
@@ -437,7 +443,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				codigoNumberTextBox.setEnabled(false);
 			marcaPreenchimentoFichaCheckBox.setVisible(true);
 			esconderPagamentoCheckBox.setVisible(true);
-			tabPanel.setHeight("500px");
+			tabPanel.setHeight("530px");
 			valorHTMLPanel.setVisible(true);
 		} else {
 			participanteHTMLPanel.setVisible(true);
@@ -476,13 +482,9 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		dataMaxParcelaDateBox.setValue(encontroInscricaoVO.getEncontroInscricao().getDataMaximaParcela());
 		if (!encontroInscricaoVO.getEncontroInscricao().getEsconderPlanoPagamento()){
 			tabPanel.getTabWidget(1).getParent().setVisible(true);
-			detalheHTMLPanel.setVisible(true);
-			tabPanel.setHeight("500px");
 			valorHTMLPanel.setVisible(true);
 		}
 		if (encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.AFILHADO)){
-			if (!presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR))
-				detalheHTMLPanel.setVisible(false);
 			hospedagemParticularCheckBox.setVisible(false);
 		}
 
@@ -497,11 +499,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			ListBoxUtil.setItemSelected(confirmacaoListBox, entidadeEditada.getEncontroInscricao().getTipoConfirmacao().getNome());
 		}
 
-		//entidadeEditada.somaValorEncontro();
 		populaDetalhes(encontroInscricaoVO.getListaPagamentoDetalhe(),false);
-		/*if(entidadeEditada.getEncontroInscricao().getValorEncontro()!=null){
-			valorLabel.setText(dfCurrency.format(entidadeEditada.getEncontroInscricao().getValorEncontro()));
-		}*/
 	}
 
 	@UiHandler("exibeDesistenciaCheckBox")
@@ -533,7 +531,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 	@Override
 	public String getDisplayTitle() {
-		return "Inscrição ao encontro";
+		return "Inscrição no Encontro";
 	}
 
 	@Override
@@ -866,7 +864,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 	private void somaValorEncontro(boolean atualiza){
 		double valor = 0;
-		for (EncontroInscricaoPagamentoDetalhe detalhe: dadosPagamentoComponent.getEncontroInscricaoVO().getListaPagamentoDetalhe()) {
+		for (EncontroInscricaoPagamentoDetalhe detalhe: entidadeEditada.getListaPagamentoDetalhe()) {
 			if(detalhe.getTipoLancamento().equals(TipoPagamentoLancamentoEnum.DEBITO))
 				valor += detalhe.getValor().doubleValue();
 			else

@@ -66,19 +66,19 @@
 								</tr>
 								<tr>
 									<td>
-										<g:CheckBox ui:field="publicaPlanilhaCheckBox" text="Publica Planilha"/>
+										<g:CheckBox ui:field="publicaPlanilhaCheckBox" width="200px" text="Publica Planilha"/>
 									</td>
 									<td>
-										<g:CheckBox ui:field="publicaOrganogramaCheckBox" text="Publica Organograma"/>
+										<g:CheckBox ui:field="publicaOrganogramaCheckBox" width="200px" text="Publica Organograma"/>
 									</td>
 									<td>
-										<g:CheckBox ui:field="publicaRestauranteCheckBox" text="Publica Restaurante"/>
+										<g:CheckBox ui:field="publicaRestauranteCheckBox" width="200px" text="Publica Restaurante"/>
 									</td>
 									<td>
-										<g:CheckBox ui:field="publicaHotelariaCheckBox" text="Publica Hotelaria"/>
+										<g:CheckBox ui:field="publicaHotelariaCheckBox" width="200px" text="Publica Hotelaria"/>
 									</td>
 									<td>
-										<g:CheckBox ui:field="encerramentoCheckBox" text="Encerramento do Encontro"/>
+										<g:CheckBox ui:field="encerramentoCheckBox" width="200px" text="Encerramento"/>
 									</td>
 									<td>
 									</td>

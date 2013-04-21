@@ -87,6 +87,12 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			}
 		}
 
+		if (encontroInscricaoVO.getEncontroInscricao().getEncontro().getUsaDetalheAutomatico().equals(1) &&
+				encontroInscricaoVO.getListaPagamentoDetalhe().size()==0){
+			encontroInscricaoVO.geraPagamentoDetalhe();
+		}
+		encontroInscricaoVO.somaValorEncontro();
+
 		EncontroInscricaoFichaPagamento ficha = null;
 
 		if(encontroInscricaoVO.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
@@ -139,23 +145,32 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 			q.setParameter("encontroInscricao", encontroInscricaoVO.getEncontroInscricao());
 			q.executeUpdate();
 		}else{
-			ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
-			if (ficha==null && !encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.EXTERNO)){
-				if (encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.AFILHADO) ){
-					ficha = getFichaVaga(TipoInscricaoCasalEnum.AFILHADO,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+			if (encontroInscricaoVO.getEncontroInscricao().getEncontro().getUsaFichaPagamento().equals(1)){
+				ficha = encontroInscricaoVO.getEncontroInscricao().getFichaPagamento();
+				if (ficha==null && !encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+					if (encontroInscricaoVO.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.AFILHADO) ){
+						ficha = getFichaVaga(TipoInscricaoCasalEnum.AFILHADO,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+					}else{
+						ficha = getFichaVaga(TipoInscricaoCasalEnum.ENCONTRISTA,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+					}
+					encontroInscricaoVO.getEncontroInscricao().setFichaPagamento(ficha);
+					encontroInscricaoVO.getEncontroInscricao().setCodigo(ficha.getFicha());
+					if (encontroInscricaoVO.getEncontroInscricao().getEncontro().getUsaDetalheAutomatico().equals(1)){
+						encontroInscricaoVO.defineParcelasPosiveis();
+						if (encontroInscricaoVO.getListaPagamento().size()>0)
+							encontroInscricaoVO.setQtdeparcelas(encontroInscricaoVO.getListaPagamento().size());
+						else
+							encontroInscricaoVO.setQtdeparcelas(encontroInscricaoVO.getMaxParcela());
+						encontroInscricaoVO.geraParcelas();
+					}
+				}
+				if (ficha!=null){
+					encontroInscricaoVO.getEncontroInscricao().setCodigo(ficha.getFicha());
 				}else{
-					ficha = getFichaVaga(TipoInscricaoCasalEnum.ENCONTRISTA,encontroInscricaoVO.getEncontroInscricao().getEncontro());
+					encontroInscricaoVO.getEncontroInscricao().setCodigo(null);
 				}
 			}
-			if (ficha!=null){
-				encontroInscricaoVO.getEncontroInscricao().setFichaPagamento(ficha);
-				encontroInscricaoVO.getEncontroInscricao().setCodigo(ficha.getFicha());
-			}else{
-				encontroInscricaoVO.getEncontroInscricao().setFichaPagamento(null);
-				encontroInscricaoVO.getEncontroInscricao().setCodigo(null);
-			}
 		}
-		encontroInscricaoVO.somaValorEncontro();
 		encontroInscricaoVO.getEncontroInscricao().setEsconderPlanoPagamento(encontroInscricaoVO.getEncontroInscricao().getValorEncontro().doubleValue()==0);
 		encontroInscricaoVO.setEncontroInscricao(em.merge(encontroInscricaoVO.getEncontroInscricao()));
 		if (ficha!=null){

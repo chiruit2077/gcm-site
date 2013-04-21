@@ -48,6 +48,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.Widget;
@@ -61,6 +62,8 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
+
+	@UiField TabLayoutPanel despesaTabLayoutPanel;
 
 	@UiField DateBox inicioDateBox;
 	@UiField DateBox fimDateBox;
@@ -465,6 +468,7 @@ public class EncontroView extends BaseView<EncontroPresenter> implements Encontr
 
 	public void limpaCampos(){
 		copia = false;
+		despesaTabLayoutPanel.selectTab(0);
 		afilhadosNumberTextBox.setNumber(null);
 		refeicoesNumberTextBox.setNumber(null);
 		diariasNumberTextBox.setNumber(null);
