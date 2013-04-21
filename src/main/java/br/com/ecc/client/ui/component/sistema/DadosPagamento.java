@@ -99,16 +99,13 @@ public class DadosPagamento extends Composite {
 		dataVencimentoDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
 	}
 
-	public void setValorEncontro(BigDecimal valor){
-		setValorEncontro(valor,true);
-		dadosAlterados = false;
-	}
 	public void setValorEncontro(BigDecimal valor, boolean geraparcelas) {
 		entidadeEditada.getEncontroInscricao().setValorEncontro(valor);
 		if(entidadeEditada.getEncontroInscricao().getValorEncontro()!=null){
 			valorLabel.setText(dfCurrency.format(entidadeEditada.getEncontroInscricao().getValorEncontro()));
 		}
 		if (geraparcelas) {
+			defineParcelasPosiveis();
 			entidadeEditada.geraParcelas();
 			dadosAlterados = true;
 		}
@@ -189,7 +186,7 @@ public class DadosPagamento extends Composite {
 	public void defineAvisos(Integer codigoParam){
 		entidadeEditada.getEncontroInscricao().setCodigo(codigoParam);
 		setCodigo(codigoParam);
-		String codigo = "01";
+		String codigo = "00";
 		String aux= "se seu código for ";
 		if(codigoParam!=null){
 			codigo = StringUtil.right("00" + codigoParam.toString(),2);

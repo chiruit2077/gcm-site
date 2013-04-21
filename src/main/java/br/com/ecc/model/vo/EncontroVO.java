@@ -81,7 +81,7 @@ public class EncontroVO implements Serializable {
 		int qtde=0;
 		if (getListaInscricao()!= null){
 			for (EncontroInscricao inscricao : getListaInscricao()) {
-				if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO))
+				if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !inscricao.getTipo().equals(TipoInscricaoEnum.DOACAO))
 					qtde++;
 			}
 		}
@@ -93,7 +93,7 @@ public class EncontroVO implements Serializable {
 		int qtde=0;
 		if (getListaInscricao()!= null){
 			for (EncontroInscricao inscricao : getListaInscricao()) {
-				if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO))
+				if (inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO))
 					qtde++;
 			}
 		}

@@ -250,8 +250,6 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		}, BlurEvent.getType());
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoEnum.values());
 		ListBoxUtil.populate(confirmacaoListBox, false, TipoConfirmacaoEnum.values());
-		ListBoxUtil.populate(tipoDetalheListBox, false, TipoPagamentoDetalheEnum.values());
-		ListBoxUtil.populate(tipoLancamentoListBox, false, TipoPagamentoLancamentoEnum.values());
 	}
 
 	private void criaTabela() {
@@ -577,7 +575,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		Image editar, excluir;
 		HorizontalPanel hp;
 		boolean ok = false, exibeLinha;
-		int coordenador = 0, padrinho=0, apoio=0, afilhado=0, desistencia=0, externo=0;
+		int coordenador = 0, padrinho=0, apoio=0, afilhado=0, desistencia=0, externo=0, doacao = 0;
 		for (final EncontroInscricao encontroInscricao: lista) {
 			exibeLinha = true;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
@@ -596,6 +594,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 					afilhado++;
 				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
 					externo++;
+				} else if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.DOACAO)){
+					doacao++;
 				}
 			}
 			if(exibeLinha){
@@ -698,6 +698,11 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			totais += " / " + desistencia + " desistencia";
 		} else {
 			totais += " / " + desistencia + " desistencias";
+		}
+		if(doacao==1 || doacao==0){
+			totais += " / " + doacao + " doação";
+		} else {
+			totais += " / " + doacao + " doações";
 		}
 		if((coordenador+apoio+padrinho)==1 || (coordenador+apoio+padrinho)==0){
 			totais += " / " + (coordenador+apoio+padrinho) + " encontrista";
@@ -886,6 +891,17 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		casalRadio.setValue(true);
 		labelOutraInscricao.setText("Casal:");
 		inscricaoOutraSuggestBox.setValue(null);
+		TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values());
+		if (tipo != null && (tipo.equals(TipoInscricaoEnum.DOACAO) || tipo.equals(TipoInscricaoEnum.EXTERNO))){
+			descricaoDetalheTextBox.setEnabled(false);
+			descricaoDetalheTextBox.setValue(TipoPagamentoDetalheEnum.OUTRAINSCRICAO.toString());
+			tipoDetalheListBox.clear();
+			tipoDetalheListBox.addItem(TipoPagamentoDetalheEnum.OUTRAINSCRICAO.toString());
+			tipoLancamentoListBox.clear();
+			tipoLancamentoListBox.addItem(TipoPagamentoLancamentoEnum.DEBITO.toString());
+		}else
+			ListBoxUtil.populate(tipoDetalheListBox, false, TipoPagamentoDetalheEnum.values());
+			ListBoxUtil.populate(tipoLancamentoListBox, false, TipoPagamentoLancamentoEnum.values());
 	}
 	public void defineCamposDetalhe(EncontroInscricaoPagamentoDetalhe detalhe){
 		if (detalhe.getTipoDetalhe().equals(TipoPagamentoDetalheEnum.AVULSO)){
@@ -925,7 +941,20 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			entidadeEditadaDetalhe = new EncontroInscricaoPagamentoDetalhe();
 			entidadeEditadaDetalhe.setEncontroInscricao(entidadeEditada.getEncontroInscricao());
 			entidadeEditadaDetalhe.setEditavel(true);
-			ListBoxUtil.setItemSelected(tipoDetalheListBox, TipoPagamentoDetalheEnum.AVULSO.toString());
+			TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values());
+			if (tipo != null && (tipo.equals(TipoInscricaoEnum.DOACAO) || tipo.equals(TipoInscricaoEnum.EXTERNO)) ){
+				inscricaoOutraSuggestBox.setVisible(true);
+				labelOutraInscricao.setVisible(true);
+				casalRadio.setVisible(true);
+				pessoaRadio.setVisible(true);
+				HashMap<String, Object> params = new HashMap<String, Object>();
+				params.put("encontro", presenter.getEncontroSelecionado());
+				inscricaoOutraSuggest.setQueryParams(params);
+				inscricaoOutraSuggest.setSuggestQuery("encontroInscricao.porEncontroCasalNomeLike");
+				ListBoxUtil.setItemSelected(tipoDetalheListBox, TipoPagamentoDetalheEnum.OUTRAINSCRICAO.toString());
+			}
+			else
+				ListBoxUtil.setItemSelected(tipoDetalheListBox, TipoPagamentoDetalheEnum.AVULSO.toString());
 			ListBoxUtil.setItemSelected(tipoLancamentoListBox, TipoPagamentoLancamentoEnum.DEBITO.toString());
 		} else {
 			if (!detalhe.getEditavel()) return;

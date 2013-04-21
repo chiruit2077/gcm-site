@@ -109,10 +109,10 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		List<EncontroAtividade> listaEncontroAtividade = new ArrayList<EncontroAtividade>();
 		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
 		if(tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.COMPLETA)){
-			listaEncontroInscricao = montaListaEncontroInscricaoSemExterno(encontroVO.getListaInscricao());
+			listaEncontroInscricao = montaListaEncontroInscricaoSemExternoDoacao(encontroVO.getListaInscricao());
 			listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(encontroVO.getListaEncontroAtividade());
 		} else if(tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.COMPLETAEXTERNO)){
-			listaEncontroInscricao = montaListaEncontroInscricao(encontroVO.getListaInscricao());
+			listaEncontroInscricao = montaListaEncontroInscricaoSemDoacao(encontroVO.getListaInscricao());
 			listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(encontroVO.getListaEncontroAtividade());
 		} else if (tipoExibicaoPlanilhaEnum.equals(TipoExibicaoPlanilhaEnum.MINHA_ATIVIDADE_MINHA_COLUNA)){
 			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual(encontroVO.getListaInscricao());
@@ -286,20 +286,20 @@ public class PlanilhaImprimirCommand implements Callable<Integer>{
 		}
 	}
 
-	private List<EncontroInscricao> montaListaEncontroInscricaoSemExterno(List<EncontroInscricao> listaInscricao) {
+	private List<EncontroInscricao> montaListaEncontroInscricaoSemExternoDoacao(List<EncontroInscricao> listaInscricao) {
 		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
 		for (EncontroInscricao encontroInscricao : listaInscricao) {
-			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
+			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO) && !encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !encontroInscricao.getTipo().equals(TipoInscricaoEnum.DOACAO)){
 				listaEncontroInscricao.add(encontroInscricao);
 			}
 		}
 		return listaEncontroInscricao;
 	}
 
-	private List<EncontroInscricao> montaListaEncontroInscricao(List<EncontroInscricao> listaInscricao) {
+	private List<EncontroInscricao> montaListaEncontroInscricaoSemDoacao(List<EncontroInscricao> listaInscricao) {
 		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
 		for (EncontroInscricao encontroInscricao : listaInscricao) {
-			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
+			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO) && !encontroInscricao.getTipo().equals(TipoInscricaoEnum.DOACAO)){
 				listaEncontroInscricao.add(encontroInscricao);
 			}
 		}

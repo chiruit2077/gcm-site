@@ -1,5 +1,7 @@
 package br.com.ecc.server.command;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -7,134 +9,47 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.ecc.model.Casal;
-import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroConvite;
 import br.com.ecc.model.EncontroFila;
 import br.com.ecc.model.EncontroInscricao;
-import br.com.ecc.model.EncontroInscricaoFichaPagamento;
+import br.com.ecc.model.EncontroInscricaoPagamento;
 import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
+import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoFilaEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
-import br.com.ecc.model.tipo.TipoInscricaoCasalEnum;
-import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
+import br.com.ecc.model.tipo.TipoPagamentoDetalheEnum;
+import br.com.ecc.model.tipo.TipoPagamentoLancamentoEnum;
 import br.com.ecc.model.tipo.TipoRespostaConviteEnum;
 import br.com.ecc.model.tipo.TipoSituacaoEnum;
+import br.com.ecc.model.vo.EncontroInscricaoVO;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.persist.Transactional;
 
 public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 
 	@Inject EntityManager em;
+	@Inject Injector inject;
 	private EncontroConvite encontroConvite;
+	private Usuario usuarioAtual;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public EncontroConvite call() throws Exception {
+		if(encontroConvite.getTipoResposta()==null) return encontroConvite;
 		boolean mover = encontroConvite.getMoverFinalFila();
 		boolean inscrever = encontroConvite.getGerarInscricao();
 		encontroConvite = em.merge(encontroConvite);
 
-		if(encontroConvite.getTipoResposta()!=null &&
-		   encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO) &&
-		   inscrever){
-
-			EncontroInscricao ei;
-			EncontroInscricaoPagamentoDetalhe eip;
-
-			//padrinho
-			Query q = em.createNamedQuery("encontroInscricao.porEncontroCasal");
-			q.setParameter("encontro", encontroConvite.getEncontro());
-			q.setParameter("casal", encontroConvite.getCasal());
-			if(q.getResultList().size()==0){
-				ei = new EncontroInscricao();
-				ei.setEncontro(encontroConvite.getEncontro());
-				ei.setTipo(TipoInscricaoEnum.PADRINHO);
-				ei.setCasal(encontroConvite.getCasal());
-				ei.setEsconderPlanoPagamento(encontroConvite.getEsconderPlanoPagamento());
-				if(encontroConvite.getEsconderPlanoPagamento()){
-					ei.setValorEncontro(null);
-				} else {
-					ei.setValorEncontro(encontroConvite.getEncontro().getValorPadrinho());
-				}
-				ei.setTipoConfirmacao(TipoConfirmacaoEnum.CONFIRMADO);
-				EncontroInscricaoFichaPagamento ficha = getFichaVaga(TipoInscricaoCasalEnum.ENCONTRISTA,encontroConvite.getEncontro());
-				if (ficha!=null){
-					ei.setFichaPagamento(ficha);
-					ei.setCodigo(ficha.getFicha());
-				}
-				ei = em.merge(ei);
-				if (ficha != null){
-					ficha.setEncontroInscricao(ei);
-					ficha = em.merge(ficha);
-				}
-
-				if(ei.getValorEncontro()!=null){
-					eip = new EncontroInscricaoPagamentoDetalhe();
-					eip.setEncontroInscricao(ei);
-					eip.setDescricao("Valor do encontro");
-					eip.setValor(ei.getValorEncontro());
-					em.merge(eip);
-					if(encontroConvite.getEsconderPlanoPagamento()){
-						eip = new EncontroInscricaoPagamentoDetalhe();
-						eip.setEncontroInscricao(ei);
-						eip.setDescricao("Valor do afilhado");
-						eip.setValor(encontroConvite.getEncontro().getValorAfilhado());
-						em.merge(eip);
-					}
-				}
-			}
-
-			//afilhado
-			q = em.createNamedQuery("encontroInscricao.porEncontroCasal");
-			q.setParameter("encontro", encontroConvite.getEncontro());
-			q.setParameter("casal", encontroConvite.getCasalConvidado());
-			if(q.getResultList().size()==0){
-				Casal casalConvidado = encontroConvite.getCasalConvidado();
-				casalConvidado.setSituacao(TipoSituacaoEnum.ATIVO);
-				casalConvidado.setGrupo(encontroConvite.getEncontro().getGrupo());
-				casalConvidado = em.merge(casalConvidado);
-
-				ei = new EncontroInscricao();
-				ei.setEncontro(encontroConvite.getEncontro());
-				ei.setTipo(TipoInscricaoEnum.AFILHADO);
-				ei.setCasal(encontroConvite.getCasalConvidado());
-				ei.setEsconderPlanoPagamento(encontroConvite.getEsconderPlanoPagamento());
-				if(encontroConvite.getEsconderPlanoPagamento()){
-					ei.setValorEncontro(null);
-				} else {
-					ei.setValorEncontro(encontroConvite.getEncontro().getValorAfilhado());
-				}
-				ei.setTipoConfirmacao(TipoConfirmacaoEnum.CONFIRMADO);
-				EncontroInscricaoFichaPagamento ficha = getFichaVaga(TipoInscricaoCasalEnum.AFILHADO,encontroConvite.getEncontro());
-				if (ficha!=null){
-					ei.setFichaPagamento(ficha);
-					ei.setCodigo(ficha.getFicha());
-
-				}
-				ei = em.merge(ei);
-				if (ficha != null){
-					ficha.setEncontroInscricao(ei);
-					ficha = em.merge(ficha);
-				}
-
-				if(ei.getValorEncontro()!=null){
-					eip = new EncontroInscricaoPagamentoDetalhe();
-					eip.setEncontroInscricao(ei);
-					eip.setDescricao("Valor do encontro");
-					eip.setValor(ei.getValorEncontro());
-					em.merge(eip);
-				}
-			}
-
+		if(encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO)){
+			if (inscrever) geraInscricoes();
 			encontroConvite.getCasalConvidado().setCasalPadrinho(encontroConvite.getCasal());
 			em.merge(encontroConvite.getCasalConvidado());
 		}
-		if(encontroConvite.getTipoResposta()!=null &&
-		   encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
-
+		else if(encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
 			Query q;
 			if(mover){
 				q = em.createNamedQuery("encontroFila.porEncontroFilaNormal");
@@ -180,17 +95,162 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 		return encontroConvite;
 	}
 
+	private void geraInscricoes() throws Exception {
+		EncontroInscricao ei;
+		EncontroInscricaoPagamentoDetalhe eip;
+		EncontroInscricaoPagamentoDetalhe credito = null;
+		EncontroInscricaoPagamentoDetalhe debito = null;
+
+		EncontroInscricaoVO vopadrinho = getEncontroInscricaoVO(encontroConvite.getCasal());
+		if(vopadrinho==null){
+			vopadrinho = new EncontroInscricaoVO();
+			ei = new EncontroInscricao();
+			vopadrinho.setEncontroInscricao(ei);
+			vopadrinho.setListaPagamentoDetalhe(new ArrayList<EncontroInscricaoPagamentoDetalhe>());
+			vopadrinho.setListaPagamento(new ArrayList<EncontroInscricaoPagamento>());
+		}else{
+			ei = vopadrinho.getEncontroInscricao();
+		}
+		ei.setEncontro(encontroConvite.getEncontro());
+		ei.setTipo(TipoInscricaoEnum.PADRINHO);
+		ei.setCasal(encontroConvite.getCasal());
+		ei.setEsconderPlanoPagamento(false);
+		ei.setTipoConfirmacao(TipoConfirmacaoEnum.CONFIRMADO);
+
+		if (encontroConvite.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			if(encontroConvite.getEsconderPlanoPagamento()){
+				debito = new EncontroInscricaoPagamentoDetalhe();
+				debito.setEncontroInscricao(ei);
+				debito.setTipoDetalhe(TipoPagamentoDetalheEnum.OUTRAINSCRICAO);
+				debito.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
+				debito.setValor(encontroConvite.getEncontro().getValorAfilhado());
+				debito.setQuantidade(1);
+				debito.setEditavel(true);
+				debito.setValorUnitario(encontroConvite.getEncontro().getValorAfilhado());
+				vopadrinho.getListaPagamentoDetalhe().add(debito);
+			}
+		}
+		else{
+			vopadrinho.setListaPagamentoDetalhe(new ArrayList<EncontroInscricaoPagamentoDetalhe>());
+			vopadrinho.setListaPagamento(new ArrayList<EncontroInscricaoPagamento>());
+			ei.setValorEncontro(encontroConvite.getEncontro().getValorPadrinho());
+			if(ei.getValorEncontro().doubleValue()>0){
+				eip = new EncontroInscricaoPagamentoDetalhe();
+				eip.setEncontroInscricao(ei);
+				eip.setDescricao("Valor do encontro");
+				eip.setTipoDetalhe(TipoPagamentoDetalheEnum.AVULSO);
+				eip.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
+				eip.setValor(ei.getValorEncontro());
+				eip.setQuantidade(1);
+				eip.setEditavel(true);
+				eip.setValorUnitario(ei.getValorEncontro());
+				vopadrinho.getListaPagamentoDetalhe().add(eip);
+			}
+			if(encontroConvite.getEsconderPlanoPagamento() && encontroConvite.getEncontro().getValorAfilhado().doubleValue()>0){
+				ei.setValorEncontro(new BigDecimal(encontroConvite.getEncontro().getValorPadrinho().doubleValue()+encontroConvite.getEncontro().getValorAfilhado().doubleValue()));
+				eip = new EncontroInscricaoPagamentoDetalhe();
+				eip.setEncontroInscricao(ei);
+				eip.setDescricao("Valor do afilhado");
+				eip.setTipoDetalhe(TipoPagamentoDetalheEnum.AVULSO);
+				eip.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
+				eip.setValor(encontroConvite.getEncontro().getValorAfilhado());
+				eip.setQuantidade(1);
+				eip.setEditavel(true);
+				eip.setValorUnitario(encontroConvite.getEncontro().getValorAfilhado());
+				vopadrinho.getListaPagamentoDetalhe().add(eip);
+			}
+		}
+
+		EncontroInscricaoSalvarCommand cmd = inject.getInstance(EncontroInscricaoSalvarCommand.class);
+		cmd.setUsuarioAtual(getUsuarioAtual());
+		cmd.setEncontroInscricaoVO(vopadrinho);
+		vopadrinho = cmd.call();
+
+
+		//afilhado
+
+		Casal casalConvidado = encontroConvite.getCasalConvidado();
+		casalConvidado.setSituacao(TipoSituacaoEnum.ATIVO);
+		casalConvidado.setGrupo(encontroConvite.getEncontro().getGrupo());
+		casalConvidado = em.merge(casalConvidado);
+
+		EncontroInscricaoVO voafilhado = getEncontroInscricaoVO(casalConvidado);
+		if(vopadrinho==null){
+			voafilhado = new EncontroInscricaoVO();
+			ei = new EncontroInscricao();
+			voafilhado.setListaPagamentoDetalhe(new ArrayList<EncontroInscricaoPagamentoDetalhe>());
+			voafilhado.setListaPagamento(new ArrayList<EncontroInscricaoPagamento>());
+			voafilhado.setEncontroInscricao(ei);
+		}else{
+			ei = voafilhado.getEncontroInscricao();
+		}
+
+		ei.setEncontro(encontroConvite.getEncontro());
+		ei.setTipo(TipoInscricaoEnum.AFILHADO);
+		ei.setCasal(casalConvidado);
+		ei.setEsconderPlanoPagamento(false);
+		ei.setTipoConfirmacao(TipoConfirmacaoEnum.CONFIRMADO);
+
+		if (encontroConvite.getEncontro().getUsaDetalheAutomatico().equals(1)){
+			if(encontroConvite.getEsconderPlanoPagamento()){
+				credito = new EncontroInscricaoPagamentoDetalhe();
+				credito.setEncontroInscricao(ei);
+				credito.setTipoDetalhe(TipoPagamentoDetalheEnum.OUTRAINSCRICAO);
+				credito.setTipoLancamento(TipoPagamentoLancamentoEnum.CREDITO);
+				credito.setValor(encontroConvite.getEncontro().getValorAfilhado());
+				credito.setQuantidade(1);
+				credito.setEditavel(true);
+				credito.setEncontroInscricaoOutra(vopadrinho.getEncontroInscricao());
+				credito.setValorUnitario(encontroConvite.getEncontro().getValorAfilhado());
+				voafilhado.getListaPagamentoDetalhe().add(credito);
+			}
+		}else{
+			if(encontroConvite.getEsconderPlanoPagamento()){
+				ei.setValorEncontro(new BigDecimal(0));
+			} else {
+				ei.setValorEncontro(encontroConvite.getEncontro().getValorAfilhado());
+			}
+			if(ei.getValorEncontro().doubleValue()>0){
+				eip = new EncontroInscricaoPagamentoDetalhe();
+				eip.setEncontroInscricao(ei);
+				eip.setDescricao("Valor do encontro");
+				eip.setTipoDetalhe(TipoPagamentoDetalheEnum.AVULSO);
+				eip.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
+				eip.setValor(ei.getValorEncontro());
+				eip.setQuantidade(1);
+				eip.setEditavel(true);
+				eip.setValorUnitario(ei.getValorEncontro());
+				voafilhado.getListaPagamentoDetalhe().add(eip);
+			}
+		}
+
+		cmd.setUsuarioAtual(getUsuarioAtual());
+		cmd.setEncontroInscricaoVO(voafilhado);
+		voafilhado = cmd.call();
+		if (voafilhado != null && vopadrinho != null && credito != null && debito != null){
+			for (EncontroInscricaoPagamentoDetalhe detalhe : vopadrinho.getListaPagamentoDetalhe()) {
+				if (detalhe.getTipoDetalhe().equals(debito.getTipoDetalhe()) &&
+						detalhe.getTipoLancamento().equals(debito.getTipoLancamento()) &&
+						detalhe.getEncontroInscricaoOutra() == null &&
+						detalhe.getValor().equals(credito.getValor())){
+					detalhe.setEncontroInscricaoOutra(voafilhado.getEncontroInscricao());
+					em.merge(detalhe);
+				}
+
+			}
+		}
+	}
+
 	@SuppressWarnings("unchecked")
-	private EncontroInscricaoFichaPagamento getFichaVaga(
-			TipoInscricaoCasalEnum tipo, Encontro encontro) {
-		if (encontro.getUsaFichaPagamento()!= null && encontro.getUsaFichaPagamento().equals(1)){
-			Query q = em.createNamedQuery("encontroInscricaoFichaPagamento.porVagalLivre");
-			q.setParameter("encontro", encontro);
-			q.setParameter("tipo", tipo);
-			q.setParameter("status", TipoInscricaoFichaStatusEnum.NORMAL);
-			List<EncontroInscricaoFichaPagamento> fichas = q.getResultList();
-			if (fichas.size()>0)
-				return fichas.get(0);
+	private EncontroInscricaoVO getEncontroInscricaoVO(Casal casal) throws Exception {
+		Query q = em.createNamedQuery("encontroInscricao.porEncontroCasal");
+		q.setParameter("encontro", encontroConvite.getEncontro());
+		q.setParameter("casal", encontroConvite.getCasal());
+		List<EncontroInscricao> result = q.getResultList();
+		if (result.size()>0){
+			EncontroInscricaoCarregaVOCommand cmd = inject.getInstance(EncontroInscricaoCarregaVOCommand.class);
+			cmd.setEncontroInscricao(result.get(0));
+			return cmd.call();
 		}
 		return null;
 	}
@@ -200,5 +260,13 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 	}
 	public void setEncontroConvite(EncontroConvite encontroConvite) {
 		this.encontroConvite = encontroConvite;
+	}
+
+	public Usuario getUsuarioAtual() {
+		return usuarioAtual;
+	}
+
+	public void setUsuarioAtual(Usuario usuarioAtual) {
+		this.usuarioAtual = usuarioAtual;
 	}
 }

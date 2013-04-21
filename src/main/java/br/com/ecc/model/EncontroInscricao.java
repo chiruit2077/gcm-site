@@ -45,7 +45,7 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 					  "      u.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR' ) and " +
 					  "	     u.tipoConfirmacao = 'CONFIRMADO' " ),
 	@NamedQuery(name="encontroInscricao.porEncontroCasal",
-		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal order by u.id desc"),
+		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal and u.tipoConfirmacao = 'CONFIRMADO' order by u.id desc"),
 	@NamedQuery(name="encontroInscricao.porEncontroPessoaNomeLike",
 	query="select up from EncontroInscricao up LEFT OUTER JOIN FETCH up.pessoa as p " +
 	  "   where up.encontro = :encontro and " +
@@ -142,6 +142,8 @@ public class EncontroInscricao extends _WebBaseEntity {
 	private Boolean esconderPlanoPagamento;
 
 	private Boolean hospedagemParticular;
+
+	private Boolean geraFicha;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
@@ -288,6 +290,15 @@ public class EncontroInscricao extends _WebBaseEntity {
 
 	public void setHospedagemParticular(Boolean hospedagemParticular) {
 		this.hospedagemParticular = hospedagemParticular;
+	}
+
+	public Boolean getGeraFicha() {
+		if (geraFicha==null) return true;
+		return geraFicha;
+	}
+
+	public void setGeraFicha(Boolean geraFicha) {
+		this.geraFicha = geraFicha;
 	}
 
 }

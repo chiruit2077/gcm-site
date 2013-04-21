@@ -33,7 +33,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 
 public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePresenter.Display> {
-	
+
 	public interface Display extends BaseDisplay {
 		void populaEntidades(List<EncontroConvite> lista);
 		void init();
@@ -52,7 +52,7 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 	private DadosLoginVO dadosLoginVO;
 	private List<EncontroConviteResponsavel> listaResponsavel;
 	private List<EncontroConvite> listaConvites;
-	
+
 	@Override
 	public void bind() {
 	}
@@ -85,7 +85,7 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 			}
 		});
 	}
-	
+
 	public void buscaEncontroConvite(){
 		getDisplay().showWaitMessage(true);
 		service.lista(encontroSelecionado, new WebAsyncCallback<List<EncontroConvite>>(getDisplay()) {
@@ -96,9 +96,9 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 			}
 		});
 	}
-	public void salvar(EncontroConvite encontroInscricaoEditado) {
+	public void salvar(EncontroConvite convite) {
 		getDisplay().showWaitMessage(true);
-		service.salva(encontroInscricaoEditado, new WebAsyncCallback<EncontroConvite>(getDisplay()) {
+		service.salva(convite, dadosLoginVO.getUsuario(), new WebAsyncCallback<EncontroConvite>(getDisplay()) {
 			@Override
 			public void success(EncontroConvite resposta) {
 				getDisplay().reset();
@@ -107,9 +107,9 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 		});
 	}
 
-	public void excluir(EncontroConvite encontroInscricaoEditado) {
+	public void excluir(EncontroConvite convite) {
 		getDisplay().showWaitMessage(true);
-		service.exclui(encontroInscricaoEditado, new WebAsyncCallback<Void>(getDisplay()) {
+		service.exclui(convite, dadosLoginVO.getUsuario(), new WebAsyncCallback<Void>(getDisplay()) {
 			@Override
 			public void success(Void resposta) {
 				getDisplay().reset();
@@ -126,7 +126,7 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 				getDisplay().populaFilas(result);
 			}
 		});
-		
+
 	}
 	public void salvarFila(EncontroFila encontroFila) {
 		EncontroFilaServiceAsync service = GWT.create(EncontroFilaService.class);
@@ -136,7 +136,7 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 				buscaFilas();
 			}
 		});
-		
+
 	}
 	public void excluirFila(EncontroFila encontroFila) {
 		EncontroFilaServiceAsync service = GWT.create(EncontroFilaService.class);
@@ -147,7 +147,7 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 			}
 		});
 	}
-	
+
 	public void buscaEncontros() {
 		EncontroServiceAsync serviceEncontro = GWT.create(EncontroService.class);
 		serviceEncontro.lista(grupoSelecionado, new WebAsyncCallback<List<Encontro>>(getDisplay()) {
@@ -173,7 +173,7 @@ public class EncontroConvitePresenter extends BasePresenter<EncontroConvitePrese
 			}
 		});
 	}
-	
+
 	public void salvarCasal(Casal casal) {
 		CasalServiceAsync serviceCasal = GWT.create(CasalService.class);
 		serviceCasal.salva(casal, new WebAsyncCallback<Casal>(getDisplay()) {

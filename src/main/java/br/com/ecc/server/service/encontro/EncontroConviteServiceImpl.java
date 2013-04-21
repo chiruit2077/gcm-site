@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ecc.client.service.encontro.EncontroConviteService;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroConvite;
+import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
@@ -32,25 +33,19 @@ public class EncontroConviteServiceImpl extends SecureRemoteServiceServlet imple
 
 	@Override
 	@Permissao(nomeOperacao="Excluir convite", operacao=Operacao.EXCLUIR)
-	public void exclui(EncontroConvite encontroConvite) throws Exception {
-		//dependencias
-//		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-//		cmdEntidade.setNamedQuery("encontroAtividadeInscricao.porEncontroConvite");
-//		cmdEntidade.addParameter("encontroConvite", encontroConvite);
-//		if(cmdEntidade.call().size()>0){
-//			throw new WebException("Erro ao excluir esta inscrição. \nJá existem atividades planilhadas para esta inscrição.");
-//		}
-		
+	public void exclui(EncontroConvite encontroConvite, Usuario usuarioAtual) throws Exception {
 		EncontroConviteExcluirCommand cmd = injector.getInstance(EncontroConviteExcluirCommand.class);
 		cmd.setEncontroConvite(encontroConvite);
+		cmd.setUsuarioAtual(usuarioAtual);
 		cmd.call();
 	}
 
 	@Override
 	@Permissao(nomeOperacao="Salvar convite", operacao=Operacao.SALVAR)
-	public EncontroConvite salva(EncontroConvite encontroConvite) throws Exception {
+	public EncontroConvite salva(EncontroConvite encontroConvite, Usuario usuarioAtual) throws Exception {
 		EncontroConviteSalvarCommand cmd = injector.getInstance(EncontroConviteSalvarCommand.class);
 		cmd.setEncontroConvite(encontroConvite);
+		cmd.setUsuarioAtual(usuarioAtual);
 		return cmd.call();
 	}
 }

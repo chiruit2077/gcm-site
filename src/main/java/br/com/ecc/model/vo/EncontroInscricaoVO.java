@@ -181,7 +181,7 @@ public class EncontroInscricaoVO implements Serializable {
 		this.maxParcela = maxParcela;
 	}
 	public Integer getQtdeparcelas() {
-		if (qtdeparcelas==null) return 1;
+		if (qtdeparcelas==null || qtdeparcelas.equals(0)) return 1;
 		return qtdeparcelas;
 	}
 	public void setQtdeparcelas(Integer qtdeparcelas) {

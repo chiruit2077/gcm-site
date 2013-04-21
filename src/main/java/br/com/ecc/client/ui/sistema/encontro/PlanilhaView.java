@@ -404,10 +404,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		List<EncontroAtividadeInscricao> listaEncontroAtividadeInscricao = presenter.getListaEncontroAtividadeInscricao();
 
 		if(tipoExibicao.equals(TipoExibicaoPlanilhaEnum.COMPLETA)){
-			listaEncontroInscricao = montaListaEncontroInscricaoSemExterno();
+			listaEncontroInscricao = montaListaEncontroInscricaoSemExternoDoacao();
 			listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
 		} else if(tipoExibicao.equals(TipoExibicaoPlanilhaEnum.COMPLETAEXTERNO)){
-			listaEncontroInscricao = presenter.getEncontroVO().getListaInscricao();
+			listaEncontroInscricao = montaListaEncontroInscricaoSemDoacao();
 			listaEncontroAtividade = presenter.getEncontroVO().getListaEncontroAtividade();
 		} else if (tipoExibicao.equals(TipoExibicaoPlanilhaEnum.MINHA_ATIVIDADE_MINHA_COLUNA)){
 			listaEncontroInscricao = montaListaEncontroInscricaoUsuarioAtual();
@@ -1052,10 +1052,50 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		return listaEncontroInscricao;
 	}
 
-	private List<EncontroInscricao> montaListaEncontroInscricaoSemExterno() {
+	private List<EncontroInscricao> montaListaEncontroInscricaoSemExternoDoacao() {
 		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
 		for (EncontroInscricao encontroInscricao : presenter.getEncontroVO().getListaInscricao()) {
-			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !encontroInscricao.getTipo().equals(TipoInscricaoEnum.DOACAO)){
+				listaEncontroInscricao.add(encontroInscricao);
+			}
+		}
+		return listaEncontroInscricao;
+	}
+
+	private List<EncontroInscricao> montaListaEncontroInscricaoExterno() {
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao encontroInscricao : presenter.getEncontroVO().getListaInscricao()) {
+			if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+				listaEncontroInscricao.add(encontroInscricao);
+			}
+		}
+		return listaEncontroInscricao;
+	}
+
+	private List<EncontroInscricao> montaListaEncontroInscricaoPadrinhos() {
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao encontroInscricao : presenter.getEncontroVO().getListaInscricao()) {
+			if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
+				listaEncontroInscricao.add(encontroInscricao);
+			}
+		}
+		return listaEncontroInscricao;
+	}
+
+	private List<EncontroInscricao> montaListaEncontroInscricaoApoios() {
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao encontroInscricao : presenter.getEncontroVO().getListaInscricao()) {
+			if(encontroInscricao.getTipo().equals(TipoInscricaoEnum.APOIO)){
+				listaEncontroInscricao.add(encontroInscricao);
+			}
+		}
+		return listaEncontroInscricao;
+	}
+
+	private List<EncontroInscricao> montaListaEncontroInscricaoSemDoacao() {
+		List<EncontroInscricao> listaEncontroInscricao = new ArrayList<EncontroInscricao>();
+		for (EncontroInscricao encontroInscricao : presenter.getEncontroVO().getListaInscricao()) {
+			if(!encontroInscricao.getTipo().equals(TipoInscricaoEnum.DOACAO)){
 				listaEncontroInscricao.add(encontroInscricao);
 			}
 		}
@@ -1373,25 +1413,20 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				if (ei != null)
 					adicionaParticipante(papel, ei, encontroAtividadeEditada, true);
 			} else if(opcao.equals("2")){
-				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
-					if (!ei.getTipo().equals(TipoInscricaoEnum.EXTERNO))
-						adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
+				for (EncontroInscricao ei : montaListaEncontroInscricaoSemExternoDoacao()) {
+					adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
 				}
 			} else if(opcao.equals("3")){
-				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
+				for (EncontroInscricao ei : montaListaEncontroInscricaoSemDoacao()) {
 					adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
 				}
 			} else if(opcao.equals("4")){
-				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
-					if(ei.getTipo().equals(TipoInscricaoEnum.PADRINHO)){
-						adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
-					}
+				for (EncontroInscricao ei : montaListaEncontroInscricaoPadrinhos()) {
+					adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
 				}
 			} else if(opcao.equals("5")){
-				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
-					if(ei.getTipo().equals(TipoInscricaoEnum.APOIO)){
-						adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
-					}
+				for (EncontroInscricao ei : montaListaEncontroInscricaoApoios()) {
+					adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
 				}
 			} else if(opcao.equals("6")){
 				EncontroAtividade atividade = (EncontroAtividade) ListBoxUtil.getItemSelected(addAtividadeListBox, presenter.getEncontroVO().getListaEncontroAtividade());
@@ -1406,23 +1441,21 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				EncontroAtividade atividade = (EncontroAtividade) ListBoxUtil.getItemSelected(addAtividadeListBox, presenter.getEncontroVO().getListaEncontroAtividade());
 				if (atividade != null ) {
 					List<EncontroInscricao> lista = new ArrayList<EncontroInscricao>();
-					for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricao()) {
+					for (EncontroAtividadeInscricao eai : presenter.getListaEncontroAtividadeInscricaoFull()) {
 						if(eai.getEncontroAtividade().getId().equals(atividade.getId())){
 							lista.add(eai.getEncontroInscricao());
 						}
 					}
-					for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
-						if(!ei.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !lista.contains(ei)){
+					for (EncontroInscricao ei : montaListaEncontroInscricaoSemExternoDoacao()) {
+						if(!lista.contains(ei)){
 							adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
 						}
 					}
 				}
 			} else if(opcao.equals("8")){
-				for (EncontroInscricao ei : presenter.getEncontroVO().getListaInscricao()) {
-					if(!ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
-						if(!getChoqueHorarios(null,encontroAtividadeEditada,ei,(Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel())))
-							adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
-					}
+				for (EncontroInscricao ei : montaListaEncontroInscricaoSemExternoDoacao()) {
+					if(!getChoqueHorarios(null,encontroAtividadeEditada,ei,(Papel)ListBoxUtil.getItemSelected(papelListBox, presenter.getGrupoEncontroVO().getListaPapel())))
+						adicionaParticipante(papel, ei, encontroAtividadeEditada, false);
 				}
 			} else {
 				for (AgrupamentoVO agrupamentoVO : presenter.getEncontroVO().getListaAgrupamentoVOEncontro()) {
@@ -1744,9 +1777,8 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 			Papel papelPadrao, Papel papelPadrinho) {
 		if (!atividade.getRevisado()){
 			if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOS)){
-				List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+				List<EncontroInscricao> listaInscricao = montaListaEncontroInscricaoSemExternoDoacao();
 				for (EncontroInscricao inscricao : listaInscricao) {
-					if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)) {
 						EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
 						if (atividadeInscricao==null){
 							atividadeInscricao = new EncontroAtividadeInscricao();
@@ -1755,13 +1787,11 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						}
 						atividadeInscricao.setPapel(papelPadrao);
 						atividadeInscricao.setEncontroInscricao(inscricao);
-					}
 				}
 			}
 			else if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.EXTERNO)){
-				List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+				List<EncontroInscricao> listaInscricao = montaListaEncontroInscricaoExterno();
 				for (EncontroInscricao inscricao : listaInscricao) {
-					if (inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)) {
 						EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
 						if (atividadeInscricao==null){
 							atividadeInscricao = new EncontroAtividadeInscricao();
@@ -1770,11 +1800,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						}
 						atividadeInscricao.setPapel(papelPadrao);
 						atividadeInscricao.setEncontroInscricao(inscricao);
-					}
 				}
 			}
 			else if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.TODOSEXTERNO)){
-				List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+				List<EncontroInscricao> listaInscricao = montaListaEncontroInscricaoSemDoacao();
 				for (EncontroInscricao inscricao : listaInscricao) {
 						EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
 						if (atividadeInscricao==null){
@@ -1787,7 +1816,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 				}
 			}
 			if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.METADE)){
-				List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+				List<EncontroInscricao> listaInscricao = montaListaEncontroInscricaoSemExternoDoacao();
 				int total = listaInscricao.size();
 				int metade = listaInscricao.size()/2+1;
 				while (listaParticipantesInscritos.size() <= metade){
@@ -1804,23 +1833,10 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						atividadeInscricao.setEncontroInscricao(inscricao);
 					}
 				}
-				for (EncontroInscricao inscricao : listaInscricao) {
-					if (!inscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)) {
-						EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
-						if (atividadeInscricao==null){
-							atividadeInscricao = new EncontroAtividadeInscricao();
-							atividadeInscricao.setEncontroAtividade(atividade);
-							listaParticipantesInscritos.add(atividadeInscricao);
-						}
-						atividadeInscricao.setPapel(papelPadrao);
-						atividadeInscricao.setEncontroInscricao(inscricao);
-					}
-				}
 			}
 			else if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.PADRINHOS)){
-				List<EncontroInscricao> listaInscricao = presenter.getEncontroVO().getListaInscricao();
+				List<EncontroInscricao> listaInscricao = montaListaEncontroInscricaoPadrinhos();
 				for (EncontroInscricao inscricao : listaInscricao) {
-					if (inscricao.getTipo().equals(TipoInscricaoEnum.PADRINHO)) {
 						EncontroAtividadeInscricao atividadeInscricao = getEncontroAtividadeInscricao(atividade,inscricao);
 						if (atividadeInscricao==null){
 							atividadeInscricao = new EncontroAtividadeInscricao();
@@ -1829,7 +1845,6 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 						}
 						atividadeInscricao.setPapel(papelPadrinho);
 						atividadeInscricao.setEncontroInscricao(inscricao);
-					}
 				}
 			}
 			else if (atividade.getTipoPreenchimento().equals(TipoPreenchimentoAtividadeEnum.VARIAVEL)){
@@ -2273,7 +2288,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 	private void defineCamposSelecao() {
 		showWaitMessage(true);
 		List<EncontroAtividade> listaEncontroAtividade = montaListaAtividadesPorPeriodoSelecionado(presenter.getEncontroVO().getListaEncontroAtividade(),getPeriodoSelecionado());
-		List<EncontroInscricao> listaEncontroInscricao = presenter.getEncontroVO().getListaInscricao();
+		List<EncontroInscricao> listaEncontroInscricao = montaListaEncontroInscricaoSemExternoDoacao();
 		List<ParticipanteVO> listaParticipantes = new ArrayList<ParticipanteVO>();
 		List<ParticipanteVO> listaExcluida = new ArrayList<ParticipanteVO>();
 		listaParticipantesSugeridos = new ArrayList<ParticipanteVO>();
@@ -2284,7 +2299,7 @@ public class PlanilhaView extends BaseView<PlanilhaPresenter> implements Planilh
 		boolean ok;
 
 		for (EncontroInscricao ei : listaEncontroInscricao) {
-			if(getEncontroAtividadeInscricao(encontroAtividadeEditada, ei) == null && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+			if(getEncontroAtividadeInscricao(encontroAtividadeEditada, ei) == null){
 				ok=true;
 				if ( !mostraChoqueCheckBox.getValue() && getChoqueHorarios(null, encontroAtividadeEditada, ei, papel)){
 					ok=false;

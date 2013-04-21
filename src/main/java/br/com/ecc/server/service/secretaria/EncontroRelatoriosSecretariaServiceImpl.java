@@ -174,7 +174,8 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 		for (EncontroInscricao ei : listaEncontroInscricao) {
 			ei.setQtdeAtividades(0);
-			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO) && (inscricao!=null || (inscricao == null && !ei.getTipo().equals(TipoInscricaoEnum.COORDENADOR) && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO)))){
+			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO) && (inscricao!=null ||
+					(inscricao == null && !ei.getTipo().equals(TipoInscricaoEnum.COORDENADOR) && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !ei.getTipo().equals(TipoInscricaoEnum.DOACAO) ))){
 				for (EncontroAtividade ea : listaEncontroAtividade) {
 					String atividade = (new SimpleDateFormat("E")).format(ea.getInicio()) + " " +
 						(new SimpleDateFormat("HH:mm")).format(ea.getInicio()) + " " + (new SimpleDateFormat("HH:mm")).format(ea.getFim()) + " " + ea.getTipoAtividade().getNome() + " - " + ea.getAtividade().getNome();
@@ -569,7 +570,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		int qtdeVegetarianos = 0;
 		int qtdeDiabeticos = 0;
 		for (EncontroInscricao encontroInscricao : lista) {
-			if (!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO)){
+			if (!encontroInscricao.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !encontroInscricao.getTipo().equals(TipoInscricaoEnum.DOACAO)){
 				if (encontroInscricao.getCasal()!=null){
 					if (encontroInscricao.getCasal().getEle().getVegetariano() || encontroInscricao.getCasal().getEle().getDiabetico()){
 						encontroInscricao.getCasal().getEle().setTag(TipoInscricaoCasalEnum.getPorInscricaoCasal(encontroInscricao.getTipo()).getNome());

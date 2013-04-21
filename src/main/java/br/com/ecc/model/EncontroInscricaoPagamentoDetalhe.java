@@ -71,6 +71,8 @@ public class EncontroInscricaoPagamentoDetalhe extends _WebBaseEntity {
 	@Version
 	private Integer version;
 
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -141,5 +143,22 @@ public class EncontroInscricaoPagamentoDetalhe extends _WebBaseEntity {
 	}
 	public void setEncontroInscricaoOutra(EncontroInscricao encontroInscricaoOutra) {
 		this.encontroInscricaoOutra = encontroInscricaoOutra;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EncontroInscricaoPagamentoDetalhe other = (EncontroInscricaoPagamentoDetalhe) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }
