@@ -11,4 +11,5 @@ public interface EncontroInscricaoFichaPagamentoServiceAsync {
 	void listaFichas(Encontro encontroSelecionado, AsyncCallback<List<EncontroInscricaoFichaPagamento>> callback);
 	void salvaFicha(EncontroInscricaoFichaPagamento ficha, AsyncCallback<Void> callback);
 	void geraFichasVagas(Encontro encontroSelecionado,AsyncCallback<Void> callback);
+	void excluiFicha(EncontroInscricaoFichaPagamento ficha, AsyncCallback<Void> callback);
 }

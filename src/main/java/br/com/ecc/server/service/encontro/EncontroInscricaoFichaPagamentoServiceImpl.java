@@ -6,6 +6,7 @@ import br.com.ecc.client.service.encontro.EncontroInscricaoFichaPagamentoService
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricaoFichaPagamento;
 import br.com.ecc.server.SecureRemoteServiceServlet;
+import br.com.ecc.server.command.EncontroInscricaoFichaPagamentoExcluirCommand;
 import br.com.ecc.server.command.EncontroInscricaoFichaPagamentoGeraFichasCommand;
 import br.com.ecc.server.command.EncontroInscricaoFichaPagamentoSalvarCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
@@ -44,6 +45,13 @@ public class EncontroInscricaoFichaPagamentoServiceImpl extends SecureRemoteServ
 		cmd.setEncontroSelecionado(encontroSelecionado);
 		cmd.call();
 
+	}
+
+	@Override
+	public void excluiFicha(EncontroInscricaoFichaPagamento ficha) throws Exception {
+		EncontroInscricaoFichaPagamentoExcluirCommand cmd = injector.getInstance(EncontroInscricaoFichaPagamentoExcluirCommand.class);
+		cmd.setFicha(ficha);
+		cmd.call();
 	}
 
 }

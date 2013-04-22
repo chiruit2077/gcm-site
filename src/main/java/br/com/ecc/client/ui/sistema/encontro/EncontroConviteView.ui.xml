@@ -1,5 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder 
+<ui:UiBinder
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
@@ -7,8 +7,8 @@
   xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox" >
   	<ui:style>
   		.total{
-			font-style: italic; 
-			color: blue; 
+			font-style: italic;
+			color: blue;
 			text-align: left;
 		}
 		.convidado {
@@ -59,7 +59,7 @@
 						</tr>
 					</table>
 				</g:HTMLPanel>
-			</g:HorizontalPanel> 
+			</g:HorizontalPanel>
 		</g:VerticalPanel>
 		<g:VerticalPanel width="100%">
 			<g:HorizontalPanel spacing="2" width="100%">
@@ -130,9 +130,26 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel">&nbsp;</td>
-									<td colspan="2">
+									<td colspan="3">
 										<g:CheckBox ui:field="esconderPagamentoCheckBox" text="Esconder informações de pagamento"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Valor Doação:</td>
+									<td colspan="2">
+										<cn:NumberTextBox ui:field="valorDoacaoNumberTextBox" width="150" textAlignment="right"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Valor Afilhado pode Pagar:</td>
+									<td colspan="2">
+										<cn:NumberTextBox ui:field="valorAfilhadoPodePagarNumberTextBox" width="150" textAlignment="right"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Casal Doação:</td>
+									<td colspan="2">
+										<g:SuggestBox ui:field="casalDoacaoSuggestBox" width="350px"/>
 									</td>
 								</tr>
 							</table>
@@ -161,7 +178,6 @@
 							<table cellpadding="3" align="center">
 								<tr>
 									<td>
-										<g:CheckBox ui:field="gerarInscricaoCheckBox" text="Gerar inscrição ao evento para os padrinhos e afilhados"/>
 										<g:CheckBox ui:field="moverCheckBox" text="Adicionar novamente no final da fila (Normal)"/>
 									</td>
 								</tr>

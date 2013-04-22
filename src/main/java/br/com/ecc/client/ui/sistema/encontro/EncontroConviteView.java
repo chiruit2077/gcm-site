@@ -1,11 +1,13 @@
 package br.com.ecc.client.ui.sistema.encontro;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.textbox.NumberTextBox;
+import br.com.ecc.client.ui.component.textbox.NumberTextBox.Formato;
 import br.com.ecc.client.util.FlexTableUtil;
 import br.com.ecc.client.util.FlexTableUtil.TipoColuna;
 import br.com.ecc.client.util.LabelTotalUtil;
@@ -66,7 +68,6 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiField VerticalPanel centralPanel;
 
 	@UiField HTMLPanel respostaHTMLPanel;
-	@UiField CheckBox gerarInscricaoCheckBox;
 	@UiField CheckBox moverCheckBox;
 
 	@UiField CheckBox exibeRecusadosCheckBox;
@@ -120,6 +121,11 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@UiField TextBox dataFichaRecebidaPadrinhoDateBox;
 	@UiField TextBox dataFichaAtualizadaPadrinhoDateBox;
 
+	@UiField(provided=true) NumberTextBox valorDoacaoNumberTextBox;
+	@UiField(provided=true) NumberTextBox valorAfilhadoPodePagarNumberTextBox;
+	@UiField(provided = true) SuggestBox casalDoacaoSuggestBox;
+	private final GenericEntitySuggestOracle casalDoacaoSuggest = new GenericEntitySuggestOracle();
+
 	@UiField Button salvarFilaButton;
 	@UiField Button fecharFilaButton;
 	@UiField Button novaFilaButton;
@@ -151,9 +157,16 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		casalConvidadoSuggest.setSuggestQuery("casal.porNomeLike");
 		casalConvidadoSuggestBox = new SuggestBox(casalConvidadoSuggest);
 
+		casalDoacaoSuggest.setMinimoCaracteres(2);
+		casalDoacaoSuggest.setSuggestQuery("casal.porNomeLike");
+		casalDoacaoSuggestBox = new SuggestBox(casalDoacaoSuggest);
+
 		prioridadeNumberTextBox = new NumberTextBox(false, false, 5, 5);
 		qtdeVagasNumberTextBox = new NumberTextBox(false, false, 5, 5);
 		ordemNumberTextBox = new NumberTextBox(false, false, 5, 5);
+
+		valorDoacaoNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
+		valorAfilhadoPodePagarNumberTextBox = new NumberTextBox(true, false, 16, 16, Formato.MOEDA);
 
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -267,6 +280,20 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		if(responsavel!=null){
 			entidadeEditada.setCasalResponsavel(responsavel.getCasal());
 		}
+		entidadeEditada.setCasalDoacao(null);
+		if(!casalDoacaoSuggestBox.getValue().equals("")){
+			entidadeEditada.setCasalDoacao((Casal)ListUtil.getEntidadePorNome(casalDoacaoSuggest.getListaEntidades(), casalDoacaoSuggestBox.getValue()));
+		}
+
+		entidadeEditada.setValorDoacao(null);
+		if(valorDoacaoNumberTextBox.getNumber()!=null){
+			entidadeEditada.setValorDoacao(new BigDecimal(valorDoacaoNumberTextBox.getNumber().doubleValue()));
+		}
+		entidadeEditada.setValorAfilhadoPodePagar(null);
+		if(valorAfilhadoPodePagarNumberTextBox.getNumber()!=null){
+			entidadeEditada.setValorAfilhadoPodePagar(new BigDecimal(valorAfilhadoPodePagarNumberTextBox.getNumber().doubleValue()));
+		}
+
 		entidadeEditada.setDataConvite(dataConviteDateBox.getValue());
 		entidadeEditada.setDataResposta(dataRespostaDateBox.getValue());
 		entidadeEditada.setEsconderPlanoPagamento(esconderPagamentoCheckBox.getValue());
@@ -275,7 +302,6 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		entidadeEditada.setTipoConfirmacao((TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values()));
 
 		entidadeEditada.setMoverFinalFila(moverCheckBox.getValue());
-		entidadeEditada.setGerarInscricao(gerarInscricaoCheckBox.getValue());
 		presenter.salvar(entidadeEditada);
 	}
 	private void edita(EncontroConvite encontroConvite) {
@@ -304,9 +330,12 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		respostaListBox.setSelectedIndex(0);
 		dataRespostaDateBox.setValue(null);
 		casalConvidadoTelefoneLabel.setText(null);
-		gerarInscricaoCheckBox.setValue(false);
 		moverCheckBox.setValue(false);
 		respostaHTMLPanel.setVisible(false);
+		valorDoacaoNumberTextBox.setNumber(null);
+		valorAfilhadoPodePagarNumberTextBox.setNumber(null);
+		casalDoacaoSuggestBox.setValue(null);
+		fichaHTMLPanel.setVisible(false);
 
 		dataFichaEnviadaAfilhadoDateBox.setValue(null);
 		dataFichaRecebidaAfilhadoDateBox.setValue(null);
@@ -355,6 +384,17 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			casalSuggestBox.setValue(encontroConvite.getCasal().toString());
 			casalSuggest.setListaEntidades(new ArrayList<_WebBaseEntity>());
 			casalSuggest.getListaEntidades().add(encontroConvite.getCasal());
+		}
+		if(encontroConvite.getCasalDoacao()!=null){
+			casalDoacaoSuggestBox.setValue(encontroConvite.getCasalDoacao().toString());
+			casalDoacaoSuggest.setListaEntidades(new ArrayList<_WebBaseEntity>());
+			casalDoacaoSuggest.getListaEntidades().add(encontroConvite.getCasalDoacao());
+		}
+		if(encontroConvite.getValorAfilhadoPodePagar()!=null){
+			valorAfilhadoPodePagarNumberTextBox.setNumber(encontroConvite.getValorAfilhadoPodePagar());
+		}
+		if(encontroConvite.getValorDoacao()!=null){
+			valorDoacaoNumberTextBox.setNumber(encontroConvite.getValorDoacao());
 		}
 		if(encontroConvite.getCasalResponsavel()!=null){
 			ListBoxUtil.setItemSelected(responsavelListBox, encontroConvite.getCasalResponsavel().toString());
@@ -800,8 +840,6 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	public void respostaListBoxChangeHandler(ChangeEvent event){
 		respostaHTMLPanel.setVisible(false);
 		fichaHTMLPanel.setVisible(false);
-		gerarInscricaoCheckBox.setVisible(false);
-		gerarInscricaoCheckBox.setValue(false);
 		moverCheckBox.setVisible(false);
 		moverCheckBox.setValue(false);
 		TipoRespostaConviteEnum resposta = (TipoRespostaConviteEnum) ListBoxUtil.getItemSelected(respostaListBox, TipoRespostaConviteEnum.values());
@@ -809,8 +847,6 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			if(resposta.equals(TipoRespostaConviteEnum.ACEITO)){
 				respostaHTMLPanel.setVisible(true);
 				fichaHTMLPanel.setVisible(true);
-				gerarInscricaoCheckBox.setVisible(true);
-				gerarInscricaoCheckBox.setValue(true);
 			} else if(resposta.equals(TipoRespostaConviteEnum.RECUSADO)){
 				respostaHTMLPanel.setVisible(true);
 				moverCheckBox.setVisible(true);

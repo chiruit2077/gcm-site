@@ -1,5 +1,6 @@
 package br.com.ecc.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -69,6 +70,16 @@ public class EncontroConvite extends _WebBaseEntity {
 
 	private Boolean esconderPlanoPagamento;
 
+	@Column(precision=15, scale=2)
+	private BigDecimal valorAfilhadoPodePagar;
+
+	@ManyToOne
+	@JoinColumn(name="casalDoacao")
+	private Casal casalDoacao;
+
+	@Column(precision=15, scale=2)
+	private BigDecimal valorDoacao;
+
 	@Column(length=500)
 	private String observacao;
 
@@ -82,9 +93,6 @@ public class EncontroConvite extends _WebBaseEntity {
 
 	@Version
 	private Integer version;
-
-	@Transient
-	private Boolean gerarInscricao;
 
 	@Transient
 	private Boolean moverFinalFila;
@@ -167,12 +175,6 @@ public class EncontroConvite extends _WebBaseEntity {
 	public void setTipoResposta(TipoRespostaConviteEnum tipoResposta) {
 		this.tipoResposta = tipoResposta;
 	}
-	public Boolean getGerarInscricao() {
-		return gerarInscricao;
-	}
-	public void setGerarInscricao(Boolean gerarInscricao) {
-		this.gerarInscricao = gerarInscricao;
-	}
 	public Boolean getMoverFinalFila() {
 		return moverFinalFila;
 	}
@@ -190,5 +192,23 @@ public class EncontroConvite extends _WebBaseEntity {
 	}
 	public void setTipoConfirmacao(TipoConfirmacaoEnum tipoConfirmacao) {
 		this.tipoConfirmacao = tipoConfirmacao;
+	}
+	public BigDecimal getValorAfilhadoPodePagar() {
+		return valorAfilhadoPodePagar;
+	}
+	public void setValorAfilhadoPodePagar(BigDecimal valorAfilhadoPodePagar) {
+		this.valorAfilhadoPodePagar = valorAfilhadoPodePagar;
+	}
+	public Casal getCasalDoacao() {
+		return casalDoacao;
+	}
+	public void setCasalDoacao(Casal casalDoacao) {
+		this.casalDoacao = casalDoacao;
+	}
+	public BigDecimal getValorDoacao() {
+		return valorDoacao;
+	}
+	public void setValorDoacao(BigDecimal valorDoacao) {
+		this.valorDoacao = valorDoacao;
 	}
 }

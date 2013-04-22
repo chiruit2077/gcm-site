@@ -28,6 +28,7 @@ import br.com.ecc.model._WebBaseEntity;
 import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 import br.com.ecc.model.tipo.TipoMensagemEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.tipo.TipoPagamentoDetalheEnum;
@@ -644,7 +645,13 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				}
 
 				dados[0] = hp;
-				dados[1] = encontroInscricao.getCodigo();
+				if (encontroInscricao.getFichaPagamento()!=null){
+					if (encontroInscricao.getFichaPagamento().getStatus().equals(TipoInscricaoFichaStatusEnum.LIBERADO))
+						dados[1] = encontroInscricao.getFichaPagamento().toString() + "-L";
+					else
+						dados[1] = encontroInscricao.getFichaPagamento().toString();
+				}else
+					dados[1] = encontroInscricao.getCodigo();
 				dados[2] = encontroInscricao.getTipo().getNome();
 				dados[3] = encontroInscricao.getCasal()==null?encontroInscricao.getPessoa().getNome():encontroInscricao.getCasal().toString();
 

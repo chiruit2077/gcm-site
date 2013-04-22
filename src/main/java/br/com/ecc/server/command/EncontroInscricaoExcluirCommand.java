@@ -80,6 +80,10 @@ public class EncontroInscricaoExcluirCommand implements Callable<Void>{
 		DeleteEntityCommand cmd = inject.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(encontroInscricao);
 		cmd.call();
+		if (ficha!=null){
+			cmd.setBaseEntity(ficha);
+			cmd.call();
+		}
 		return null;
 	}
 

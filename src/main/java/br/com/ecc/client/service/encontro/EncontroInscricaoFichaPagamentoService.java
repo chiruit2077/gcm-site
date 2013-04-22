@@ -13,4 +13,5 @@ public interface EncontroInscricaoFichaPagamentoService extends RemoteService {
 	public List<EncontroInscricaoFichaPagamento> listaFichas(Encontro encontroSelecionado) throws Exception;
 	public void salvaFicha(EncontroInscricaoFichaPagamento ficha) throws Exception;
 	public void geraFichasVagas(Encontro encontroSelecionado) throws Exception;
+	public void excluiFicha(EncontroInscricaoFichaPagamento ficha) throws Exception;
 }

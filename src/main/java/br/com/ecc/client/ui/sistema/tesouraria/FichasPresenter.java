@@ -132,4 +132,14 @@ public class FichasPresenter extends BasePresenter<FichasPresenter.Display> {
 		this.listaFichas = listaFichas;
 	}
 
+	public void excluir(EncontroInscricaoFichaPagamento ficha) {
+		service.excluiFicha(ficha, new WebAsyncCallback<Void>(getDisplay()) {
+			@Override
+			protected void success(Void result) {
+				buscaFichas();
+			}
+		});
+
+	}
+
 }

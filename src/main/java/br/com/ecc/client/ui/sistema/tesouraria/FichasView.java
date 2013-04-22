@@ -196,7 +196,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 	public void populaEntidades(List<EncontroInscricaoFichaPagamento> lista) {
 		fichaTableUtil.clearData();
 		int row = 0;
-		Image editar;
+		Image editar, excluir;
 		HorizontalPanel hp;
 		int liberados = 0;
 		int reservados = 0;
@@ -219,6 +219,10 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 				row++;
 				Object dados[] = new Object[6];
 
+				hp = new HorizontalPanel();
+				hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				hp.setSpacing(1);
+
 				editar = new Image("images/edit.png");
 				editar.setStyleName("portal-ImageCursor");
 				editar.addClickHandler(new ClickHandler() {
@@ -227,10 +231,20 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 						edita(ficha);
 					}
 				});
-				hp = new HorizontalPanel();
-				hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-				hp.setSpacing(1);
 				hp.add(editar);
+				if (ficha.getEncontroInscricao()==null){
+					excluir = new Image("images/delete.png");
+					excluir.setStyleName("portal-ImageCursor");
+					excluir.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent arg0) {
+							if(Window.confirm("Deseja excluir esta ficha ?")){
+								presenter.excluir(ficha);
+							}
+						}
+					});
+					hp.add(excluir);
+				}
 
 				dados[0] = hp;
 				dados[1] = ficha.getFicha();
