@@ -7,7 +7,7 @@ public class PortletItem {
 	private ExtendedHorizontalPanel portlet;
 	private HorizontalPanel portletContent;
 	public enum Position { LEFT, RIGHT};
-	
+
 	public ExtendedHorizontalPanel getPortlet() {
 		return portlet;
 	}

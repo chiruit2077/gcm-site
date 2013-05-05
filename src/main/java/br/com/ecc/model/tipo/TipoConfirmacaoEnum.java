@@ -2,10 +2,11 @@ package br.com.ecc.model.tipo;
 
 public enum TipoConfirmacaoEnum {
 	CONFIRMADO("Confirmado"),
-	DESISTENCIA("Desistência");
-	
+	DESISTENCIA("Desistência"),
+	AGUARDANDO("Aguardando");
+
 	private String nome;
-	
+
 	private TipoConfirmacaoEnum(String nome) {
 		this.nome = nome;
 	}
@@ -14,7 +15,7 @@ public enum TipoConfirmacaoEnum {
 	public String toString() {
 		return getNome();
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}

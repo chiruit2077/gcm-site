@@ -212,9 +212,6 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		encontroConviteTableUtil.addColumn("Resposta", "70", HasHorizontalAlignment.ALIGN_CENTER);
 		encontroConviteTableUtil.addColumn("Data Resp.", "90", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 		encontroConviteTableUtil.addColumn("Confirmação", "70", HasHorizontalAlignment.ALIGN_CENTER);
-//		encontroConviteTableUtil.addColumn("Env. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
-//		encontroConviteTableUtil.addColumn("Rec. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
-//		encontroConviteTableUtil.addColumn("Pre. Ficha", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy HH:mm");
 	}
 
 	private void criaTabelaFila() {
@@ -255,9 +252,15 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			Window.alert("Seleciona a fila");
 			return;
 		}
+		TipoConfirmacaoEnum confirmacao = (TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values());
 		TipoRespostaConviteEnum resposta = (TipoRespostaConviteEnum) ListBoxUtil.getItemSelected(respostaListBox, TipoRespostaConviteEnum.values());
 		if(resposta!=null && casalConvidadoSuggestBox.getValue().equals("")){
 			Window.alert("Defina o casal convidado");
+			return;
+		}
+
+		if(confirmacao!=null && !confirmacao.equals(TipoConfirmacaoEnum.AGUARDANDO) && casalSuggestBox.getValue().equals("")){
+			Window.alert("Defina os Padrinhos");
 			return;
 		}
 
@@ -593,7 +596,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				if(encontroConvite.getTipoConfirmacao()!=null){
 					dados[10] = encontroConvite.getTipoConfirmacao().getNome();
 				} else {
-					dados[10] = TipoConfirmacaoEnum.CONFIRMADO.getNome();
+					dados[10] = TipoConfirmacaoEnum.AGUARDANDO.getNome();
 				}
 
 				encontroConviteTableUtil.addRow(dados,row);
