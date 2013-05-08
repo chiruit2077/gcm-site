@@ -45,9 +45,9 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 		if (encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.CONFIRMADO)){
 			geraInscricaoApoio();
 			if( encontroConvite.getTipoResposta()!= null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO)){
-				geraInscricoesAceito();
 				encontroConvite.getCasalConvidado().setCasalPadrinho(encontroConvite.getCasal());
-				em.merge(encontroConvite.getCasalConvidado());
+				encontroConvite.setCasalConvidado(em.merge(encontroConvite.getCasalConvidado()));
+				geraInscricoesAceito();
 			}
 			else if(encontroConvite.getTipoResposta()!= null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
 				desisteInscricao(encontroConvite.getCasalConvidado());

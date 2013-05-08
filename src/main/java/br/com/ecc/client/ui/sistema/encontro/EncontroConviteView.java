@@ -869,7 +869,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 
 	@Override
 	public void setCasal(Casal casal) {
-		entidadeEditada.setCasal(casal);
+		entidadeEditada.setCasalConvidado(casal);
 		casalConvidadoSuggestBox.setValue(casal.toString());
 		casalConvidadoSuggest.setListaEntidades(new ArrayList<_WebBaseEntity>());
 		casalConvidadoSuggest.getListaEntidades().add(casal);
