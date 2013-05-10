@@ -20,7 +20,7 @@ import br.com.ecc.model.tipo.TipoFilaEnum;
 @SequenceGenerator(name="SQ_ENCONTROFILA", sequenceName="SQ_ENCONTROFILA")
 @NamedQueries({
 	@NamedQuery(name="encontroFila.porEncontro", query="select u from EncontroFila u where u.encontro = :encontro order by u.ordem, u.nome"),
-	@NamedQuery(name="encontroFila.porEncontroFilaNormal", query="select u from EncontroFila u where u.encontro = :encontro and u.tipoFila = 'NORMAL'"),
+	@NamedQuery(name="encontroFila.porEncontroFilaGeral", query="select u from EncontroFila u where u.encontro = :encontro and u.tipoFila = 'GERAL'"),
 	@NamedQuery(name="encontroFila.deletePorEncontro", query="delete from EncontroFila u where u.encontro = :encontro")
 })
 public class EncontroFila extends _WebBaseEntity {

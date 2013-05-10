@@ -519,8 +519,11 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				}
 				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.NORMAL)){
 					if (filaAtual.getQuantidadeVagas() != null)
-						vagas = filaAtual.getQuantidadeVagas();
-					vagas = vagas + liberados;
+						vagas = filaAtual.getQuantidadeVagas() + liberados;
+					else{
+						if (convidar < encontroConvite.getEncontro().getQuantidadeAfilhados())
+							vagas = encontroConvite.getEncontro().getQuantidadeAfilhados() - convidar ;
+					}
 				}
 				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.GERAL)){
 					if (convidar < encontroConvite.getEncontro().getQuantidadeAfilhados())
@@ -542,8 +545,11 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				}
 				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.NORMAL)){
 					if (filaAtual.getQuantidadeVagas() != null)
-						vagas = filaAtual.getQuantidadeVagas();
-					vagas = vagas + liberados;
+						vagas = filaAtual.getQuantidadeVagas() + liberados;
+					else{
+						if (convidar < encontroConvite.getEncontro().getQuantidadeAfilhados())
+							vagas = encontroConvite.getEncontro().getQuantidadeAfilhados() - convidar ;
+					}
 					liberados = 0;
 				}
 				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.GERAL)){

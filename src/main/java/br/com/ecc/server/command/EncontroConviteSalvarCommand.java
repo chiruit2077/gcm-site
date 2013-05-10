@@ -54,7 +54,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 				desisteInscricaoEncontrista(encontroConvite.getCasalDoacao());
 				Query q;
 				if(mover){
-					q = em.createNamedQuery("encontroFila.porEncontroFilaNormal");
+					q = em.createNamedQuery("encontroFila.porEncontroFilaGeral");
 					q.setParameter("encontro", encontroConvite.getEncontro());
 					q.setMaxResults(1);
 					List<EncontroFila> listaFila = q.getResultList();
@@ -63,7 +63,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 
 						q = em.createQuery("Select max(ordem) from EncontroConvite e where e.encontro = :encontro and e.encontroFila.tipoFila = :tipoFila");
 						q.setParameter("encontro", encontroConvite.getEncontro());
-						q.setParameter("tipoFila", TipoFilaEnum.NORMAL);
+						q.setParameter("tipoFila", TipoFilaEnum.GERAL);
 						Integer max = (Integer) q.getSingleResult();
 
 						EncontroConvite ec = new EncontroConvite();
