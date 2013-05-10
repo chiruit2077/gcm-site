@@ -72,6 +72,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 
 	@UiField CheckBox exibeRecusadosCheckBox;
 	@UiField CheckBox exibeDesistenciaCheckBox;
+	@UiField CheckBox vaiComoApoioCheckBox;
 
 	//Convite
 	@UiField(provided = true) SuggestBox casalSuggestBox;
@@ -300,6 +301,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		entidadeEditada.setDataConvite(dataConviteDateBox.getValue());
 		entidadeEditada.setDataResposta(dataRespostaDateBox.getValue());
 		entidadeEditada.setEsconderPlanoPagamento(esconderPagamentoCheckBox.getValue());
+		entidadeEditada.setVaiComoApoio(vaiComoApoioCheckBox.getValue());
 		entidadeEditada.setObservacao(observacaoTextArea.getValue());
 		entidadeEditada.setTipoResposta(resposta);
 		entidadeEditada.setTipoConfirmacao((TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values()));
@@ -352,7 +354,10 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		casalSuggestBox.getTextBox().setEnabled(true);
 		responsavelListBox.setEnabled(true);
 		casalConvidadoSuggestBox.getTextBox().setEnabled(true);
+		esconderPagamentoCheckBox.setValue(false);
 		esconderPagamentoCheckBox.setEnabled(true);
+		vaiComoApoioCheckBox.setEnabled(true);
+		vaiComoApoioCheckBox.setValue(true);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -375,6 +380,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			responsavelListBox.setEnabled(false);
 			casalConvidadoSuggestBox.getTextBox().setEnabled(false);
 			esconderPagamentoCheckBox.setEnabled(false);
+			vaiComoApoioCheckBox.setEnabled(false);
 		}
 
 
@@ -411,6 +417,7 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		}
 		observacaoTextArea.setValue(encontroConvite.getObservacao());
 		esconderPagamentoCheckBox.setValue(encontroConvite.getEsconderPlanoPagamento());
+		vaiComoApoioCheckBox.setValue(encontroConvite.getVaiComoApoio());
 		dataConviteDateBox.setValue(encontroConvite.getDataConvite());
 		if(encontroConvite.getTipoResposta()!=null){
 			ListBoxUtil.setItemSelected(respostaListBox, encontroConvite.getTipoResposta().getNome());

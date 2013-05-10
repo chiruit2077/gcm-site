@@ -104,6 +104,11 @@
 										<g:ListBox ui:field="confirmacaoListBox" width="350px"/>
 									</td>
 								</tr>
+								<tr>
+									<td colspan="4">
+										<g:CheckBox ui:field="vaiComoApoioCheckBox" text="Vai como Apoio"/>
+									</td>
+								</tr>
 							</table>
 						</g:HTMLPanel>
 						<g:HTMLPanel width="95%" styleName="{style.convidado}">
