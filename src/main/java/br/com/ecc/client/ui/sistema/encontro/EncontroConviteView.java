@@ -498,9 +498,52 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 		int row = 0;
 		Image editar, excluir;
 		HorizontalPanel hp;
-		EncontroFila filaAnterior = null;
-		int contaFila = 1, convidar = 0, recusados = 0, aceitos = 0, desistencia=0;
+		EncontroFila filaAtual = null;
+		int convidar = 0, recusados = 0, aceitos = 0, desistencia=0, liberados = 0, contaEntrou = 0, vagas = 0;
 		for (final EncontroConvite encontroConvite: lista) {
+			if(filaAtual == null){
+				contaEntrou = 0;
+				liberados = 0;
+				vagas = 0;
+				filaAtual = encontroConvite.getEncontroFila();
+				if (filaAtual.getTipoFila().equals(TipoFilaEnum.POR_VAGA)){
+					if (filaAtual.getQuantidadeVagas() != null)
+						vagas = filaAtual.getQuantidadeVagas();
+				}
+				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.NORMAL)){
+					if (filaAtual.getQuantidadeVagas() != null)
+						vagas = filaAtual.getQuantidadeVagas();
+					vagas = vagas + liberados;
+				}
+				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.GERAL)){
+					if (convidar < encontroConvite.getEncontro().getQuantidadeAfilhados())
+						vagas = encontroConvite.getEncontro().getQuantidadeAfilhados() - convidar ;
+				}
+			}
+
+			if(filaAtual !=null && !filaAtual.getId().equals(encontroConvite.getEncontroFila().getId())){
+				if (contaEntrou < vagas )
+					liberados = liberados + vagas - contaEntrou;
+
+				contaEntrou = 0;
+				vagas = 0;
+
+				filaAtual = encontroConvite.getEncontroFila();
+				if (filaAtual.getTipoFila().equals(TipoFilaEnum.POR_VAGA)){
+					if (filaAtual.getQuantidadeVagas() != null)
+						vagas = filaAtual.getQuantidadeVagas();
+				}
+				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.NORMAL)){
+					if (filaAtual.getQuantidadeVagas() != null)
+						vagas = filaAtual.getQuantidadeVagas();
+					vagas = vagas + liberados;
+					liberados = 0;
+				}
+				else if (filaAtual.getTipoFila().equals(TipoFilaEnum.GERAL)){
+					if (convidar < encontroConvite.getEncontro().getQuantidadeAfilhados())
+						vagas = encontroConvite.getEncontro().getQuantidadeAfilhados() - convidar ;
+				}
+			}
 			boolean exibeLinha = true;
 			if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
 				recusados++;
@@ -519,26 +562,11 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				row++;
 
 				boolean exibeEditar = true;
-				if(filaAnterior!=null && !filaAnterior.getId().equals(encontroConvite.getEncontroFila().getId())){
-					contaFila = 1;
-				}
-				filaAnterior = encontroConvite.getEncontroFila();
+
 				Object dados[] = new Object[11];
 				hp = new HorizontalPanel();
 				hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				hp.setSpacing(1);
-
-				if(convidador){
-					/*
-				exibeEditar = false;
-				if(presenter.getEncontroSelecionado().getQuantidadeAfilhados()!=null &&
-				   convidar<=presenter.getEncontroSelecionado().getQuantidadeAfilhados()){
-					if(filaAnterior.getQuantidadeVagas()==null || contaFila <= filaAnterior.getQuantidadeVagas()){
-						exibeEditar = true;
-					}
-				}
-					 */
-				}
 
 				if(podeEditar || convidador){
 					if(exibeEditar){
@@ -606,20 +634,19 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				} else if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
 					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
 				} else {
-					if(filaAnterior.getQuantidadeVagas()!=null && contaFila > filaAnterior.getQuantidadeVagas()){
-						encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGray");
-					} else {
-						convidar++;
-					}
+					contaEntrou++;
 					if(encontroConvite.getTipoResposta()!=null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO)){
 						encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialBkYellow");
 						aceitos++;
+						convidar++;
+					}else{
+						if( contaEntrou > vagas ){
+							encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGray");
+						}else{
+							encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalBlue");
+							convidar++;
+						}
 					}
-					contaFila++;
-				}
-				if(presenter.getEncontroSelecionado().getQuantidadeAfilhados()!=null &&
-						convidar<=presenter.getEncontroSelecionado().getQuantidadeAfilhados()){
-					encontroConviteTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalBlue");
 				}
 			}
 		}

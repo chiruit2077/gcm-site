@@ -50,8 +50,8 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 				geraInscricoesAceito();
 			}
 			else if(encontroConvite.getTipoResposta()!= null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
-				desisteInscricao(encontroConvite.getCasalConvidado());
-				desisteInscricao(encontroConvite.getCasalDoacao());
+				desisteInscricaoConvidado(encontroConvite.getCasalConvidado());
+				desisteInscricaoEncontrista(encontroConvite.getCasalDoacao());
 				Query q;
 				if(mover){
 					q = em.createNamedQuery("encontroFila.porEncontroFilaNormal");
@@ -76,7 +76,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 					}
 				}
 
-				q = em.createNamedQuery("encontroConvite.porEncontro");
+				/*q = em.createNamedQuery("encontroConvite.porEncontro");
 				q.setParameter("encontro", encontroConvite.getEncontro());
 				List<EncontroConvite> listaConvite = q.getResultList();
 
@@ -92,19 +92,30 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 							}
 						}
 					}
-				}
+				}*/
 			}
 		}else if (encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
-			desisteInscricao(encontroConvite.getCasal());
-			desisteInscricao(encontroConvite.getCasalConvidado());
-			desisteInscricao(encontroConvite.getCasalDoacao());
+			if (!encontroConvite.getVaiComoApoio()) desisteInscricaoEncontrista(encontroConvite.getCasal());
+			desisteInscricaoConvidado(encontroConvite.getCasalConvidado());
+			desisteInscricaoEncontrista(encontroConvite.getCasalDoacao());
 		}
 		return em.merge(encontroConvite);
 	}
 
-	private void desisteInscricao(Casal casal) throws Exception {
+	private void desisteInscricaoConvidado(Casal casal) throws Exception {
 		EncontroInscricaoVO vo = getEncontroInscricaoVO(casal);
 		if (vo!=null){
+			vo.getEncontroInscricao().setTipoConfirmacao(TipoConfirmacaoEnum.DESISTENCIA);
+			EncontroInscricaoSalvarCommand cmd = inject.getInstance(EncontroInscricaoSalvarCommand.class);
+			cmd.setUsuarioAtual(getUsuarioAtual());
+			cmd.setEncontroInscricaoVO(vo);
+			cmd.call();
+		}
+	}
+
+	private void desisteInscricaoEncontrista(Casal casal) throws Exception {
+		EncontroInscricaoVO vo = getEncontroInscricaoVO(casal);
+		if (vo!=null && vo.getEncontroInscricao().getTipo().equals(TipoInscricaoEnum.DOACAO)){
 			vo.getEncontroInscricao().setTipoConfirmacao(TipoConfirmacaoEnum.DESISTENCIA);
 			EncontroInscricaoSalvarCommand cmd = inject.getInstance(EncontroInscricaoSalvarCommand.class);
 			cmd.setUsuarioAtual(getUsuarioAtual());

@@ -44,6 +44,8 @@ public class EncontroConvite extends _WebBaseEntity {
 	@JoinColumn(name="casal")
 	private Casal casal;
 
+	private Boolean vaiComoApoio;
+
 	@ManyToOne
 	@JoinColumn(name="casalConvidado")
 	private Casal casalConvidado;
@@ -210,5 +212,12 @@ public class EncontroConvite extends _WebBaseEntity {
 	}
 	public void setValorDoacao(BigDecimal valorDoacao) {
 		this.valorDoacao = valorDoacao;
+	}
+	public Boolean getVaiComoApoio() {
+		if (vaiComoApoio==null) return false;
+		return vaiComoApoio;
+	}
+	public void setVaiComoApoio(Boolean vaiComoApoio) {
+		this.vaiComoApoio = vaiComoApoio;
 	}
 }
