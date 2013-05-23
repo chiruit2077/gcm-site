@@ -18,4 +18,5 @@ public interface EncontroInscricaoServiceAsync {
 	void getVO(Encontro encontro, Casal casal, AsyncCallback<EncontroInscricaoVO> callback);
 	void listaPagamentos(Encontro encontroSelecionado, AsyncCallback<List<EncontroInscricaoPagamento>> callback);
 	void salvaPagamento(EncontroInscricaoPagamento pagamento, AsyncCallback<Void> callback);
+	void listaVO(Encontro encontro, AsyncCallback<List<EncontroInscricaoVO>> callback);
 }

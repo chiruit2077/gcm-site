@@ -32,7 +32,7 @@ import com.google.gwt.user.client.Window;
 public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoPresenter.Display> {
 
 	public interface Display extends BaseDisplay {
-		void populaEntidades(List<EncontroInscricao> lista);
+		void populaEntidades(List<EncontroInscricaoVO> lista);
 		void init();
 		void setVO(EncontroInscricaoVO vo);
 		void setDadosFicha(EncontroInscricao result);
@@ -97,15 +97,16 @@ public class EncontroInscricaoPresenter extends BasePresenter<EncontroInscricaoP
 
 	public void buscaEncontroInscricao(){
 		getDisplay().showWaitMessage(true);
-		service.lista(encontroSelecionado, new WebAsyncCallback<List<EncontroInscricao>>(getDisplay()) {
+		service.listaVO(encontroSelecionado, new WebAsyncCallback<List<EncontroInscricaoVO>>(getDisplay()) {
 			@Override
-			protected void success(List<EncontroInscricao> lista) {
-				getDisplay().populaEntidades(lista);
+			protected void success(List<EncontroInscricaoVO> listaVO) {
+				getDisplay().populaEntidades(listaVO);
 				if(dadosLoginVO.getParametrosRedirecionamentoVO()!=null &&
 				   dadosLoginVO.getParametrosRedirecionamentoVO().getPresenterCode()!=null &&
 				   dadosLoginVO.getParametrosRedirecionamentoVO().getPresenterCode().equals(PresenterCodeEnum.ENCONTRO_INSCRICAO)){
 					dadosLoginVO.getParametrosRedirecionamentoVO().setPresenterCode(null);
-					for (EncontroInscricao encontroInscricao : lista) {
+					for (EncontroInscricaoVO encontroInscricaoVO : listaVO) {
+						EncontroInscricao encontroInscricao = encontroInscricaoVO.getEncontroInscricao();
 						if(dadosLoginVO.getParametrosRedirecionamentoVO().getCasal()!=null &&
 						   encontroInscricao.getCasal()!=null &&
 						   dadosLoginVO.getParametrosRedirecionamentoVO().getCasal().getId().equals(encontroInscricao.getCasal().getId())){

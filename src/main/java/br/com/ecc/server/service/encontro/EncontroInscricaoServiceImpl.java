@@ -1,6 +1,7 @@
 package br.com.ecc.server.service.encontro;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ecc.client.service.encontro.EncontroInscricaoService;
@@ -126,6 +127,16 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		SaveEntityCommand cmd = inject.getInstance(SaveEntityCommand.class);
 		cmd.setBaseEntity(pagamento);
 		cmd.call();
+	}
+
+	@Override
+	public List<EncontroInscricaoVO> listaVO(Encontro encontro) throws Exception {
+		List<EncontroInscricaoVO> listavo = new ArrayList<EncontroInscricaoVO>();
+		List<EncontroInscricao> lista = lista(encontro);
+		for (EncontroInscricao encontroInscricao : lista) {
+			listavo.add(getVO(encontroInscricao));
+		}
+		return listavo;
 	}
 
 }

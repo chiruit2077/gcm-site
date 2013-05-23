@@ -106,6 +106,7 @@ public class DadosPagamento extends Composite {
 		}
 		if (geraparcelas) {
 			defineParcelasPosiveis();
+			entidadeEditada.defineParcelasPosiveis();
 			entidadeEditada.geraParcelas();
 			dadosAlterados = true;
 		}
@@ -205,38 +206,18 @@ public class DadosPagamento extends Composite {
 			inscricaoLabel.setText("3. A vaga somente se concretiza no pagamento da primeira parcela.");
 		}
 	}
-	@SuppressWarnings("deprecation")
+
 	private void defineParcelasPosiveis() {
 		parcelaListBox.clear();
 		parcelaListBox.addItem("");
 		vencimentoMaximoLabel.setText(null);
-		entidadeEditada.setMaxParcela(null);
-		Date dataMaxima = entidadeEditada.getEncontroInscricao().getDataMaximaParcela();
-		int daybase = entidadeEditada.getEncontroInscricao().getEncontro().getDataMaximaPagamento().getDate();
-		if(dataMaxima==null){
-			dataMaxima = entidadeEditada.getEncontroInscricao().getEncontro().getDataMaximaPagamento();
-		}
+		entidadeEditada.defineParcelasPosiveis();
+		Date dataMaxima = entidadeEditada.getDataMaxima();
 		if(dataMaxima!=null){
 			vencimentoMaximoLabel.setText(dfGlobal.format(dataMaxima));
-			Date hoje = new Date();
-			hoje = new Date(hoje.getYear(), hoje.getMonth(), daybase, 0, 0, 0);
-			int parcelas = 0;
-			while(hoje.compareTo(dataMaxima)<=0){
-				parcelas++;
-				parcelaListBox.addItem(parcelas+"");
-				hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase, 0, 0, 0);
-			}
-			entidadeEditada.setMaxParcela(parcelas);
-		}else{
-			Date hoje = new Date();
-			hoje = new Date(hoje.getYear(), hoje.getMonth(), daybase, 0, 0, 0);
-			int parcelas = 0;
-			while(parcelas < 12){
-				parcelas++;
-				parcelaListBox.addItem(parcelas+"");
-				hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase, 0, 0, 0);
-			}
-			entidadeEditada.setMaxParcela(parcelas);
+		}
+		for(int i=1;i<=entidadeEditada.getMaxParcela();i++){
+			parcelaListBox.addItem(i+"");
 		}
 	}
 
@@ -310,6 +291,7 @@ public class DadosPagamento extends Composite {
 							if(Window.confirm("Deseja excluir esta parcela ?")){
 								dadosAlterados = true;
 								entidadeEditada.getListaPagamento().remove(pagamento);
+								entidadeEditada.defineParcelasPosiveis();
 								entidadeEditada.geraParcelas();
 								populaPagamentos();
 							}
@@ -442,6 +424,7 @@ public class DadosPagamento extends Composite {
 			return;
 		}
 		getEncontroInscricaoVO().setQtdeparcelas(Integer.parseInt(parcelaListBox.getValue(parcelaListBox.getSelectedIndex())));
+		getEncontroInscricaoVO().defineParcelasPosiveis();
 		getEncontroInscricaoVO().geraParcelas();
 		populaPagamentos();
 	}

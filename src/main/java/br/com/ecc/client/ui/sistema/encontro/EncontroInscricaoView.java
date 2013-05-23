@@ -153,7 +153,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 	private EncontroInscricaoPagamentoDetalhe entidadeEditadaDetalhe;
 
-	private List<EncontroInscricao> listaEncontro;
+	private List<EncontroInscricaoVO> listaEncontroVO;
 
 	public EncontroInscricaoView() {
 		criaTabela();
@@ -339,6 +339,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				return;
 			}
 		}
+		entidadeEditada.setMantemValores(true);
 		presenter.salvar(entidadeEditada);
 	}
 
@@ -498,12 +499,21 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			ListBoxUtil.setItemSelected(confirmacaoListBox, entidadeEditada.getEncontroInscricao().getTipoConfirmacao().getNome());
 		}
 
-		populaDetalhes(encontroInscricaoVO.getListaPagamentoDetalhe(),false);
+		boolean atualiza = encontroInscricaoVO.isAtualizaValores();
+		if (atualiza) {
+			if (Window.confirm("Deseja atualizar os valor para esta inscrição?")){
+				encontroInscricaoVO.geraPagamentoDetalhe();
+				encontroInscricaoVO.defineParcelasPosiveis();
+				encontroInscricaoVO.geraParcelas();
+			}else
+				atualiza = false;
+		}
+		populaDetalhes(encontroInscricaoVO.getListaPagamentoDetalhe(), atualiza);
 	}
 
 	@UiHandler("exibeDesistenciaCheckBox")
 	public void exibeDesistenciaCheckBoxClickHandler(ClickEvent event){
-		populaEntidades(listaEncontro);
+		populaEntidades(listaEncontroVO);
 	}
 
 	@UiHandler("hospedagemParticularCheckBox")
@@ -539,28 +549,28 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		encontroInscricaoTableUtil.clearData();
 	}
 	@Override
-	public void populaEntidades(List<EncontroInscricao> lista) {
-		this.listaEncontro = lista;
-		Collections.sort(lista, new Comparator<EncontroInscricao>() {
+	public void populaEntidades(List<EncontroInscricaoVO> lista) {
+		this.listaEncontroVO = lista;
+		Collections.sort(lista, new Comparator<EncontroInscricaoVO>() {
 			@Override
-			public int compare(EncontroInscricao o1, EncontroInscricao o2) {
+			public int compare(EncontroInscricaoVO o1, EncontroInscricaoVO o2) {
 				String s1="", s2="";
-				if(o1.getCodigo()!=null) s1 = o1.getCodigo().toString();
-				if(o2.getCodigo()!=null) s2 = o2.getCodigo().toString();
-				if (o1.getTipo().equals(o2.getTipo())){
-					if(o1.getCasal()!=null){
-						s1 = s1 + o1.getCasal().toString();
+				if(o1.getEncontroInscricao().getCodigo()!=null) s1 = o1.getEncontroInscricao().getCodigo().toString();
+				if(o2.getEncontroInscricao().getCodigo()!=null) s2 = o2.getEncontroInscricao().getCodigo().toString();
+				if (o1.getEncontroInscricao().getTipo().equals(o2.getEncontroInscricao().getTipo())){
+					if(o1.getEncontroInscricao().getCasal()!=null){
+						s1 = s1 + o1.getEncontroInscricao().getCasal().toString();
 					} else {
-						s1 = s1 + o1.getPessoa().toString();
+						s1 = s1 + o1.getEncontroInscricao().getPessoa().toString();
 					}
-					if(o2.getCasal()!=null){
-						s2 = s2 + o2.getCasal().toString();
+					if(o2.getEncontroInscricao().getCasal()!=null){
+						s2 = s2 + o2.getEncontroInscricao().getCasal().toString();
 					} else {
-						s2 = s2 + o2.getPessoa().toString();
+						s2 = s2 + o2.getEncontroInscricao().getPessoa().toString();
 					}
 				} else {
-					s1 = o1.getTipo().getCodigo() + s1;
-					s2 = o2.getTipo().getCodigo() + s2;
+					s1 = o1.getEncontroInscricao().getTipo().getCodigo() + s1;
+					s2 = o2.getEncontroInscricao().getTipo().getCodigo() + s2;
 				}
 				return s1.compareTo(s2);
 			}
@@ -577,7 +587,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		HorizontalPanel hp;
 		boolean ok = false, exibeLinha;
 		int coordenador = 0, padrinho=0, apoio=0, afilhado=0, desistencia=0, externo=0, doacao = 0;
-		for (final EncontroInscricao encontroInscricao: lista) {
+		for (EncontroInscricaoVO encontroInscricaoVO: lista) {
+			final EncontroInscricao encontroInscricao = encontroInscricaoVO.getEncontroInscricao();
 			exibeLinha = true;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
 				exibeLinha = false;
@@ -670,6 +681,10 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				encontroInscricaoTableUtil.addRow(dados,row);
 				if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 					encontroInscricaoTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
+				}
+				if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+					if (encontroInscricaoVO.isAtualizaValores())
+						encontroInscricaoTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalRed");
 				}
 
 			}
