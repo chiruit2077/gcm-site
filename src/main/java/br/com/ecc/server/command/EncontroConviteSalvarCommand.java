@@ -191,6 +191,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 			casalConvidado.setSituacao(TipoSituacaoEnum.ATIVO);
 			casalConvidado.setGrupo(encontroConvite.getEncontro().getGrupo());
 			casalConvidado = em.merge(casalConvidado);
+			encontroConvite.setCasalConvidado(casalConvidado);
 
 			EncontroInscricaoVO voafilhado = getEncontroInscricaoVO(casalConvidado);
 			if(voafilhado==null){

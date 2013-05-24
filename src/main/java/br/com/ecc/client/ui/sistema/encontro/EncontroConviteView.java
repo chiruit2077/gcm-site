@@ -2,6 +2,7 @@ package br.com.ecc.client.ui.sistema.encontro;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
@@ -31,6 +32,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -192,9 +195,29 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 
 		dataConviteDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataConviteDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
+		dataConviteDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onValueChange(ValueChangeEvent<Date> event) {
+				Date value = event.getValue();
+				Date hoje = new Date();
+				value = new Date(value.getYear(),value.getMonth(),value.getDate(), hoje.getHours(), hoje.getMinutes(), 0);
+				dataConviteDateBox.setValue(value, false);
+			}
+		});
 
 		dataRespostaDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("dd-MM-yyyy HH:mm")));
 		dataRespostaDateBox.getTextBox().setAlignment(TextAlignment.CENTER);
+		dataRespostaDateBox.addValueChangeHandler(new ValueChangeHandler<Date>() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onValueChange(ValueChangeEvent<Date> event) {
+				Date value = event.getValue();
+				Date hoje = new Date();
+				value = new Date(value.getYear(),value.getMonth(),value.getDate(), hoje.getHours(), hoje.getMinutes(), 0);
+				dataRespostaDateBox.setValue(value, false);
+			}
+		});
 	}
 
 	private void criaTabela() {
@@ -896,6 +919,9 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 				moverCheckBox.setValue(true);
 			}
 		}
+		if (dataConviteDateBox.getValue() == null)
+			dataConviteDateBox.setValue(new Date());
+		dataRespostaDateBox.setValue(new Date());
 		editaDialogBox.center();
 	}
 	@UiHandler("exibeRecusadosCheckBox")

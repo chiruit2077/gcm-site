@@ -397,9 +397,17 @@ public class EncontroInscricaoVO implements Serializable {
 		return pagamentoDetalheNovo;
 	}
 	public boolean isAtualizaValores() {
-		return !somaValorEncontroAux(getListaPagamentoDetalhe()).equals(somaValorEncontroAux(geraPagamentoDetalheAux()));
+		return !somaValorEncontroAux(getListaPagamentoDetalhe()).equals(somaValorEncontroAux(geraPagamentoDetalheAux())) ||
+				!somaValorEncontroAux(geraPagamentoDetalheAux()).equals(somaValorParcelas(getListaPagamento()));
 	}
 
+	private BigDecimal somaValorParcelas(List<EncontroInscricaoPagamento> listaPagamento) {
+		double valor = 0;
+		for (EncontroInscricaoPagamento pagamento : listaPagamento) {
+			valor += pagamento.getValor().setScale(0, RoundingMode.DOWN).doubleValue();
+		}
+		return new BigDecimal(valor);
+	}
 	public BigDecimal somaValorEncontroAux(List<EncontroInscricaoPagamentoDetalhe> detalhes){
 		double valor = 0;
 		for (EncontroInscricaoPagamentoDetalhe detalhe: detalhes) {
