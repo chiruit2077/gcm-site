@@ -7,10 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 public class ImageUtil {
 
@@ -43,8 +41,9 @@ public class ImageUtil {
 		g2d.drawImage(imageIcon.getImage(), 0, 0, width, height, null);
 		g2d.dispose();
 		ByteArrayOutputStream encoderOutputStream = new ByteArrayOutputStream();
-		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(encoderOutputStream);
-		encoder.encode(bufferedResizedImage);
+		ImageIO.write(bufferedResizedImage, "jpeg", encoderOutputStream);
+//		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(encoderOutputStream);
+//		encoder.encode(bufferedResizedImage);
 		return encoderOutputStream.toByteArray();
 	}
 	/*

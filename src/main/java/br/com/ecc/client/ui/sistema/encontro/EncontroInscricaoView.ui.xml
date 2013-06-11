@@ -32,9 +32,13 @@
 		<g:HorizontalPanel styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
 			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center" >
 				<g:HTMLPanel width="100%">
-					<table cellpadding="3" cellspacing="0" border="0">
+					<table cellpadding="3" cellspacing="0" border="0" width="100%">
 						<tr>
-							<td>
+						    <td class="portal-formLabel" width="50px">Tipo:</td>
+							<td width="160px">
+								<g:ListBox ui:field="tipoInscricaoListBox" width="150px"/>
+							</td>
+							<td align="right">
 								<g:CheckBox ui:field="exibeDesistenciaCheckBox" text="Exibir desistências"/>
 							</td>
 						</tr>

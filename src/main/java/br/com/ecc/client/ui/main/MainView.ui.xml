@@ -129,7 +129,7 @@
 									<g:HorizontalPanel width="5px"/>
 									<g:Label ui:field="grupoLabel" styleName="portal-headerBarText" width="125px"/>
 							 	</g:HorizontalPanel>
-							 	<g:HorizontalPanel ui:field="encontroHorizontalPanel" verticalAlignment="middle" height="35px" width="170px" spacing="5" styleName="portal-headerBar" visible="false">
+							 	<g:HorizontalPanel ui:field="encontroHorizontalPanel" verticalAlignment="middle" height="35px" width="180px" spacing="5" styleName="portal-headerBar" visible="false">
 									<g:Label ui:field="encontroLabel" styleName="portal-headerBarText" />
 							 	</g:HorizontalPanel>
 						 	</g:HorizontalPanel>

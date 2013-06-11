@@ -98,6 +98,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 	@UiField Label participanteLabel;
 	@UiField CheckBox exibeDesistenciaCheckBox;
 	@UiField TabLayoutPanel tabPanel;
+	
+	@UiField ListBox tipoInscricaoListBox;
 
 	@UiField(provided = true) SuggestBox casalSuggestBox;
 	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
@@ -251,6 +253,11 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		}, BlurEvent.getType());
 		ListBoxUtil.populate(tipoListBox, false, TipoInscricaoEnum.values());
 		ListBoxUtil.populate(confirmacaoListBox, false, TipoConfirmacaoEnum.values());
+		
+		tipoInscricaoListBox.addItem("");
+		for (TipoInscricaoEnum tipo : TipoInscricaoEnum.values()) {
+			tipoInscricaoListBox.addItem(tipo.toString());
+		}
 	}
 
 	private void criaTabela() {
@@ -420,7 +427,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		valorHTMLPanel.setVisible(false);
 		confirmacaoListBox.setSelectedIndex(0);
 		ListBoxUtil.setItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.CONFIRMADO.toString());
-		tabPanel.setHeight("200px");
+		tabPanel.setHeight("460px");
 
 
 		dataFichaEnviadaAfilhadoDateBox.setValue(null);
@@ -516,6 +523,12 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		populaEntidades(listaEncontroVO);
 	}
 
+	
+	@UiHandler("tipoInscricaoListBox")
+	public void tipoInscricaoListBoxChangeHandler(ChangeEvent event) {
+		populaEntidades(listaEncontroVO);
+	}
+	
 	@UiHandler("hospedagemParticularCheckBox")
 	public void hospedagemParticularCheckBoxClickHandler(ClickEvent event){
 		TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values());
@@ -580,6 +593,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 			podeEditar = true;
 		}
+		
+		TipoInscricaoEnum tipoInscricao = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoInscricaoListBox, TipoInscricaoEnum.values());
 
 		encontroInscricaoTableUtil.clearData();
 		int row = 0;
@@ -592,6 +607,11 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			exibeLinha = true;
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA) && !exibeDesistenciaCheckBox.getValue()){
 				exibeLinha = false;
+			}
+			if(tipoInscricao!=null){
+				if(!tipoInscricao.equals(encontroInscricaoVO.getEncontroInscricao().getTipo())){
+					exibeLinha = false;
+				}
 			}
 			if(encontroInscricao.getTipoConfirmacao()!=null && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 				desistencia++;

@@ -533,22 +533,22 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			centralPanel.setVisible(true);
 			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
 				novoButton.setVisible(true);
-				Button b = new Button("Redimensionar");
-				b.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent arg0) {
-						presenter.redimensiona();
-					}
-				});
-				ferramentasHorizontalPanel.add(b);
-				b = new Button("Limpar lixo de imágens");
-				b.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent arg0) {
-						presenter.limpaLixo();
-					}
-				});
-				ferramentasHorizontalPanel.add(b);
+//				Button b = new Button("Redimensionar");
+//				b.addClickHandler(new ClickHandler() {
+//					@Override
+//					public void onClick(ClickEvent arg0) {
+//						presenter.redimensiona();
+//					}
+//				});
+//				ferramentasHorizontalPanel.add(b);
+//				b = new Button("Limpar lixo de imágens");
+//				b.addClickHandler(new ClickHandler() {
+//					@Override
+//					public void onClick(ClickEvent arg0) {
+//						presenter.limpaLixo();
+//					}
+//				});
+//				ferramentasHorizontalPanel.add(b);
 			} else {
 				novoButton.setVisible(false);
 			}

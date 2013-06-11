@@ -560,24 +560,28 @@ public class MainView extends BaseView<MainPresenter> implements MainPresenter.D
 
 	@Override
 	public void defineEncontro() {
-		String encontroCookie = Cookies.getCookie("encontroSelecionado");
-		boolean achou = false;
-		if(encontroCookie!=null && !encontroCookie.equals("")){
-			for (Encontro encontro : presenter.getListaEncontros()) {
-				if(encontro.toString().equals(encontroCookie)){
-					setEncontroVisual(encontro);
-					achou = true;
-					break;
-				}
-			}
-		}
-		if(!achou) {
-			if(presenter.getListaEncontros().size()>0){
-				setEncontroVisual(presenter.getListaEncontros().get(0));
-				achou = true;
-			}
-		}
-		if(achou){
+//		String encontroCookie = Cookies.getCookie("encontroSelecionado");
+//		boolean achou = false;
+//		if(encontroCookie!=null && !encontroCookie.equals("")){
+//			for (Encontro encontro : presenter.getListaEncontros()) {
+//				if(encontro.toString().equals(encontroCookie)){
+//					setEncontroVisual(encontro);
+//					achou = true;
+//					break;
+//				}
+//			}
+//		}
+//		if(!achou) {
+//			if(presenter.getListaEncontros().size()>0){
+//				setEncontroVisual(presenter.getListaEncontros().get(0));
+//				achou = true;
+//			}
+//		}
+//		if(achou){
+//			encontroHorizontalPanel.setVisible(true);
+//		}
+		if(presenter.getListaEncontros().size()>0){
+			setEncontroVisual(presenter.getListaEncontros().get(0));
 			encontroHorizontalPanel.setVisible(true);
 		}
 	}
