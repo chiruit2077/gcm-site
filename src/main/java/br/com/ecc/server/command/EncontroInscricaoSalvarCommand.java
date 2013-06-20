@@ -163,7 +163,9 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 						ficha = getFichaVaga(TipoInscricaoCasalEnum.ENCONTRISTA,encontroInscricaoVO.getEncontroInscricao().getEncontro());
 					}
 					encontroInscricaoVO.getEncontroInscricao().setFichaPagamento(ficha);
-					encontroInscricaoVO.getEncontroInscricao().setCodigo(ficha.getFicha());
+					if(ficha!=null){
+						encontroInscricaoVO.getEncontroInscricao().setCodigo(ficha.getFicha());
+					}
 					if (encontroInscricaoVO.getEncontroInscricao().getEncontro().getUsaDetalheAutomatico().equals(1)){
 						encontroInscricaoVO.defineParcelasPosiveis();
 						if (encontroInscricaoVO.getListaPagamento().size()>0)
