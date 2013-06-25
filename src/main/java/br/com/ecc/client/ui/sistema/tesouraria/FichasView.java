@@ -79,7 +79,7 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		fichaTableUtil.addColumn("Ficha", "50", HasHorizontalAlignment.ALIGN_CENTER);
 		fichaTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
 		fichaTableUtil.addColumn("Status", "50", HasHorizontalAlignment.ALIGN_CENTER);
-		fichaTableUtil.addColumn("Observação", "200", HasHorizontalAlignment.ALIGN_LEFT);
+		fichaTableUtil.addColumn("Observação", "300", HasHorizontalAlignment.ALIGN_LEFT);
 		fichaTableUtil.addColumn("Tipo", "100", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
@@ -200,7 +200,11 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 		HorizontalPanel hp;
 		int liberados = 0;
 		int reservados = 0;
-		int vagas = 0;
+		int afilhados = 0;
+		int encontristas = 0;
+		int vagasafilhados = 0;
+		int vagasencontristas = 0;
+		int total = 0;
 		for (final EncontroInscricaoFichaPagamento ficha: lista) {
 			boolean exibeFicha = true;
 			if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.LIBERADO)){
@@ -211,9 +215,13 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 			}
 			if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.RESERVADO)){
 				reservados++;
+				total++;
 				if (!exibeReservadasCheckBox.getValue()){
 					exibeFicha = false;
 				}
+			}
+			if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.NORMAL)){
+				total++;
 			}
 			if(exibeFicha){
 				row++;
@@ -254,8 +262,13 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 					} else {
 						dados[2] = ficha.getEncontroInscricao().getPessoa().getNome();
 					}
-					if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.NORMAL))
+					if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.NORMAL)){
 						fichaTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGray");
+						if (ficha.getTipo().equals(TipoInscricaoCasalEnum.AFILHADO))
+							afilhados++;
+						if (ficha.getTipo().equals(TipoInscricaoCasalEnum.ENCONTRISTA))
+							encontristas++;
+					}
 					else if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.LIBERADO))
 						fichaTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialBoldGreen");
 					else if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.RESERVADO))
@@ -267,7 +280,14 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 					}else if (ficha.getStatus().equals(TipoInscricaoFichaStatusEnum.NORMAL)){
 						dados[2] = "VAGO";
 						fichaTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalBlue");
-						vagas++;
+						if (ficha.getTipo().equals(TipoInscricaoCasalEnum.AFILHADO)){
+							afilhados++;
+							vagasafilhados++;
+						}
+						if (ficha.getTipo().equals(TipoInscricaoCasalEnum.ENCONTRISTA)){
+							vagasencontristas++;
+							encontristas++;
+						}
 					}
 				}
 				dados[3] = ficha.getStatus().getNome();
@@ -277,17 +297,32 @@ public class FichasView extends BaseView<FichasPresenter> implements FichasPrese
 				fichaTableUtil.addRow(dados,row);
 			}
 		}
-		LabelTotalUtil.setTotal(itemTotal, row, "ficha", "fichas", "");
+		LabelTotalUtil.setTotal(itemTotal, row, "ficha listada", "fichas listadas", "");
 		String totais = "";
-		if(row==1 || row==0){
-			totais += row + " ficha";
+		if(total==1 || total==0){
+			totais += total + " ficha";
 		} else {
-			totais += row + " fichas";
+			totais += total + " fichas";
 		}
-		if(vagas==1 || vagas==0){
-			totais += " / " + vagas + " vaga";
+		if(afilhados==1 || afilhados==0){
+			totais += " / " + afilhados + " afilhado";
 		} else {
-			totais += " / " + vagas + " vagas";
+			totais += " / " + afilhados + " afilhados";
+		}
+		if(vagasafilhados==1 || vagasafilhados==0){
+			totais += " / " + vagasafilhados + " vaga afilhado";
+		} else {
+			totais += " / " + vagasafilhados + " vagas afilhados";
+		}
+		if(encontristas==1 || encontristas==0){
+			totais += " / " + encontristas + " encontrista";
+		} else {
+			totais += " / " + encontristas + " encontristas";
+		}
+		if(vagasencontristas==1 || vagasencontristas==0){
+			totais += " / " + vagasencontristas + " vaga encontrista";
+		} else {
+			totais += " / " + vagasencontristas + " vagas encontristas";
 		}
 		if(reservados==1 || reservados==0){
 			totais += " / " + reservados + " reservada";
