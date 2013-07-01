@@ -260,7 +260,9 @@ public class EncontroInscricaoVO implements Serializable {
 			detalhe.setValorUnitario(encontro.getValorDiariaCasal());
 			detalhe.setEditavel(false);
 			detalhe.setQuantidade(encontro.getQuantidadeDiarias());
-			detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+			if(encontro.getValorDiariaCasal()!=null && encontro.getQuantidadeDiarias()!=null){
+				detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+			}
 			pagamentoDetalheNovo.add(detalhe);
 			detalhe = new EncontroInscricaoPagamentoDetalhe();
 			detalhe.setEncontroInscricao(getEncontroInscricao());
@@ -268,8 +270,12 @@ public class EncontroInscricaoVO implements Serializable {
 			detalhe.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
 			detalhe.setEditavel(false);
 			detalhe.setValorUnitario(encontro.getValorAlimentacao());
-			detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
-			detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			if(encontro.getQuantidadeRefeicoes()!=null){
+				detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+			}
+			if(encontro.getValorAlimentacao()!=null && encontro.getQuantidadeRefeicoes()!=null){
+				detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			}
 			pagamentoDetalheNovo.add(detalhe);
 		}else if (tipo.equals(TipoInscricaoEnum.PADRINHO)){
 			EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
@@ -289,7 +295,9 @@ public class EncontroInscricaoVO implements Serializable {
 				detalhe.setValorUnitario(encontro.getValorDiariaCasal());
 				detalhe.setEditavel(false);
 				detalhe.setQuantidade(encontro.getQuantidadeDiarias());
-				detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+				if(encontro.getValorDiariaCasal()!=null &&  encontro.getQuantidadeDiarias()!=null){
+					detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+				}
 				pagamentoDetalheNovo.add(detalhe);
 			}
 			detalhe = new EncontroInscricaoPagamentoDetalhe();
@@ -298,8 +306,12 @@ public class EncontroInscricaoVO implements Serializable {
 			detalhe.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
 			detalhe.setEditavel(false);
 			detalhe.setValorUnitario(encontro.getValorAlimentacao());
-			detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
-			detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			if(encontro.getQuantidadeRefeicoes()!=null){
+				detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+			}
+			if(encontro.getValorAlimentacao()!=null && encontro.getQuantidadeRefeicoes()!=null){
+				detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			}
 			pagamentoDetalheNovo.add(detalhe);
 		}else if (tipo.equals(TipoInscricaoEnum.COORDENADOR)){
 			EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
@@ -319,7 +331,9 @@ public class EncontroInscricaoVO implements Serializable {
 				detalhe.setValorUnitario(encontro.getValorDiariaCasal());
 				detalhe.setQuantidade(encontro.getQuantidadeDiarias());
 				detalhe.setEditavel(false);
-				detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+				if(encontro.getValorDiariaCasal()!=null && encontro.getQuantidadeDiarias()!=null){
+					detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+				}
 				pagamentoDetalheNovo.add(detalhe);
 			}
 			detalhe = new EncontroInscricaoPagamentoDetalhe();
@@ -327,9 +341,13 @@ public class EncontroInscricaoVO implements Serializable {
 			detalhe.setTipoDetalhe(TipoPagamentoDetalheEnum.ALIMENTACAO);
 			detalhe.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
 			detalhe.setValorUnitario(encontro.getValorAlimentacao());
-			detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+			if(encontro.getQuantidadeRefeicoes()!=null){
+				detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+			}
 			detalhe.setEditavel(false);
-			detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			if(encontro.getValorAlimentacao()!=null && encontro.getQuantidadeRefeicoes()!=null){
+				detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+			}
 			pagamentoDetalheNovo.add(detalhe);
 		}else if (tipo.equals(TipoInscricaoEnum.APOIO)){
 			if (getEncontroInscricao().getCasal() != null){
@@ -350,7 +368,9 @@ public class EncontroInscricaoVO implements Serializable {
 					detalhe.setValorUnitario(encontro.getValorDiariaCasal());
 					detalhe.setQuantidade(encontro.getQuantidadeDiarias());
 					detalhe.setEditavel(false);
-					detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+					if(encontro.getValorDiariaCasal()!=null && encontro.getQuantidadeDiarias()!=null){
+						detalhe.setValor(new BigDecimal(encontro.getValorDiariaCasal().doubleValue()*encontro.getQuantidadeDiarias()));
+					}
 					pagamentoDetalheNovo.add(detalhe);
 				}
 				detalhe = new EncontroInscricaoPagamentoDetalhe();
@@ -358,9 +378,13 @@ public class EncontroInscricaoVO implements Serializable {
 				detalhe.setTipoDetalhe(TipoPagamentoDetalheEnum.ALIMENTACAO);
 				detalhe.setTipoLancamento(TipoPagamentoLancamentoEnum.DEBITO);
 				detalhe.setValorUnitario(encontro.getValorAlimentacao());
-				detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+				if(encontro.getQuantidadeRefeicoes()!=null){
+					detalhe.setQuantidade(encontro.getQuantidadeRefeicoes()*2);
+				}
 				detalhe.setEditavel(false);
-				detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+				if(encontro.getValorAlimentacao()!=null && encontro.getQuantidadeRefeicoes()!=null){
+					detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()*2));
+				}
 				pagamentoDetalheNovo.add(detalhe);
 			}else{
 				EncontroInscricaoPagamentoDetalhe detalhe = new EncontroInscricaoPagamentoDetalhe();
@@ -380,7 +404,9 @@ public class EncontroInscricaoVO implements Serializable {
 					detalhe.setValorUnitario(encontro.getValorDiariaSolteiro());
 					detalhe.setEditavel(false);
 					detalhe.setQuantidade(encontro.getQuantidadeDiarias());
-					detalhe.setValor(new BigDecimal(encontro.getValorDiariaSolteiro().doubleValue()*encontro.getQuantidadeDiarias()));
+					if(encontro.getValorDiariaSolteiro()!=null && encontro.getQuantidadeDiarias()!=null){
+						detalhe.setValor(new BigDecimal(encontro.getValorDiariaSolteiro().doubleValue()*encontro.getQuantidadeDiarias()));
+					}
 					pagamentoDetalheNovo.add(detalhe);
 				}
 				detalhe = new EncontroInscricaoPagamentoDetalhe();
@@ -390,7 +416,9 @@ public class EncontroInscricaoVO implements Serializable {
 				detalhe.setValorUnitario(encontro.getValorAlimentacao());
 				detalhe.setQuantidade(encontro.getQuantidadeRefeicoes());
 				detalhe.setEditavel(false);
-				detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()));
+				if(encontro.getValorAlimentacao()!=null && encontro.getQuantidadeRefeicoes()!=null){
+					detalhe.setValor(new BigDecimal(encontro.getValorAlimentacao().doubleValue()*encontro.getQuantidadeRefeicoes()));
+				}
 				pagamentoDetalheNovo.add(detalhe);
 			}
 		}
@@ -411,10 +439,12 @@ public class EncontroInscricaoVO implements Serializable {
 	public BigDecimal somaValorEncontroAux(List<EncontroInscricaoPagamentoDetalhe> detalhes){
 		double valor = 0;
 		for (EncontroInscricaoPagamentoDetalhe detalhe: detalhes) {
-			if(detalhe.getTipoLancamento().equals(TipoPagamentoLancamentoEnum.DEBITO))
-				valor += detalhe.getValor().doubleValue();
-			else
-				valor -= detalhe.getValor().doubleValue();
+			if(detalhe.getValor()!=null){
+				if(detalhe.getTipoLancamento().equals(TipoPagamentoLancamentoEnum.DEBITO))
+					valor += detalhe.getValor().doubleValue();
+				else
+					valor -= detalhe.getValor().doubleValue();
+			}
 		}
 		return new BigDecimal(valor);
 	}
