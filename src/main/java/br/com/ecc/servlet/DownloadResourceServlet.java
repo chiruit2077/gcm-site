@@ -29,6 +29,7 @@ public class DownloadResourceServlet extends DownloadFileServlet {
 		}
 		
 		String fisicalFile = req.getParameter("ff");
+		System.out.println("Request de dowload: " + fisicalFile + " por " + req.getLocalAddr());
 		InputStream inputStream;
 		try {
 			if(fisicalFile!=null && !fisicalFile.equals("")){
