@@ -81,6 +81,10 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 			}
 			if(!cmdEmail.getDestinatariosCopiaOculta().equals("")){
 				try {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) { }
+					
 					cmdEmail.call();
 					
 					MensagemDestinatario d;
@@ -135,6 +139,11 @@ public class MensagemEnviarCommand implements Callable<MensagemVO>{
 								sHTML = substituiTagNome(mensagemVO.getMensagem(), null, d.getPessoa());
 								cmdEmail.setMensagem(sHTML);
 								cmdEmail.setDestinatario(d.getPessoa().getEmail());
+								
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) { }
+								
 								cmdEmail.call();
 								ok = true;
 							}
