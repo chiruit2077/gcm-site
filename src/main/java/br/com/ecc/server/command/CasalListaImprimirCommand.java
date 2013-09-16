@@ -171,6 +171,20 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 				}
 				dadosItemEla.add(valorCampo);
 			}
+			if(casalOpcaoRelatorioVO.getHipertenso()){
+				titulos.add("Hipertenso");
+				valorCampo = "Não";
+				if(casal.getEle().getDiabetico()!=null && casal.getEle().getHipertenso()){
+					valorCampo = "Sim";
+				}
+				dadosItemEle.add(valorCampo);
+
+				valorCampo = "Não";
+				if(casal.getEla().getDiabetico()!=null && casal.getEla().getHipertenso()){
+					valorCampo = "Sim";
+				}
+				dadosItemEla.add(valorCampo);
+			}
 			
 			voEle = new CasalItemVO();
 			voEla = new CasalItemVO();

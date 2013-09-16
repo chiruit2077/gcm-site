@@ -14,7 +14,7 @@
 	}
 	.borde {
 		border: 1px solid gray;
-		background-color: lightgray;
+		background-color: #F5FFFA;
 		width: 100%;
 	}
 	.opcao {
@@ -99,6 +99,7 @@
 				<g:CheckBox ui:field="alergiaCheckBox" text="Alergia"/>
 				<g:CheckBox ui:field="vegetarianoCheckBox" text="Vegetariano"/>
 				<g:CheckBox ui:field="diabeticoCheckBox" text="Diabetico"/>
+				<g:CheckBox ui:field="hipertensoCheckBox" text="Hipertenso"/>
 				<g:CheckBox ui:field="tipoCheckBox" text="Tipo"/>
 			</g:VerticalPanel>
 		</g:HorizontalPanel>

@@ -73,6 +73,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@UiField CheckBox alergiaCheckBox;
 	@UiField CheckBox vegetarianoCheckBox;
 	@UiField CheckBox diabeticoCheckBox;
+	@UiField CheckBox hipertensoCheckBox;
 	@UiField CheckBox tipoCheckBox;
 
 	@UiField DialogBox emailDialogBox;
@@ -124,6 +125,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalTableUtil.addColumn("A", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("D", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("V", "30", HasHorizontalAlignment.ALIGN_CENTER);
+		casalTableUtil.addColumn("H", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
@@ -141,6 +143,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalListagemTableUtil.addColumn("A", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalListagemTableUtil.addColumn("D", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalListagemTableUtil.addColumn("V", "30", HasHorizontalAlignment.ALIGN_CENTER);
+		casalListagemTableUtil.addColumn("H", "30", HasHorizontalAlignment.ALIGN_CENTER);
 		casalListagemTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
@@ -181,6 +184,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		casalOpcaoRelatorioVO.setApelido(apelidoCheckBox.getValue());
 		casalOpcaoRelatorioVO.setDiabetico(diabeticoCheckBox.getValue());
 		casalOpcaoRelatorioVO.setDocumento(documentoCheckBox.getValue());
+		casalOpcaoRelatorioVO.setHipertenso(hipertensoCheckBox.getValue());
 		casalOpcaoRelatorioVO.setEmail(emailCheckBox.getValue());
 		casalOpcaoRelatorioVO.setEndereco(enderecoCheckBox.getValue());
 		casalOpcaoRelatorioVO.setTelefone(telefoneCheckBox.getValue());
@@ -261,7 +265,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		HorizontalPanel hp;
 		String t = "";
 		for (final Casal casal: lista) {
-			Object dados[] = new Object[10];
+			Object dados[] = new Object[11];
 
 			hp = new HorizontalPanel();
 			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -346,7 +350,14 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 				t += (casal.getEla().getVegetariano()!=null&&casal.getEla().getVegetariano()?"Sim":"Não");
 			}
 			dados[8] = new HTML(t);
-			dados[9] = casal.getTipoCasal()==null?"":casal.getTipoCasal().getNome();
+			if(casal.getEle()!=null){
+				t = (casal.getEle().getHipertenso()!=null&&casal.getEle().getHipertenso()?"Sim":"Não") + "<br>";
+			}
+			if(casal.getEla()!=null){
+				t += (casal.getEla().getHipertenso()!=null&&casal.getEla().getHipertenso()?"Sim":"Não");
+			}
+			dados[9] = new HTML(t);
+			dados[10] = casal.getTipoCasal()==null?"":casal.getTipoCasal().getNome();
 			if(listagem){
 				casalListagemTableUtil.addRow(dados,row+1);
 			} else {

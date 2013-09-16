@@ -14,6 +14,7 @@ public class CasalOpcaoRelatorioVO implements Serializable {
 	private Boolean alergia;
 	private Boolean diabetico;
 	private Boolean vegetariano;
+	private Boolean hipertenso;
 	private Boolean tipo;
 	
 	public Boolean getEmail() {
@@ -75,5 +76,11 @@ public class CasalOpcaoRelatorioVO implements Serializable {
 	}
 	public void setTipo(Boolean tipo) {
 		this.tipo = tipo;
+	}
+	public Boolean getHipertenso() {
+		return hipertenso;
+	}
+	public void setHipertenso(Boolean hipertenso) {
+		this.hipertenso = hipertenso;
 	}
 }
