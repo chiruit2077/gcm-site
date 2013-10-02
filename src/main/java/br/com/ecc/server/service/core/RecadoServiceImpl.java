@@ -151,7 +151,12 @@ public class RecadoServiceImpl extends SecureRemoteServiceServlet implements Rec
 			GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
 			cmd.setNamedQuery("encontroInscricao.porEncontroConvidados");
 			cmd.addParameter("encontro", encontro);
-			List<EncontroInscricao> listaInscricao = cmd.call();
+			List<EncontroInscricao> listaInscricao = new ArrayList<EncontroInscricao>();
+			try {
+				listaInscricao = cmd.call();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			List<Casal> casais = new ArrayList<Casal>();
 			for (EncontroInscricao encontroInscricao : listaInscricao) {
 				casais.add(encontroInscricao.getCasal());
