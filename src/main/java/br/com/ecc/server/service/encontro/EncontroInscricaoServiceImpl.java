@@ -38,7 +38,12 @@ public class EncontroInscricaoServiceImpl extends SecureRemoteServiceServlet imp
 		GetEntityListCommand cmd = inject.getInstance(GetEntityListCommand.class);
 		cmd.setNamedQuery("encontroInscricao.porEncontro");
 		cmd.addParameter("encontro", encontro);
-		List<EncontroInscricao> lista = cmd.call();
+		List<EncontroInscricao> lista = new ArrayList<EncontroInscricao>();
+		try{
+			lista = cmd.call();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		for (EncontroInscricao encontroInscricao : lista) {
