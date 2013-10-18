@@ -174,11 +174,11 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 
 		for (EncontroInscricao ei : listaEncontroInscricao) {
 			ei.setQtdeAtividades(0);
-			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO) && (inscricao!=null ||
-					(inscricao == null && !ei.getTipo().equals(TipoInscricaoEnum.COORDENADOR) && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !ei.getTipo().equals(TipoInscricaoEnum.DOACAO) ))){
+			if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO) && ((inscricao!=null) ||
+					((inscricao == null) && !ei.getTipo().equals(TipoInscricaoEnum.COORDENADOR) && !ei.getTipo().equals(TipoInscricaoEnum.EXTERNO) && !ei.getTipo().equals(TipoInscricaoEnum.DOACAO) ))){
 				for (EncontroAtividade ea : listaEncontroAtividade) {
 					String atividade = (new SimpleDateFormat("E")).format(ea.getInicio()) + " " +
-						(new SimpleDateFormat("HH:mm")).format(ea.getInicio()) + " " + (new SimpleDateFormat("HH:mm")).format(ea.getFim()) + " " + ea.getTipoAtividade().getNome() + " - " + ea.getAtividade().getNome();
+							(new SimpleDateFormat("HH:mm")).format(ea.getInicio()) + " " + (new SimpleDateFormat("HH:mm")).format(ea.getFim()) + " " + ea.getTipoAtividade().getNome() + " - " + ea.getAtividade().getNome();
 					boolean coordenacao = false;
 					for (EncontroAtividadeInscricao eai : ea.getEncontroAtividadeInscricoes()) {
 						if (eai.getEncontroInscricao().getId().equals(ei.getId())){
@@ -275,7 +275,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 			}
 
 			for (EncontroAtividade ea : vo.getListaEncontroAtividade()) {
-				if (ea.getInicio().compareTo(inicio)>=0 && ea.getInicio().compareTo(fim)<0){
+				if ((ea.getInicio().compareTo(inicio)>=0) && (ea.getInicio().compareTo(fim)<0)){
 					listaEncontroAtividadePeriodo.add(ea);
 				}
 			}
@@ -399,8 +399,8 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		Collections.sort(lista, new Comparator<AgrupamentoMembro>() {
 			@Override
 			public int compare(AgrupamentoMembro o1, AgrupamentoMembro o2) {
-				if (o1.getRotulo() != null && o2.getRotulo() != null ) return o1.getRotulo().compareTo(o2.getRotulo());
-				if (o1.getRotulo() == null && o2.getRotulo() != null && !o2.getRotulo().equals("") ) return -1;
+				if ((o1.getRotulo() != null) && (o2.getRotulo() != null) ) return o1.getRotulo().compareTo(o2.getRotulo());
+				if ((o1.getRotulo() == null) && (o2.getRotulo() != null) && !o2.getRotulo().equals("") ) return -1;
 				return o1.getCasal().getApelidos("e").compareTo(o2.getCasal().getApelidos("e"));
 			}
 		});
@@ -459,6 +459,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		return null;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Integer geraCSVCrachas(Encontro encontro, Agrupamento agrupamento, String name) throws Exception {
 		if (encontro != null){
@@ -537,9 +538,9 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		List<EncontroInscricao> lista = cmd.call();
 		List<Pessoa> listaPessoa = new ArrayList<Pessoa>();
 		for (EncontroInscricao encontroInscricao : lista) {
-			if (encontroInscricao.getCasal().getEle().getNecessidadesEspeciais() != null && !encontroInscricao.getCasal().getEle().getNecessidadesEspeciais().equals(""))
+			if ((encontroInscricao.getCasal().getEle().getNecessidadesEspeciais() != null) && !encontroInscricao.getCasal().getEle().getNecessidadesEspeciais().equals(""))
 				listaPessoa.add(encontroInscricao.getCasal().getEle());
-			if (encontroInscricao.getCasal().getEla().getNecessidadesEspeciais() != null && !encontroInscricao.getCasal().getEla().getNecessidadesEspeciais().equals(""))
+			if ((encontroInscricao.getCasal().getEla().getNecessidadesEspeciais() != null) && !encontroInscricao.getCasal().getEla().getNecessidadesEspeciais().equals(""))
 				listaPessoa.add(encontroInscricao.getCasal().getEla());
 		}
 		Collections.sort(listaPessoa, new Comparator<Pessoa>() {
@@ -597,7 +598,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		Collections.sort(listaPessoa, new Comparator<Pessoa>() {
 			@Override
 			public int compare(Pessoa o1, Pessoa o2) {
-				if (o1.getTag() != null && o2.getTag() != null ) return o1.getTag().compareTo(o2.getTag());
+				if ((o1.getTag() != null) && (o2.getTag() != null) ) return o1.getTag().compareTo(o2.getTag());
 				return o1.getNome().compareTo(o2.getNome());
 			}
 		});
@@ -654,7 +655,7 @@ public class EncontroRelatoriosSecretariaServiceImpl extends SecureRemoteService
 		List<EncontroInscricao> lista = cmd.call();
 		GetEntityListCommand cmdQuarto = injector.getInstance(GetEntityListCommand.class);
 		cmdQuarto.setNamedQuery("encontroHotelQuarto.porEncontroHotelListaInscricao");
-		cmdQuarto.addParameter("encontrohotel", encontroHotel);
+		//cmdQuarto.addParameter("encontrohotel", encontroHotel);
 		cmdQuarto.addParameter("encontroinscricao1", lista);
 		List<EncontroHotelQuarto> listaQuarto = cmdQuarto.call();
 

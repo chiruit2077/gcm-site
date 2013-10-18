@@ -156,7 +156,7 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 
 	@UiHandler("salvarGrupoButton")
 	public void salvarGrupoButtonClickHandler(ClickEvent event){
-		if(nomeGrupoTextBox.getValue()==null || nomeGrupoTextBox.getValue().equals("")){
+		if((nomeGrupoTextBox.getValue()==null) || nomeGrupoTextBox.getValue().equals("")){
 			Window.alert("Informe o nome do grupo");
 			return;
 		}
@@ -174,7 +174,7 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	@UiHandler("salvarGruposButton")
 	public void salvarGruposButtonClickHandler(ClickEvent event){
 		for (Mesa mesa: presenter.getVo().getListaMesas()){
-			if (mesa.getGrupo() != null && !listaGrupos.contains(mesa.getGrupo())){
+			if ((mesa.getGrupo() != null) && !listaGrupos.contains(mesa.getGrupo())){
 				mesa.setGrupo(null);
 			}
 		}
@@ -265,10 +265,10 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	@UiHandler("salvarMesaButton")
 	public void salvarMesaButtonClickHandler(ClickEvent event){
 		if (entidadeMesaEditada!=null){
-			if(valorTextBox.getValue()==null || valorTextBox.getValue().equals("")){
+			if((valorTextBox.getValue()==null) || valorTextBox.getValue().equals("")){
 				Window.alert("Informe o Numero da Mesa");
 			}
-			if(quantidadeCasaisTextBox.getValue()==null || quantidadeCasaisTextBox.getValue().equals("")){
+			if((quantidadeCasaisTextBox.getValue()==null) || quantidadeCasaisTextBox.getValue().equals("")){
 				Window.alert("Informe a Quantidade de Casais");
 			}
 		}
@@ -276,29 +276,29 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 			Window.alert("Informe o Titulo");
 			return;
 		}
-		if(linhaTextBox.getValue()==null || linhaTextBox.getValue().equals("")){
+		if((linhaTextBox.getValue()==null) || linhaTextBox.getValue().equals("")){
 			Window.alert("Informe a linha");
 			return;
 		}
-		if(colunaTextBox.getValue()==null || colunaTextBox.getValue().equals("")){
+		if((colunaTextBox.getValue()==null) || colunaTextBox.getValue().equals("")){
 			Window.alert("Informe a coluna");
 			return;
 		}
 		if (entidadeMesaEditada!=null){
 			entidadeMesaEditada.setRestaurante(getRestauranteSelecionado());
 			entidadeMesaEditada.setNumero(valorTextBox.getValue());
-			if (quantidadeCasaisTextBox.getValue()!= null && !quantidadeCasaisTextBox.getValue().equals("")){
+			if ((quantidadeCasaisTextBox.getValue()!= null) && !quantidadeCasaisTextBox.getValue().equals("")){
 				entidadeMesaEditada.setQuantidadeCasais(Integer.valueOf(quantidadeCasaisTextBox.getValue()));
 			}
 			entidadeMesaEditada.setGrupo((RestauranteGrupo) ListBoxUtil.getItemSelected(grupoListBox, presenter.getVo().getListaGrupos()));
 			entidadeMesaEditada.setLinha(Integer.valueOf(linhaTextBox.getValue()));
 			entidadeMesaEditada.setColuna(Integer.valueOf(colunaTextBox.getValue()));
 			entidadeMesaEditada.setLinhaSpam(null);
-			if (linhaSpamTextBox.getValue()!= null && !linhaSpamTextBox.getValue().equals("")){
+			if ((linhaSpamTextBox.getValue()!= null) && !linhaSpamTextBox.getValue().equals("")){
 				entidadeMesaEditada.setLinhaSpam(Integer.valueOf(linhaSpamTextBox.getValue()));
 			}
 			entidadeMesaEditada.setColunaSpam(null);
-			if (colunaSpamTextBox.getValue()!= null && !linhaSpamTextBox.getValue().equals("")){
+			if ((colunaSpamTextBox.getValue()!= null) && !linhaSpamTextBox.getValue().equals("")){
 				entidadeMesaEditada.setColunaSpam(Integer.valueOf(colunaSpamTextBox.getValue()));
 			}
 			if (mesaPanelEditado == null){
@@ -310,11 +310,11 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 			entidadeTituloEditada.setLinha(Integer.valueOf(linhaTextBox.getValue()));
 			entidadeTituloEditada.setColuna(Integer.valueOf(colunaTextBox.getValue()));
 			entidadeTituloEditada.setLinhaSpam(null);
-			if (linhaSpamTextBox.getNumber()!= null && !linhaSpamTextBox.getValue().equals("")){
+			if ((linhaSpamTextBox.getNumber()!= null) && !linhaSpamTextBox.getValue().equals("")){
 				entidadeTituloEditada.setLinhaSpam(linhaSpamTextBox.getNumber().intValue());
 			}
 			entidadeTituloEditada.setColunaSpam(null);
-			if (colunaSpamTextBox.getValue()!= null && !colunaSpamTextBox.getValue().equals("")){
+			if ((colunaSpamTextBox.getValue()!= null) && !colunaSpamTextBox.getValue().equals("")){
 				entidadeTituloEditada.setColunaSpam(Integer.valueOf(colunaSpamTextBox.getValue()));
 			}
 			if (mesaPanelEditado == null){
@@ -356,7 +356,8 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		entidadeMesaEditada = mesa;
 		valorLabel.setText("Número da Mesa:");
 		valorTextBox.setText(mesa.getNumero());
-		quantidadeCasaisTextBox.setText(mesa.getQuantidadeCasais().toString());
+		if (mesa.getQuantidadeCasais() != null)
+			quantidadeCasaisTextBox.setText(mesa.getQuantidadeCasais().toString());
 		if (mesa.getGrupo()!=null)
 			ListBoxUtil.setItemSelected(grupoListBox, mesa.getGrupo().toString());
 		if (mesa.getLinha() != null)
@@ -475,31 +476,31 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	}
 
 	private Widget geraMesaWidget(final Mesa mesa) {
-			final VerticalPanel mesaPanel = new VerticalPanel();
-			mesaPanel.setSize("200px", "100px");
-			mesaPanel.setStyleName("restaurante-Panel");
+		final VerticalPanel mesaPanel = new VerticalPanel();
+		mesaPanel.setSize("200px", "100px");
+		mesaPanel.setStyleName("restaurante-Panel");
 
-			FocusPanel focusPanel = new FocusPanel();
-			focusPanel.setSize("200px", "100px");
-			final VerticalPanel tituloMesa = new VerticalPanel();
-			tituloMesa.setSize("200px", "100px");
-			tituloMesa.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-			tituloMesa.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
-			tituloMesa.add(new Label("MESA " + mesa.getNumero()));
-			if (mesa.getGrupo() != null)
-				tituloMesa.add(new Label(mesa.getGrupo().toString()));
-			focusPanel.add(tituloMesa);
-			mesaPanel.add(focusPanel);
+		FocusPanel focusPanel = new FocusPanel();
+		focusPanel.setSize("200px", "100px");
+		final VerticalPanel tituloMesa = new VerticalPanel();
+		tituloMesa.setSize("200px", "100px");
+		tituloMesa.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		tituloMesa.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		tituloMesa.add(new Label("MESA " + mesa.getNumero()));
+		if (mesa.getGrupo() != null)
+			tituloMesa.add(new Label(mesa.getGrupo().toString()));
+		focusPanel.add(tituloMesa);
+		mesaPanel.add(focusPanel);
 
-			focusPanel.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					mesaPanelEditado = mesaPanel;
-					entidadeMesaEditada = mesa;
-					edita(mesa);
-				}
-			});
-			return mesaPanel;
+		focusPanel.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				mesaPanelEditado = mesaPanel;
+				entidadeMesaEditada = mesa;
+				edita(mesa);
+			}
+		});
+		return mesaPanel;
 	}
 
 	public Restaurante getRestauranteSelecionado() {
@@ -515,7 +516,7 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 
 	@Override
 	public void setListaRestaurantes(List<Restaurante> lista) {
-		this.listaRestaurantes = lista;
+		listaRestaurantes = lista;
 		ListBoxUtil.populate(restauranteListBox, false, lista );
 	}
 
