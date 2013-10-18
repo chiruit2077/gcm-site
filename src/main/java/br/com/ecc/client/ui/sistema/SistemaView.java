@@ -54,7 +54,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		MenuItem menuItem;
 
 		boolean administrador = presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR);
-		boolean convidado = presenter.getCasal().getTipoCasal()==null || presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO);
+		boolean convidado = (presenter.getCasal().getTipoCasal()==null) || presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO);
 
 		boolean publicacaoplanilha = presenter.getEncontroSelecionado().getDataPublicacaoPlanilha() != null;
 		boolean publicacaorestaurante = presenter.getEncontroSelecionado().getDataPublicacaoRestaurante() != null;
@@ -126,7 +126,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 				menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
 				menuItem.getSubMenu().addItem("Organogramas do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_ENCONTRO); } });
 				menuItem.getSubMenu().addItem("Distribuição dos Organogramas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ORGANOGRAMA_DISTRIBUICAO); } });
-				menuItem.getSubMenu().addItem("Monitor de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_MONITOR); } });
+				//menuItem.getSubMenu().addItem("Monitor de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_MONITOR); } });
 			}else{
 				if (publicacaoplanilha)
 					menuItem.getSubMenu().addItem("Planilha de Atividades", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.ENCONTRO_PLANILHA); } });
@@ -172,7 +172,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 	@Override
 	public void showPresenter(StateHistory stateHistory) {
 		showWaitMessage(true);
-		PresenterShow.showPresenter(stateHistory,contentPortlet,this.presenter);
+		PresenterShow.showPresenter(stateHistory,contentPortlet,presenter);
 	}
 
 }
