@@ -17,7 +17,6 @@ import br.com.ecc.client.ui.sistema.cadastro.RestaurantePresenter;
 import br.com.ecc.client.ui.sistema.encontro.DistribuicaoOrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroConvitePresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroInscricaoPresenter;
-import br.com.ecc.client.ui.sistema.encontro.EncontroMonitorPresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroOrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.encontro.PlanilhaPresenter;
 import br.com.ecc.client.ui.sistema.hotelaria.DistribuicaoQuartosPresenter;
@@ -71,8 +70,8 @@ public enum PresenterCodeEnum  {
 	HOTEL_DISTRIBUICAO(2,19, DistribuicaoQuartosPresenter.class, "Distribuição dos Quartos", true),
 
 	ORGANOGRAMA_ENCONTRO(2,21, EncontroOrganogramaPresenter.class, "Organogramas do Encontro", true),
-	ORGANOGRAMA_DISTRIBUICAO(2,22, DistribuicaoOrganogramaPresenter.class, "Distribuição dos Organogramas", true),
-	ENCONTRO_MONITOR(2,29, EncontroMonitorPresenter.class, "Monitor de Atividades", true);
+	ORGANOGRAMA_DISTRIBUICAO(2,22, DistribuicaoOrganogramaPresenter.class, "Distribuição dos Organogramas", true);
+	//ENCONTRO_MONITOR(2,29, EncontroMonitorPresenter.class, "Monitor de Atividades", true);
 
 
 	private Integer parentId;
@@ -116,7 +115,7 @@ public enum PresenterCodeEnum  {
 		this.id = id;
 	}
 	public Integer getCodigo() {
-		return parentId * 1000 + id;
+		return (parentId * 1000) + id;
 	}
 	public Boolean getRequireAutentication() {
 		return requireAutentication;
