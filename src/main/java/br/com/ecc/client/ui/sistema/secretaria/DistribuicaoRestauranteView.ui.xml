@@ -73,7 +73,9 @@
 						<g:HTMLPanel width="100%">
 							<table cellpadding="3" align="center">
 								<tr>
-									<td colspan="3" class="portal-formLabel">Número Mesa: </td>
+									<td colspan="3" class="portal-formLabel">
+										<g:Label ui:field="labelMesaNumberLabel" styleName="portal-formLabel" text="Número Mesa:" />
+									</td>
 									<td>
 										<g:Label ui:field="mesaNumberLabel" styleName="portal-formLabel" width="50px" horizontalAlignment="center"/>
 									</td>

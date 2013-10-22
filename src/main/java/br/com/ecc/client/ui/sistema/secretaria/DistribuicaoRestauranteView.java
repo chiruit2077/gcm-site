@@ -28,8 +28,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -44,7 +42,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -77,8 +74,8 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	@UiField Button limpaDistribuicaoButton;
 	@UiField Button encontroMaitreButton;
 	@UiField Label labelMaitre;
+	@UiField Label labelMesaNumberLabel;
 
-	private EncontroRestaurante restauranteSelecionado;
 	private EncontroRestauranteMesa entidadeEditada;
 	private List<EncontroInscricao> listaGarcons;
 	private List<EncontroRestaurante> listaRestaurantes;
@@ -96,12 +93,15 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 		initWidget(uiBinder.createAndBindUi(this));
 
-		inscricaoSuggestBox1.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
+		/*inscricaoSuggestBox1.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
 				if(!inscricaoSuggestBox1.getValue().equals("")){
 					EncontroInscricao encontroInscricao = (EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue());
-					entidadeEditada.setEncontroAfilhado1(encontroInscricao);
+					if (entidadeEditada != null)
+						entidadeEditada.setEncontroAfilhado1(encontroInscricao);
+					else
+						restauranteSelecionado.setEncontroMaitre(encontroInscricao);
 				}
 			}
 		});
@@ -122,7 +122,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 					entidadeEditada.setEncontroAfilhado1(encontroInscricao);
 				}
 			}
-		});
+		});*/
 		tituloFormularioLabel.setText(getDisplayTitle());
 		listaGarcons = new ArrayList<EncontroInscricao>();
 	}
@@ -165,7 +165,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			editaDialogBox.hide();
 			presenter.salvar();
 		}else{
-			restauranteSelecionado.setEncontroMaitre((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue()));
+			getRestauranteSelecionado().setEncontroMaitre((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue()));
 			editaDialogBox.hide();
 			presenter.salvar();
 		}
@@ -191,13 +191,13 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		inscricaoSuggestBox1.setFocus(true);
 	}
 
-	private void edita(EncontroRestaurante encontroMaitre) {
+	private void edita(EncontroRestaurante encontroRestaurante) {
 		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("encontro", presenter.getEncontroSelecionado());
 		inscricaoSuggest1.setQueryParams(params);
 		limpaCampos();
-		defineCampos(encontroMaitre);
+		defineCampos(encontroRestaurante);
 		editaDialogBox.center();
 		editaDialogBox.show();
 		inscricaoSuggestBox1.setFocus(true);
@@ -206,22 +206,22 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	@UiHandler("restauranteListBox")
 	public void restauranteListBoxListBoxChangeHandler(ChangeEvent event) {
 		EncontroRestaurante restaurante = (EncontroRestaurante) ListBoxUtil.getItemSelected(restauranteListBox, getListaRestaurantes());
-		setRestauranteSelecionado(restaurante);
 		presenter.setEncontroRestauranteSelecionado(restaurante);
 		presenter.buscaVO();
 	}
 
-	public void defineCampos(EncontroRestaurante encontroMaitre){
+	public void defineCampos(EncontroRestaurante encontroRestaurante){
 		mesaNumberLabel.setVisible(false);
+		labelMesaNumberLabel.setVisible(false);
 		labelInscricao1.setText("Maitre:");
 		labelInscricao2.setVisible(false);
 		labelInscricao3.setVisible(false);
 		inscricaoSuggestBox2.setVisible(false);
 		inscricaoSuggestBox3.setVisible(false);
-		if(encontroMaitre != null){
-			inscricaoSuggestBox1.setValue(encontroMaitre.toString());
+		if(encontroRestaurante.getEncontroMaitre() != null){
+			inscricaoSuggestBox1.setValue(encontroRestaurante.getEncontroMaitre().toString());
 			inscricaoSuggest1.setListaEntidades(new ArrayList<_WebBaseEntity>());
-			inscricaoSuggest1.getListaEntidades().add(encontroMaitre);
+			inscricaoSuggest1.getListaEntidades().add(encontroRestaurante.getEncontroMaitre());
 		}
 	}
 
@@ -249,6 +249,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		entidadeEditada = null;
 		mesaNumberLabel.setText(null);
 		mesaNumberLabel.setVisible(true);
+		labelMesaNumberLabel.setVisible(true);
 		inscricaoSuggestBox2.setVisible(false);
 		labelInscricao2.setVisible(false);
 		inscricaoSuggestBox1.setValue(null);
@@ -280,7 +281,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		listaGarcons.clear();
 		for (AgrupamentoVO agrupamentoVO : presenter.getVo().getListaAgrupamentosVO()) {
 			if ((agrupamentoVO.getAgrupamento().getAtividade() != null) &&
-					agrupamentoVO.getAgrupamento().getAtividade().equals(restauranteSelecionado.getRestaurante().getAtividade())){
+					agrupamentoVO.getAgrupamento().getAtividade().equals(getRestauranteSelecionado().getRestaurante().getAtividade())){
 				for (AgrupamentoMembro menbro : agrupamentoVO.getListaMembros()) {
 					EncontroInscricao inscricao = getInscricaoCasal(menbro.getCasal());
 					if ((inscricao!=null) && menbro.getPapel().getGarcon())
@@ -547,12 +548,11 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	}
 
 	public EncontroRestaurante getRestauranteSelecionado() {
-		return restauranteSelecionado;
+		return presenter.getEncontroRestauranteSelecionado();
 	}
 
 	@Override
 	public void setRestauranteSelecionado(EncontroRestaurante restauranteSelecionado) {
-		this.restauranteSelecionado = restauranteSelecionado;
 		ListBoxUtil.setItemSelected(restauranteListBox, restauranteSelecionado.toString());
 
 	}
@@ -584,7 +584,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	@UiHandler("encontroMaitreButton")
 	public void encontroMaitreButtonButtonClickHandler(ClickEvent event){
-		edita(restauranteSelecionado);
+		edita(getRestauranteSelecionado());
 	}
 
 	@UiHandler("gerarDistribuicaoButton")
