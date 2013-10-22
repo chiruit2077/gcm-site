@@ -119,6 +119,7 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 			public void success(EncontroRestauranteVO vo) {
 				getDisplay().reset();
 				setVo(vo);
+				encontroRestauranteSelecionado = vo.getEncontroRestaurante();
 				getDisplay().populaEntidades(vo);
 				getDisplay().showWaitMessage(false);
 			}

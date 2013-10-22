@@ -139,7 +139,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 
 	@UiHandler("fecharMesaButton")
-	public void fecharQuartoButtonClickHandler(ClickEvent event){
+	public void fecharMesaButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
 	}
 
@@ -481,7 +481,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			final Label afilhadoEle1, Label afilhadoEla1, Label afilhadoEle2, Label afilhadoEla2, Label garcon) {
 		String erros = "";
 		boolean atencao = false;
-		if (encontroRestauranteMesa.getEncontroAfilhado1() != null){
+		if ((encontroRestauranteMesa.getEncontroAfilhado1() != null) && (encontroRestauranteMesa.getEncontroAfilhado1().getCasal() != null)){
 			afilhadoEle1.getElement().setInnerHTML(getNomeEspecial(encontroRestauranteMesa.getEncontroAfilhado1().getCasal().getEle()));
 			afilhadoEla1.getElement().setInnerHTML(getNomeEspecial(encontroRestauranteMesa.getEncontroAfilhado1().getCasal().getEla()));
 			if (isSelecionadoRestaurante(encontroRestauranteMesa.getEncontroAfilhado1(), getRestauranteSelecionado(), mesa, encontroRestauranteMesa.getEncontroAfilhado2()))
@@ -492,7 +492,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 				erros+="Afilhados " + encontroRestauranteMesa.getEncontroAfilhado1().toStringApelidos() + " já selecionado nesta mesa em outro restaurante\n";
 		}else atencao = true;
 		if (mesa.getQuantidadeCasais()>1){
-			if (encontroRestauranteMesa.getEncontroAfilhado2() != null){
+			if ((encontroRestauranteMesa.getEncontroAfilhado2() != null) && (encontroRestauranteMesa.getEncontroAfilhado2().getCasal() != null)){
 				afilhadoEle2.getElement().setInnerHTML(getNomeEspecial(encontroRestauranteMesa.getEncontroAfilhado2().getCasal().getEle()));
 				afilhadoEla2.getElement().setInnerHTML(getNomeEspecial(encontroRestauranteMesa.getEncontroAfilhado2().getCasal().getEla()));
 				if (isSelecionadoRestaurante(encontroRestauranteMesa.getEncontroAfilhado2(), getRestauranteSelecionado(), mesa, encontroRestauranteMesa.getEncontroAfilhado1()))
@@ -842,7 +842,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		EncontroInscricao encontroInscricao = null;
 		if( grupo==null) return null;
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesa()) {
-			if (encontroRestaurante.getMesa().getGrupo().equals(grupo))
+			if ( (encontroRestaurante.getMesa().getGrupo()  != null) && encontroRestaurante.getMesa().getGrupo().equals(grupo))
 				return encontroRestaurante.getEncontroGarcon();
 		}
 		return encontroInscricao;
