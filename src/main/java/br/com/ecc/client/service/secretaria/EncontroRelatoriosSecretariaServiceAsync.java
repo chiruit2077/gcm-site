@@ -27,4 +27,5 @@ public interface EncontroRelatoriosSecretariaServiceAsync {
 	void imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo, EncontroInscricao inscricao, AsyncCallback<Integer> callback);
 	void imprimeRelatorioMalas(Encontro encontro, AsyncCallback<Integer> callback);
 	void imprimeRelatorioCamarim(EncontroRestaurante restaurante, AsyncCallback<Integer> callback);
+	void imprimeRelatorioHotelEncontristasHospedagemParticular(Encontro encontro, AsyncCallback<Integer> callback);
 }

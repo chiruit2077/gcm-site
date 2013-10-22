@@ -40,6 +40,8 @@ public class Papel extends _WebBaseEntity {
 	private Boolean padrao;
 	private Boolean padrinho;
 	private Boolean coordenacao;
+	private Boolean garcon;
+	private Boolean maitre;
 
 	@Version
 	private Integer version;
@@ -145,5 +147,27 @@ public class Papel extends _WebBaseEntity {
 
 	public void setCoordenacao(Boolean coordenacao) {
 		this.coordenacao = coordenacao;
+	}
+
+
+	public Boolean getMaitre() {
+		if (maitre==null) return false;
+		return maitre;
+	}
+
+
+	public void setMaitre(Boolean maitre) {
+		this.maitre = maitre;
+	}
+
+
+	public Boolean getGarcon() {
+		if (garcon==null) return false;
+		return garcon;
+	}
+
+
+	public void setGarcon(Boolean garcon) {
+		this.garcon = garcon;
 	}
 }

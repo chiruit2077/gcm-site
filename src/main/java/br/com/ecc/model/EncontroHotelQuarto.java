@@ -19,25 +19,28 @@ import br.com.ecc.model.tipo.TipoEncontroQuartoEnum;
 @Entity
 @SequenceGenerator(name="SQ_ENCONTROHOTELQUARTO", sequenceName="SQ_ENCONTROHOTELQUARTO")
 @NamedQueries({
-		@NamedQuery(name="encontroHotelQuarto.porEncontroHotel", query="select u from EncontroHotelQuarto u where u.encontroHotel = :encontrohotel order by u.quarto.ordem "),
-		@NamedQuery(name="encontroHotelQuarto.porListaInscricao", query="select u from EncontroHotelQuarto u where u.encontroInscricao1 in (:encontroinscricao1) order by u.quarto.ordem "),
-		@NamedQuery(name="encontroHotelQuarto.porEncontroHotelListaInscricao", query="select u from EncontroHotelQuarto u where u.encontroInscricao1 in (:encontroinscricao1) order by u.quarto.ordem "),
-		@NamedQuery(name="encontroHotelQuarto.porEncontroHotelInscricao",
-			query="select u from EncontroHotelQuarto u where u.encontroHotel.encontro = :encontro and encontroInscricao1 = :encontroinscricao1 "),
-		@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao1",
-			query="update EncontroHotelQuarto u set u.encontroInscricao1 = null " +
-					"where u.encontroInscricao1 = :encontroInscricao " ),
-		@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao2",
+	@NamedQuery(name="encontroHotelQuarto.porEncontroHotel", query="select u from EncontroHotelQuarto u where u.encontroHotel = :encontrohotel order by u.quarto.ordem "),
+	@NamedQuery(name="encontroHotelQuarto.porEncontroHotelAfilhados", query="select u from EncontroHotelQuarto u where u.encontroHotel.encontro = :encontro and u.encontroHotel.tipo='EVENTO' and u.tipo = 'AFILHADO' order by u.quarto.ordem "),
+	@NamedQuery(name="encontroHotelQuarto.porEncontroHotelEncontristas", query="select u from EncontroHotelQuarto u where u.encontroHotel = :encontrohotel and u.tipo != 'AFILHADO' and u.encontroInscricao1 is not null order by u.quarto.ordem "),
+	@NamedQuery(name="encontroHotelQuarto.porListaInscricao", query="select u from EncontroHotelQuarto u where u.encontroInscricao1 in (:encontroinscricao1) order by u.quarto.ordem "),
+	@NamedQuery(name="encontroHotelQuarto.porEncontroHotelListaInscricao",
+	query="select u from EncontroHotelQuarto u where u.encontroInscricao1 in (:encontroinscricao1) order by u.quarto.ordem "),
+	@NamedQuery(name="encontroHotelQuarto.porEncontroHotelInscricao",
+	query="select u from EncontroHotelQuarto u where u.encontroHotel.encontro = :encontro and encontroInscricao1 = :encontroinscricao1 "),
+	@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao1",
+	query="update EncontroHotelQuarto u set u.encontroInscricao1 = null " +
+			"where u.encontroInscricao1 = :encontroInscricao " ),
+			@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao2",
 			query="update EncontroHotelQuarto u set u.encontroInscricao2 = null " +
 					"where u.encontroInscricao2 = :encontroInscricao " ),
-		@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao3",
-			query="update EncontroHotelQuarto u set u.encontroInscricao3 = null " +
-					"where u.encontroInscricao3 = :encontroInscricao " ),
-		@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao4",
-			query="update EncontroHotelQuarto u set u.encontroInscricao4 = null " +
-				"where u.encontroInscricao4 = :encontroInscricao " ),
-		@NamedQuery(name="encontroHotelQuarto.deletePorEncontro",
-		    query="delete from EncontroHotelQuarto u where u.encontroHotel in ( select a from EncontroHotel a where a.encontro = :encontro ) "),
+					@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao3",
+					query="update EncontroHotelQuarto u set u.encontroInscricao3 = null " +
+							"where u.encontroInscricao3 = :encontroInscricao " ),
+							@NamedQuery(name="encontroHotelQuarto.updatePorEncontroInscricao4",
+							query="update EncontroHotelQuarto u set u.encontroInscricao4 = null " +
+									"where u.encontroInscricao4 = :encontroInscricao " ),
+									@NamedQuery(name="encontroHotelQuarto.deletePorEncontro",
+									query="delete from EncontroHotelQuarto u where u.encontroHotel in ( select a from EncontroHotel a where a.encontro = :encontro ) "),
 
 })
 

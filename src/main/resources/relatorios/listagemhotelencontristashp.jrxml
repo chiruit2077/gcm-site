@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listagemhotelencontristashp" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3455ea0d-5ab8-41d5-b887-25104a61aa86">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
+	<import value="br.com.ecc.model.*"/>
+	<import value="java.util.*"/>
+	<parameter name="TITULO" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.io.InputStream" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="cpf" class="java.lang.String">
+		<fieldDescription><![CDATA[cpf]]></fieldDescription>
+	</field>
+	<field name="expedidor" class="java.lang.String">
+		<fieldDescription><![CDATA[expedidor]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[nome]]></fieldDescription>
+	</field>
+	<field name="rg" class="java.lang.String">
+		<fieldDescription><![CDATA[rg]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2d40beb8-ab76-4e46-9357-42724286d2e1" mode="Opaque" x="0" y="17" width="555" height="20" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TITULO}]]></textFieldExpression>
+			</textField>
+			<image isUsingCache="true" onErrorType="Blank">
+				<reportElement uuid="b55797c2-5b45-46c3-b99d-ec79972c5f33" x="0" y="3" width="34" height="34">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0442e52c-24b7-4a9f-a6ba-a35a6e8c3a37" x="290" y="6" width="90" height="20"/>
+				<textElement/>
+				<text><![CDATA[RG]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="79d995a9-7d79-4b8d-bb42-32f1443f3fac" x="0" y="25" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="f22f32fe-e805-448f-b991-f1413ea12d22" x="0" y="6" width="280" height="20">
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a32f0b2d-cf2a-4c3f-ab4b-245a10150040" x="380" y="6" width="90" height="19"/>
+				<textElement/>
+				<text><![CDATA[Orgão Exp.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="efb77f11-2ab5-414a-813f-3c2f36990c59" x="470" y="6" width="84" height="19"/>
+				<textElement/>
+				<text><![CDATA[CPF]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d4e42286-c022-4185-b6fa-e5495e6edb71" x="470" y="0" width="84" height="16">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cpf}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="85aa155f-6019-4308-8262-3965749d28e7" x="380" y="0" width="90" height="16">
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{expedidor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1e667828-ae4c-4bc4-bad8-c0e0555d605f" x="290" y="0" width="90" height="16">
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{rg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="16463275-898b-42ad-a78b-aed9572d6924" x="0" y="0" width="280" height="16">
+					<property name="local_mesure_unitheight" value="pixel"/>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

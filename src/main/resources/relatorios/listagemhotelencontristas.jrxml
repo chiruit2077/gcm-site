@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version last-->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listagemhotelencontristas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3455ea0d-5ab8-41d5-b887-25104a61aa86">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="159"/>
+	<property name="ireport.y" value="223"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SampleCasal"/>
-	<import value="java.util.*"/>
 	<import value="br.com.ecc.model.*"/>
+	<import value="java.util.*"/>
 	<parameter name="TITULO" class="java.lang.String"/>
 	<parameter name="LOGO" class="java.io.InputStream"/>
 	<field name="encontroInscricao1" class="br.com.ecc.model.EncontroInscricao">
@@ -550,8 +549,19 @@
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["P?gina " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="50">
+			<textField>
+				<reportElement uuid="cd992102-e4e8-4444-985f-b6e1a19baa11" x="367" y="0" width="187" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Quantidade: " + $V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

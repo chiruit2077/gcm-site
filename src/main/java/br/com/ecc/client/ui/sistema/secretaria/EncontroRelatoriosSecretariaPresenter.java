@@ -61,6 +61,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		LISTAGEMDIABETICOSVEGETARIANOS,
 		LISTAGEMHOTELAFILHADOS,
 		LISTAGEMHOTELENCONTRISTAS,
+		LISTAGEMHOTELENCONTRISTASHOSPEDAGEMPARTICULAR,
 		LISTAGEMRECEPCAOINICIAL,
 		LISTAGEMRECEPCAOFINAL,
 		LISTAGEMMALAS,
@@ -310,6 +311,25 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					}
 				} );
 			}
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMHOTELENCONTRISTASHOSPEDAGEMPARTICULAR)){
+			service.imprimeRelatorioHotelEncontristasHospedagemParticular(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport){
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+				}
+			} );
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMCAMARIM)){
+			if (object instanceof EncontroRestaurante){
+				EncontroRestaurante encontroRestaurante = (EncontroRestaurante) object;
+				service.imprimeRelatorioCamarim(encontroRestaurante, new WebAsyncCallback<Integer>(getDisplay()) {
+					@Override
+					protected void success(Integer idReport) {
+						getDisplay().showWaitMessage(false);
+						DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+					}
+				});
+			}
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMPLANILHAATIVIDADES)){
 			EncontroPeriodo periodo = null;
 			EncontroInscricao inscricao = null;
@@ -344,12 +364,12 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					TipoExibicaoPlanilhaEnum.COMPLETA,
 					false,
 					new WebAsyncCallback<Integer>(getDisplay()) {
-				@Override
-				protected void success(Integer idRelatorio) {
-					DownloadResourceHelper.showReport(idRelatorio, getDisplay().getDisplayTitle(), "");
-					getDisplay().showWaitMessage(false);
-				}
-			});
+						@Override
+						protected void success(Integer idRelatorio) {
+							DownloadResourceHelper.showReport(idRelatorio, getDisplay().getDisplayTitle(), "");
+							getDisplay().showWaitMessage(false);
+						}
+					});
 		}else if (opcao.equals(ProcessaOpcao.PLANILHAEXCEL)){
 			EncontroPeriodo periodo = null;
 			if (object instanceof EncontroPeriodo){
@@ -362,12 +382,12 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 					TipoExibicaoPlanilhaEnum.COMPLETA,
 					true,
 					new WebAsyncCallback<Integer>(getDisplay()) {
-				@Override
-				protected void success(Integer idRelatorio) {
-					DownloadResourceHelper.showReport(idRelatorio, getDisplay().getDisplayTitle(), "");
-					getDisplay().showWaitMessage(false);
-				}
-			});
+						@Override
+						protected void success(Integer idRelatorio) {
+							DownloadResourceHelper.showReport(idRelatorio, getDisplay().getDisplayTitle(), "");
+							getDisplay().showWaitMessage(false);
+						}
+					});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMRECEPCAOINICIAL)){
 			service.imprimeRelatorioRecepcaoInicial(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override

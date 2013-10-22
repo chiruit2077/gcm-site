@@ -50,6 +50,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton relatorioDiabeticosVegetarianosRadioButton;
 	@UiField RadioButton relatorioHotelAfilhadosRadioButton;
 	@UiField RadioButton relatorioHotelEncontristasRadioButton;
+	@UiField RadioButton relatorioHotelEncontristasHospedagemParticularRadioButton;
 	@UiField RadioButton relatorioRecepcaoInicialRadioButton;
 	@UiField RadioButton relatorioRecepcaoFinalRadioButton;
 	@UiField RadioButton relatorioPlanilhaAtividadesRadioButton;
@@ -146,6 +147,8 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 				Window.alert("Escolha um Hotel");
 
 		}
+		else if (relatorioHotelEncontristasHospedagemParticularRadioButton.getValue())
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMHOTELENCONTRISTASHOSPEDAGEMPARTICULAR);
 		else if (relatorioCamarimRadioButton.getValue()){
 			EncontroRestaurante encontroRestaurante = (EncontroRestaurante) ListBoxUtil.getItemSelected(restaurantesListBox, getEncontroRestaurantes());
 			if (encontroRestaurante != null)
