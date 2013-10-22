@@ -57,12 +57,12 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	@UiField FlexTable distribuicaoPanel;
 	@UiField ListBox restauranteListBox;
 	@UiField DialogBox editaDialogBox;
+	@UiField Label labelInscricao1;
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox1;
 	private final GenericEntitySuggestOracle inscricaoSuggest1 = new GenericEntitySuggestOracle();
+	@UiField Label labelInscricao2;
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox2;
 	private final GenericEntitySuggestOracle inscricaoSuggest2 = new GenericEntitySuggestOracle();
-	@UiField Label labelInscricao1;
-	@UiField Label labelInscricao2;
 	@UiField Label labelInscricao3;
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox3;
 	private final GenericEntitySuggestOracle inscricaoSuggest3 = new GenericEntitySuggestOracle();
@@ -198,6 +198,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		inscricaoSuggest1.setQueryParams(params);
 		limpaCampos();
 		defineCampos(encontroRestaurante);
+		editaDialogBox.setText("Dados do Maitre");
 		editaDialogBox.center();
 		editaDialogBox.show();
 		inscricaoSuggestBox1.setFocus(true);
@@ -211,6 +212,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	}
 
 	public void defineCampos(EncontroRestaurante encontroRestaurante){
+		editaDialogBox.setText("Dados do Maitre");
 		mesaNumberLabel.setVisible(false);
 		labelMesaNumberLabel.setVisible(false);
 		labelInscricao1.setText("Maitre:");
@@ -226,6 +228,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	}
 
 	public void defineCampos(EncontroRestauranteMesa encontroRestauranteMesa){
+		editaDialogBox.setText("Dados da Mesa");
 		entidadeEditada = encontroRestauranteMesa;
 		mesaNumberLabel.setText(encontroRestauranteMesa.getMesa().getNumero());
 		if(encontroRestauranteMesa.getEncontroAfilhado1() != null){
@@ -277,9 +280,11 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		distribuicaoPanel.clear(true);
 		distribuicaoPanel.setCellSpacing(10);
 		distribuicaoPanel.setStyleName("restaurante");
+		listaRestaurantes.remove(vo.getEncontroRestaurante());
+		listaRestaurantes.add(vo.getEncontroRestaurante());
 		encontroMaitre = null;
 		listaGarcons.clear();
-		for (AgrupamentoVO agrupamentoVO : presenter.getVo().getListaAgrupamentosVO()) {
+		for (AgrupamentoVO agrupamentoVO : vo.getListaAgrupamentosVO()) {
 			if ((agrupamentoVO.getAgrupamento().getAtividade() != null) &&
 					agrupamentoVO.getAgrupamento().getAtividade().equals(getRestauranteSelecionado().getRestaurante().getAtividade())){
 				for (AgrupamentoMembro menbro : agrupamentoVO.getListaMembros()) {
@@ -324,13 +329,15 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		}
 		FlexTableHelper.fixRowSpan(distribuicaoPanel);
 
-		if (vo.getEncontroRestaurante().getEncontroMaitre() != null){
-			labelMaitre.setText("Maitre: " + vo.getEncontroRestaurante().getEncontroMaitre().toStringApelidos());
-		}else if (encontroMaitre != null){
-			vo.getEncontroRestaurante().setEncontroMaitre(encontroMaitre);
-			labelMaitre.setText("Maitre: " + vo.getEncontroRestaurante().getEncontroMaitre().toStringApelidos());
-			encontroMaitreButton.click();
+		if (getRestauranteSelecionado() != null){
+			if (getRestauranteSelecionado().getEncontroMaitre() != null){
+				labelMaitre.setText("Maitre: " + getRestauranteSelecionado().getEncontroMaitre().toStringApelidos());
+			}else if ((encontroMaitre != null) && (getRestauranteSelecionado().getEncontroMaitre() == null)){
+				getRestauranteSelecionado().setEncontroMaitre(encontroMaitre);
+				edita(getRestauranteSelecionado());
+			}
 		}
+
 		showWaitMessage(false);
 	}
 
@@ -554,7 +561,6 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	@Override
 	public void setRestauranteSelecionado(EncontroRestaurante restauranteSelecionado) {
 		ListBoxUtil.setItemSelected(restauranteListBox, restauranteSelecionado.toString());
-
 	}
 
 	private EncontroInscricao getInscricaoCasal(Casal casal) {

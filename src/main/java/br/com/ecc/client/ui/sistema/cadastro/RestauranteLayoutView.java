@@ -76,7 +76,6 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	@UiField Button salvarGrupoButton;
 	@UiField Button fecharGrupoButton;
 
-	private Restaurante restauranteSelecionado;
 	private Mesa entidadeMesaEditada;
 	private RestauranteTitulo entidadeTituloEditada;
 	private RestauranteGrupo entidadeGrupoEditada;
@@ -185,6 +184,7 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	}
 
 	private void editaGrupo(RestauranteGrupo grupo) {
+		entidadeGrupoEditada = grupo;
 		limpaCamposGrupo();
 		defineCamposGrupo(grupo);
 		editaGrupoDialogBox.center();
@@ -415,6 +415,8 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 		distribuicaoPanel.clear(true);
 		distribuicaoPanel.setCellSpacing(10);
 		distribuicaoPanel.setStyleName("restaurante");
+		listaRestaurantes.remove(vo.getRestaurante());
+		listaRestaurantes.add(vo.getRestaurante());
 
 		if (vo.getListaTitulos().size()>0){
 			for (final RestauranteTitulo titulo : vo.getListaTitulos()) {
@@ -504,12 +506,11 @@ public class RestauranteLayoutView extends BaseView<RestauranteLayoutPresenter> 
 	}
 
 	public Restaurante getRestauranteSelecionado() {
-		return restauranteSelecionado;
+		return presenter.getRestauranteSelecionado();
 	}
 
 	@Override
 	public void setRestauranteSelecionado(Restaurante restauranteSelecionado) {
-		this.restauranteSelecionado = restauranteSelecionado;
 		ListBoxUtil.setItemSelected(restauranteListBox, restauranteSelecionado.toString());
 
 	}

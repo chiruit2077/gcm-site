@@ -90,7 +90,6 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 			protected void success(List<EncontroRestaurante> lista) {
 				getDisplay().setListaRestaurantes(lista);
 				if (lista.size() > 0){
-					getDisplay().setRestauranteSelecionado(lista.get(0));
 					setEncontroRestauranteSelecionado(lista.get(0));
 				}
 				buscaVO();
@@ -104,6 +103,7 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 			service.getVO(encontroRestauranteSelecionado, new WebAsyncCallback<EncontroRestauranteVO>(getDisplay()) {
 				@Override
 				protected void success(EncontroRestauranteVO vo) {
+					encontroRestauranteSelecionado = vo.getEncontroRestaurante();
 					setVo(vo);
 					getDisplay().populaEntidades(vo);
 					getDisplay().showWaitMessage(false);
@@ -145,6 +145,7 @@ public class DistribuicaoRestaurantePresenter extends BasePresenter<Distribuicao
 	public void setEncontroRestauranteSelecionado(
 			EncontroRestaurante encontroRestauranteSelecionado) {
 		this.encontroRestauranteSelecionado = encontroRestauranteSelecionado;
+		getDisplay().setRestauranteSelecionado(encontroRestauranteSelecionado);
 	}
 
 	public EncontroRestauranteVO getVo() {

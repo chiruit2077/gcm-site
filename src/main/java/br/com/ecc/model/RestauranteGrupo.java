@@ -17,9 +17,9 @@ import javax.persistence.Version;
 @NamedQueries({
 	@NamedQuery(name="restauranteGrupo.porRestaurante", query="select u from RestauranteGrupo u where u.restaurante = :restaurante "),
 	@NamedQuery(name="restauranteGrupo.deletePorRestaurante",
-		query="delete from RestauranteGrupo u where u.restaurante = :restaurante"),
+	query="delete from RestauranteGrupo u where u.restaurante = :restaurante"),
 	@NamedQuery(name="restauranteGrupo.deletePorRestauranteNotIn",
-		query="delete from RestauranteGrupo u where u.restaurante = :restaurante and u not in (:lista)")
+	query="delete from RestauranteGrupo u where u.restaurante = :restaurante and u not in (:lista)")
 })
 public class RestauranteGrupo extends _WebBaseEntity {
 
@@ -39,6 +39,7 @@ public class RestauranteGrupo extends _WebBaseEntity {
 	@Version
 	private Integer version;
 
+	@Override
 	public String toString() {
 		return nome;
 	}
@@ -59,6 +60,17 @@ public class RestauranteGrupo extends _WebBaseEntity {
 		this.version = version;
 	}
 
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((id == null) ? 0 : id.hashCode());
+		result = (prime * result) + ((nome == null) ? 0 : nome.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -68,12 +80,16 @@ public class RestauranteGrupo extends _WebBaseEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		RestauranteGrupo other = (RestauranteGrupo) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		if ((id != null) && (other.id != null) && !id.equals(other.id)) {
 			return false;
-		return true;
+		}else {
+			if (nome == null) {
+				if (other.nome != null)
+					return false;
+			} else if (!nome.equals(other.nome))
+				return false;
+			return true;
+		}
 	}
 
 	public Restaurante getRestaurante() {

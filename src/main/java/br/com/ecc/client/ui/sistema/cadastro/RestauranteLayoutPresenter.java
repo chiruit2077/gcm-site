@@ -70,7 +70,6 @@ public class RestauranteLayoutPresenter extends BasePresenter<RestauranteLayoutP
 			protected void success(List<Restaurante> lista) {
 				getDisplay().setListaRestaurantes(lista);
 				if (lista.size() > 0){
-					getDisplay().setRestauranteSelecionado(lista.get(0));
 					setRestauranteSelecionado(lista.get(0));
 				}
 				buscaVO();
@@ -85,6 +84,7 @@ public class RestauranteLayoutPresenter extends BasePresenter<RestauranteLayoutP
 				@Override
 				protected void success(RestauranteVO vo) {
 					setVo(vo);
+					restauranteSelecionado = vo.getRestaurante();
 					getDisplay().populaEntidades(vo);
 					getDisplay().showWaitMessage(false);
 				}
@@ -111,6 +111,7 @@ public class RestauranteLayoutPresenter extends BasePresenter<RestauranteLayoutP
 
 	public void setRestauranteSelecionado(Restaurante restauranteSelecionado) {
 		this.restauranteSelecionado = restauranteSelecionado;
+		getDisplay().setRestauranteSelecionado(restauranteSelecionado);
 	}
 
 	public RestauranteVO getVo() {
