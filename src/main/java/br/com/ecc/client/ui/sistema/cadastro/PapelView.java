@@ -73,8 +73,12 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		papelTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
 		papelTableUtil.addColumn("Sigla", "50", HasHorizontalAlignment.ALIGN_CENTER);
 		papelTableUtil.addColumn("Nome", "300", HasHorizontalAlignment.ALIGN_LEFT);
-		papelTableUtil.addColumn("Planilha", "20", HasHorizontalAlignment.ALIGN_CENTER);
 		papelTableUtil.addColumn("Padrão", "20", HasHorizontalAlignment.ALIGN_CENTER);
+		papelTableUtil.addColumn("Padrinho", "20", HasHorizontalAlignment.ALIGN_CENTER);
+		papelTableUtil.addColumn("Garçon", "20", HasHorizontalAlignment.ALIGN_CENTER);
+		papelTableUtil.addColumn("Maitre", "20", HasHorizontalAlignment.ALIGN_CENTER);
+		papelTableUtil.addColumn("Planilha", "20", HasHorizontalAlignment.ALIGN_CENTER);
+		papelTableUtil.addColumn("Choca", "20", HasHorizontalAlignment.ALIGN_CENTER);
 	}
 
 	@UiHandler("fecharButton")
@@ -155,7 +159,7 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		Image editar, excluir;
 		HorizontalPanel hp;
 		for (final Papel papel: lista) {
-			Object dados[] = new Object[5];
+			Object dados[] = new Object[9];
 
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
@@ -185,13 +189,29 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 			dados[1] = papel.getSigla();
 			dados[2] = papel.getNome();
 			CheckBox checkBox = new CheckBox();
-			checkBox.setValue(papel.getAparecePlanilha());
+			checkBox.setValue(papel.getPadrao());
 			checkBox.setEnabled(false);
 			dados[3] = checkBox;
 			checkBox = new CheckBox();
-			checkBox.setValue(papel.getPadrao());
+			checkBox.setValue(papel.getPadrinho());
 			checkBox.setEnabled(false);
 			dados[4] = checkBox;
+			checkBox = new CheckBox();
+			checkBox.setValue(papel.getGarcon());
+			checkBox.setEnabled(false);
+			dados[5] = checkBox;
+			checkBox = new CheckBox();
+			checkBox.setValue(papel.getMaitre());
+			checkBox.setEnabled(false);
+			dados[6] = checkBox;
+			checkBox = new CheckBox();
+			checkBox.setValue(papel.getAparecePlanilha());
+			checkBox.setEnabled(false);
+			dados[7] = checkBox;
+			checkBox = new CheckBox();
+			checkBox.setValue(papel.getChocaPlanilha());
+			checkBox.setEnabled(false);
+			dados[8] = checkBox;
 			papelTableUtil.addRow(dados,row+1);
 			row++;
 		}
