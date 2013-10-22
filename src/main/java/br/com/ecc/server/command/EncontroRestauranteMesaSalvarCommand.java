@@ -26,6 +26,7 @@ public class EncontroRestauranteMesaSalvarCommand implements Callable<EncontroRe
 				vo.getListaEncontroRestauranteMesa().set(i, em.merge(eip));
 			}
 		}
+		vo.setEncontroRestaurante(em.merge(vo.getEncontroRestaurante()));
 		return vo;
 	}
 
