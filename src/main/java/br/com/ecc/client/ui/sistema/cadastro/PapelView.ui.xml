@@ -58,6 +58,15 @@
 									<td>
 										<g:CheckBox ui:field="padrinhoCheckBox" text="Padrão Padrinho"/>
 									</td>
+
+								</tr>
+								<tr>
+									<td>
+										<g:CheckBox ui:field="garconCheckBox" text="Equivale Garçon"/>
+									</td>
+									<td>
+										<g:CheckBox ui:field="maitreCheckBox" text="Equivale Maitre"/>
+									</td>
 								</tr>
 								<tr>
 									<td>

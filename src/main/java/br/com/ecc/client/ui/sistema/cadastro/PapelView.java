@@ -48,6 +48,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 	@UiField CheckBox aparecePlanilhaCheckBox;
 	@UiField CheckBox chocaPlanilhaCheckBox;
 	@UiField CheckBox padrinhoCheckBox;
+	@UiField CheckBox garconCheckBox;
+	@UiField CheckBox maitreCheckBox;
 
 
 	@UiField(provided=true) FlexTable papelFlexTable;
@@ -95,6 +97,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		entidadeEditada.setAparecePlanilha(aparecePlanilhaCheckBox.getValue());
 		entidadeEditada.setPadrao(padraoCheckBox.getValue());
 		entidadeEditada.setPadrinho(padrinhoCheckBox.getValue());
+		entidadeEditada.setGarcon(garconCheckBox.getValue());
+		entidadeEditada.setMaitre(maitreCheckBox.getValue());
 		entidadeEditada.setChocaPlanilha(chocaPlanilhaCheckBox.getValue());
 		presenter.salvar(entidadeEditada);
 	}
@@ -117,6 +121,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		aparecePlanilhaCheckBox.setValue(true);
 		padraoCheckBox.setValue(false);
 		padrinhoCheckBox.setValue(false);
+		garconCheckBox.setValue(false);
+		maitreCheckBox.setValue(false);
 		chocaPlanilhaCheckBox.setValue(false);
 	}
 
@@ -126,6 +132,8 @@ public class PapelView extends BaseView<PapelPresenter> implements PapelPresente
 		aparecePlanilhaCheckBox.setValue(papel.getAparecePlanilha());
 		padraoCheckBox.setValue(papel.getPadrao());
 		padrinhoCheckBox.setValue(papel.getPadrinho());
+		garconCheckBox.setValue(papel.getGarcon());
+		maitreCheckBox.setValue(papel.getMaitre());
 		chocaPlanilhaCheckBox.setValue(papel.getChocaPlanilha());
 	}
 

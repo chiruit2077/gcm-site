@@ -41,7 +41,7 @@ public class EncontroRestauranteVO implements Serializable {
 	}
 	public void setListaEncontroRestauranteMesa(
 			List<EncontroRestauranteMesa> listaEncontroRestauranteGarcon) {
-		this.listaEncontroRestauranteMesa = listaEncontroRestauranteGarcon;
+		listaEncontroRestauranteMesa = listaEncontroRestauranteGarcon;
 	}
 	public List<AgrupamentoVO> getListaAgrupamentosVO() {
 		return listaAgrupamentosVO;
@@ -80,6 +80,5 @@ public class EncontroRestauranteVO implements Serializable {
 	public void setListaGrupos(List<RestauranteGrupo> listaGrupos) {
 		this.listaGrupos = listaGrupos;
 	}
-
 
 }

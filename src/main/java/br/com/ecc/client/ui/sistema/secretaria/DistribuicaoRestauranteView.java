@@ -64,7 +64,9 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	private final GenericEntitySuggestOracle inscricaoSuggest1 = new GenericEntitySuggestOracle();
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox2;
 	private final GenericEntitySuggestOracle inscricaoSuggest2 = new GenericEntitySuggestOracle();
+	@UiField Label labelInscricao1;
 	@UiField Label labelInscricao2;
+	@UiField Label labelInscricao3;
 	@UiField(provided = true) SuggestBox inscricaoSuggestBox3;
 	private final GenericEntitySuggestOracle inscricaoSuggest3 = new GenericEntitySuggestOracle();
 	@UiField Label mesaNumberLabel;
@@ -73,11 +75,15 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	@UiField Button printButton;
 	@UiField Button gerarDistribuicaoButton;
 	@UiField Button limpaDistribuicaoButton;
+	@UiField Button encontroMaitreButton;
+	@UiField Label labelMaitre;
 
 	private EncontroRestaurante restauranteSelecionado;
 	private EncontroRestauranteMesa entidadeEditada;
 	private List<EncontroInscricao> listaGarcons;
 	private List<EncontroRestaurante> listaRestaurantes;
+
+	private EncontroInscricao encontroMaitre;
 
 	public DistribuicaoRestauranteView() {
 		inscricaoSuggest1.setMinimoCaracteres(2);
@@ -139,26 +145,30 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	@UiHandler("salvarMesaButton")
 	public void salvarMesaButtonClickHandler(ClickEvent event){
-		entidadeEditada.setEncontroRestaurante(getRestauranteSelecionado());
+		if (entidadeEditada != null){
+			entidadeEditada.setEncontroRestaurante(getRestauranteSelecionado());
 
-		entidadeEditada.setEncontroAfilhado1(null);
-		entidadeEditada.setEncontroAfilhado2(null);
-		entidadeEditada.setEncontroGarcon(null);
+			entidadeEditada.setEncontroAfilhado1(null);
+			entidadeEditada.setEncontroAfilhado2(null);
+			entidadeEditada.setEncontroGarcon(null);
 
-		if(!inscricaoSuggestBox1.getValue().equals("")){
-			entidadeEditada.setEncontroAfilhado1((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue()));
+			if(!inscricaoSuggestBox1.getValue().equals("")){
+				entidadeEditada.setEncontroAfilhado1((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue()));
+			}
+			if(!inscricaoSuggestBox2.getValue().equals("")){
+				entidadeEditada.setEncontroAfilhado2((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
+			}
+			if(!inscricaoSuggestBox3.getValue().equals("")){
+				entidadeEditada.setEncontroGarcon((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest3.getListaEntidades(), inscricaoSuggestBox3.getValue()));
+			}
+
+			editaDialogBox.hide();
+			presenter.salvar();
+		}else{
+			restauranteSelecionado.setEncontroMaitre((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest1.getListaEntidades(), inscricaoSuggestBox1.getValue()));
+			editaDialogBox.hide();
+			presenter.salvar();
 		}
-		if(!inscricaoSuggestBox2.getValue().equals("")){
-			entidadeEditada.setEncontroAfilhado2((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest2.getListaEntidades(), inscricaoSuggestBox2.getValue()));
-		}
-		if(!inscricaoSuggestBox3.getValue().equals("")){
-			entidadeEditada.setEncontroGarcon((EncontroInscricao)ListUtil.getEntidadePorNome(inscricaoSuggest3.getListaEntidades(), inscricaoSuggestBox3.getValue()));
-		}
-
-		editaDialogBox.hide();
-		presenter.salvar();
-
-
 	}
 
 	private void edita(EncontroRestauranteMesa mesa) {
@@ -181,12 +191,38 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		inscricaoSuggestBox1.setFocus(true);
 	}
 
+	private void edita(EncontroRestaurante encontroMaitre) {
+		inscricaoSuggest1.setSuggestQuery("encontroInscricao.porEncontroCasalNomeEncontristaLike");
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("encontro", presenter.getEncontroSelecionado());
+		inscricaoSuggest1.setQueryParams(params);
+		limpaCampos();
+		defineCampos(encontroMaitre);
+		editaDialogBox.center();
+		editaDialogBox.show();
+		inscricaoSuggestBox1.setFocus(true);
+	}
+
 	@UiHandler("restauranteListBox")
 	public void restauranteListBoxListBoxChangeHandler(ChangeEvent event) {
 		EncontroRestaurante restaurante = (EncontroRestaurante) ListBoxUtil.getItemSelected(restauranteListBox, getListaRestaurantes());
 		setRestauranteSelecionado(restaurante);
 		presenter.setEncontroRestauranteSelecionado(restaurante);
 		presenter.buscaVO();
+	}
+
+	public void defineCampos(EncontroRestaurante encontroMaitre){
+		mesaNumberLabel.setVisible(false);
+		labelInscricao1.setText("Maitre:");
+		labelInscricao2.setVisible(false);
+		labelInscricao3.setVisible(false);
+		inscricaoSuggestBox2.setVisible(false);
+		inscricaoSuggestBox3.setVisible(false);
+		if(encontroMaitre != null){
+			inscricaoSuggestBox1.setValue(encontroMaitre.toString());
+			inscricaoSuggest1.setListaEntidades(new ArrayList<_WebBaseEntity>());
+			inscricaoSuggest1.getListaEntidades().add(encontroMaitre);
+		}
 	}
 
 	public void defineCampos(EncontroRestauranteMesa encontroRestauranteMesa){
@@ -210,12 +246,17 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	}
 
 	public void limpaCampos(){
+		entidadeEditada = null;
 		mesaNumberLabel.setText(null);
+		mesaNumberLabel.setVisible(true);
 		inscricaoSuggestBox2.setVisible(false);
 		labelInscricao2.setVisible(false);
 		inscricaoSuggestBox1.setValue(null);
 		inscricaoSuggestBox2.setValue(null);
 		inscricaoSuggestBox3.setValue(null);
+		labelInscricao1.setText("Afilhado 1:");
+		labelInscricao3.setVisible(true);
+		inscricaoSuggestBox3.setVisible(true);
 	}
 
 	@Override
@@ -235,15 +276,18 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		distribuicaoPanel.clear(true);
 		distribuicaoPanel.setCellSpacing(10);
 		distribuicaoPanel.setStyleName("restaurante");
-
+		encontroMaitre = null;
 		listaGarcons.clear();
 		for (AgrupamentoVO agrupamentoVO : presenter.getVo().getListaAgrupamentosVO()) {
-			if (agrupamentoVO.getAgrupamento().getAtividade() != null &&
+			if ((agrupamentoVO.getAgrupamento().getAtividade() != null) &&
 					agrupamentoVO.getAgrupamento().getAtividade().equals(restauranteSelecionado.getRestaurante().getAtividade())){
 				for (AgrupamentoMembro menbro : agrupamentoVO.getListaMembros()) {
 					EncontroInscricao inscricao = getInscricaoCasal(menbro.getCasal());
-					if (inscricao!=null)
+					if ((inscricao!=null) && menbro.getPapel().getGarcon())
 						listaGarcons.add(inscricao);
+					else if ((inscricao!=null) && menbro.getPapel().getMaitre()){
+						encontroMaitre = inscricao;
+					}
 				}
 			}
 		}
@@ -278,6 +322,14 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 		}
 		FlexTableHelper.fixRowSpan(distribuicaoPanel);
+
+		if (vo.getEncontroRestaurante().getEncontroMaitre() != null){
+			labelMaitre.setText("Maitre: " + vo.getEncontroRestaurante().getEncontroMaitre().toStringApelidos());
+		}else if (encontroMaitre != null){
+			vo.getEncontroRestaurante().setEncontroMaitre(encontroMaitre);
+			labelMaitre.setText("Maitre: " + vo.getEncontroRestaurante().getEncontroMaitre().toStringApelidos());
+			encontroMaitreButton.click();
+		}
 		showWaitMessage(false);
 	}
 
@@ -508,7 +560,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	private EncontroInscricao getInscricaoCasal(Casal casal) {
 		List<EncontroInscricao> listaEncontristas = presenter.getVo().getListaEncontristas();
 		for (EncontroInscricao encontroInscricao : listaEncontristas) {
-			if (encontroInscricao.getCasal()!= null && encontroInscricao.getCasal().equals(casal))
+			if ((encontroInscricao.getCasal()!= null) && encontroInscricao.getCasal().equals(casal))
 				return encontroInscricao;
 		}
 		return null;
@@ -530,33 +582,38 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		}
 	}
 
+	@UiHandler("encontroMaitreButton")
+	public void encontroMaitreButtonButtonClickHandler(ClickEvent event){
+		edita(restauranteSelecionado);
+	}
+
 	@UiHandler("gerarDistribuicaoButton")
 	public void gerarDistribuicaoButtonClickHandler(ClickEvent event){
 		if (presenter.getVo().getListaMesas().size()>0){
 			boolean achou = false;
 			for (Mesa mesa : presenter.getVo().getListaMesas()) {
 				EncontroRestauranteMesa encontroRestauranteMesa = getEncontroRestauranteMesa(presenter.getVo(),mesa,getRestauranteSelecionado());
-				if (encontroRestauranteMesa.getEncontroGarcon() != null || encontroRestauranteMesa.getEncontroAfilhado1() != null ||
-						encontroRestauranteMesa.getEncontroAfilhado2() != null){
+				if ((encontroRestauranteMesa.getEncontroGarcon() != null) || (encontroRestauranteMesa.getEncontroAfilhado1() != null) ||
+						(encontroRestauranteMesa.getEncontroAfilhado2() != null)){
 					achou = true;
 				}
 			}
 			if(achou){
-					if ( !Window.confirm("Há distribuição já lançada, deseja continur, os dados serão apagados ?"))
-						return;
-					for (Mesa mesa : presenter.getVo().getListaMesas()) {
-						EncontroRestauranteMesa encontroRestauranteMesa = getEncontroRestauranteMesa(presenter.getVo(),mesa,getRestauranteSelecionado());
-						encontroRestauranteMesa.setEncontroAfilhado1(null);
-						encontroRestauranteMesa.setEncontroAfilhado2(null);
-						encontroRestauranteMesa.setEncontroGarcon(null);
-					}
+				if ( !Window.confirm("Há distribuição já lançada, deseja continur, os dados serão apagados ?"))
+					return;
+				for (Mesa mesa : presenter.getVo().getListaMesas()) {
+					EncontroRestauranteMesa encontroRestauranteMesa = getEncontroRestauranteMesa(presenter.getVo(),mesa,getRestauranteSelecionado());
+					encontroRestauranteMesa.setEncontroAfilhado1(null);
+					encontroRestauranteMesa.setEncontroAfilhado2(null);
+					encontroRestauranteMesa.setEncontroGarcon(null);
+				}
 
 			}
 
 			int tentativa=0;
 			do{
 				tentativa++;
-			}while(!geraDistribuicao() && tentativa < 1500);
+			}while(!geraDistribuicao() && (tentativa < 1500));
 
 			showWaitMessage(true);
 			if (tentativa==1500){
@@ -582,7 +639,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 				EncontroInscricao garcon = getGarconSorteio(afilhado1,afilhado2,mesa,getRestauranteSelecionado());
 				if (mesa.getQuantidadeCasais()==2){
 					afilhado2 = getAfilhalhadoSorteio(afilhado1,mesa,getRestauranteSelecionado(),2);
-					if (afilhado1==null || afilhado2 == null)
+					if ((afilhado1==null) || (afilhado2 == null))
 						return false;
 				}else{
 					if (afilhado1==null)
@@ -612,23 +669,23 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			if (isSelecionadoMesaMesmaPosicao(encontroInscricao,restauranteSelecionado,posicao))
 				encontroInscricao = null;
 			tentativa++;
-		}while(encontroInscricao == null && tentativa < 100);
+		}while((encontroInscricao == null) && (tentativa < 100));
 		return encontroInscricao;
 	}
 
 	private boolean isSelecionadoOutroAfilhado( EncontroInscricao encontroInscricao, EncontroRestaurante restaurante, EncontroInscricao outroAfilhado) {
-		if( encontroInscricao==null || outroAfilhado == null) return false;
+		if( (encontroInscricao==null) || (outroAfilhado == null)) return false;
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesaOutros()) {
-				if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
-					if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(outroAfilhado)){
-						return true;
-					}
+			if ((encontroRestaurante.getEncontroAfilhado1()!=null) && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
+				if ((encontroRestaurante.getEncontroAfilhado2()!=null) && encontroRestaurante.getEncontroAfilhado2().equals(outroAfilhado)){
+					return true;
 				}
-				if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
-					if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(outroAfilhado)){
-						return true;
-					}
+			}
+			if ((encontroRestaurante.getEncontroAfilhado2()!=null) && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
+				if ((encontroRestaurante.getEncontroAfilhado1()!=null) && encontroRestaurante.getEncontroAfilhado1().equals(outroAfilhado)){
+					return true;
 				}
+			}
 		}
 		return false;
 	}
@@ -639,18 +696,18 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesaOutros()) {
 			if (encontroRestaurante.getMesa().getRestaurante().isCheckMesa()){
 				if (encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
-					if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
+					if ((encontroRestaurante.getEncontroAfilhado1()!=null) && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
 						if (encontroRestaurante.getMesa().equals(mesa)){
 							return true;
 						}
 					}
-					if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
+					if ((encontroRestaurante.getEncontroAfilhado2()!=null) && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
 						if (encontroRestaurante.getMesa().equals(mesa)){
 							return true;
 						}
 					}
 				}else {
-					if (encontroRestaurante.getEncontroGarcon()!=null && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+					if ((encontroRestaurante.getEncontroGarcon()!=null) && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
 						if (encontroRestaurante.getMesa().equals(mesa)){
 							return true;
 						}
@@ -668,16 +725,16 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		int qtde=0;
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesaOutros()) {
 			if (encontroRestaurante.getMesa().getRestaurante().isCheckMesa()){
-				if (posicao == 1 && encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
+				if ((posicao == 1) && (encontroRestaurante.getEncontroAfilhado1()!=null) && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
 					qtde++;
 				}
-				if (posicao == 2 && encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
+				if ((posicao == 2) && (encontroRestaurante.getEncontroAfilhado2()!=null) && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
 					qtde++;
 				}
 			}
 		}
 		int qtdemax = getListaRestaurantes().size() / 2;
-		if( getListaRestaurantes().size() % 2 == 1) qtdemax++;
+		if( (getListaRestaurantes().size() % 2) == 1) qtdemax++;
 		if (qtde > qtdemax )
 			return true;
 		return false;
@@ -686,15 +743,15 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 	private boolean isSelecionadoCasal(EncontroInscricao encontroInscricao, EncontroRestaurante restaurante, EncontroInscricao afilhado1, EncontroInscricao afilhado2) {
 		if( encontroInscricao==null) return false;
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesaOutros()) {
-				if (encontroRestaurante.getEncontroGarcon()!=null){
-					if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(afilhado1) &&
-							encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
-						return true;
-					}
-					if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(afilhado2) &&
-							encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
-						return true;
-					}
+			if (encontroRestaurante.getEncontroGarcon()!=null){
+				if ((encontroRestaurante.getEncontroAfilhado1()!=null) && encontroRestaurante.getEncontroAfilhado1().equals(afilhado1) &&
+						encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+					return true;
+				}
+				if ((encontroRestaurante.getEncontroAfilhado2()!=null) && encontroRestaurante.getEncontroAfilhado2().equals(afilhado2) &&
+						encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+					return true;
+				}
 			}
 		}
 		return false;
@@ -705,19 +762,19 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesa()) {
 			if (encontroRestaurante.getEncontroRestaurante().equals(restaurante)){
 				if (encontroInscricao.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
-					if (outroAfilhado != null && encontroInscricao.equals(outroAfilhado)) return true;
+					if ((outroAfilhado != null) && encontroInscricao.equals(outroAfilhado)) return true;
 					if (!encontroRestaurante.getMesa().equals(mesa)){
-						if (encontroRestaurante.getEncontroAfilhado1()!=null && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
+						if ((encontroRestaurante.getEncontroAfilhado1()!=null) && encontroRestaurante.getEncontroAfilhado1().equals(encontroInscricao)){
 							return true;
 						}
-						if (encontroRestaurante.getEncontroAfilhado2()!=null && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
+						if ((encontroRestaurante.getEncontroAfilhado2()!=null) && encontroRestaurante.getEncontroAfilhado2().equals(encontroInscricao)){
 							return true;
 						}
 					}
 				}
 				else {
 					if (!encontroRestaurante.getMesa().equals(mesa)){
-						if (encontroRestaurante.getEncontroGarcon()!=null && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+						if ((encontroRestaurante.getEncontroGarcon()!=null) && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
 							return true;
 						}
 					}
@@ -731,13 +788,13 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		if( encontroInscricao==null) return false;
 		for (EncontroRestauranteMesa encontroRestaurante : presenter.getVo().getListaEncontroRestauranteMesa()) {
 			if (encontroRestaurante.getEncontroRestaurante().equals(restaurante)){
-				if (encontroRestaurante.getMesa().getGrupo() != null && !encontroRestaurante.getMesa().getGrupo().equals(mesa.getGrupo())){
-					if (encontroRestaurante.getEncontroGarcon()!=null && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+				if ((encontroRestaurante.getMesa().getGrupo() != null) && !encontroRestaurante.getMesa().getGrupo().equals(mesa.getGrupo())){
+					if ((encontroRestaurante.getEncontroGarcon()!=null) && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
 						return true;
 					}
 				}
 				if (encontroRestaurante.getMesa().getGrupo()==null){
-					if (encontroRestaurante.getEncontroGarcon()!=null && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
+					if ((encontroRestaurante.getEncontroGarcon()!=null) && encontroRestaurante.getEncontroGarcon().equals(encontroInscricao)){
 						return true;
 					}
 				}
@@ -748,7 +805,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	private EncontroInscricao getGarconSorteio(EncontroInscricao afilhado1, EncontroInscricao afilhado2, Mesa mesa, EncontroRestaurante restauranteSelecionado) {
 		EncontroInscricao encontroInscricao=null;
-		if (listaGarcons!=null && listaGarcons.size() > 0){
+		if ((listaGarcons!=null) && (listaGarcons.size() > 0)){
 			int tentativa=0;
 			do{
 				if ( mesa.getGrupo() == null ) {
@@ -770,7 +827,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 				if (isSelecionadoAfilhado(encontroInscricao,restauranteSelecionado,afilhado1,afilhado2))
 					encontroInscricao = null;
 				tentativa++;
-			}while(encontroInscricao == null && tentativa < 1000);
+			}while((encontroInscricao == null) && (tentativa < 1000));
 		}
 		return encontroInscricao;
 	}
@@ -787,19 +844,20 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 
 	private boolean isSelecionadoAfilhado(EncontroInscricao encontroInscricao, EncontroRestaurante restauranteSelecionado2, EncontroInscricao afilhado1, EncontroInscricao afilhado2) {
 		if( encontroInscricao==null) return false;
-		if(afilhado1 != null && afilhado1.getCasal().getCasalPadrinho().equals(encontroInscricao.getCasal()))
+		if((afilhado1 != null) && afilhado1.getCasal().getCasalPadrinho().equals(encontroInscricao.getCasal()))
 			return true;
-		if(afilhado2 != null && afilhado2.getCasal().getCasalPadrinho().equals(encontroInscricao.getCasal()))
+		if((afilhado2 != null) && afilhado2.getCasal().getCasalPadrinho().equals(encontroInscricao.getCasal()))
 			return true;
 		return false;
 	}
 
 	@Override
 	public void setListaRestaurantes(List<EncontroRestaurante> lista) {
-		this.listaRestaurantes = lista;
+		listaRestaurantes = lista;
 		ListBoxUtil.populate(restauranteListBox, false, lista );
 		if (presenter.getEncontroSelecionado().getDataPublicacaoRestaurante()==null){
 			gerarDistribuicaoButton.setVisible(true);
+			encontroMaitreButton.setVisible(true);
 			limpaDistribuicaoButton.setVisible(true);
 		}
 	}

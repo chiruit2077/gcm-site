@@ -32,6 +32,7 @@
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="left" >
 				<g:Label styleName="portal-formLabel" text="Restaurante Selecionado: " horizontalAlignment="right" />
 				<g:ListBox ui:field="restauranteListBox" width="400px" />
+				<g:Button ui:field="encontroMaitreButton" visible="false">Maitre</g:Button>
 				<g:Button ui:field="gerarDistribuicaoButton" visible="false">Gerar Distribuição Automática</g:Button>
 				<g:Button ui:field="limpaDistribuicaoButton" visible="false">Limpa Distribuição</g:Button>
 				<g:Button ui:field="printButton">Imprimir</g:Button>
@@ -56,6 +57,9 @@
 								</tr>
 							</table>
 				</g:HTMLPanel>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel styleName="portal-formLabel" spacing="2" width="100%" horizontalAlignment="left" >
+				<g:Label ui:field="labelMaitre" styleName="portal-formLabel" text="Maitre: " horizontalAlignment="center" />
 			</g:HorizontalPanel>
 			<g:HorizontalPanel spacing="2" width="100%" horizontalAlignment="center">
 				<g:FlexTable ui:field="distribuicaoPanel" />

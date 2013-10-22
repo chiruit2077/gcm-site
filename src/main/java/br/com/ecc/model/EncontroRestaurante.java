@@ -33,6 +33,10 @@ public class EncontroRestaurante extends _WebBaseEntity {
 	@JoinColumn(name="restaurante")
 	private Restaurante restaurante;
 
+	@ManyToOne
+	@JoinColumn(name="encontroMaitre")
+	private EncontroInscricao encontroMaitre;
+
 	@Version
 	private Integer version;
 
@@ -80,5 +84,11 @@ public class EncontroRestaurante extends _WebBaseEntity {
 	}
 	public void setRestaurante(Restaurante restaurante) {
 		this.restaurante = restaurante;
+	}
+	public EncontroInscricao getEncontroMaitre() {
+		return encontroMaitre;
+	}
+	public void setEncontroMaitre(EncontroInscricao encontroMaitre) {
+		this.encontroMaitre = encontroMaitre;
 	}
 }
