@@ -45,6 +45,7 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 	@UiField RadioButton relatorioAfilhadosPadrinhosRadioButton;
 	@UiField RadioButton relatorioOnibusRadioButton;
 	@UiField RadioButton relatorioAlbumRadioButton;
+	@UiField RadioButton relatorioCestaRadioButton;
 	@UiField RadioButton relatorioOracaoAmorRadioButton;
 	@UiField RadioButton relatorioNecessidadesEspeciaisRadioButton;
 	@UiField RadioButton relatorioDiabeticosVegetarianosRadioButton;
@@ -169,13 +170,8 @@ public class EncontroRelatoriosSecretariaView extends BaseView<EncontroRelatorio
 			params.add(periodo);
 			presenter.processa(presenter.getEncontroSelecionado(), ProcessaOpcao.LISTAGEMPLANILHAATIVIDADES, params);
 		}
-		else if (relatorioCamarimRadioButton.getValue()){
-			EncontroRestaurante encontroRestaurante = (EncontroRestaurante) ListBoxUtil.getItemSelected(restaurantesListBox, getEncontroRestaurantes());
-			if (encontroRestaurante != null)
-				presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMCAMARIM,encontroRestaurante);
-			else
-				Window.alert("Escolha um Restaurante");
-
+		else if (relatorioCestaRadioButton.getValue()){
+			presenter.processa(presenter.getEncontroSelecionado(),ProcessaOpcao.LISTAGEMCESTA);
 		}
 		else if (relatorioPlanilhaRadioButton.getValue()){
 			EncontroPeriodo periodo = (EncontroPeriodo) ListBoxUtil.getItemSelected(periodoListBox, getListaPeriodo());

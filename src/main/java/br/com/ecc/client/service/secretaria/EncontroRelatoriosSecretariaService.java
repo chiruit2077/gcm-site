@@ -30,4 +30,5 @@ public interface EncontroRelatoriosSecretariaService extends RemoteService {
 	public Integer imprimeRelatorioAfilhadosPadrinhos(Encontro encontro) throws Exception;
 	public Integer imprimeRelatorioPlanilha(Encontro encontro, EncontroPeriodo periodo, EncontroInscricao inscricao) throws Exception;
 	public Integer imprimeRelatorioHotelEncontristasHospedagemParticular(Encontro encontro) throws Exception;
+	public Integer imprimeRelatorioEntregaCesta(Encontro encontro) throws Exception;
 }

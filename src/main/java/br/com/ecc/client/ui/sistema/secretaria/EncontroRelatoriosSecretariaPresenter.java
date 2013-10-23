@@ -68,7 +68,7 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 		LISTAGEMCAMARIM,
 		LISTAGEMPLANILHAATIVIDADES,
 		PLANILHAPDF,
-		PLANILHAEXCEL;
+		PLANILHAEXCEL, LISTAGEMCESTA;
 	}
 
 	public EncontroRelatoriosSecretariaPresenter(Display display, WebResource portalResource) {
@@ -254,6 +254,14 @@ public class EncontroRelatoriosSecretariaPresenter extends BasePresenter<Encontr
 			});
 		}else if (opcao.equals(ProcessaOpcao.LISTAGEMALBUM)){
 			service.imprimeRelatorioAlbum(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
+				@Override
+				protected void success(Integer idReport) {
+					getDisplay().showWaitMessage(false);
+					DownloadResourceHelper.showReport(idReport, getDisplay().getDisplayTitle(), "");
+				}
+			});
+		}else if (opcao.equals(ProcessaOpcao.LISTAGEMCESTA)){
+			service.imprimeRelatorioEntregaCesta(encontro, new WebAsyncCallback<Integer>(getDisplay()) {
 				@Override
 				protected void success(Integer idReport) {
 					getDisplay().showWaitMessage(false);

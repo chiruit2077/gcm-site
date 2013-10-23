@@ -16,8 +16,8 @@ import javax.persistence.Version;
 @NamedQueries({
 	@NamedQuery(name="encontroRestauranteMesa.porEncontroRestaurante", query="select u from EncontroRestauranteMesa u " +
 			" where u.encontroRestaurante = :encontrorestaurante "),
-			@NamedQuery(name="encontroRestauranteMesa.porEncontroRestaurante", query="select u.encontroGarcon from EncontroRestauranteMesa u " +
-					" where u.encontroRestaurante = :encontrorestaurante "),
+			@NamedQuery(name="encontroRestauranteMesa.porEncontroRestaurante", query="select u from EncontroRestauranteMesa u " +
+					" where u.encontroRestaurante = :encontrorestaurante order by u.mesa.numero "),
 					@NamedQuery(name="encontroRestauranteMesa.porEncontroRestauranteOutro", query="select u from EncontroRestauranteMesa u " +
 							" where u.encontroRestaurante != :encontrorestaurante and u.encontroRestaurante.encontro = :encontro "),
 							@NamedQuery(name="encontroRestauranteMesa.updatePorEncontroGarcon",
