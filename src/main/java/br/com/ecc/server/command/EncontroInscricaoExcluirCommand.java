@@ -35,6 +35,9 @@ public class EncontroInscricaoExcluirCommand implements Callable<Void>{
 
 		cmdDelete.setNamedQuery("encontroAtividadeInscricao.deletePorEncontroInscricao");
 		cmdDelete.call();
+		
+		cmdDelete.setNamedQuery("encontroInscricaoFichaPagamento.deletePorEncontroInscricao");
+		cmdDelete.call();
 
 		cmdDelete.setNamedQuery("encontroHotelQuarto.updatePorEncontroInscricao1");
 		cmdDelete.call();

@@ -26,7 +26,7 @@ public class FlexTableUtil {
 		private Integer originalId;
 		private Object[] listaWidgets;
 		private List<String> listaEstilos;
-
+		
 		public Integer getId() {
 			return id;
 		}
@@ -52,34 +52,39 @@ public class FlexTableUtil {
 			this.originalId = originalId;
 		}
 	}
-
+	
+	private boolean enableSort = true;
 	private Integer HeaderRowIndex = 0;
 	private List<AutoHorizontalAlignmentConstant> listaAlinhamento = new ArrayList<AutoHorizontalAlignmentConstant>();
 	private List<Elemento> listaElementos = new ArrayList<Elemento>();
 	private List<Image> listaImagens = new ArrayList<Image>();
 	private List<TipoColuna> listaTipos = new ArrayList<TipoColuna>();
 	private List<String> listaFormatoData = new ArrayList<String>();
-
+	
 	public static enum TipoColuna { STRING, NUMBER, DATE };
-
+	
 	private enum Ordenacao { ASCENTENTE, DESCENDENTE };
 	private Ordenacao ordenacao;
 	private int ultimaColunaOrdenada = 0;
-
+	private int columnCount = 0;
+	private String serial;
+	
 	private FlexTable tabela;
-
+	
 	public  void initialize(FlexTable tabela) {
+		serial = "T"+ tabela.hashCode();
 		tabela.insertRow(HeaderRowIndex);
 		tabela.getRowFormatter().addStyleName(HeaderRowIndex,"FlexTable-Header");
 		tabela.addStyleName("FlexTable");
 		this.tabela = tabela;
 	}
-
-	public  void addColumn(final Object columnHeading, String width,
+	
+	public  void addColumn(final Object columnHeading, String width, 
 						   AutoHorizontalAlignmentConstant alinhamento ) {
 		addColumn(columnHeading, width, alinhamento, TipoColuna.STRING, null);
 	}
 	public  void addColumn(final Object columnHeading, String width, AutoHorizontalAlignmentConstant alinhamento, TipoColuna tipo, String formatoData ) {
+		columnCount++;
 		if(tipo==null){
 			tipo=TipoColuna.STRING;
 		}
@@ -103,23 +108,23 @@ public class FlexTableUtil {
 			});
 		}
 		String html = "<table cellpadding='0' cellspacing='0' width='100%'>" +
-							"<tr>" +
-							"	<td id='one' width='95%' style='vertical-align: middle;'></td>" +
-							"	<td id='two' width='14px' style='padding-top: 2px;padding-right: 2px;' align='center'></td>" +
-							"</tr>" +
-					  "</table>";
+				"<tr>" +
+				"	<td id='one_" + serial + "_" + columnCount + "' width='95%' style='vertical-align: middle;'></td>" +
+				"	<td id='two_" + serial + "_" + columnCount + "' width='14px' style='padding-top: 2px;padding-right: 2px;' align='center'></td>" +
+				"</tr>" +
+		  "</table>";
 		HTMLPanel hp = new HTMLPanel(html);
 		Image img = new Image("images/table/blank.png");
 		listaImagens.add(img);
-		hp.add(widget, "one");
-		hp.add(img, "two");
-
+		hp.add(widget, "one_" + serial + "_"  + columnCount + "");
+		hp.add(img, "two_" +  serial + "_" +  columnCount + "");
+				
 		if(cell==0){
 			hp.addStyleName("FlexTable-ColumnLabel-FirstColumn");
 		} else {
 			hp.addStyleName("FlexTable-ColumnLabel");
 		}
-
+		
 		tabela.setWidget(HeaderRowIndex, cell, hp);
 		tabela.getCellFormatter().setWidth(HeaderRowIndex, cell, width);
 	}
@@ -148,12 +153,12 @@ public class FlexTableUtil {
 		elemento.setId(rowIndex);
 		elemento.setListaWidgets(cellObjects);
 		listaElementos.add(elemento);
-
+		
+		Widget widget;
 		for (int cell = 0; cell < cellObjects.length; cell++) {
 			if(cellObjects[cell]==null){
 				cellObjects[cell]="";
 			}
-			Widget widget;
 			if(cell>listaAlinhamento.size()-1){
 				widget = createCellWidget(cellObjects[cell], HasHorizontalAlignment.ALIGN_LEFT);
 			} else {
@@ -195,8 +200,11 @@ public class FlexTableUtil {
 			tabela.removeRow(1);
 		}
 	}
-
+	
 	private void sort(final int cell){
+		if(!enableSort){
+			return;
+		}
 		for (Image img : listaImagens) {
 			img.setUrl("images/table/blank.png");
 		}
@@ -227,14 +235,6 @@ public class FlexTableUtil {
 		Collections.sort(novaListaElementos, new Comparator<Elemento>() {
 			@Override
 			public int compare(Elemento o1, Elemento o2) {
-				if(o1.getListaWidgets()[cell]==null || o1.getListaWidgets()[cell].toString().equals("")){
-					if(ordenacao.equals(Ordenacao.ASCENTENTE)) return -1;
-					else return 1;
-				}
-				if(o2.getListaWidgets()[cell].toString()==null || o2.getListaWidgets()[cell].toString().equals("")){
-					if(ordenacao.equals(Ordenacao.ASCENTENTE)) return 1;
-					else return -1;
-				}
 				if(!(o1.getListaWidgets()[cell] instanceof Widget)){
 					if(tipo.equals(TipoColuna.NUMBER)){
 						try {
@@ -273,7 +273,7 @@ public class FlexTableUtil {
 				return 0;
 			}
 		});
-
+		
 		clearData(false);
 		int rowIndex = 1;
 		for (Elemento element : novaListaElementos) {
@@ -307,7 +307,13 @@ public class FlexTableUtil {
 			}
 		}
 	}
-
+	
+	public void setColumnVisible(int Col, boolean b){
+		for(int i=0; i< tabela.getRowCount(); i++) {
+			tabela.getCellFormatter().setVisible(i, Col, b);
+		}
+	}
+	
 	public Integer getRowById(Integer id){
 		for (Elemento elemento : listaElementos) {
 			if(elemento.getOriginalId().equals(id)){
@@ -317,27 +323,10 @@ public class FlexTableUtil {
 		return 0;
 	}
 
-	public void setColumnVisible(int Col, boolean b){
-		for(int i=0; i< tabela.getRowCount(); i++) {
-			tabela.getCellFormatter().setVisible(i, Col, b);
-		}
+	public boolean isEnableSort() {
+		return enableSort;
 	}
-
-	 public static void copyCell(FlexTable sourceTable, FlexTable targetTable, int sourceRow, int sourceCol,
-		      int targetRow, int targetCol) {
-		    targetTable.insertRow(targetRow);
-		    HTML html = new HTML(sourceTable.getHTML(sourceRow, sourceCol));
-		    targetTable.setWidget(targetRow, sourceCol, html);
-		    /*for (int col = 0; col < sourceTable.getCellCount(sourceRow); col++) {
-
-		      targetTable.setWidget(targetRow, col, html);
-		    }*/
-		    copyRowStyle(sourceTable, targetTable, sourceRow, targetRow);
-		  }
-
-	 private static void copyRowStyle(FlexTable sourceTable, FlexTable targetTable, int sourceRow,
-		      int targetRow) {
-		    String rowStyle = sourceTable.getRowFormatter().getStyleName(sourceRow);
-		    targetTable.getRowFormatter().setStyleName(targetRow, rowStyle);
-		  }
+	public void setEnableSort(boolean enableSort) {
+		this.enableSort = enableSort;
+	}
 }

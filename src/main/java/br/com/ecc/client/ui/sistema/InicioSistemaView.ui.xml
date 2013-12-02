@@ -4,7 +4,9 @@
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:rt="urn:import:br.com.ecc.client.ui.component.richtext"
   xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
-  xmlns:c="urn:import:com.bradrydzewski.gwt.calendar.client" xmlns:canvas="urn:import:com.google.gwt.canvas.client">
+  xmlns:c="urn:import:com.bradrydzewski.gwt.calendar.client"
+  xmlns:u="urn:import:br.com.ecc.client.ui.component.upload"
+  xmlns:canvas="urn:import:com.google.gwt.canvas.client">
   	<ui:style>
 	  	.formulario{
 			overflow-y:scroll;
@@ -66,6 +68,9 @@
 		.casalArea {
 			background-color: #f5f5f5;
 		}
+		.toolbar {
+		 	background-color:#c5c5c5;
+		}
   	</ui:style>
    <g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" height="100%">
    		<g:HTMLPanel width="100%" height="100%">
@@ -90,6 +95,24 @@
 					</td>
 					<td style="vertical-align:top;font-size:11px;;padding-left:2px;padding-top:2px;padding-right:2px" align="center" width="100%" height="100%">
 					  <g:VerticalPanel ui:field="areaInfoVerticalPanel" width="100%" visible="false" height="100%" horizontalAlignment="center" verticalAlignment="top">
+						<g:VerticalPanel ui:field="areaEventosVerticalPanel" width="100%" height="100%" visible="false" styleName="{style.bordeado}">
+							<g:HTMLPanel width="100%" styleName="{style.barra}">
+								<table cellpadding="2" cellspacing="0" width="100%" border="0">
+									<tr>
+										<td width="16px">
+											<g:Image url="images/email.png" width="16px" height="auto"/>
+										</td>
+										<td><g:Label text="Eventos" styleName="{style.titulo}"/></td>
+									    <td width="90px" align="center">
+									    	<g:Anchor ui:field="addEventoAnchor" text="Adicionar evento" styleName="portal-anchor"/>
+									    </td>
+									</tr>
+								</table>
+							</g:HTMLPanel>
+							<g:FlowPanel ui:field="eventosFlowPanel" styleName="content-Scroll" width="100%" height="100%">
+								<g:VerticalPanel ui:field="eventosVerticalPanel" width="100%" height="100%"/>
+							</g:FlowPanel>
+						</g:VerticalPanel>
 						<g:VerticalPanel ui:field="areaAgendaVerticalPanel" width="100%" visible="false" styleName="{style.bordeado}" height="100%">
 							<g:HTMLPanel width="100%" styleName="{style.barra}">
 								<table cellpadding="2" cellspacing="0" width="100%" border="0">
@@ -111,6 +134,7 @@
 							</g:HTMLPanel>
 							<c:Calendar ui:field="agendaCalendar" width="100%" height="100%"/>
 						</g:VerticalPanel>
+						<!-- 
 						<g:VerticalPanel ui:field="areaRecadoVerticalPanel" width="100%" height="100%" visible="false" styleName="{style.bordeado}">
 							<g:HTMLPanel width="100%" styleName="{style.barra}">
 								<table cellpadding="2" cellspacing="0" width="100%" border="0">
@@ -136,6 +160,7 @@
 								<g:VerticalPanel ui:field="recadosVerticalPanel" width="100%" height="100%"/>
 							</g:FlowPanel>
 						</g:VerticalPanel>
+						 -->
 					  </g:VerticalPanel>
 					</td>
 					<td style="vertical-align:top;padding-left:2px;padding-top:2px;padding-right:2px" width="400px" height="100%">
@@ -202,6 +227,67 @@
 			</table>
 		</g:HTMLPanel>
 		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaEventoDialogBox" visible="false"
+				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Evento">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" cellspacing="0" width="100%">
+								<tr>
+									<td class="portal-formLabel">Descrição:</td>
+									<td colspan="2">
+										<g:TextBox ui:field="descricaoEventoTextBox" width="560px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Data:</td>
+									<td>
+										<dp:DateBox ui:field="dataEventoDateBox" width="80px"/>
+									</td>
+									<td align="right"><g:Button ui:field="addFotoEventoButton">Adicionar fotos</g:Button></td>
+								</tr>
+								<tr>
+									<td colspan="3" style="border: 1px solid lightgray;">
+										<g:FlowPanel ui:field="fotosFlowPanel" styleName="portal-bodyLayout" height="300px">
+											<g:VerticalPanel ui:field="fotosEventosVerticalPanel" width="100%" styleName="{style.toolbar}">
+												<g:Label text="TEst teste teste teste"/>
+											</g:VerticalPanel>
+										</g:FlowPanel>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarEventoButton">Salvar</g:Button>
+							<g:Button ui:field="fecharEventoButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+			<g:DialogBox ui:field="imageDialogBox" visible="false"
+				         width="550px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Selecionar imagem">
+				<g:VerticalPanel width="100%">
+					<g:VerticalPanel width="100%">
+					    <u:UploadImagePreview ui:field="uploadImagePreview" multiple="false" resample="false"/>
+				    </g:VerticalPanel>
+				    <g:HTMLPanel styleName="{style.toolbar}">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td>
+									<g:Button ui:field="selecionarUploadButton" text="Selecionar imagem"/>
+								</td>
+								<td align="right">
+									<g:Button ui:field="aceitarUploadButton" text="Salvar imagem"/>
+									<g:Button ui:field="cancelarUploadButton" text="Cancelar"/>
+								</td>
+							</tr>
+						</table>
+					</g:HTMLPanel>
+			    </g:VerticalPanel>
+			</g:DialogBox>
+		<!-- 
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
 				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Recado">
 				<g:VerticalPanel width="100%">
@@ -237,9 +323,6 @@
 														<rt:RichTextToolbar ui:field="mensagemRichTextToolbar"/>
 														<g:RichTextArea ui:field="mensagemRichTextArea" width="445px" height="120px"/>
 													</g:VerticalPanel>
-													<!--
-													<g:TextArea ui:field="recadoTextArea" width="300px" height="95px"/>
-													 -->
 												</td>
 											</tr>
 										</table>
@@ -272,6 +355,7 @@
 					</g:VerticalPanel>
 				</g:VerticalPanel>
 			</g:DialogBox>
+		 -->
 		</g:VerticalPanel>
 		<g:VerticalPanel visible="false">
 				<g:DialogBox ui:field="editaAgendaDialogBox" visible="false"

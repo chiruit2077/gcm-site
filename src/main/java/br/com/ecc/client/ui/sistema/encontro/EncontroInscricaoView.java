@@ -205,6 +205,19 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 					emailLabel.setText(casalEditado.getEmails(","));
 					pessoaSuggestBox.setValue(null);
 				}
+				if(entidadeEditada.getEncontroInscricao().getId()==null){
+					for (EncontroInscricaoVO ei : listaEncontroVO) {
+						if(ei.getEncontroInscricao().getCasal()!=null && 
+						   ei.getEncontroInscricao().getCasal().getId().equals(casalEditado.getId())){
+							Window.alert(casalEditado.toString() + "\nEste casal já tem inscrição neste encontro !");
+							emailLabel.setText(null);
+							casalSuggestBox.setValue(null);
+							casalEditado = null;
+							pessoaEditada = null;
+							return;
+						}
+					}
+				}
 				dadosPagamentoComponent.setPessoaInscrita(pessoaEditada);
 				dadosPagamentoComponent.setCasalInscrito(casalEditado);
 				if (casalEditado.getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA))
@@ -224,7 +237,21 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				casalEditado = null;
 				if(!pessoaSuggestBox.getValue().equals("")){
 					pessoaEditada = (Pessoa)ListUtil.getEntidadePorNome(pessoaSuggest.getListaEntidades(), pessoaSuggestBox.getValue());
+					emailLabel.setText(pessoaEditada.getEmail());
 					casalSuggestBox.setValue(null);
+				}
+				if(entidadeEditada.getEncontroInscricao().getId()==null){
+					for (EncontroInscricaoVO ei : listaEncontroVO) {
+						if(ei.getEncontroInscricao().getPessoa()!=null && 
+						   ei.getEncontroInscricao().getPessoa().getId().equals(pessoaEditada.getId())){
+							Window.alert(pessoaEditada.toString() + "\nEsta pessoa já tem inscrição neste encontro !");
+							emailLabel.setText(null);
+							pessoaSuggestBox.setValue(null);
+							casalEditado = null;
+							pessoaEditada = null;
+							return;
+						}
+					}
 				}
 				dadosPagamentoComponent.setPessoaInscrita(pessoaEditada);
 				dadosPagamentoComponent.setCasalInscrito(casalEditado);

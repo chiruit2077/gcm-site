@@ -22,6 +22,10 @@ import br.com.ecc.model.tipo.TipoInscricaoFichaStatusEnum;
 @NamedQueries({
 	@NamedQuery(name="encontroInscricaoFichaPagamento.porEncontro", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro order by u.tipo, u.ficha "),
 	@NamedQuery(name="encontroInscricaoFichaPagamento.deletePorEncontro", query="delete from EncontroInscricaoFichaPagamento u where u.encontro = :encontro "),
+	
+	@NamedQuery(name="encontroInscricaoFichaPagamento.deletePorEncontroInscricao", 
+			query="delete from EncontroInscricaoFichaPagamento u where u.encontroInscricao = :encontroInscricao "),
+	
 	@NamedQuery(name="encontroInscricaoFichaPagamento.porEncontroReservada", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro and u.status = 'RESERVADO' order by u.tipo, u.ficha "),
 	@NamedQuery(name="encontroInscricaoFichaPagamento.porFichaEncontro", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro and u.ficha = :ficha "),
 	@NamedQuery(name="encontroInscricaoFichaPagamento.porVagalLivre", query="select u from EncontroInscricaoFichaPagamento u where u.encontro = :encontro and " +

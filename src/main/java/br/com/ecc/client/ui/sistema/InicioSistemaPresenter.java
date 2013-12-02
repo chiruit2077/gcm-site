@@ -1,6 +1,5 @@
 package br.com.ecc.client.ui.sistema;
 
-import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.PresenterCodeEnum;
@@ -21,7 +20,6 @@ import br.com.ecc.model.Agenda;
 import br.com.ecc.model.Casal;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
-import br.com.ecc.model.Recado;
 import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.vo.AniversarianteVO;
 import br.com.ecc.model.vo.DadosLoginVO;
@@ -38,9 +36,9 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 
 	public interface Display extends BaseDisplay {
 		void init();
-		void populaRecados(List<Recado> result);
-		void fechaRecado();
-		void populaRecadosPorGrupo(List<Recado> result);
+		//void populaRecados(List<Recado> result);
+		//void fechaRecado();
+		//void populaRecadosPorGrupo(List<Recado> result);
 		void createScroll();
 		void populaAniversariantes(List<AniversarianteVO> listaAniversarioPessoa, List<AniversarianteVO> listaAniversarioCasal);
 		void populaConvidados(List<Casal> listaConvidados);
@@ -114,7 +112,7 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 				recadoService.listaInicial(getDadosLoginVO().getCasal(), encontroSelecionado, new WebAsyncCallback<InicioVO>(getDisplay()) {
 					@Override
 					protected void success(InicioVO vo) {
-						getDisplay().populaRecados(vo.getListaRecados());
+						//getDisplay().populaRecados(vo.getListaRecados());
 						getDisplay().populaAniversariantes(vo.getListaAniversarioPessoa(), vo.getListaAniversarioCasal());
 						getDisplay().populaConvidados(vo.getListaConvidados());
 						getDisplay().populaAgenda(vo.getListaAgenda());
@@ -125,7 +123,7 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 			}
 		});
 	}
-
+/*
 	public void listaRecadosPorCasal(Casal casal, Boolean lido, final Boolean carregaAniversarios){
 		getDisplay().showWaitMessage(true);
 		if(dadosLoginVO.getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
@@ -157,10 +155,11 @@ public class InicioSistemaPresenter extends BasePresenter<InicioSistemaPresenter
 			}
 		});
 	}
-	public void lista(Boolean carregaAniversarios) {
+	public void lista(Boolean lido) {
 		getDisplay().showWaitMessage(true);
-		listaRecadosPorCasal(getDadosLoginVO().getCasal(), verTodos, carregaAniversarios);
+		listaRecadosPorCasal(getDadosLoginVO().getCasal(), verTodos, lido);
 	}
+ */
 
 	public DadosLoginVO getDadosLoginVO() {
 		return dadosLoginVO;

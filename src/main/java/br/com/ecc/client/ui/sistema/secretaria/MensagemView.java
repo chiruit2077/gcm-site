@@ -157,7 +157,7 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 		ListBoxUtil.populate(variaveisListBox, true, TipoVariavelEnum.values());
 		ListBoxUtil.populate(tipoListBox, false, TipoMensagemEnum.values());
 		
-		ListBoxUtil.populate(tipoFiltroListBox, true, TipoMensagemEnum.values());
+		ListBoxUtil.populate(tipoFiltroListBox, false, TipoMensagemEnum.values());
 	}
 	
 	private void criaTabela() {
@@ -584,6 +584,9 @@ public class MensagemView extends BaseView<MensagemPresenter> implements Mensage
 
 	@Override
 	public void populaEncontro(List<Encontro> lista) {
+		TipoMensagemEnum tipo = (TipoMensagemEnum) ListBoxUtil.getItemSelected(tipoFiltroListBox, TipoMensagemEnum.values());
+		presenter.buscaMensagens(tipo);
+
 		this.listaEncontro = lista;
 		ListBoxUtil.populate(encontroListBox, true, lista);
 	}

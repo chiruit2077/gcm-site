@@ -7,7 +7,8 @@ import java.util.List;
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.MapWidget;
-import br.com.ecc.client.ui.component.richtext.RichTextToolbar;
+import br.com.ecc.client.ui.component.upload.UploadImagePreview;
+import br.com.ecc.client.ui.component.upload.UploadImagemItem;
 import br.com.ecc.client.util.DateUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
@@ -19,7 +20,6 @@ import br.com.ecc.model._WebBaseEntity;
 import br.com.ecc.model.tipo.TipoAgendaEventoEnum;
 import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
-import br.com.ecc.model.tipo.TipoRecadoEnum;
 import br.com.ecc.model.tipo.TipoSituacaoEnum;
 import br.com.ecc.model.vo.AniversarianteVO;
 
@@ -34,15 +34,12 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -70,16 +67,12 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -99,15 +92,21 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField Image logoImage;
 	@UiField Image casalImage;
 	@UiField Label casalLabel;
-	@UiField VerticalPanel recadosVerticalPanel;
-	@UiField FlowPanel recadosFlowPanel;
 	@UiField FlowPanel convidadosFlowPanel;
-	@UiField Anchor verLidosAnchor;
-	@UiField Anchor esconderLidosAnchor;
-	@UiField VerticalPanel areaRecadoVerticalPanel;
+//	@UiField VerticalPanel recadosVerticalPanel;
+//	@UiField FlowPanel recadosFlowPanel;
+//	@UiField Anchor verLidosAnchor;
+//	@UiField Anchor esconderLidosAnchor;
+	// @UiField VerticalPanel areaRecadoVerticalPanel;
 	@UiField VerticalPanel areaAgendaVerticalPanel;
 	@UiField VerticalPanel areaInfoVerticalPanel;
 	@UiField HorizontalPanel areaAniversarioHorizontalPanel;
+	
+	
+	@UiField VerticalPanel areaEventosVerticalPanel;
+	@UiField Anchor addEventoAnchor;
+	@UiField FlowPanel eventosFlowPanel;
+	@UiField VerticalPanel eventosVerticalPanel;
 
 	@UiField DialogBox editaAgendaDialogBox;
 	@UiField Calendar agendaCalendar;
@@ -128,22 +127,33 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField TextBox estadoTextBox;
 	@UiField(provided = true) SuggestBox casalResponsavelSuggestBox;
 	private final GenericEntitySuggestOracle casalResponsavelSuggest = new GenericEntitySuggestOracle();
+	
+	@UiField DialogBox editaEventoDialogBox;
+	@UiField TextBox descricaoEventoTextBox;
+	@UiField FlowPanel fotosFlowPanel;
+	@UiField VerticalPanel fotosEventosVerticalPanel;
+	
+	@UiField DialogBox imageDialogBox;
+	@UiField UploadImagePreview uploadImagePreview;
+	@UiField Button selecionarUploadButton;
+	@UiField Button aceitarUploadButton;
+	@UiField Button cancelarUploadButton;
 
 
-	@UiField DialogBox editaDialogBox;
-	@UiField HTMLPanel tipoHTMLPanel;
-	@UiField(provided=true) RichTextArea mensagemRichTextArea;
-	@UiField(provided=true) RichTextToolbar mensagemRichTextToolbar;
-
-	@UiField Image casalRecadoImage;
-	@UiField(provided = true) SuggestBox casalSuggestBox;
-	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
-	@UiField Label casalRecadoLabel;
-	@UiField ListBox tipoLitBox;
-
-	@UiField DialogBox todosDialogBox;
-	@UiField FlowPanel formularioFlowPanel;
-	@UiField VerticalPanel recadosTodosVerticalPanel;
+//	@UiField DialogBox editaDialogBox;
+//	@UiField HTMLPanel tipoHTMLPanel;
+//	@UiField(provided=true) RichTextArea mensagemRichTextArea;
+//	@UiField(provided=true) RichTextToolbar mensagemRichTextToolbar;
+//
+//	@UiField Image casalRecadoImage;
+//	@UiField(provided = true) SuggestBox casalSuggestBox;
+//	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
+//	@UiField Label casalRecadoLabel;
+//	@UiField ListBox tipoLitBox;
+//
+//	@UiField DialogBox todosDialogBox;
+//	@UiField FlowPanel formularioFlowPanel;
+//	@UiField VerticalPanel recadosTodosVerticalPanel;
 
 	@UiField VerticalPanel aniversarioPessoaVerticalPanel;
 	@UiField VerticalPanel aniversarioCasalVerticalPanel;
@@ -162,21 +172,25 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	@SuppressWarnings("deprecation")
 	public InicioSistemaView() {
+		/*
 		casalSuggest.setMinimoCaracteres(2);
 		casalSuggest.setSuggestQuery("casal.porNomeLike");
 		casalSuggestBox = new SuggestBox(casalSuggest);
 
+		mensagemRichTextArea = new RichTextArea();
+		mensagemRichTextToolbar = new RichTextToolbar(mensagemRichTextArea);
+		 */
+		
 		casalResponsavelSuggest.setMinimoCaracteres(2);
 		casalResponsavelSuggest.setSuggestQuery("casal.porNomeLike");
 		casalResponsavelSuggestBox = new SuggestBox(casalResponsavelSuggest);
-
-		mensagemRichTextArea = new RichTextArea();
-		mensagemRichTextToolbar = new RichTextToolbar(mensagemRichTextArea);
-
+		
 		initWidget(uiBinder.createAndBindUi(this));
 
-		ListBoxUtil.populate(tipoLitBox, false, TipoRecadoEnum.values());
 		ListBoxUtil.populate(tipoAgendaLitBox, false, TipoAgendaEventoEnum.values());
+		
+		/*
+		ListBoxUtil.populate(tipoLitBox, false, TipoRecadoEnum.values());
 
 		casalSuggestBox.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
 			@Override
@@ -213,6 +227,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				defineTamanho();
 			}
 		});
+		*/
 
 		Window.enableScrolling(false);
 
@@ -282,7 +297,8 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	private Timer resizeTimer = new Timer() {
         @Override
         public void run() {
-            int newHeight = (int) (InicioSistemaView.this.getWindowHeight()*0.6);
+        	int ajusteHeight=110;
+            int newHeight = (int) (InicioSistemaView.this.getWindowHeight()*0.4);
             int newWidth = (int) (InicioSistemaView.this.getWindowWidth()-620);
             //967px
             if (newHeight != height || newWidth != width) {
@@ -294,12 +310,16 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
                 agendaCalendar.setWidth(width+"px");
                 agendaCalendar.doSizing();
                 agendaCalendar.doLayout();
-                areaRecadoVerticalPanel.setWidth(width+"px");
-                areaRecadoVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-136) + "px");
-                recadosVerticalPanel.setWidth((width-5)+"px");
-                recadosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-136) + "px");
-                recadosFlowPanel.setWidth((width-5)+"px");
-        		recadosFlowPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-136) + "px");
+//                areaRecadoVerticalPanel.setWidth(width+"px");
+//                areaRecadoVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
+                
+                areaEventosVerticalPanel.setWidth(width+"px");
+                areaEventosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
+                
+//                recadosVerticalPanel.setWidth((width-5)+"px");
+//                recadosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
+//                recadosFlowPanel.setWidth((width-5)+"px");
+//        		recadosFlowPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
             }
         }
     };
@@ -409,7 +429,8 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
 				areaInfoVerticalPanel.setVisible(true);
 				areaAgendaVerticalPanel.setVisible(true);
-				areaRecadoVerticalPanel.setVisible(true);
+//				areaRecadoVerticalPanel.setVisible(true);
+				//areaEventosVerticalPanel.setVisible(true);
 				areaAniversarioHorizontalPanel.setVisible(true);
 				areaConvidadosVerticalPanel.setVisible(true);
 			}
@@ -429,7 +450,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	@Override
 	public void adjustWindowSize() {
-		defineTamanho();
+		//defineTamanho();
 	}
 
 	protected void defineTamanho() {
@@ -477,13 +498,13 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				casalLabel.setText(presenter.getDadosLoginVO().getUsuario().getPessoa().getNome());
 			}
 		}
+		defineTamanho();
 	}
-
+/*
 	@Override
 	public void populaRecados(List<Recado> listaRecados) {
 		populaObjetoRecados(listaRecados, recadosVerticalPanel, true);
 	}
-
 	@UiHandler("addRecadoAnchor")
 	public void addRecadoAnchorClickHandler(ClickEvent event){
 		if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
@@ -497,7 +518,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		presenter.setVerTodos(true);
 		presenter.lista(false);
 	}
-
 	@UiHandler("esconderLidosAnchor")
 	public void esconderLidosAnchorClickHandler(ClickEvent event){
 		esconderLidosAnchor.setVisible(false);
@@ -554,19 +574,21 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		entidadeEditada.setTipo((TipoRecadoEnum)ListBoxUtil.getItemSelected(tipoLitBox, TipoRecadoEnum.values()));
 		presenter.salvar(entidadeEditada);
 	}
-
+*/
 	public void limpaCampos(){
+		/*
 		casalSuggestBox.setValue(null);
 		mensagemRichTextArea.setText(null);
 		casalRecadoImage.setUrl("");
 		ListBoxUtil.setItemSelected(tipoLitBox, TipoRecadoEnum.ENCONTRISTA.getNome());
+		*/
 	}
 
+	/*
 	@Override
 	public void fechaRecado() {
 		editaDialogBox.hide();
 	}
-
 	@UiHandler("verTodosAnchor")
 	public void verTodosAnchorClickHandler(ClickEvent event){
 		presenter.listaRecadosTodos(ultimoRecado);
@@ -762,7 +784,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		recadosVerticalPanel.add(mainHP);
 		return ok;
 	}
-
+*/
 	@Override
 	public void populaAniversariantes(List<AniversarianteVO> listaAniversarioPessoa, List<AniversarianteVO> listaAniversarioCasal) {
 		//aniversariantes
@@ -854,7 +876,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		label = new Label(data);
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dadosHP.add(label);
-
+		/*
 		if(niver.getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
 			Anchor recado = new Anchor("Enviar recado");
 			recado.setStyleName("portal-anchor");
@@ -868,6 +890,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			});
 			dadosHP.add(recado);
 		}
+		*/
 		HorizontalPanel hpSpacer = new HorizontalPanel();
 		hpSpacer.setWidth("8px");
 		mainHP.add(hpSpacer);
@@ -1061,4 +1084,70 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		//buffer.append(" BRASIL");
 		return buffer.toString().trim();
 	}
+	
+	
+	@UiHandler("addEventoAnchor")
+	public void addEventoAnchorClickHandler(ClickEvent event){
+		editaEventoDialogBox.center();
+		editaEventoDialogBox.show();
+	}
+	
+	@UiHandler("salvarEventoButton")
+	public void salvarEventoButtonClickHandler(ClickEvent event){
+		editaEventoDialogBox.hide();
+	}
+	
+	@UiHandler("fecharEventoButton")
+	public void fecharEventoButtonClickHandler(ClickEvent event){
+		editaEventoDialogBox.hide();
+	}
+	
+	@UiHandler("addFotoEventoButton")
+	public void addFotoEventoButtonClickHandler(ClickEvent event){
+		fotosEventosVerticalPanel.clear();
+		descricaoEventoTextBox.setValue(null);
+		
+		
+		uploadImagePreview.setMultiple(true);
+		uploadImagePreview.clear();
+		imageDialogBox.center();
+		imageDialogBox.show();
+		uploadImagePreview.adicionaImage();
+	}
+	
+	
+	@UiHandler("selecionarUploadButton")
+	public void selecionarUploadButtonClickHandler(ClickEvent event){
+		uploadImagePreview.clear();
+		uploadImagePreview.adicionaImage();
+	}
+
+	@UiHandler("aceitarUploadButton")
+	public void aceitarUploadButtonClickHandler(ClickEvent event){
+		fotosEventosVerticalPanel.clear();
+		Image image;
+		int i=0;
+		HorizontalPanel hp = new HorizontalPanel();
+		hp.setWidth("100%");
+		for (UploadImagemItem up : uploadImagePreview.getListaImagens()) {
+			if(i % 3 ==0){
+				hp = new HorizontalPanel();
+				fotosEventosVerticalPanel.add(hp);
+				hp.setWidth("100%");
+			}
+			image = new Image(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + up.getIdArquivoDigital() + "&thumb=true"));
+			image.setWidth("200px");
+			image.setHeight("auto");
+			hp.add(image);
+			hp.add(new Label("Foto1"));
+			i++;
+		}
+		imageDialogBox.hide();
+	}
+
+	@UiHandler("cancelarUploadButton")
+	public void cancelarUploadButtonClickHandler(ClickEvent event){
+		imageDialogBox.hide();
+	}
+	
 }

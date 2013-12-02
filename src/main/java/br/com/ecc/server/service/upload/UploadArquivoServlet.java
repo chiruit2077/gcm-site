@@ -76,6 +76,9 @@ public class UploadArquivoServlet extends HttpServlet {
 			} else {
 				fileName = uploadedFile.getNomeArquivo();
 			}
+			if(fileName==null){
+				fileName = "arquivo"+StringUtil.randomString(10)+".jpg";
+			}
 			System.out.println("Uploading: " + fileName + " to " + uploadDirectory);
 			
 			new File(uploadDirectory).mkdir();
@@ -92,7 +95,6 @@ public class UploadArquivoServlet extends HttpServlet {
 			inputStream.addListener(uploadProgressListener);
 
 			File file = new File(uploadDirectory, fileName);
-			
 			Streams.copy(inputStream, new FileOutputStream(file), true);
 		}
 	}

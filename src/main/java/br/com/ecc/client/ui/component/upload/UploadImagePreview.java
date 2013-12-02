@@ -43,6 +43,7 @@ public final class UploadImagePreview extends Composite {
 	
 	private List<UploadImagemItem> listaImagens = new ArrayList<UploadImagemItem>();
 	HorizontalPanel imgHPanel;
+	VerticalPanel imgVPanel;
 	Integer indiceImagens=0;
 	
 	public UploadImagePreview() {
@@ -62,7 +63,7 @@ public final class UploadImagePreview extends Composite {
 		imagensFlowPanel.setHeight("400px");
 		imagensFlowPanel.setStyleName("upload-FlowPanel");
 		
-		final VerticalPanel imgVPanel = new VerticalPanel();
+		imgVPanel = new VerticalPanel();
 		imgVPanel.setWidth("100%");
 		imagensFlowPanel.add(imgVPanel);
 		
@@ -234,6 +235,7 @@ public final class UploadImagePreview extends Composite {
 			timerProgress.cancel();
 		}
 		imgHPanel.clear();
+		imgVPanel.clear();
 		indiceImagens = 0;
 	}
 	

@@ -200,9 +200,11 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			@Override
 			public void onValueChange(ValueChangeEvent<Date> event) {
 				Date value = event.getValue();
-				Date hoje = new Date();
-				value = new Date(value.getYear(),value.getMonth(),value.getDate(), hoje.getHours(), hoje.getMinutes(), 0);
-				dataConviteDateBox.setValue(value, false);
+				if(value.getHours()==12 && value.getMinutes()==0){
+					Date hoje = new Date();
+					value = new Date(value.getYear(),value.getMonth(),value.getDate(), hoje.getHours(), hoje.getMinutes(), 0);
+					dataConviteDateBox.setValue(value, false);
+				}
 			}
 		});
 
