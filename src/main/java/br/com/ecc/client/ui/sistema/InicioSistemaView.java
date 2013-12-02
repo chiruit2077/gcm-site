@@ -7,8 +7,6 @@ import java.util.List;
 import br.com.ecc.client.core.mvp.view.BaseView;
 import br.com.ecc.client.core.suggestion.GenericEntitySuggestOracle;
 import br.com.ecc.client.ui.component.MapWidget;
-import br.com.ecc.client.ui.component.upload.UploadImagePreview;
-import br.com.ecc.client.ui.component.upload.UploadImagemItem;
 import br.com.ecc.client.util.DateUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.client.util.ListUtil;
@@ -30,16 +28,12 @@ import com.bradrydzewski.gwt.calendar.client.CalendarSettings.Click;
 import com.bradrydzewski.gwt.calendar.client.CalendarViews;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -63,7 +57,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -103,10 +96,10 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField HorizontalPanel areaAniversarioHorizontalPanel;
 	
 	
-	@UiField VerticalPanel areaEventosVerticalPanel;
-	@UiField Anchor addEventoAnchor;
-	@UiField FlowPanel eventosFlowPanel;
-	@UiField VerticalPanel eventosVerticalPanel;
+//	@UiField VerticalPanel areaEventosVerticalPanel;
+//	@UiField Anchor addEventoAnchor;
+//	@UiField FlowPanel eventosFlowPanel;
+//	@UiField VerticalPanel eventosVerticalPanel;
 
 	@UiField DialogBox editaAgendaDialogBox;
 	@UiField Calendar agendaCalendar;
@@ -128,16 +121,16 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField(provided = true) SuggestBox casalResponsavelSuggestBox;
 	private final GenericEntitySuggestOracle casalResponsavelSuggest = new GenericEntitySuggestOracle();
 	
-	@UiField DialogBox editaEventoDialogBox;
-	@UiField TextBox descricaoEventoTextBox;
-	@UiField FlowPanel fotosFlowPanel;
-	@UiField VerticalPanel fotosEventosVerticalPanel;
-	
-	@UiField DialogBox imageDialogBox;
-	@UiField UploadImagePreview uploadImagePreview;
-	@UiField Button selecionarUploadButton;
-	@UiField Button aceitarUploadButton;
-	@UiField Button cancelarUploadButton;
+//	@UiField DialogBox editaEventoDialogBox;
+//	@UiField TextBox descricaoEventoTextBox;
+//	@UiField FlowPanel fotosFlowPanel;
+//	@UiField VerticalPanel fotosEventosVerticalPanel;
+//	
+//	@UiField DialogBox imageDialogBox;
+//	@UiField UploadImagePreview uploadImagePreview;
+//	@UiField Button selecionarUploadButton;
+//	@UiField Button aceitarUploadButton;
+//	@UiField Button cancelarUploadButton;
 
 
 //	@UiField DialogBox editaDialogBox;
@@ -270,17 +263,17 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		agendaCalendar.scrollToHour(hoje.getHours());
 
 
-		Window.addResizeHandler(new ResizeHandler() {
-            public void onResize(ResizeEvent event) {
-                resizeTimer.schedule(500);
-            }
-        });
+//		Window.addResizeHandler(new ResizeHandler() {
+//            public void onResize(ResizeEvent event) {
+//                resizeTimer.schedule(500);
+//            }
+//        });
 
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            public void execute() {
-            	resizeTimer.schedule(500);
-            }
-		});
+//		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+//            public void execute() {
+//            	resizeTimer.schedule(500);
+//            }
+//		});
 	}
 
 	public Agenda getAgenda(String id) {
@@ -291,14 +284,15 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		return null;
 	}
 
+	/*
 	private int height = -1;
 	private int width = -1;
 
 	private Timer resizeTimer = new Timer() {
         @Override
         public void run() {
-        	int ajusteHeight=110;
-            int newHeight = (int) (InicioSistemaView.this.getWindowHeight()*0.4);
+//        	int ajusteHeight=110;
+            int newHeight = (int) (InicioSistemaView.this.getWindowHeight()*0.85);
             int newWidth = (int) (InicioSistemaView.this.getWindowWidth()-620);
             //967px
             if (newHeight != height || newWidth != width) {
@@ -313,8 +307,8 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 //                areaRecadoVerticalPanel.setWidth(width+"px");
 //                areaRecadoVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
                 
-                areaEventosVerticalPanel.setWidth(width+"px");
-                areaEventosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
+//                areaEventosVerticalPanel.setWidth(width+"px");
+//                areaEventosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
                 
 //                recadosVerticalPanel.setWidth((width-5)+"px");
 //                recadosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
@@ -323,6 +317,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
             }
         }
     };
+	 */
 
 	private MapWidget googleMap;
 
@@ -450,7 +445,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	@Override
 	public void adjustWindowSize() {
-		//defineTamanho();
+		defineTamanho();
 	}
 
 	protected void defineTamanho() {
@@ -498,7 +493,14 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				casalLabel.setText(presenter.getDadosLoginVO().getUsuario().getPessoa().getNome());
 			}
 		}
-		defineTamanho();
+		Timer resizeTimer = new Timer(){
+
+			@Override
+			public void run() {
+				defineTamanho();
+			}
+		};
+		resizeTimer.schedule(1000);
 	}
 /*
 	@Override
@@ -1085,7 +1087,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		return buffer.toString().trim();
 	}
 	
-	
+	/*
 	@UiHandler("addEventoAnchor")
 	public void addEventoAnchorClickHandler(ClickEvent event){
 		editaEventoDialogBox.center();
@@ -1149,5 +1151,5 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	public void cancelarUploadButtonClickHandler(ClickEvent event){
 		imageDialogBox.hide();
 	}
-	
+	*/
 }
