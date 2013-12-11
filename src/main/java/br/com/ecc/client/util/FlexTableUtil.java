@@ -60,6 +60,7 @@ public class FlexTableUtil {
 	private List<Image> listaImagens = new ArrayList<Image>();
 	private List<TipoColuna> listaTipos = new ArrayList<TipoColuna>();
 	private List<String> listaFormatoData = new ArrayList<String>();
+	private List<Integer> hiddenCols = new ArrayList<Integer>();
 	
 	public static enum TipoColuna { STRING, NUMBER, DATE };
 	
@@ -292,6 +293,9 @@ public class FlexTableUtil {
 			rowIndex++;
 		}
 		applyDataRowStyles();
+		for (Integer col : hiddenCols) {
+			setColumnVisible(col, false);
+		}
 	}
 
 	public void setRowSpecialStyle(Integer row, String style) {
@@ -308,7 +312,11 @@ public class FlexTableUtil {
 		}
 	}
 	
+	
 	public void setColumnVisible(int Col, boolean b){
+		hiddenCols.remove(Col);
+		hiddenCols.add(Col);
+		
 		for(int i=0; i< tabela.getRowCount(); i++) {
 			tabela.getCellFormatter().setVisible(i, Col, b);
 		}
