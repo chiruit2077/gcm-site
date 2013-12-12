@@ -802,8 +802,11 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			return;
 		}
 		if(codigoNumberTextBox.getNumber()==null){
-			Window.alert("Não foi definido CÓDIGO para esta inscrição.\nNão será possível enviar a ficha.");
-			return;
+			if(!Window.confirm("Não foi definido CÓDIGO para esta inscrição.\n\n" +
+					"Caso deseje enviar a mensagem de inscrição mesmo assim, verifique a mensagem selecionada.\n\n" +
+					"Deseja enviar a mensagem mesmo assim?")){
+				return;
+			}
 		}
 		Mensagem mensagem = (Mensagem) ListBoxUtil.getItemSelected(mensagemListBox, listaMensagem);
 		if(mensagem==null){
@@ -818,7 +821,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			Window.alert("O participante não possui email cadastrado.\nNão será possível enviar a ficha.");
 			return;
 		}
-		if((entidadeEditada.getEncontroInscricao().getCodigo()==null) || (codigoNumberTextBox.getNumber().intValue()!=entidadeEditada.getEncontroInscricao().getCodigo().intValue())){
+		if(entidadeEditada.getEncontroInscricao().getCodigo()!=null && codigoNumberTextBox.getNumber() !=null && 
+		   codigoNumberTextBox.getNumber().intValue()!=entidadeEditada.getEncontroInscricao().getCodigo().intValue()){
 			Window.alert("O CÓDIGO para esta inscrição foi alterado.\nSalve esta inscrição antes de tentar enviá-la novamente.");
 			return;
 		}
