@@ -314,8 +314,12 @@ public class FlexTableUtil {
 	
 	
 	public void setColumnVisible(int Col, boolean b){
-		hiddenCols.remove(Col);
-		hiddenCols.add(Col);
+		if(hiddenCols.size()>=Col){
+			hiddenCols.remove(Col);
+		}
+		if(hiddenCols.indexOf(new Integer(Col))<0){
+			hiddenCols.add(Col);
+		}
 		
 		for(int i=0; i< tabela.getRowCount(); i++) {
 			tabela.getCellFormatter().setVisible(i, Col, b);

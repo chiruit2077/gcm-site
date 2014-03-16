@@ -242,6 +242,13 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		papelPadraoListBox.setSelectedIndex(-1);
 		nomeTextBox.setValue(null);
 		membroTableUtil.clearData();
+		
+		if(grupoRadioButton.getValue()){
+			encontroMembroHTMLPanel.setVisible(false);
+			tipoAtividadeHTMLPanel.setVisible(false);
+		} else {
+			encontroMembroHTMLPanel.setVisible(true);
+		}
 	}
 
 	@UiHandler("tipoListBox")
@@ -465,7 +472,6 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 
 	@UiHandler("adicionarMembroButton")
 	public void adicionarMembroButtonClickHandler(ClickEvent event){
-		TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoInscricaoListBox, TipoInscricaoEnum.values());
 		TipoInscricaoCasalEnum tipoCasal = (TipoInscricaoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoCasalEnum.values());
 		AgrupamentoMembro membro = null;
 		if(pessoaEditada!=null){
@@ -478,11 +484,13 @@ public class AgrupamentoView extends BaseView<AgrupamentoPresenter> implements A
 		} else if (casalEditado!=null){
 			membro = new AgrupamentoMembro();
 			membro.setCasal(casalEditado);
+			membro.setPapel((Papel) ListBoxUtil.getItemSelected(papelPadraoListBox, listaPapel));
 			if(!buscaMembro(membro)){
 				presenter.getAgrupamentoVO().getListaMembros().add(membro);
 			}
 			casalSuggestBox.setValue(null);
 		} else if (presenter.getListaInscricoes().size()>0){
+			TipoInscricaoEnum tipo = (TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoInscricaoListBox, TipoInscricaoEnum.values());
 			for (EncontroInscricao ei : presenter.getListaInscricoes()) {
 				if((tipoInscricaoListBox.getSelectedIndex()==1 && TipoInscricaoCasalEnum.getPorInscricaoCasal(ei.getTipo()).equals(tipoCasal) ) ||
 						(tipo!=null && ei.getTipo().equals(tipo))){
