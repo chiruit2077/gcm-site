@@ -32,6 +32,7 @@ import br.com.ecc.server.service.redirecionamento.ConfirmacaoServlet;
 import br.com.ecc.server.service.redirecionamento.FichaServlet;
 import br.com.ecc.server.service.redirecionamento.InscricaoServlet;
 import br.com.ecc.server.service.redirecionamento.PlanilhaServlet;
+import br.com.ecc.server.service.secretaria.DocumentoServiceImpl;
 import br.com.ecc.server.service.secretaria.EncontroRelatoriosSecretariaServiceImpl;
 import br.com.ecc.server.service.secretaria.MensagemServiceImpl;
 import br.com.ecc.server.service.upload.UploadArquivoServlet;
@@ -56,6 +57,7 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "papel").with(PapelServiceImpl.class);
 		this.serve(contextPath + "agrupamento").with(AgrupamentoServiceImpl.class);
 		this.serve(contextPath + "mensagem").with(MensagemServiceImpl.class);
+		this.serve(contextPath + "documento").with(DocumentoServiceImpl.class);
 		this.serve(contextPath + "itemPatrimonio").with(ItemPatrimonioServiceImpl.class);
 
 		this.serve(contextPath + "hotel").with(HotelServiceImpl.class);

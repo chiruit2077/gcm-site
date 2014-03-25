@@ -24,6 +24,7 @@ import br.com.ecc.client.ui.sistema.hotelaria.DistribuicaoQuartosPresenter;
 import br.com.ecc.client.ui.sistema.hotelaria.EncontroHotelPresenter;
 import br.com.ecc.client.ui.sistema.patrimonio.ItemPatrimonioPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.DistribuicaoRestaurantePresenter;
+import br.com.ecc.client.ui.sistema.secretaria.DocumentoPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.EncontroRelatoriosSecretariaPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.EncontroRestaurantePresenter;
 import br.com.ecc.client.ui.sistema.secretaria.ListagemPresenter;
@@ -57,6 +58,7 @@ public enum PresenterCodeEnum  {
 
 	AGRUPAMENTO(2,9, AgrupamentoPresenter.class, "Agrupamentos", true),
 	MENSAGEM(2,10, MensagemPresenter.class, "Mensagens", true),
+	DOCUMENTO(2,11, DocumentoPresenter.class, "Documentos", true),
 	LISTAGEM(2,14, ListagemPresenter.class, "Listagem de casais", true),
 	RESTAURANTE_ENCONTRO(2,25, EncontroRestaurantePresenter.class, "Restaurantes do Encontro", true),
 	RESTAURANTE_DISTRIBUICAO(2,20, DistribuicaoRestaurantePresenter.class, "Distribuição dos Restaurantes", true),

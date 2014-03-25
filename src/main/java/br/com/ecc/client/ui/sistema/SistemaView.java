@@ -86,6 +86,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 			sistemaMenuBar.addItem(menuItem);
 
 			menuItem.getSubMenu().addItem("Agrupamento", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.AGRUPAMENTO); } });
+			menuItem.getSubMenu().addItem("Documentos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.DOCUMENTO); } });
 			menuItem.getSubMenu().addItem("Mensagens", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.MENSAGEM); } });
 			menuItem.getSubMenu().addItem("Listagem de Casais", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.LISTAGEM); } });
 			menuItem.getSubMenu().addItem("Restaurantes do Encontro", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.RESTAURANTE_ENCONTRO); } });

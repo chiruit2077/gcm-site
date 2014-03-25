@@ -208,7 +208,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				if(entidadeEditada.getEncontroInscricao().getId()==null){
 					for (EncontroInscricaoVO ei : listaEncontroVO) {
 						if(ei.getEncontroInscricao().getCasal()!=null && 
-						   ei.getEncontroInscricao().getCasal().getId().equals(casalEditado.getId())){
+						   ei.getEncontroInscricao().getCasal().getId().equals(casalEditado.getId()) &&
+						   !ei.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 							Window.alert(casalEditado.toString() + "\nEste casal já tem inscrição neste encontro !");
 							emailLabel.setText(null);
 							casalSuggestBox.setValue(null);
@@ -243,7 +244,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				if(entidadeEditada.getEncontroInscricao().getId()==null){
 					for (EncontroInscricaoVO ei : listaEncontroVO) {
 						if(ei.getEncontroInscricao().getPessoa()!=null && 
-						   ei.getEncontroInscricao().getPessoa().getId().equals(pessoaEditada.getId())){
+						   ei.getEncontroInscricao().getPessoa().getId().equals(pessoaEditada.getId()) &&
+						   !ei.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 							Window.alert(pessoaEditada.toString() + "\nEsta pessoa já tem inscrição neste encontro !");
 							emailLabel.setText(null);
 							pessoaSuggestBox.setValue(null);
@@ -850,6 +852,46 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 			populaDetalhes(entidadeEditada.getListaPagamentoDetalhe(),true);
 		}
 		buscaMensagem(tipo);
+	}
+	
+	@UiHandler("confirmacaoListBox")
+	public void confirmacaoListBoxChangeHandler(ChangeEvent event) {
+		TipoConfirmacaoEnum tipoconfirmacao = (TipoConfirmacaoEnum) ListBoxUtil.getItemSelected(confirmacaoListBox, TipoConfirmacaoEnum.values());
+		if(entidadeEditada.getEncontroInscricao()!=null && 
+		   entidadeEditada.getEncontroInscricao().getId()!=null && 
+		   !tipoconfirmacao.equals(TipoConfirmacaoEnum.DESISTENCIA)){
+			if(entidadeEditada.getEncontroInscricao().getCasal()!=null){
+				for (EncontroInscricaoVO ei : listaEncontroVO) {
+					if( ei.getEncontroInscricao().getCasal()!=null && 
+						ei.getEncontroInscricao().getCasal().getId().equals(casalEditado.getId()) &&
+						!ei.getEncontroInscricao().getId().equals(entidadeEditada.getEncontroInscricao().getId()) &&
+						!ei.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
+						Window.alert(ei.getEncontroInscricao().getCasal().toString() + "\nEste casal já tem inscrição CONFIRMADA neste encontro !");
+						if(entidadeEditada.getEncontroInscricao().getTipoConfirmacao()!=null){
+							ListBoxUtil.setItemSelected(confirmacaoListBox, entidadeEditada.getEncontroInscricao().getTipoConfirmacao().toString());
+						} else {
+							confirmacaoListBox.setSelectedIndex(-1);
+						}
+						return;
+					}
+				}
+			} else if(pessoaEditada!=null){
+				for (EncontroInscricaoVO ei : listaEncontroVO) {
+					if( ei.getEncontroInscricao().getPessoa()!=null && 
+						ei.getEncontroInscricao().getPessoa().getId().equals(pessoaEditada.getId()) &&
+						!ei.getEncontroInscricao().getId().equals(entidadeEditada.getEncontroInscricao().getId()) &&
+						!ei.getEncontroInscricao().getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
+						Window.alert(ei.getEncontroInscricao().getPessoa().toString() + "\nEsta pessoa já tem inscrição CONFIRMADA neste encontro !");
+						if(entidadeEditada.getEncontroInscricao().getTipoConfirmacao()!=null){
+							ListBoxUtil.setItemSelected(confirmacaoListBox, entidadeEditada.getEncontroInscricao().getTipoConfirmacao().toString());
+						} else {
+							confirmacaoListBox.setSelectedIndex(-1);
+						}
+						return;
+					}
+				}
+			}
+		}
 	}
 
 	private void buscaMensagem(TipoInscricaoEnum tipo) {

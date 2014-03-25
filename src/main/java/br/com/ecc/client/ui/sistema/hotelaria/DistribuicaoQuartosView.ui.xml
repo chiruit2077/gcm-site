@@ -14,8 +14,11 @@
 		.casal {
 			background-color: lightgray;
 		}
+		.scroll {
+			overflow: auto;
+		}
   	</ui:style>
-  	<g:VerticalPanel horizontalAlignment="center" width="100%">
+  	<g:VerticalPanel horizontalAlignment="center" width="100%" styleName="{style.scroll}">
 		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
 			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
 				<tr>
