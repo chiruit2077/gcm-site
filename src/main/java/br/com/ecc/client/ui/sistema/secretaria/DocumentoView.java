@@ -25,6 +25,8 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -32,8 +34,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 public class DocumentoView extends BaseView<DocumentoPresenter> implements DocumentoPresenter.Display {
@@ -45,12 +48,17 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 	@UiField Label tituloFormularioLabel;
 	@UiField Label itemTotal;
 	@UiField ListBox tipoListBox;
+	@UiField TextBox filtroTextBox;
+	@UiField Button filtrarButton;
 	
 	@UiField TextBox tituloTextBox;
 	@UiField CheckBox encontroCheckBox;
 	@UiField(provided=true) RichTextArea documentoRichTextArea;
 	@UiField(provided=true) RichTextToolbar documentoRichTextToolbar;
 	@UiField DateBox dataDateBox;
+	
+	@UiField VerticalPanel documentoEditavelVerticalPanel;
+	@UiField FlowPanel documentoNaoEditavelVerticalPanel;
 	
 	@UiField DialogBox editaDialogBox;
 	@UiField Button salvarButton;
@@ -92,10 +100,15 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 		documentoTableUtil.addColumn("Titulo", null, HasHorizontalAlignment.ALIGN_LEFT);
 	}
 	
-	@UiHandler("fecharButton")
-	public void fecharButtonClickHandler(ClickEvent event){
+	@UiHandler("filtrarButton")
+	public void filtrarButtonClickHandler(ClickEvent event){
 		editaDialogBox.hide();
 		presenter.listar();
+	}
+	
+	@UiHandler("fecharButton")
+	public void fecharButtonClickHandler(ClickEvent event){
+		filtrarButtonClickHandler(null);
 	}
 	@UiHandler("novoButton")
 	public void novoButtonClickHandler(ClickEvent event){
@@ -108,6 +121,9 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 	
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
+		if(presenter.getDocumentoEditado().getId()==null){
+			presenter.getDocumentoEditado().setEditavel(true);
+		}
 		presenter.getDocumentoEditado().setGrupo(presenter.getGrupoSelecionado());
 		presenter.getDocumentoEditado().setTitulo(tituloTextBox.getValue());
 		presenter.getDocumentoEditado().setData(dataDateBox.getValue());
@@ -148,8 +164,32 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 		encontroCheckBox.setValue(null);
 		dataDateBox.setValue(null);
 	}
+	
+	public void enable(boolean enabled){
+		tituloTextBox.setEnabled(enabled);
+		documentoRichTextArea.setEnabled(enabled);
+		tipoListBox.setEnabled(enabled);
+		encontroCheckBox.setEnabled(enabled);
+		dataDateBox.setEnabled(enabled);
+		salvarButton.setEnabled(enabled);
+	}
 
 	public void defineCampos(Documento documento){
+		if(documento.getEditavel()!=null && documento.getEditavel()){
+			documentoEditavelVerticalPanel.setVisible(true);
+			documentoNaoEditavelVerticalPanel.setVisible(false);
+			enable(true);
+			if(documento.getTexto()!=null){
+				documentoRichTextArea.setHTML(String.valueOf(documento.getTexto()));
+			}
+		} else {
+			documentoEditavelVerticalPanel.setVisible(false);
+			documentoNaoEditavelVerticalPanel.setVisible(true);
+			enable(false);
+			if(documento.getTexto()!=null){
+				documentoNaoEditavelVerticalPanel.add(new HTML(String.valueOf(documento.getTexto())));
+			}
+		}
 		tituloTextBox.setValue(documento.getTitulo());
 		dataDateBox.setValue(documento.getData());
 		if(documento.getEncontro()!=null){
@@ -157,9 +197,6 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 		}
 		if(documento.getTipoDocumento()!=null){
 			ListBoxUtil.setItemSelected(tipoListBox, documento.getTipoDocumento().toString());
-		}
-		if(documento.getTexto()!=null){
-			documentoRichTextArea.setHTML(String.valueOf(documento.getTexto()));
 		}
 	}
 	
@@ -225,11 +262,16 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 	
 	@UiHandler("tipoFiltroListBox")
 	public void tipoFiltroListChangeHandler(ChangeEvent event){
-		presenter.listar();
+		filtrarButtonClickHandler(null);
 	}
 	
 	@Override
 	public Integer getTipoFiltro(){
 		return tipoFiltroListBox.getSelectedIndex();
+	}
+	
+	@Override
+	public String getTextoFiltro(){
+		return filtroTextBox.getValue();
 	}
 }

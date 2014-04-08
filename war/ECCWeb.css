@@ -751,8 +751,9 @@ html>body .gwt-DecoratedTabBar {
 
 .portal-FlowPanel {
 	overflow-y: auto;
-	border: 1px solid gray;
-	background-color: #bcf;
+	border: 1px solid lightgray;
+	padding: 3px;
+	background-color: #EBF0FF;
 }
 .upload-FlowPanel {
 	overflow-y: auto;

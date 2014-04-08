@@ -24,10 +24,10 @@ import br.com.ecc.model.tipo.TipoDocumentoEnum;
 @SequenceGenerator(name="SQ_DOCUMENTO", sequenceName="SQ_DOCUMENTO")
 @NamedQueries({
 	@NamedQuery(name="documento.listarPorGrupoEncontro",
-		query="select u.id, u.titulo, u.data, u.tipoDocumento, u.encontro from Documento u " +
+		query="select u from Documento u " +
 			  "where u.grupo = :grupo and u.encontro = :encontro order by u.data desc"),
     @NamedQuery(name="documento.listarPorGrupo",
-		query="select u.id, u.titulo, u.data, u.tipoDocumento from Documento u " +
+		query="select u from Documento u " +
 			  "where u.grupo = :grupo order by u.data desc")
 })
 public class Documento extends _WebBaseEntity {
@@ -57,6 +57,8 @@ public class Documento extends _WebBaseEntity {
 	@ManyToOne
 	@JoinColumn(name="encontro")
 	private Encontro encontro;
+	
+	private Boolean editavel;
 
 	@Version
 	private Integer version;
@@ -113,5 +115,13 @@ public class Documento extends _WebBaseEntity {
 	}
 	public void setTexto(char[] texto) {
 		this.texto = texto;
+	}
+
+	public Boolean getEditavel() {
+		return editavel;
+	}
+
+	public void setEditavel(Boolean editavel) {
+		this.editavel = editavel;
 	}
 }

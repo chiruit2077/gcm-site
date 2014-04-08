@@ -26,6 +26,7 @@ public class DocumentoPresenter extends BasePresenter<DocumentoPresenter.Display
 		void populaEntidades(List<Documento> lista);
 		void setDocumento(Documento documento);
 		Integer getTipoFiltro();
+		String getTextoFiltro();
 	}
 
 	public DocumentoPresenter(Display display, WebResource portalResource) {
@@ -84,7 +85,7 @@ public class DocumentoPresenter extends BasePresenter<DocumentoPresenter.Display
 	
 	public void listar(){
 		if(getDisplay().getTipoFiltro()==0){
-			service.lista(grupoSelecionado, null, new WebAsyncCallback<List<Documento>>(getDisplay()) {
+			service.lista(grupoSelecionado, null, getDisplay().getTextoFiltro(), new WebAsyncCallback<List<Documento>>(getDisplay()) {
 				@Override
 				protected void success(List<Documento> lista) {
 					getDisplay().populaEntidades(lista);
@@ -92,7 +93,7 @@ public class DocumentoPresenter extends BasePresenter<DocumentoPresenter.Display
 				}
 			});
 		} else {
-			service.lista(grupoSelecionado, encontroSelecionado, new WebAsyncCallback<List<Documento>>(getDisplay()) {
+			service.lista(grupoSelecionado, encontroSelecionado, getDisplay().getTextoFiltro(), new WebAsyncCallback<List<Documento>>(getDisplay()) {
 				@Override
 				protected void success(List<Documento> lista) {
 					getDisplay().populaEntidades(lista);

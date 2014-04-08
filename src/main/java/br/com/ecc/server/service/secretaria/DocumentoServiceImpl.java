@@ -1,7 +1,6 @@
 package br.com.ecc.server.service.secretaria;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.service.secretaria.DocumentoService;
@@ -9,7 +8,6 @@ import br.com.ecc.model.Documento;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.tipo.Operacao;
-import br.com.ecc.model.tipo.TipoDocumentoEnum;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
@@ -30,7 +28,7 @@ public class DocumentoServiceImpl extends SecureRemoteServiceServlet implements 
 	@SuppressWarnings("unchecked")
 	@Override
 	@Permissao(nomeOperacao="Listar documentos", operacao=Operacao.VISUALIZAR)
-	public List<Documento> lista(Grupo grupo, Encontro encontro) throws Exception {
+	public List<Documento> lista(Grupo grupo, Encontro encontro, String textoFiltro) throws Exception {
 		List<Documento> lista = new ArrayList<Documento>();
 		
 		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
@@ -41,20 +39,28 @@ public class DocumentoServiceImpl extends SecureRemoteServiceServlet implements 
 			cmd.setNamedQuery("documento.listarPorGrupo");
 		}
 		cmd.addParameter("grupo", grupo);
-		List<Object[]> resultado = cmd.call();
+		List<Documento> resultado = cmd.call();
 		
 		Documento documento;
-		for (Object[] o : resultado) {
-			documento = new Documento();
-			// u.id, u.titulo, u.data, u.tipoDocumento, u.encontro
-			documento.setId((Integer)o[0]);
-			documento.setTitulo((String)o[1]);
-			documento.setData((Date)o[2]);
-			documento.setTipoDocumento((TipoDocumentoEnum)o[3]);
-			if(encontro!=null){
-				documento.setEncontro((Encontro)o[4]);
+		boolean ok;
+		for (Documento o : resultado) {
+			ok=false;
+			if(textoFiltro!=null && !"".equals(textoFiltro)){
+				if(String.valueOf(o.getTexto()).toUpperCase().contains(textoFiltro.toUpperCase())){
+					ok=true;
+				}
+			} else {
+				ok=true;
 			}
-			lista.add(documento);
+			if(ok){
+				documento = new Documento();
+				documento.setId(o.getId());
+				documento.setTitulo(o.getTitulo());
+				documento.setData(o.getData());
+				documento.setTipoDocumento(o.getTipoDocumento());
+				documento.setEncontro(o.getEncontro());
+				lista.add(documento);
+			}
 		}
 		
 		return lista;
