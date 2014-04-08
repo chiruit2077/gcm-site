@@ -287,11 +287,11 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 		for (AgrupamentoVO agrupamentoVO : vo.getListaAgrupamentosVO()) {
 			if ((agrupamentoVO.getAgrupamento().getAtividade() != null) &&
 					agrupamentoVO.getAgrupamento().getAtividade().equals(getRestauranteSelecionado().getRestaurante().getAtividade())){
-				for (AgrupamentoMembro menbro : agrupamentoVO.getListaMembros()) {
-					EncontroInscricao inscricao = getInscricaoCasal(menbro.getCasal());
-					if ((inscricao!=null) && menbro.getPapel().getGarcon())
+				for (AgrupamentoMembro membro : agrupamentoVO.getListaMembros()) {
+					EncontroInscricao inscricao = getInscricaoCasal(membro.getCasal());
+					if ((inscricao!=null) && membro.getPapel()!=null && membro.getPapel().getGarcon())
 						listaGarcons.add(inscricao);
-					else if ((inscricao!=null) && menbro.getPapel().getMaitre()){
+					else if ((inscricao!=null) && membro.getPapel()!=null && membro.getPapel().getMaitre()){
 						encontroMaitre = inscricao;
 					}
 				}
@@ -360,7 +360,7 @@ public class DistribuicaoRestauranteView extends BaseView<DistribuicaoRestaurant
 			HorizontalPanel afilhadosFundoPanel = new HorizontalPanel();
 			afilhadosFundoPanel.setSize("200px", "20px");
 			afilhadosFundoPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-			afilhadosFundoPanel.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+			afilhadosFundoPanel.setVerticalAlignment(VerticalPanel.ALIGN_BOTTOM);
 			final Label afilhadoEle1 = new Label("VAGO");
 			afilhadoEle1.setStyleName("restaurante-Afilhado");
 			afilhadosFundoPanel.add(afilhadoEle1);
