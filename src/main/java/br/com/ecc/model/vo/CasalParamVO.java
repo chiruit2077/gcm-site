@@ -7,6 +7,7 @@ import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoInscricaoEnum;
+import br.com.ecc.model.tipo.TipoSituacaoEnum;
 
 public class CasalParamVO implements Serializable {
 	private static final long serialVersionUID = 2926102079696867943L;
@@ -18,6 +19,7 @@ public class CasalParamVO implements Serializable {
 	private TipoCasalEnum tipoCasal;
 	private Encontro encontro;
 	private Boolean todosInscritos;
+	private TipoSituacaoEnum situacao;
 	
 	public Grupo getGrupo() {
 		return grupo;
@@ -60,5 +62,11 @@ public class CasalParamVO implements Serializable {
 	}
 	public void setTipoCasal(TipoCasalEnum tipoCasal) {
 		this.tipoCasal = tipoCasal;
+	}
+	public TipoSituacaoEnum getSituacao() {
+		return situacao;
+	}
+	public void setSituacao(TipoSituacaoEnum situacao) {
+		this.situacao = situacao;
 	}
 }

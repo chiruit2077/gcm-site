@@ -26,6 +26,7 @@ import br.com.ecc.model.tipo.TipoSituacaoEnum;
 @NamedQueries({
 	@NamedQuery(name="casal.todos", query="select u from Casal u order by u.ele.apelido, u.ela.apelido"),
 	@NamedQuery(name="casal.porGrupo", query="select u from Casal u where u.grupo = :grupo order by u.ele.apelido, u.ela.apelido"),
+	@NamedQuery(name="casal.porGrupoAtivo", query="select u from Casal u where u.grupo = :grupo and u.situacao = 'ATIVO' order by u.ele.apelido, u.ela.apelido"),
 	@NamedQuery(name="casal.porPessoa", query="select u from Casal u where u.ele = :pessoa or u.ela =:pessoa"),
 	@NamedQuery(name="casal.porGrupoNomeLike",
 	query="select u from Casal u " +

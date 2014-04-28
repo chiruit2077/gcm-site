@@ -31,68 +31,68 @@ import br.com.ecc.model.tipo.TipoInscricaoEnum;
 	@NamedQuery(name="encontroInscricao.updateFichaNullPorEncontro", query="update EncontroInscricao u set u.fichaPagamento = null where u.encontro = :encontro"),
 	@NamedQuery(name="encontroInscricao.deletePorEncontro", query="delete from EncontroInscricao u where u.encontro = :encontro"),
 	@NamedQuery(name="encontroInscricao.porEncontroConfirmados",
-	query="select u from EncontroInscricao u " +
-			"where  u.encontro = :encontro and " +
-			"		( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " +
-			"order by u.tipo"),
-			@NamedQuery(name="encontroInscricao.porEncontroConvidados",
-			query="select u from EncontroInscricao u " +
-					"where u.encontro = :encontro and " +
-					"      u.tipo = 'AFILHADO' and " +
-					"	     u.tipoConfirmacao = 'CONFIRMADO' " ),
-					@NamedQuery(name="encontroInscricao.porEncontroEncontristas",
-					query="select u from EncontroInscricao u " +
-							"where u.encontro = :encontro and " +
-							"      u.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR' ) and " +
-							"	     u.tipoConfirmacao = 'CONFIRMADO' " ),
-							@NamedQuery(name="encontroInscricao.porEncontroCasal",
-							query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal and u.tipoConfirmacao = 'CONFIRMADO' order by u.id desc"),
-							@NamedQuery(name="encontroInscricao.porEncontroPessoaNomeLike",
-							query="select up from EncontroInscricao up LEFT OUTER JOIN FETCH up.pessoa as p " +
-									"   where up.encontro = :encontro and " +
-									"        up.tipoConfirmacao = 'CONFIRMADO' and " +
-									"       ( upper(p.nome) like upper(:key) or" +
-									"        upper(p.apelido) like upper(:key) ) " +
-									"   order by p.apelido, p.nome  " ),
-									@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLike",
-									query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
-											"   where uc.encontro = :encontro and " +
-											"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
-											"       ( upper(c.ele.nome) like upper(:key) or " +
-											"        upper(c.ele.apelido) like upper(:key) or " +
-											"        upper(c.ela.nome) like upper(:key) or" +
-											"        upper(c.ela.apelido) like upper(:key) )  " +
-											"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
-											@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLikeTipo",
-											query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
-													"   where uc.encontro = :encontro and " +
-													"        uc.tipo = :tipo and " +
-													"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
-													"       ( upper(c.ele.nome) like upper(:key) or " +
-													"        upper(c.ele.apelido) like upper(:key) or " +
-													"        upper(c.ela.nome) like upper(:key) or" +
-													"        upper(c.ela.apelido) like upper(:key) )  " +
-													"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
-													@NamedQuery(name="encontroInscricao.porEncontroCasalNomeEncontristaLike",
-													query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
-															"   where uc.encontro = :encontro and " +
-															"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
-															"        uc.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR', 'EXTERNO' ) and " +
-															"       ( upper(c.ele.nome) like upper(:key) or " +
-															"        upper(c.ele.apelido) like upper(:key) or " +
-															"        upper(c.ela.nome) like upper(:key) or" +
-															"        upper(c.ela.apelido) like upper(:key) )  " +
-															"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
-															@NamedQuery(name="encontroInscricao.porEncontroCasalNomeAfilhadoLike",
-															query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
-																	"   where uc.encontro = :encontro and " +
-																	"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
-																	"        uc.tipo in ( 'AFILHADO' ) and " +
-																	"       ( upper(c.ele.nome) like upper(:key) or " +
-																	"        upper(c.ele.apelido) like upper(:key) or " +
-																	"        upper(c.ela.nome) like upper(:key) or" +
-																	"        upper(c.ela.apelido) like upper(:key) )  " +
-																	"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " )
+		query="select u from EncontroInscricao u " +
+				"where  u.encontro = :encontro and " +
+				"		( u.tipoConfirmacao is null or u.tipoConfirmacao = 'CONFIRMADO' ) " +
+				"order by u.tipo"),
+	@NamedQuery(name="encontroInscricao.porEncontroConvidados",
+		query="select u from EncontroInscricao u " +
+				"where u.encontro = :encontro and " +
+				"      u.tipo = 'AFILHADO' and " +
+				"	     u.tipoConfirmacao = 'CONFIRMADO' " ),
+	@NamedQuery(name="encontroInscricao.porEncontroEncontristas",
+		query="select u from EncontroInscricao u " +
+				"where u.encontro = :encontro and " +
+				"      u.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR' ) and " +
+				"	     u.tipoConfirmacao = 'CONFIRMADO' " ),
+	@NamedQuery(name="encontroInscricao.porEncontroCasal",
+		query="select u from EncontroInscricao u where u.encontro = :encontro and u.casal = :casal and u.tipoConfirmacao = 'CONFIRMADO' order by u.id desc"),
+	@NamedQuery(name="encontroInscricao.porEncontroPessoaNomeLike",
+		query="select up from EncontroInscricao up LEFT OUTER JOIN FETCH up.pessoa as p " +
+				"   where up.encontro = :encontro and " +
+				"        up.tipoConfirmacao = 'CONFIRMADO' and " +
+				"       ( upper(p.nome) like upper(:key) or" +
+				"        upper(p.apelido) like upper(:key) ) " +
+				"   order by p.apelido, p.nome  " ),
+	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLike",
+		query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
+				"   where uc.encontro = :encontro and " +
+				"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
+				"       ( upper(c.ele.nome) like upper(:key) or " +
+				"        upper(c.ele.apelido) like upper(:key) or " +
+				"        upper(c.ela.nome) like upper(:key) or" +
+				"        upper(c.ela.apelido) like upper(:key) )  " +
+				"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
+	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeLikeTipo",
+		query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
+				"   where uc.encontro = :encontro and " +
+				"        uc.tipo = :tipo and " +
+				"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
+				"       ( upper(c.ele.nome) like upper(:key) or " +
+				"        upper(c.ele.apelido) like upper(:key) or " +
+				"        upper(c.ela.nome) like upper(:key) or" +
+				"        upper(c.ela.apelido) like upper(:key) )  " +
+				"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
+	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeEncontristaLike",
+		query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
+				"   where uc.encontro = :encontro and " +
+				"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
+				"        uc.tipo in ( 'APOIO', 'PADRINHO', 'COORDENADOR', 'EXTERNO' ) and " +
+				"       ( upper(c.ele.nome) like upper(:key) or " +
+				"        upper(c.ele.apelido) like upper(:key) or " +
+				"        upper(c.ela.nome) like upper(:key) or" +
+				"        upper(c.ela.apelido) like upper(:key) )  " +
+				"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " ),
+	@NamedQuery(name="encontroInscricao.porEncontroCasalNomeAfilhadoLike",
+		query="select uc from EncontroInscricao uc LEFT OUTER JOIN FETCH uc.casal as c " +
+				"   where uc.encontro = :encontro and " +
+				"        uc.tipoConfirmacao = 'CONFIRMADO' and " +
+				"        uc.tipo in ( 'AFILHADO' ) and " +
+				"       ( upper(c.ele.nome) like upper(:key) or " +
+				"        upper(c.ele.apelido) like upper(:key) or " +
+				"        upper(c.ela.nome) like upper(:key) or" +
+				"        upper(c.ela.apelido) like upper(:key) )  " +
+				"   order by c.ele.apelido, c.ela.apelido, c.ele.nome, c.ela.nome " )
 })
 public class EncontroInscricao extends _WebBaseEntity {
 

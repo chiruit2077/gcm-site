@@ -28,6 +28,7 @@ import br.com.ecc.client.ui.sistema.secretaria.DocumentoPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.EncontroRelatoriosSecretariaPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.EncontroRestaurantePresenter;
 import br.com.ecc.client.ui.sistema.secretaria.ListagemPresenter;
+import br.com.ecc.client.ui.sistema.secretaria.ListagemSorteioPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.MensagemPresenter;
 import br.com.ecc.client.ui.sistema.tesouraria.FichasPresenter;
 import br.com.ecc.client.ui.sistema.tesouraria.PagamentosPresenter;
@@ -60,6 +61,7 @@ public enum PresenterCodeEnum  {
 	MENSAGEM(2,10, MensagemPresenter.class, "Mensagens", true),
 	DOCUMENTO(2,11, DocumentoPresenter.class, "Documentos", true),
 	LISTAGEM(2,14, ListagemPresenter.class, "Listagem de casais", true),
+	INTENCAOPROXIMOENCONTRO(2,30, ListagemSorteioPresenter.class, "Intenção de participação no próximo encontro", true),
 	RESTAURANTE_ENCONTRO(2,25, EncontroRestaurantePresenter.class, "Restaurantes do Encontro", true),
 	RESTAURANTE_DISTRIBUICAO(2,20, DistribuicaoRestaurantePresenter.class, "Distribuição dos Restaurantes", true),
 	SECRETARIA_RELATORIOS_ENCONTROS(2,26, EncontroRelatoriosSecretariaPresenter.class, "Relatórios do Encontro", true),

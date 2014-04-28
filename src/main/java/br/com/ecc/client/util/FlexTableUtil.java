@@ -311,6 +311,19 @@ public class FlexTableUtil {
 			}
 		}
 	}
+	public void removeRowSpecialStyle(Integer row, String style) {
+		HTMLTable.RowFormatter rf = tabela.getRowFormatter();
+		rf.removeStyleName(row, style);
+		for (Elemento elemento : listaElementos) {
+			if(elemento.getId().equals(row)){
+				if(elemento.getListaEstilos()==null){
+					elemento.setListaEstilos(new ArrayList<String>());
+				}
+				elemento.getListaEstilos().remove(style);
+				break;
+			}
+		}
+	}
 	
 	
 	public void setColumnVisible(int Col, boolean b){

@@ -9,11 +9,14 @@ import br.com.ecc.client.service.cadastro.CasalService;
 import br.com.ecc.core.mvp.infra.exception.WebException;
 import br.com.ecc.model.AgrupamentoMembro;
 import br.com.ecc.model.Casal;
+import br.com.ecc.model.CasalListaSorteio;
+import br.com.ecc.model.Encontro;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.Operacao;
 import br.com.ecc.model.tipo.TipoCasalEnum;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
+import br.com.ecc.model.tipo.TipoInscricaoEnum;
 import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.model.vo.CasalOpcaoRelatorioVO;
 import br.com.ecc.model.vo.CasalParamVO;
@@ -26,6 +29,7 @@ import br.com.ecc.server.command.CasalSalvarCommand;
 import br.com.ecc.server.command.UsuarioGerarPorPessoaCommand;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
+import br.com.ecc.server.command.basico.SaveEntityCommand;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -85,6 +89,14 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 				}
 			}
 			listaCasal = listaCasalLocal;
+		}
+		if(casalParamVO.getSituacao()!=null){
+			for (int i = 0; i < listaCasal.size(); i++) {
+				if(listaCasal.get(i).getSituacao()==null || !listaCasal.get(i).getSituacao().equals(casalParamVO.getSituacao())){
+					listaCasal.remove(i);
+					i--;
+				}
+			}
 		}
 		Collections.sort(listaCasal, new Comparator<Casal>() {
 			@Override
@@ -179,6 +191,89 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 		cmd.setListaCasal(listaCasal);
 		cmd.setCasalOpcaoRelatorioVO(casalOpcaoRelatorioVO);
 		return cmd.call();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CasalVO> listaSorteio(Encontro encontro) throws Exception {
+		List<CasalVO> lvo = new ArrayList<CasalVO>();
+		
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("casal.porGrupoAtivo");
+		cmd.addParameter("grupo", encontro.getGrupo());
+		List<Casal> listaCasal = cmd.call();
+
+		cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("casalListaSorteio.porEncontro");
+		cmd.addParameter("encontro", encontro);
+		List<CasalListaSorteio> lista = cmd.call();
+		
+
+		Encontro encontroAnterior = null;
+		cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("encontro.porGrupo");
+		cmd.addParameter("grupo", encontro.getGrupo());
+		List<Encontro> listaEncontro = cmd.call();
+		for (int i = 0; i < listaEncontro.size(); i++) {
+			if(listaEncontro.get(i).getId().equals(encontro.getId())){
+				if(i+1<=listaEncontro.size()){
+					encontroAnterior = listaEncontro.get(i+1);
+					break;
+				}
+			}
+		}
+		
+		if(encontroAnterior!=null){
+			cmd = injector.getInstance(GetEntityListCommand.class);
+			cmd.setNamedQuery("encontroInscricao.porEncontroConfirmados");
+			cmd.addParameter("encontro", encontroAnterior);
+			List<EncontroInscricao> listaE = cmd.call();
+			
+			CasalVO vo;
+			for (Casal casal : listaCasal) {
+				vo = new CasalVO();
+				vo.setCasal(casal);
+				lvo.add(vo);
+				for (EncontroInscricao encontroInscricao : listaE) {
+					if(encontroInscricao.getCasal()!=null && encontroInscricao.getCasal().getId().equals(casal.getId())){
+						vo.setUltimaParticipacao(encontroInscricao.getTipo());
+						break;
+					}
+				}
+				for (CasalListaSorteio cs : lista) {
+					if(cs.getCasal().getId().equals(casal.getId())){
+						vo.setCasalSorteio(cs);
+						break;
+					}
+				}
+			}
+		}
+		return lvo;
+	}
+
+	@Override
+	public CasalListaSorteio salvarSorteio(Encontro encontro, Casal casal, TipoInscricaoEnum tipo) throws Exception {
+		CasalListaSorteio cs = new CasalListaSorteio();
+		cs.setEncontro(encontro);
+		cs.setCasal(casal);
+		cs.setTipo(tipo);
+
+		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
+		cmd.setBaseEntity(cs);
+		return (CasalListaSorteio) cmd.call();
+		
+	}
+
+	@Override
+	public void excluirSorteio(CasalListaSorteio casal) throws Exception {
+		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
+		cmd.setBaseEntity(casal);
+		cmd.call();
+	}
+
+	@Override
+	public Integer imprimeListaSorteio(List<CasalListaSorteio> listaCasal) throws Exception {
+		return null;
 	}
 
 }
