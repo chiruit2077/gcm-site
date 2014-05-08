@@ -300,7 +300,12 @@ public class DadosPagamento extends Composite {
 					hp.add(excluir);
 				}
 			}else{
-				valorpago += pagamento.getValor().setScale(0, RoundingMode.HALF_UP).doubleValue();
+//				valorpago += pagamento.getValor().setScale(0, RoundingMode.HALF_UP).doubleValue()
+				if(entidadeEditada.getEncontroInscricao().getCodigo()!=null && pagamento.getValor().doubleValue()!=pagamento.getValor().setScale(0, RoundingMode.HALF_DOWN).doubleValue()){
+					valorpago += new BigDecimal(pagamento.getValor().doubleValue() - entidadeEditada.getEncontroInscricao().getCodigo().doubleValue()/100).setScale(0, RoundingMode.HALF_DOWN).doubleValue();
+				} else {
+					valorpago += pagamento.getValor().setScale(0, RoundingMode.HALF_DOWN).doubleValue();
+				}
 			}
 			dados[0] = hp;
 			if(pagamento.getParcela().equals(0)){
@@ -432,6 +437,7 @@ public class DadosPagamento extends Composite {
 	private void setCodigo(Integer codigo){
 		if(codigo!=null){
 			if(entidadeEditada.getListaPagamento().size()>0){
+				/*
 				double centavos = 0;
 				if(entidadeEditada.getEncontroInscricao().getCodigo()!=null){
 					centavos = entidadeEditada.getEncontroInscricao().getCodigo().intValue();
@@ -443,6 +449,7 @@ public class DadosPagamento extends Composite {
 						pagamento.setValor(new BigDecimal(valorParcela.doubleValue()+(centavos/100)));
 					}
 				}
+				*/
 				populaPagamentos();
 			}
 			codigoLabel.setText(codigo.toString());

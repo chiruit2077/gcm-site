@@ -139,7 +139,13 @@ public class EncontroInscricaoVO implements Serializable {
 						listPagamento.add(parcelaInscricao);
 					}
 			}else{
-
+				//suponho q a ultima parcela paga tenha sido paga por ultimo :)
+				for (EncontroInscricaoPagamento pagto : listPagamento) {
+					if(pagto.getDataPagamento()!=null){
+						hoje = pagto.getDataPagamento();
+						hoje.setMonth(hoje.getMonth()+1);
+					}
+				}
 				double valor = valorApagar / parcelasrestantes;
 
 				EncontroInscricaoPagamento p;
