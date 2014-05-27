@@ -282,7 +282,8 @@ public class PlanilhaPresenter extends BasePresenter<PlanilhaPresenter.Display> 
 
 	public boolean isCoordenador() {
 		boolean bco = false;
-		if(usuario.getNivel()!=null && usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(usuario.getNivel()!=null && usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				usuario.getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			bco = true;
 		}
 		if(!bco && getEncontroVO()!=null){

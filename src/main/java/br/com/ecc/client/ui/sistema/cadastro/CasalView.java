@@ -448,7 +448,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 
 	@UiHandler("salvarButton")
 	public void salvarButtonClickHandler(ClickEvent event){
-		if(!presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.NORMAL)){
 			if(eleRgTextBox.getValue()==null || eleRgTextBox.getValue().equals("")){
 				Window.alert("Informe o RG do homem");
 				return;
@@ -531,7 +531,8 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			novoButton.setVisible(false);
 		} else {
 			centralPanel.setVisible(true);
-			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+			   presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 				novoButton.setVisible(true);
 //				Button b = new Button("Redimensionar");
 //				b.addClickHandler(new ClickHandler() {
@@ -623,7 +624,8 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		musicaTextBox.setValue(casalVO.getCasal().getMusica());
 
 		salvarButton.setVisible(false);
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+			presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			situacaoHTMLPanel.setVisible(true);
 			salvarButton.setVisible(true);
 		} else {
@@ -776,7 +778,8 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 		Image editar, excluir;
 		HorizontalPanel hp;
 		boolean podeEditar = false;
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			podeEditar = true;
 		}
 		for (final Casal casal: lista) {

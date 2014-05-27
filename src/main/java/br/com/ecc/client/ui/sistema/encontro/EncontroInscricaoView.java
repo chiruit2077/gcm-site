@@ -321,7 +321,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		if(presenter.getDadosLoginVO().getUsuario()==null) return;
 		centralPanel.setVisible(false);
 		addDetalheImage.setVisible(false);
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			centralPanel.setVisible(true);
 			addDetalheImage.setVisible(true);
 		}
@@ -355,7 +356,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		entidadeEditada.getEncontroInscricao().setEncontro(presenter.getEncontroSelecionado());
 		entidadeEditada.getEncontroInscricao().setCasal(casalEditado);
 		entidadeEditada.getEncontroInscricao().setPessoa(pessoaEditada);
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			entidadeEditada.getEncontroInscricao().setTipo((TipoInscricaoEnum)ListBoxUtil.getItemSelected(tipoListBox, TipoInscricaoEnum.values()));
 		}
 		entidadeEditada.getEncontroInscricao().setCodigo(null);
@@ -464,7 +466,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		dataLimiteHTMLPanel.setVisible(false);
 		marcaPreenchimentoFichaCheckBox.setValue(false);
 
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			tabPanel.getTabWidget(1).getParent().setVisible(true);
 			dataLimiteHTMLPanel.setVisible(true);
 			tipoLabel.setVisible(false);
@@ -620,7 +623,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		});
 
 		boolean podeEditar = false;
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			podeEditar = true;
 		}
 
@@ -732,7 +736,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 				if((encontroInscricao.getTipoConfirmacao()!=null) && encontroInscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 					encontroInscricaoTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalGrayLineThrough");
 				}
-				if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+				if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+						presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 					if (encontroInscricaoVO.isAtualizaValores())
 						encontroInscricaoTableUtil.setRowSpecialStyle(row, "FlexTable-RowSpecialNormalRed");
 				}
@@ -914,7 +919,8 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 
 	public void populaDetalhes(List<EncontroInscricaoPagamentoDetalhe> lista, boolean atualiza) {
 		boolean podeEditar = false;
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			podeEditar = true;
 		}
 		detalheTableUtil.clearData();

@@ -75,7 +75,8 @@ public class EncontroInscricaoSalvarCommand implements Callable<EncontroInscrica
 		if(atualiza){
 			encontroInscricaoVO.getEncontroInscricao().setDataPrenchimentoFicha(new Date());
 		} else {
-			if (usuarioAtual.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) && encontroInscricaoVO.getEncontroInscricao().getId()!=null){
+			if ((usuarioAtual.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)  ||
+					usuarioAtual.getNivel().equals(TipoNivelUsuarioEnum.ROOT) ) && encontroInscricaoVO.getEncontroInscricao().getId()!=null){
 				if (encontroInscricaoVO.getEncontroInscricao().getCasal() != null &&
 					encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario() != null &&
 					encontroInscricaoVO.getEncontroInscricao().getMensagemDestinatario().getDataEnvio() != null &&

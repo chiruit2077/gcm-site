@@ -254,7 +254,8 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@Override
 	public void init(){
 		centralPanel.setVisible(false);
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			centralPanel.setVisible(true);
 		}
 	}
@@ -395,7 +396,8 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 			}
 		}
 		boolean podeEditar = false;
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			podeEditar = true;
 		}
 		if(convidador && !podeEditar){
@@ -514,7 +516,8 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	@Override
 	public void populaEntidades(List<EncontroConvite> lista) {
 		boolean podeEditar = false;
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			podeEditar = true;
 		}
 		boolean convidador = false;
@@ -850,7 +853,8 @@ public class EncontroConviteView extends BaseView<EncontroConvitePresenter> impl
 	public void populaTabelaFilas(List<EncontroFila> lista) {
 		LabelTotalUtil.setTotal(itemFilaTotal, lista.size(), "fila", "filas", "a");
 		boolean podeEditar = false;
-		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			podeEditar = true;
 		}
 

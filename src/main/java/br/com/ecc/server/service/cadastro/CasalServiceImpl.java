@@ -135,7 +135,8 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 	public CasalVO salva(CasalVO casalVO) throws Exception {
 		boolean ok = false;
 		Usuario usuario = SessionHelper.getUsuario(getThreadLocalRequest().getSession());
-		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) || 
+				usuario.getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			ok = true;
 		} else {
 			GetEntityListCommand cmdE = injector.getInstance(GetEntityListCommand.class);

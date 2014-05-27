@@ -35,7 +35,7 @@ public class CasalSalvarCommand implements Callable<CasalVO>{
 
 		//verificação de segurança pra que o tipo não seja alterado opr outro que não seja o administrador
 		usuario = em.find(Usuario.class, usuario.getId());
-		if(!usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.NORMAL)){
 			if(casal.getId()==null){
 				casal.setTipoCasal(TipoCasalEnum.CONVIDADO);
 			} else {
@@ -52,7 +52,9 @@ public class CasalSalvarCommand implements Callable<CasalVO>{
 		q.setMaxResults(1);
 		List<Casal> lista = q.getResultList();
 		if(lista.size()!=0){
-			if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) || casal.getId()==null || (casal.getId()!=null && casal.getId().equals(lista.get(0).getId()))){
+			if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) || 
+			   usuario.getNivel().equals(TipoNivelUsuarioEnum.ROOT) || 
+			   casal.getId()==null || (casal.getId()!=null && casal.getId().equals(lista.get(0).getId()))){
 				casal.setAtualizacaoCadastro(new Date());
 			}
 		}

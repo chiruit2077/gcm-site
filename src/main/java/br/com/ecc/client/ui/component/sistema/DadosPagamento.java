@@ -236,7 +236,8 @@ public class DadosPagamento extends Composite {
 
 		if(usuario==null) return ;
 		boolean podeEditar = false;
-		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+				usuario.getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 			podeEditar = true;
 		}
 

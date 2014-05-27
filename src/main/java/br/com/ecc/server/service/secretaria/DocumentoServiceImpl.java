@@ -7,8 +7,11 @@ import br.com.ecc.client.service.secretaria.DocumentoService;
 import br.com.ecc.model.Documento;
 import br.com.ecc.model.Encontro;
 import br.com.ecc.model.Grupo;
+import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.Operacao;
+import br.com.ecc.model.tipo.TipoNivelUsuarioEnum;
 import br.com.ecc.server.SecureRemoteServiceServlet;
+import br.com.ecc.server.SessionHelper;
 import br.com.ecc.server.auth.Permissao;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
 import br.com.ecc.server.command.basico.GetEntityCommand;
@@ -41,6 +44,12 @@ public class DocumentoServiceImpl extends SecureRemoteServiceServlet implements 
 		cmd.addParameter("grupo", grupo);
 		List<Documento> resultado = cmd.call();
 		
+		boolean editavelAdm = false;
+		Usuario usuario = SessionHelper.getUsuario(getThreadLocalRequest().getSession());
+		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
+			editavelAdm = true;
+		}
+		
 		Documento documento;
 		boolean ok;
 		for (Documento o : resultado) {
@@ -59,6 +68,10 @@ public class DocumentoServiceImpl extends SecureRemoteServiceServlet implements 
 				documento.setData(o.getData());
 				documento.setTipoDocumento(o.getTipoDocumento());
 				documento.setEncontro(o.getEncontro());
+				documento.setEditavel(o.getEditavel());
+				if(editavelAdm){
+					documento.setEditavel(true);
+				}
 				lista.add(documento);
 			}
 		}
@@ -70,6 +83,11 @@ public class DocumentoServiceImpl extends SecureRemoteServiceServlet implements 
 	@Override
 	@Permissao(nomeOperacao="Excluir documento", operacao=Operacao.EXCLUIR)
 	public void exclui(Documento documento) throws Exception {
+		GetEntityCommand cmdE = injector.getInstance(GetEntityCommand.class);
+		cmdE.setClazz(Documento.class);
+		cmdE.setId(documento.getId());
+		documento = (Documento) cmdE.call(); 
+		
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(documento);
 		cmd.call();
@@ -88,6 +106,16 @@ public class DocumentoServiceImpl extends SecureRemoteServiceServlet implements 
 		GetEntityCommand cmdE = injector.getInstance(GetEntityCommand.class);
 		cmdE.setClazz(Documento.class);
 		cmdE.setId(id);
-		return (Documento) cmdE.call();
+		Documento d = (Documento) cmdE.call();
+		
+		boolean editavelAdm = false;
+		Usuario usuario = SessionHelper.getUsuario(getThreadLocalRequest().getSession());
+		if(usuario.getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
+			editavelAdm = true;
+		}
+		if(editavelAdm){
+			d.setEditavel(true);
+		}
+		return d;
 	}
 }

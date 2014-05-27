@@ -53,7 +53,8 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 	private void montaMenu() {
 		MenuItem menuItem;
 
-		boolean administrador = presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR);
+		boolean administrador = presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+								presenter.getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT);
 		boolean convidado = (presenter.getCasal().getTipoCasal()==null) || presenter.getCasal().getTipoCasal().equals(TipoCasalEnum.CONVIDADO);
 
 		boolean publicacaoplanilha = presenter.getEncontroSelecionado().getDataPublicacaoPlanilha() != null;

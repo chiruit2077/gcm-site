@@ -1,6 +1,7 @@
 package br.com.ecc.model.tipo;
 
 public enum TipoNivelUsuarioEnum {
+	ROOT("Root"),
 	ADMINISTRADOR("Administrador"),
 	NORMAL("Normal");
 	

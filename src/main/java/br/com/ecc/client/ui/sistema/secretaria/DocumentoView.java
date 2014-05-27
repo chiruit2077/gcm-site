@@ -158,6 +158,7 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 	
 	
 	public void limpaCampos(){
+		documentoNaoEditavelVerticalPanel.clear();
 		tituloTextBox.setValue(null);
 		documentoRichTextArea.setHTML("");
 		tipoListBox.setSelectedIndex(0);
@@ -175,6 +176,8 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 	}
 
 	public void defineCampos(Documento documento){
+		documentoRichTextArea.setHTML("");
+		documentoNaoEditavelVerticalPanel.clear();
 		if(documento.getEditavel()!=null && documento.getEditavel()){
 			documentoEditavelVerticalPanel.setVisible(true);
 			documentoNaoEditavelVerticalPanel.setVisible(false);
@@ -221,6 +224,10 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 		for (final Documento documento: lista) {
 			Object dados[] = new Object[4];
 			
+			hp = new HorizontalPanel();
+			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			hp.setSpacing(1);
+			
 			editar = new Image("images/edit.png");
 			editar.setStyleName("portal-ImageCursor");
 			editar.addClickHandler(new ClickHandler() {
@@ -229,21 +236,21 @@ public class DocumentoView extends BaseView<DocumentoPresenter> implements Docum
 					edita(documento);
 				}
 			});
-			excluir = new Image("images/delete.png");
-			excluir.setStyleName("portal-ImageCursor");
-			excluir.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent arg0) {
-					if(Window.confirm("Deseja excluir este documento ?")){
-						presenter.excluir(documento);
-					}
-				}
-			});
-			hp = new HorizontalPanel();
-			hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			hp.setSpacing(1);
 			hp.add(editar);
-			hp.add(excluir);
+			
+			if(documento.getEditavel()!=null && documento.getEditavel()){
+				excluir = new Image("images/delete.png");
+				excluir.setStyleName("portal-ImageCursor");
+				excluir.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent arg0) {
+						if(Window.confirm("Deseja excluir este documento ?")){
+							presenter.excluir(documento);
+						}
+					}
+				});
+				hp.add(excluir);
+			}
 			
 			dados[0] = hp;
 			

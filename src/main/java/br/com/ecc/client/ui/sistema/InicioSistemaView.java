@@ -429,7 +429,8 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 				areaAniversarioHorizontalPanel.setVisible(true);
 				areaConvidadosVerticalPanel.setVisible(true);
 			}
-			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR)){
+			if(presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ADMINISTRADOR) ||
+					presenter.getDadosLoginVO().getUsuario().getNivel().equals(TipoNivelUsuarioEnum.ROOT)){
 				addAgendaButton.setVisible(true);
 			}
 			try {
