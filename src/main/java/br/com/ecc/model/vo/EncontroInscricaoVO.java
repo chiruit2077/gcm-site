@@ -94,25 +94,26 @@ public class EncontroInscricaoVO implements Serializable {
 				valorPago += pagamento.getValor().setScale(0, RoundingMode.DOWN).doubleValue();
 			}
 		}
-		int qtdeparcelapagas=0;
+		/*int qtdeparcelapagas=0;
 		for (EncontroInscricaoPagamento pagamento : listPagamento) {
 			qtdeparcelapagas++;
 			pagamento.setParcela(qtdeparcelapagas);
 		}
+		*/
 		double valorTotal = getEncontroInscricao().getValorEncontro().doubleValue();
 		double valorApagar = valorTotal - valorPago;
 
-		int parcelasrestantes = getQtdeparcelas() - qtdeparcelapagas;
+		int parcelasrestantes = getQtdeparcelas();
 
 		if (valorApagar > 0){
-			if (getMaxParcela() != null && parcelasrestantes+qtdeparcelapagas > getMaxParcela()){
-				parcelasrestantes = getMaxParcela()-qtdeparcelapagas;
-				setQtdeparcelas(qtdeparcelapagas + parcelasrestantes);
+			if (getMaxParcela() != null && parcelasrestantes > getMaxParcela()){
+				parcelasrestantes = getMaxParcela();
+				setQtdeparcelas(parcelasrestantes);
 
 			}
 			if (parcelasrestantes<0) {
 				parcelasrestantes = 1;
-				setQtdeparcelas(qtdeparcelapagas + 1);
+				setQtdeparcelas(1);
 			}
 			if (listPagamento.size()==0 && getQtdeparcelas().equals(1)){
 					if(getEncontroInscricao().getEncontro().getDataPagamentoInscricao()!=null){
@@ -140,19 +141,21 @@ public class EncontroInscricaoVO implements Serializable {
 					}
 			}else{
 				//suponho q a ultima parcela paga tenha sido paga por ultimo :)
+				/*
 				for (EncontroInscricaoPagamento pagto : listPagamento) {
 					if(pagto.getDataPagamento()!=null){
 						hoje = pagto.getDataPagamento();
 						hoje.setMonth(hoje.getMonth()+1);
 					}
-				}
+				} */
+				hoje = new Date();
 				double valor = valorApagar / parcelasrestantes;
 
 				EncontroInscricaoPagamento p;
 
 				BigDecimal valorParcela;
 				double total = 0;
-				for (int i = qtdeparcelapagas+1; i <= getQtdeparcelas(); i++) {
+				for (int i = 1; i <= getQtdeparcelas(); i++) {
 					if(getQtdeparcelas().equals(i)){
 						valorParcela = new BigDecimal(valorApagar-total);
 					} else {
@@ -165,7 +168,7 @@ public class EncontroInscricaoVO implements Serializable {
 					p.setEncontroInscricao(getEncontroInscricao());
 					p.setValorAlterado(false);
 
-					if (i==qtdeparcelapagas+1){
+					if (i==1){
 						if(hoje.getDate()>daybase){
 							hoje = new Date(hoje.getYear(), hoje.getMonth()+1, daybase);
 						} else {

@@ -225,6 +225,16 @@ public class DadosPagamento extends Composite {
 		Collections.sort(entidadeEditada.getListaPagamento(), new Comparator<EncontroInscricaoPagamento>() {
 			@Override
 			public int compare(EncontroInscricaoPagamento o1, EncontroInscricaoPagamento o2) {
+				Date d1=null, d2=null; 
+				if(o1.getDataPagamento()!=null) d1=o1.getDataPagamento();
+				if(o2.getDataPagamento()!=null) d2=o2.getDataPagamento();
+				if(d1!=null && d2!=null){
+					return o1.getDataPagamento().compareTo(o2.getDataPagamento());
+				} else if(d1!=null && d2==null){
+					return -1;
+				} else if(d2!=null && d1==null){
+					return -1;
+				}
 				return o1.getParcela().compareTo(o2.getParcela());
 			}
 		});
@@ -312,7 +322,9 @@ public class DadosPagamento extends Composite {
 			if(pagamento.getParcela().equals(0)){
 				dados[1] = "Inscrição";
 			} else {
-				dados[1] = pagamento.getParcela();
+				if(pagamento.getDataPagamento()==null){
+					dados[1] = pagamento.getParcela();
+				}
 			}
 			if(pagamento.getDataVencimento()!=null){
 				dados[2] = dfGlobal.format(pagamento.getDataVencimento());
@@ -331,7 +343,7 @@ public class DadosPagamento extends Composite {
 			valorcredito = valorpago - entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue();
 		if (entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue() > valorpago)
 			valorpagar = entidadeEditada.getEncontroInscricao().getValorEncontro().doubleValue() - valorpago;
-		entidadeEditada.setQtdeparcelas(row);
+		//entidadeEditada.setQtdeparcelas(row);
 		pagamentoTableUtil.applyDataRowStyles();
 		if (row>0){
 			ListBoxUtil.setItemSelected(parcelaListBox,row+"");
