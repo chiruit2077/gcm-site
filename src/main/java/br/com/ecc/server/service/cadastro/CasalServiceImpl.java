@@ -69,6 +69,15 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 				if(ok && ei.getCasal()!=null && ei.getTipoConfirmacao()!=null && ei.getTipoConfirmacao().equals(TipoConfirmacaoEnum.CONFIRMADO)){
 					listaCasal.add(ei.getCasal());
 				}
+				if(ok && ei.getPessoa()!=null && ei.getTipoConfirmacao()!=null && ei.getTipoConfirmacao().equals(TipoConfirmacaoEnum.CONFIRMADO)){
+					if(!ei.getTipo().equals(TipoInscricaoEnum.AFILHADO)){
+						Casal c = new Casal();
+						c.setEle(ei.getPessoa());
+						c.setTelefone(ei.getPessoa().getTelefone());
+						c.setTipoCasal(TipoCasalEnum.ENCONTRISTA);
+						listaCasal.add(c);
+					}
+				}
 			}
 
 		}  else {

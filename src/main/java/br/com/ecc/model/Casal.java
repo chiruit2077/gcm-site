@@ -127,20 +127,26 @@ public class Casal extends _WebBaseEntity {
 	}
 	public String getApelidos(String separador) {
 		String r = "";
-		if(ele.getApelido()!=null && !ele.getApelido().equals("")){
-			r += ele.getApelido();
-		} else {
-			r += ele.getNome();
+		if(ele!=null){
+			if(ele.getApelido()!=null && !ele.getApelido().equals("")){
+				r += ele.getApelido();
+			} else {
+				r += ele.getNome();
+			}
 		}
-		if(separador!=null){
-			r += " " + separador + " ";
-		} else {
-			r += " ";
+		if(!r.equals("") && ela!=null){
+			if(separador!=null){
+				r += " " + separador + " ";
+			} else {
+				r += " ";
+			}
 		}
-		if(ela.getApelido()!=null && !ela.getApelido().equals("")){
-			r += ela.getApelido();
-		} else {
-			r += ela.getNome();
+		if(ela!=null){
+			if(ela.getApelido()!=null && !ela.getApelido().equals("")){
+				r += ela.getApelido();
+			} else {
+				r += ela.getNome();
+			}
 		}
 		return r;
 	}
