@@ -89,7 +89,7 @@ public class EncontroInscricaoVO implements Serializable {
 		double valorPago = 0;
 		List<EncontroInscricaoPagamento> listPagamento = new ArrayList<EncontroInscricaoPagamento>();
 		for (EncontroInscricaoPagamento pagamento : getListaPagamento()) {
-			if(pagamento.getDataPagamento()!=null || pagamento.getValorAlterado()){
+			if(pagamento.getDataPagamento()!=null  /*|| pagamento.getValorAlterado() */ ){
 				listPagamento.add(pagamento);
 				valorPago += pagamento.getValor().setScale(0, RoundingMode.DOWN).doubleValue();
 			}
@@ -121,14 +121,12 @@ public class EncontroInscricaoVO implements Serializable {
 						parcelaInscricao.setDataVencimento(getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
 						parcelaInscricao.setEncontroInscricao(getEncontroInscricao());
 						parcelaInscricao.setValorAlterado(false);
-						parcelaInscricao.setParcela(1);
 						parcelaInscricao.setValor(new BigDecimal(getEncontroInscricao().getValorEncontro().doubleValue()+(centavos/100)));
 						listPagamento.add(parcelaInscricao);
 					}else{
 						parcelaInscricao = new EncontroInscricaoPagamento();
 						parcelaInscricao.setDataVencimento(getEncontroInscricao().getEncontro().getDataPagamentoInscricao());
 						parcelaInscricao.setEncontroInscricao(getEncontroInscricao());
-						parcelaInscricao.setParcela(1);
 						parcelaInscricao.setValorAlterado(false);
 						parcelaInscricao.setValor(new BigDecimal(getEncontroInscricao().getValorEncontro().doubleValue()+(centavos/100)));
 						if(hoje.getDate()>daybase){
@@ -179,7 +177,6 @@ public class EncontroInscricaoVO implements Serializable {
 					}
 					p.setDataVencimento(hoje);
 
-					p.setParcela(i);
 					p.setValor(new BigDecimal(valorParcela.doubleValue() + (centavos/100)));
 					listPagamento.add(p);
 				}

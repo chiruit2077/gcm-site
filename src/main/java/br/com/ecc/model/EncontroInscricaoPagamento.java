@@ -21,12 +21,12 @@ import javax.persistence.Version;
 @SequenceGenerator(name="SQ_FORMAPAGAMENTO", sequenceName="SQ_FORMAPAGAMENTO")
 @NamedQueries({
 	@NamedQuery(name="encontroInscricaoPagamento.porEncontroInscricao",
-		query="select u from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao order by u.parcela"),
+		query="select u from EncontroInscricaoPagamento u where u.encontroInscricao = :encontroInscricao order by u.dataVencimento asc"),
 	@NamedQuery(name="encontroInscricaoPagamento.listaPagamentosPorEncontro",
 		query="select u from EncontroInscricaoPagamento u " +
 			  "where u.encontroInscricao.encontro = :encontro and" +
 			  "      u.dataPagamento is not null " +
-			  "order by u.encontroInscricao.codigo, u.parcela"),
+			  "order by u.encontroInscricao.codigo, u.dataVencimento asc"),
 	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontro",
 		query="delete from EncontroInscricaoPagamento u where u.encontroInscricao in ( select a from EncontroInscricao a where a.encontro = :encontro ) and u.dataPagamento is null"),
 	@NamedQuery(name="encontroInscricaoPagamento.deletePorEncontroInscricao",
@@ -45,7 +45,7 @@ public class EncontroInscricaoPagamento extends _WebBaseEntity {
 	@JoinColumn(name="encontroInscricao")
 	private EncontroInscricao encontroInscricao;
 
-	private Integer parcela;
+	//private Integer parcela;
 
 	@Column(precision=15, scale=2)
 	private BigDecimal valor;
@@ -57,6 +57,8 @@ public class EncontroInscricaoPagamento extends _WebBaseEntity {
 	private Date dataPagamento;
 
 	private Boolean valorAlterado;
+	
+	private Boolean inscricao = false; 
 
 	@Version
 	private Integer version;
@@ -79,12 +81,12 @@ public class EncontroInscricaoPagamento extends _WebBaseEntity {
 	public void setEncontroInscricao(EncontroInscricao encontroInscricao) {
 		this.encontroInscricao = encontroInscricao;
 	}
-	public Integer getParcela() {
-		return parcela;
-	}
-	public void setParcela(Integer parcela) {
-		this.parcela = parcela;
-	}
+//	public Integer getParcela() {
+//		return parcela;
+//	}
+//	public void setParcela(Integer parcela) {
+//		this.parcela = parcela;
+//	}
 	public BigDecimal getValor() {
 		return valor;
 	}
@@ -109,5 +111,11 @@ public class EncontroInscricaoPagamento extends _WebBaseEntity {
 	}
 	public void setValorAlterado(Boolean valorAlterado) {
 		this.valorAlterado = valorAlterado;
+	}
+	public Boolean getInscricao() {
+		return inscricao;
+	}
+	public void setInscricao(Boolean inscricao) {
+		this.inscricao = inscricao;
 	}
 }

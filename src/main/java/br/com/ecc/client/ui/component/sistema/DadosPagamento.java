@@ -119,7 +119,7 @@ public class DadosPagamento extends Composite {
 		pagamentoTableUtil.initialize(pagamentoFlexTable);
 
 		pagamentoTableUtil.addColumn("", "40", HasHorizontalAlignment.ALIGN_CENTER);
-		pagamentoTableUtil.addColumn("Parcela", "50", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.NUMBER, null);
+		pagamentoTableUtil.addColumn("Tipo", "50", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.NUMBER, null);
 		pagamentoTableUtil.addColumn("Vencimento", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy");
 		pagamentoTableUtil.addColumn("Valor", "100", HasHorizontalAlignment.ALIGN_RIGHT, TipoColuna.NUMBER, null);
 		pagamentoTableUtil.addColumn("Pagamento", "80", HasHorizontalAlignment.ALIGN_CENTER, TipoColuna.DATE, "dd-MM-yyyy");
@@ -225,17 +225,15 @@ public class DadosPagamento extends Composite {
 		Collections.sort(entidadeEditada.getListaPagamento(), new Comparator<EncontroInscricaoPagamento>() {
 			@Override
 			public int compare(EncontroInscricaoPagamento o1, EncontroInscricaoPagamento o2) {
-				Date d1=null, d2=null; 
-				if(o1.getDataPagamento()!=null) d1=o1.getDataPagamento();
-				if(o2.getDataPagamento()!=null) d2=o2.getDataPagamento();
+				Date d1=o1.getDataPagamento(), d2=o2.getDataPagamento(); 
 				if(d1!=null && d2!=null){
 					return o1.getDataPagamento().compareTo(o2.getDataPagamento());
 				} else if(d1!=null && d2==null){
 					return -1;
 				} else if(d2!=null && d1==null){
-					return -1;
+					return 1;
 				}
-				return o1.getParcela().compareTo(o2.getParcela());
+				return o1.getDataVencimento().compareTo(o2.getDataVencimento());
 			}
 		});
 
@@ -292,7 +290,7 @@ public class DadosPagamento extends Composite {
 					hp.add(editar);
 				}
 
-				if((podeEditar || ok ) && !pagamento.getParcela().equals(0)){
+				if((podeEditar || ok ) && !pagamento.getInscricao()){
 					excluir = new Image("images/delete.png");
 					excluir.setTitle("Excluir esta parcela");
 					excluir.setStyleName("portal-ImageCursor");
@@ -319,11 +317,11 @@ public class DadosPagamento extends Composite {
 				}
 			}
 			dados[0] = hp;
-			if(pagamento.getParcela().equals(0)){
+			if(pagamento.getInscricao()){
 				dados[1] = "Inscrição";
 			} else {
 				if(pagamento.getDataPagamento()==null){
-					dados[1] = pagamento.getParcela();
+					dados[1] = "Parcela";
 				}
 			}
 			if(pagamento.getDataVencimento()!=null){
@@ -365,7 +363,7 @@ public class DadosPagamento extends Composite {
 		if(encontroInscricaoPagamento == null){
 			pagamentoEditada = new EncontroInscricaoPagamento();
 		} else {
-			if(encontroInscricaoPagamento.getParcela()==0){
+			if(encontroInscricaoPagamento.getInscricao()){
 				valorParcelaNumberTextBox.setEnabled(false);
 			} else {
 				valorParcelaNumberTextBox.setEnabled(true);
@@ -387,12 +385,10 @@ public class DadosPagamento extends Composite {
 	}
 
 	public void defineCamposPagamento(EncontroInscricaoPagamento encontroInscricaoPagamento){
-		if(encontroInscricaoPagamento.getParcela()!=null){
-			if(encontroInscricaoPagamento.getParcela().equals(0)){
-				parcelaLabel.setText("Inscrição");
-			} else {
-				parcelaLabel.setText(encontroInscricaoPagamento.getParcela().toString());
-			}
+		if(encontroInscricaoPagamento.getInscricao()){
+			parcelaLabel.setText("Inscrição");
+		} else {
+			parcelaLabel.setText("Parcela");
 		}
 		dataVencimentoDateBox.setValue(encontroInscricaoPagamento.getDataVencimento());
 		valorParcelaNumberTextBox.setNumber(encontroInscricaoPagamento.getValor());
@@ -407,7 +403,7 @@ public class DadosPagamento extends Composite {
 			Window.alert("A data dos vencimentos não pode exceder: " + dfGlobal.format(entidadeEditada.getEncontroInscricao().getEncontro().getDataMaximaPagamento()));
 			return;
 		}
-		if(pagamentoEditada.getParcela().equals(0)){
+		if(pagamentoEditada.getInscricao()){
 			if(dataVencimentoDateBox.getValue().after(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao())){
 				Window.alert("A data de vencimento da inscrição não pode exceder: " + dfGlobal.format(entidadeEditada.getEncontroInscricao().getEncontro().getDataPagamentoInscricao()));
 				return;

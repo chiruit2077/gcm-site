@@ -419,7 +419,7 @@ public class CasalView extends BaseView<CasalPresenter> implements CasalPresente
 			if(verificar){
 				dadosPagamento = false;
 				for (EncontroInscricaoPagamento pagamento : getEncontroInscricaoVO().getListaPagamento()) {
-					if(!pagamento.getParcela().equals(0)){
+					if(!pagamento.getInscricao()){
 						dadosPagamento = true;
 						break;
 					}

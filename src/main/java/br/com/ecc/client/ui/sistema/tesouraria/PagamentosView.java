@@ -3,6 +3,7 @@ package br.com.ecc.client.ui.sistema.tesouraria;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;
@@ -59,6 +60,7 @@ public class PagamentosView extends BaseView<PagamentosPresenter> implements Pag
 	@UiField Button salvarButton;
 	@UiField Button fecharButton;
 	@UiField Button novoButton;
+	@UiField Label pagadoLabel;
 	
 	
 	@UiField(provided=true) FlexTable pagamentoFlexTable;
@@ -152,9 +154,13 @@ public class PagamentosView extends BaseView<PagamentosPresenter> implements Pag
 		vencimentoLabel.setText(dfGlobal.format(pagamento.getDataVencimento()));
 		valorNumberTextBox.setNumber(pagamento.getValor());
 		pagamentoDateBox.setValue(pagamento.getDataPagamento());
+		pagadoLabel.setText(null);
+		if(pagamento.getDataPagamento()!=null){
+			pagadoLabel.setText("Parcela paga");
+		}
 		if(combos){
 			ListBoxUtil.setItemSelected(codigoListBox, pagamento.getEncontroInscricao().getCodigo().toString());
-			ListBoxUtil.setItemSelected(parcelaListBox, pagamento.getParcela().toString());
+			//ListBoxUtil.setItemSelected(parcelaListBox, pagamento.getParcela().toString());
 		}
 	}
 	
@@ -210,7 +216,7 @@ public class PagamentosView extends BaseView<PagamentosPresenter> implements Pag
 			} else {
 				dados[2] = pagamento.getEncontroInscricao().getPessoa().getNome();
 			}
-			dados[3] = pagamento.getParcela();
+			dados[3] = pagamento.getInscricao()?"Inscrição":"Parcela";
 			dados[4] = dfCurrency.format(pagamento.getValor());
 			dados[5] = dfGlobal.format(pagamento.getDataVencimento());
 			dados[6] = dfGlobal.format(pagamento.getDataPagamento());
@@ -263,10 +269,10 @@ public class PagamentosView extends BaseView<PagamentosPresenter> implements Pag
 		this.listaParcelas = listaPagamento;
 		parcelaListBox.clear();
 		for (EncontroInscricaoPagamento parcela : listaPagamento) {
-			if(parcela.getParcela().equals(0)){
-				parcelaListBox.addItem("Inscrição");
+			if(parcela.getInscricao()){
+				parcelaListBox.addItem("Inscrição", parcela.getId().toString());
 			} else {
-				parcelaListBox.addItem(parcela.getParcela().toString());
+				parcelaListBox.addItem(dfGlobal.format(parcela.getDataVencimento()), parcela.getId().toString());
 			}
 		}
 		parcelaListBoxChangeHandler(null);
@@ -274,19 +280,12 @@ public class PagamentosView extends BaseView<PagamentosPresenter> implements Pag
 	
 	@UiHandler("parcelaListBox")
 	public void parcelaListBoxChangeHandler(ChangeEvent event){
-		String parcela = parcelaListBox.getValue(parcelaListBox.getSelectedIndex());
-		Integer p = null;
-		if(parcela!=null && !parcela.equals("")){
-			if(parcela.equals("Inscrição")){
-				p = 0;
-			} else {
-				p = Integer.valueOf(parcela);
-			}
-			for (EncontroInscricaoPagamento pagamento : listaParcelas) {
-				if(pagamento.getParcela().equals(p)){
-					defineCampos(pagamento, false);
-					break;
-				}
+		pagadoLabel.setText(null);
+		String id = parcelaListBox.getValue(parcelaListBox.getSelectedIndex());
+		for (EncontroInscricaoPagamento pagamento : listaParcelas) {
+			if(pagamento.getId().toString().equals(id)){
+				defineCampos(pagamento, false);
+				break;
 			}
 		}
 	}

@@ -395,7 +395,7 @@ public class EncontroInscricaoView extends BaseView<EncontroInscricaoPresenter> 
 		if(verificar){
 			dadosPagamento = false;
 			for (EncontroInscricaoPagamento pagamento : entidadeEditada.getListaPagamento()) {
-				if(!pagamento.getParcela().equals(0)){
+				if(!pagamento.getInscricao()){
 					dadosPagamento = true;
 					break;
 				}
