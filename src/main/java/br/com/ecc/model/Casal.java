@@ -152,10 +152,10 @@ public class Casal extends _WebBaseEntity {
 	}
 	public String getEmails(String separador) {
 		String r = "", em="", am="";
-		if(ele.getEmail()!=null && !ele.getEmail().trim().equals("")){
+		if(ele!=null && ele.getEmail()!=null && !ele.getEmail().trim().equals("")){
 			em += ele.getEmail();
 		}
-		if(ela.getEmail()!=null && !ela.getEmail().trim().equals("")){
+		if(ela!=null && ela.getEmail()!=null && !ela.getEmail().trim().equals("")){
 			am += ela.getEmail();
 		}
 		if(!em.equals("") && !am.equals("")){
