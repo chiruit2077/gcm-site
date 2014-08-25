@@ -120,9 +120,15 @@ public class Casal extends _WebBaseEntity {
 	@Override
 	public String toString() {
 		String r = "";
-		r += ele.getNome();
-		r += " / ";
-		r += ela.getNome();
+		if(ele!=null){
+			r += ele.getNome();
+		}
+		if(!r.equals("")){
+			r += " / ";
+		}
+		if(ela!=null){
+			r += ela.getNome();
+		}
 		return r;
 	}
 	public String getApelidos(String separador) {

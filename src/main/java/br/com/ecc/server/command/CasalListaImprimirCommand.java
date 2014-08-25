@@ -34,6 +34,7 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 		Map<String, Object> parametros = new HashMap<String, Object>();
 		parametros.put("titulo", casalOpcaoRelatorioVO.getTitulo());
 		
+		String none ="-";
 		List<CasalItemVO> dadosRelatorio = new ArrayList<CasalItemVO>();
 		CasalItemVO voEle, voEla;
 		List<String> dadosItemEle = new ArrayList<String>();
@@ -42,154 +43,231 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 		String valorCampo;
 		int item = 0;
 		for (Casal casal : listaCasal) {
+			System.out.println(casal.toString());
 			dadosItemEle = new ArrayList<String>();
 			dadosItemEla = new ArrayList<String>();
 			titulos = new ArrayList<String>();
 			
-			if(casalOpcaoRelatorioVO.getEmail()){
+			if(casalOpcaoRelatorioVO.getEmail()!=null && casalOpcaoRelatorioVO.getEmail()){
 				titulos.add("Email");
-				dadosItemEle.add(casal.getEle().getEmail());
-				dadosItemEla.add(casal.getEla().getEmail());
+				if(casal.getEle()!=null){
+					dadosItemEle.add(casal.getEle().getEmail());
+				} else {
+					dadosItemEle.add(none);
+				}
+				if(casal.getEla()!=null){
+					dadosItemEla.add(casal.getEla().getEmail());
+				}else {
+					dadosItemEla.add(none);
+				}
 			}
-			if(casalOpcaoRelatorioVO.getEndereco()){
+			if(casalOpcaoRelatorioVO.getEndereco()!=null && casalOpcaoRelatorioVO.getEndereco()){
 				titulos.add("Endereço");
 				dadosItemEle.add(casal.getEndereco());
 				dadosItemEla.add(casal.getBairro() + " - " + casal.getCidade() + " " + casal.getEstado());
 			}
-			if(casalOpcaoRelatorioVO.getTelefone()){
+			if(casalOpcaoRelatorioVO.getTelefone()!=null && casalOpcaoRelatorioVO.getTelefone()){
 				titulos.add("Telefone");
 				valorCampo = "";
-				if(casal.getEle().getTelefone()!=null && !casal.getEle().getTelefone().equals("")){
-					valorCampo = casal.getEle().getTelefone() + " ";
-				}
-				if(casal.getEle().getTelefoneCelular()!=null && !casal.getEle().getTelefoneCelular().equals("")){
-					valorCampo += "Cel: " + casal.getEle().getTelefoneCelular();
+				if(casal.getEle()!=null){
+					if(casal.getEle().getTelefone()!=null && !casal.getEle().getTelefone().equals("")){
+						valorCampo = casal.getEle().getTelefone() + " ";
+					}
+					if(casal.getEle().getTelefoneCelular()!=null && !casal.getEle().getTelefoneCelular().equals("")){
+						valorCampo += "Cel: " + casal.getEle().getTelefoneCelular();
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEle.add(valorCampo);
 				
 				valorCampo = "";
-				if(casal.getEla().getTelefone()!=null && !casal.getEla().getTelefone().equals("")){
-					valorCampo = casal.getEla().getTelefone() + " ";
-				}
-				if(casal.getEla().getTelefoneCelular()!=null && !casal.getEla().getTelefoneCelular().equals("")){
-					valorCampo += "Cel: " + casal.getEla().getTelefoneCelular();
+				if(casal.getEla()!=null){
+					if(casal.getEla().getTelefone()!=null && !casal.getEla().getTelefone().equals("")){
+						valorCampo = casal.getEla().getTelefone() + " ";
+					}
+					if(casal.getEla().getTelefoneCelular()!=null && !casal.getEla().getTelefoneCelular().equals("")){
+						valorCampo += "Cel: " + casal.getEla().getTelefoneCelular();
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEla.add(valorCampo);
 			}
 			
-			if(casalOpcaoRelatorioVO.getDocumento()){
+			if(casalOpcaoRelatorioVO.getDocumento()!=null && casalOpcaoRelatorioVO.getDocumento()){
 				titulos.add("Documento");
 				valorCampo = "";
-				if(casal.getEle().getRg()!=null && !casal.getEle().getRg().equals("")){
-					valorCampo = "RG: " + casal.getEle().getRg();
-				}
-				if(casal.getEle().getExpedidor()!=null  && !casal.getEle().getExpedidor().equals("")){
-					valorCampo += " " + casal.getEle().getExpedidor();
-				}
-				if(casal.getEle().getCpf()!=null && !casal.getEle().getCpf().equals("")){
-					valorCampo += "\nCPF: " + casal.getEle().getCpf();
+				if(casal.getEle()!=null){
+					if(casal.getEle().getRg()!=null && !casal.getEle().getRg().equals("")){
+						valorCampo = "RG: " + casal.getEle().getRg();
+					}
+					if(casal.getEle().getExpedidor()!=null  && !casal.getEle().getExpedidor().equals("")){
+						valorCampo += " " + casal.getEle().getExpedidor();
+					}
+					if(casal.getEle().getCpf()!=null && !casal.getEle().getCpf().equals("")){
+						valorCampo += "\nCPF: " + casal.getEle().getCpf();
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEle.add(valorCampo);
-
+				
+				
 				valorCampo = "";
-				if(casal.getEla().getRg()!=null &&  !casal.getEla().getRg().equals("")){
-					valorCampo = "RG: " + casal.getEla().getRg();
-				}
-				if(casal.getEla().getExpedidor()!=null  && !casal.getEla().getExpedidor().equals("")){
-					valorCampo += " " + casal.getEla().getExpedidor();
-				}
-				if(casal.getEla().getCpf()!=null && !casal.getEla().getCpf().equals("")){
-					valorCampo += "\nCPF: " + casal.getEla().getCpf();
+				if(casal.getEla()!=null){
+					if(casal.getEla().getRg()!=null &&  !casal.getEla().getRg().equals("")){
+						valorCampo = "RG: " + casal.getEla().getRg();
+					}
+					if(casal.getEla().getExpedidor()!=null  && !casal.getEla().getExpedidor().equals("")){
+						valorCampo += " " + casal.getEla().getExpedidor();
+					}
+					if(casal.getEla().getCpf()!=null && !casal.getEla().getCpf().equals("")){
+						valorCampo += "\nCPF: " + casal.getEla().getCpf();
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEla.add(valorCampo);
 			}
-			if(casalOpcaoRelatorioVO.getApelido()){
+			if(casalOpcaoRelatorioVO.getApelido()!=null && casalOpcaoRelatorioVO.getApelido()){
 				titulos.add("Apelido");
-				dadosItemEle.add(casal.getEle().getApelido());
-				dadosItemEla.add(casal.getEla().getApelido());
+				if(casal.getEle()!=null){
+					dadosItemEle.add(casal.getEle().getApelido());
+				} else {
+					dadosItemEle.add(none);
+				}
+				if(casal.getEla()!=null){
+					dadosItemEla.add(casal.getEla().getApelido());
+				} else {
+					dadosItemEla.add(none);
+				}
 			}
 			if(casalOpcaoRelatorioVO.getTipo()){
 				titulos.add("Tipo");
-				dadosItemEle.add(casal.getTipoCasal().getNome());
+				if(casal.getTipoCasal()!=null){
+					dadosItemEle.add(casal.getTipoCasal().getNome());
+				}
 				dadosItemEla.add(null);
 			}
 			
-			if(casalOpcaoRelatorioVO.getAlergia()){
+			if(casalOpcaoRelatorioVO.getAlergia()!=null && casalOpcaoRelatorioVO.getAlergia()){
 				titulos.add("Alérgico");
 				valorCampo = "";
-				if(casal.getEle().getAlergico()!=null){
-					if(casal.getEle().getAlergico()){
-						valorCampo = "Sim";
-						if(casal.getEle().getAlergia()!=null){
-							valorCampo += ": " + casal.getEle().getAlergia();
+				if(casal.getEle()!=null){
+					if(casal.getEle().getAlergico()!=null){
+						if(casal.getEle().getAlergico()){
+							valorCampo = "Sim";
+							if(casal.getEle().getAlergia()!=null){
+								valorCampo += ": " + casal.getEle().getAlergia();
+							}
+						} else {
+							valorCampo = "Não";
 						}
-					} else {
-						valorCampo = "Não";
 					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEle.add(valorCampo);
 				
 				valorCampo = "";
-				if(casal.getEla().getAlergico()!=null){
-					if(casal.getEla().getAlergico()){
-						valorCampo = "Sim";
-						if(casal.getEla().getAlergia()!=null){
-							valorCampo += ": " + casal.getEla().getAlergia();
+				if(casal.getEla()!=null){
+					if(casal.getEla().getAlergico()!=null){
+						if(casal.getEla().getAlergico()){
+							valorCampo = "Sim";
+							if(casal.getEla().getAlergia()!=null){
+								valorCampo += ": " + casal.getEla().getAlergia();
+							}
+						} else {
+							valorCampo = "Não";
 						}
-					} else {
-						valorCampo = "Não";
 					}
-				}
-				dadosItemEla.add(valorCampo);
-			}
-			if(casalOpcaoRelatorioVO.getVegetariano()){
-				titulos.add("Veget.");
-				valorCampo = "Não";
-				if(casal.getEle().getVegetariano()!=null && casal.getEle().getVegetariano()){
-					valorCampo = "Sim";
-				}
-				dadosItemEle.add(valorCampo);
-
-				valorCampo = "Não";
-				if(casal.getEla().getVegetariano()!=null && casal.getEla().getVegetariano()){
-					valorCampo = "Sim";
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEla.add(valorCampo);
 			}
 			
-			if(casalOpcaoRelatorioVO.getDiabetico()){
-				titulos.add("Diabético");
+			if(casalOpcaoRelatorioVO.getVegetariano()!=null && casalOpcaoRelatorioVO.getVegetariano()){
+				titulos.add("Veget.");
 				valorCampo = "Não";
-				if(casal.getEle().getDiabetico()!=null && casal.getEle().getDiabetico()){
-					valorCampo = "Sim";
+				if(casal.getEle()!=null){
+					if(casal.getEle().getVegetariano()!=null && casal.getEle().getVegetariano()){
+						valorCampo = "Sim";
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEle.add(valorCampo);
 
 				valorCampo = "Não";
-				if(casal.getEla().getDiabetico()!=null && casal.getEla().getDiabetico()){
-					valorCampo = "Sim";
+				if(casal.getEla()!=null){
+					if(casal.getEla().getVegetariano()!=null && casal.getEla().getVegetariano()){
+						valorCampo = "Sim";
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEla.add(valorCampo);
 			}
-			if(casalOpcaoRelatorioVO.getHipertenso()){
-				titulos.add("Hipertenso");
+			
+			if(casalOpcaoRelatorioVO.getDiabetico()!=null && casalOpcaoRelatorioVO.getDiabetico()){
+				titulos.add("Diabético");
 				valorCampo = "Não";
-				if(casal.getEle().getDiabetico()!=null && casal.getEle().getHipertenso()){
-					valorCampo = "Sim";
+				if(casal.getEle()!=null){
+					if(casal.getEle().getDiabetico()!=null && casal.getEle().getDiabetico()){
+						valorCampo = "Sim";
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEle.add(valorCampo);
 
 				valorCampo = "Não";
-				if(casal.getEla().getDiabetico()!=null && casal.getEla().getHipertenso()){
-					valorCampo = "Sim";
+				if(casal.getEla()!=null){
+					if(casal.getEla().getDiabetico()!=null && casal.getEla().getDiabetico()){
+						valorCampo = "Sim";
+					}
+				} else {
+					valorCampo = none;
+				}
+				dadosItemEla.add(valorCampo);
+			}
+			if(casalOpcaoRelatorioVO.getHipertenso()!=null && casalOpcaoRelatorioVO.getHipertenso()){
+				titulos.add("Hipertenso");
+				valorCampo = "Não";
+				if(casal.getEle()!=null){
+					if(casal.getEle().getDiabetico()!=null && casal.getEle().getHipertenso()){
+						valorCampo = "Sim";
+					}
+				} else {
+					valorCampo = none;
+				}
+				dadosItemEle.add(valorCampo);
+
+				valorCampo = "Não";
+				if(casal.getEla()!=null){
+					if(casal.getEla().getDiabetico()!=null && casal.getEla().getHipertenso()){
+						valorCampo = "Sim";
+					}
+				} else {
+					valorCampo = none;
 				}
 				dadosItemEla.add(valorCampo);
 			}
 			
 			voEle = new CasalItemVO();
 			voEla = new CasalItemVO();
-			voEle.setNome(casal.getEle().getNome());
-			voEla.setNome(casal.getEla().getNome());
+			if(casal.getEle()!=null){
+				voEle.setNome(casal.getEle().getNome());
+			} else {
+				voEle.setNome(none);
+			}
+			if(casal.getEla()!=null){
+				voEla.setNome(casal.getEla().getNome());
+			} else {
+				voEla.setNome(none);
+			}
 			voEle.setItem(item);
 			voEla.setItem(item);
 			int i=0;
