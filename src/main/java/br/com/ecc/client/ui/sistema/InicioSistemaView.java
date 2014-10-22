@@ -30,6 +30,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
@@ -86,21 +90,11 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField Image casalImage;
 	@UiField Label casalLabel;
 	@UiField FlowPanel convidadosFlowPanel;
-//	@UiField VerticalPanel recadosVerticalPanel;
-//	@UiField FlowPanel recadosFlowPanel;
-//	@UiField Anchor verLidosAnchor;
-//	@UiField Anchor esconderLidosAnchor;
-	// @UiField VerticalPanel areaRecadoVerticalPanel;
 	@UiField VerticalPanel areaAgendaVerticalPanel;
 	@UiField VerticalPanel areaInfoVerticalPanel;
 	@UiField HorizontalPanel areaAniversarioHorizontalPanel;
 	
 	
-//	@UiField VerticalPanel areaEventosVerticalPanel;
-//	@UiField Anchor addEventoAnchor;
-//	@UiField FlowPanel eventosFlowPanel;
-//	@UiField VerticalPanel eventosVerticalPanel;
-
 	@UiField DialogBox editaAgendaDialogBox;
 	@UiField Calendar agendaCalendar;
 	@UiField Button semanalButton;
@@ -121,33 +115,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField(provided = true) SuggestBox casalResponsavelSuggestBox;
 	private final GenericEntitySuggestOracle casalResponsavelSuggest = new GenericEntitySuggestOracle();
 	
-//	@UiField DialogBox editaEventoDialogBox;
-//	@UiField TextBox descricaoEventoTextBox;
-//	@UiField FlowPanel fotosFlowPanel;
-//	@UiField VerticalPanel fotosEventosVerticalPanel;
-//	
-//	@UiField DialogBox imageDialogBox;
-//	@UiField UploadImagePreview uploadImagePreview;
-//	@UiField Button selecionarUploadButton;
-//	@UiField Button aceitarUploadButton;
-//	@UiField Button cancelarUploadButton;
-
-
-//	@UiField DialogBox editaDialogBox;
-//	@UiField HTMLPanel tipoHTMLPanel;
-//	@UiField(provided=true) RichTextArea mensagemRichTextArea;
-//	@UiField(provided=true) RichTextToolbar mensagemRichTextToolbar;
-//
-//	@UiField Image casalRecadoImage;
-//	@UiField(provided = true) SuggestBox casalSuggestBox;
-//	private final GenericEntitySuggestOracle casalSuggest = new GenericEntitySuggestOracle();
-//	@UiField Label casalRecadoLabel;
-//	@UiField ListBox tipoLitBox;
-//
-//	@UiField DialogBox todosDialogBox;
-//	@UiField FlowPanel formularioFlowPanel;
-//	@UiField VerticalPanel recadosTodosVerticalPanel;
-
 	@UiField VerticalPanel aniversarioPessoaVerticalPanel;
 	@UiField VerticalPanel aniversarioCasalVerticalPanel;
 	@UiField FlowPanel aniversarioPessoaFlowPanel;
@@ -155,6 +122,14 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	@UiField VerticalPanel areaConvidadosVerticalPanel;
 	@UiField VerticalPanel convidadosVerticalPanel;
+	
+	//apresentcacao
+	@UiField DialogBox apresentacaoDialogBox;
+	@UiField Image casalApresentacaoImage;
+	@UiField Label casalApresentacaoLabel;
+	@UiField Image casalPadrinhoImage;
+	@UiField Label casalPadrinhoLabel;
+	@UiField TextBox keyTextBox;
 
 	private Recado entidadeEditada;
 	private Agenda entidadeAgendaEditada;
@@ -162,18 +137,11 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	DateTimeFormat dfNiver = DateTimeFormat.getFormat("E, dd-MMM");
 	Date ultimoRecado = null;
 	Boolean imagemLida=false, aniversariantesLidos=false;
+	
+	private List<Casal> listaConvidados = new ArrayList<Casal>();
 
 	@SuppressWarnings("deprecation")
 	public InicioSistemaView() {
-		/*
-		casalSuggest.setMinimoCaracteres(2);
-		casalSuggest.setSuggestQuery("casal.porNomeLike");
-		casalSuggestBox = new SuggestBox(casalSuggest);
-
-		mensagemRichTextArea = new RichTextArea();
-		mensagemRichTextToolbar = new RichTextToolbar(mensagemRichTextArea);
-		 */
-		
 		casalResponsavelSuggest.setMinimoCaracteres(2);
 		casalResponsavelSuggest.setSuggestQuery("casal.porNomeLike");
 		casalResponsavelSuggestBox = new SuggestBox(casalResponsavelSuggest);
@@ -182,46 +150,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 		ListBoxUtil.populate(tipoAgendaLitBox, false, TipoAgendaEventoEnum.values());
 		
-		/*
-		ListBoxUtil.populate(tipoLitBox, false, TipoRecadoEnum.values());
-
-		casalSuggestBox.addSelectionHandler(new SelectionHandler<GenericEntitySuggestOracle.Suggestion>() {
-			@Override
-			public void onSelection(SelectionEvent<Suggestion> event) {
-				casalRecadoImage.setUrl("");
-				if(!casalSuggestBox.getValue().equals("")){
-					Casal casal = (Casal)ListUtil.getEntidadePorNome(casalSuggest.getListaEntidades(), casalSuggestBox.getValue());
-					if(casal.getTipoCasal().equals(TipoCasalEnum.CONVIDADO)){
-						Window.alert("Este é um casal convidado e não pode receber recados");
-						casalSuggestBox.setValue(null);
-						casalSuggest.setListaEntidades(new ArrayList<_WebBaseEntity>());
-						casalRecadoImage.setUrl("");
-						casalSuggestBox.setFocus(true);
-						return;
-					} else {
-						if(casal.getIdArquivoDigital()!=null){
-							casalRecadoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?thumb=true&id="+casal.getIdArquivoDigital()));
-						}
-					}
-				}
-			}
-		});
-		casalSuggestBox.addValueChangeHandler(new ValueChangeHandler<String>() {
-			@Override
-			public void onValueChange(ValueChangeEvent<String> arg0) {
-				if(casalSuggestBox.getValue().equals("")){
-					casalRecadoImage.setUrl("");
-				}
-			}
-		});
-		casalImage.addLoadHandler(new LoadHandler() {
-			@Override
-			public void onLoad(LoadEvent arg0) {
-				defineTamanho();
-			}
-		});
-		*/
-
 		Window.enableScrolling(false);
 
 		Date hoje = new Date();
@@ -261,19 +189,66 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		agendaCalendar.setSettings(settings);
 		agendaCalendar.setDate(hoje);
 		agendaCalendar.scrollToHour(hoje.getHours());
+		
+		keyTextBox.addDomHandler(new KeyDownHandler() {
+		    @Override
+		    public void onKeyDown(KeyDownEvent event) {
+		        switch (event.getNativeKeyCode()) {
+		        case KeyCodes.KEY_ENTER: 
+		        	apresentaProximo(true);
+		        	break;
+		        case KeyCodes.KEY_RIGHT: 
+		        	apresentaProximo(true);
+		        	break;
+		        case KeyCodes.KEY_DOWN: 
+		        	apresentaProximo(true);
+		        	break;
+		        	
+		        case KeyCodes.KEY_LEFT: 
+		        	apresentaProximo(false);
+		        	break;
+		        case KeyCodes.KEY_UP: 
+		        	apresentaProximo(false);
+		        	break;
+		        case KeyCodes.KEY_ESCAPE: 
+		        	apresentacaoDialogBox.hide();
+		        	break;
+		        }
+		    }
 
-
-//		Window.addResizeHandler(new ResizeHandler() {
-//            public void onResize(ResizeEvent event) {
-//                resizeTimer.schedule(500);
-//            }
-//        });
-
-//		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-//            public void execute() {
-//            	resizeTimer.schedule(500);
-//            }
+		}, KeyDownEvent.getType());
+		ClickHandler ch = new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent arg0) {
+				keyTextBox.setFocus(true);
+			}
+		};
+		casalApresentacaoImage.addClickHandler(ch);
+		casalPadrinhoImage.addClickHandler(ch);
+		casalApresentacaoImage.addLoadHandler(new LoadHandler() {
+			@Override
+			public void onLoad(LoadEvent arg0) {
+				casalApresentacaoImage.setWidth("auto");
+				casalApresentacaoImage.setHeight((getWindowHeight()-40)+"px");
+				/*
+				if(casalApresentacaoImage.getWidth()>casalApresentacaoImage.getHeight()){
+					casalApresentacaoImage.setWidth((getWindowWidth()-20)+"px");
+					casalApresentacaoImage.setHeight("auto");
+				} else {
+					casalApresentacaoImage.setWidth("auto");
+					casalApresentacaoImage.setHeight((getWindowHeight()-40)+"px");
+				}
+				*/
+				//casalApresentacaoImage.setVisible(true);
+			}
+		});
+//		casalPadrinhoImage.addLoadHandler(new LoadHandler() {
+//			@Override
+//			public void onLoad(LoadEvent arg0) {
+//				//casalPadrinhoImage.setVisible(true);
+//			}
 //		});
+
 	}
 
 	public Agenda getAgenda(String id) {
@@ -284,44 +259,57 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		return null;
 	}
 
-	/*
-	private int height = -1;
-	private int width = -1;
-
-	private Timer resizeTimer = new Timer() {
-        @Override
-        public void run() {
-//        	int ajusteHeight=110;
-            int newHeight = (int) (InicioSistemaView.this.getWindowHeight()*0.85);
-            int newWidth = (int) (InicioSistemaView.this.getWindowWidth()-620);
-            //967px
-            if (newHeight != height || newWidth != width) {
-            	height = newHeight;
-            	width = newWidth;
-            	areaAgendaVerticalPanel.setWidth(width+"px");
-            	areaAgendaVerticalPanel.setHeight(height + "px");
-                agendaCalendar.setHeight(height+"px");
-                agendaCalendar.setWidth(width+"px");
-                agendaCalendar.doSizing();
-                agendaCalendar.doLayout();
-//                areaRecadoVerticalPanel.setWidth(width+"px");
-//                areaRecadoVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
-                
-//                areaEventosVerticalPanel.setWidth(width+"px");
-//                areaEventosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
-                
-//                recadosVerticalPanel.setWidth((width-5)+"px");
-//                recadosVerticalPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
-//                recadosFlowPanel.setWidth((width-5)+"px");
-//        		recadosFlowPanel.setHeight(((InicioSistemaView.this.getWindowHeight()-height)-ajusteHeight) + "px");
-            }
-        }
-    };
-	 */
-
 	private MapWidget googleMap;
 
-
+	@UiHandler("apresenterConvidadosButton")
+	public void apresenterConvidadosButtonButtonClickHandler(ClickEvent event){
+		apresentacaoDialogBox.setHeight((getWindowHeight()-10)+"px");
+		apresentacaoDialogBox.setWidth((getWindowWidth()-10)+"px");
+		apresentacaoDialogBox.center();
+		apresentacaoDialogBox.setPopupPosition(5, 5);
+		apresentacaoDialogBox.show();
+		indiceApresentacao = 0;
+		apresentaCasal();
+	}
+	
+	Integer indiceApresentacao = 0;
+	public void apresentaProximo(boolean avanca){
+		if(avanca){
+			indiceApresentacao++;
+		} else {
+			indiceApresentacao--;
+		}
+		if(indiceApresentacao<0){
+			indiceApresentacao=0;
+		} else if (indiceApresentacao>=listaConvidados.size()){
+			indiceApresentacao=listaConvidados.size()-1;
+		}
+		apresentaCasal();
+	}
+	
+	private void apresentaCasal(){
+		Casal casal = listaConvidados.get(indiceApresentacao);
+//		casalApresentacaoImage.setVisible(false);
+//		casalPadrinhoImage.setVisible(false);
+		if(casal!=null){
+			if(casal.getIdArquivoDigital()!=null){
+				casalApresentacaoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + casal.getIdArquivoDigital()));
+			} else {
+				casalApresentacaoImage.setUrl("images/casal.jpg");
+			}
+			casalApresentacaoLabel.setText(casal.getApelidos("e"));
+			if(casal.getCasalPadrinho()!=null){
+				if(casal.getCasalPadrinho().getIdArquivoDigital()!=null){
+					casalPadrinhoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + casal.getCasalPadrinho().getIdArquivoDigital()));
+				} else {
+					casalPadrinhoImage.setUrl("images/casal.jpg");
+				}
+				casalPadrinhoLabel.setText(casal.getCasalPadrinho().getApelidos("e"));
+			}
+		}
+		keyTextBox.setFocus(true);
+	}
+	
 	@UiHandler("semanalButton")
 	public void semanalButtonClickHandler(ClickEvent event){
 		agendaCalendar.setView(CalendarViews.DAY, 7);
@@ -503,291 +491,10 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		};
 		resizeTimer.schedule(1000);
 	}
-/*
-	@Override
-	public void populaRecados(List<Recado> listaRecados) {
-		populaObjetoRecados(listaRecados, recadosVerticalPanel, true);
-	}
-	@UiHandler("addRecadoAnchor")
-	public void addRecadoAnchorClickHandler(ClickEvent event){
-		if(presenter.getDadosLoginVO().getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
-			edita(null);
-		}
-	}
-	@UiHandler("verLidosAnchor")
-	public void verLidosAnchorClickHandler(ClickEvent event){
-		esconderLidosAnchor.setVisible(true);
-		verLidosAnchor.setVisible(false);
-		presenter.setVerTodos(true);
-		presenter.lista(false);
-	}
-	@UiHandler("esconderLidosAnchor")
-	public void esconderLidosAnchorClickHandler(ClickEvent event){
-		esconderLidosAnchor.setVisible(false);
-		verLidosAnchor.setVisible(true);
-		presenter.setVerTodos(false);
-		presenter.lista(false);
-	}
 
-	public void edita(Recado recado){
-		limpaCampos();
-		if(recado==null){
-			entidadeEditada = new Recado();
-			casalSuggestBox.setVisible(true);
-			casalRecadoLabel.setVisible(false);
-			tipoHTMLPanel.setVisible(true);
-		} else {
-			entidadeEditada = recado;
-			casalSuggestBox.setText(recado.getCasal().toString());
-			casalRecadoLabel.setText(recado.getCasal().toString());
-			casalSuggestBox.setVisible(false);
-			casalSuggest.setListaEntidades(new ArrayList<_WebBaseEntity>());
-			casalSuggest.getListaEntidades().add(recado.getCasal());
-			casalRecadoLabel.setVisible(true);
-			if(recado.getCasal().getIdArquivoDigital()!=null){
-				casalRecadoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?id="+recado.getCasal().getIdArquivoDigital()));
-			}
-			tipoHTMLPanel.setVisible(false);
-		}
-		editaDialogBox.center();
-		editaDialogBox.show();
-		mensagemRichTextArea.setFocus(true);
-		casalSuggestBox.setFocus(true);
-	}
-
-	@UiHandler("fecharButton")
-	public void fecharButtonClickHandler(ClickEvent event){
-		editaDialogBox.hide();
-	}
-	@UiHandler("enviarButton")
-	public void enviarButtonClickHandler(ClickEvent event){
-		Casal casal = null;
-		if(!casalSuggestBox.getValue().equals("")){
-			casal = (Casal)ListUtil.getEntidadePorNome(casalSuggest.getListaEntidades(), casalSuggestBox.getValue());
-		}
-		if(casal==null){
-			Window.alert("Informe o nome do casal ao que deseja enviar o recado");
-			casalSuggestBox.setFocus(true);
-			return;
-		}
-		entidadeEditada.setCasal(casal);
-		entidadeEditada.setCasalOrigem(presenter.getDadosLoginVO().getCasal());
-		entidadeEditada.setPessoaOrigem(presenter.getDadosLoginVO().getUsuario().getPessoa());
-		entidadeEditada.setMensagem(mensagemRichTextArea.getHTML().toCharArray());
-		entidadeEditada.setTipo((TipoRecadoEnum)ListBoxUtil.getItemSelected(tipoLitBox, TipoRecadoEnum.values()));
-		presenter.salvar(entidadeEditada);
-	}
-*/
 	public void limpaCampos(){
-		/*
-		casalSuggestBox.setValue(null);
-		mensagemRichTextArea.setText(null);
-		casalRecadoImage.setUrl("");
-		ListBoxUtil.setItemSelected(tipoLitBox, TipoRecadoEnum.ENCONTRISTA.getNome());
-		*/
 	}
 
-	/*
-	@Override
-	public void fechaRecado() {
-		editaDialogBox.hide();
-	}
-	@UiHandler("verTodosAnchor")
-	public void verTodosAnchorClickHandler(ClickEvent event){
-		presenter.listaRecadosTodos(ultimoRecado);
-		todosDialogBox.center();
-		todosDialogBox.show();
-	}
-	@UiHandler("fecharTodosButton")
-	public void fecharTodosButtonClickHandler(ClickEvent event){
-		ultimoRecado = null;
-		recadosTodosVerticalPanel.clear();
-		todosDialogBox.hide();
-	}
-	@UiHandler("maisTodosButton")
-	public void maisTodosButtonClickHandler(ClickEvent event){
-		presenter.listaRecadosTodos(ultimoRecado);
-	}
-	@Override
-	public void populaRecadosPorGrupo(List<Recado> listaRecados) {
-		if(listaRecados.size()>0){
-			ultimoRecado = listaRecados.get(listaRecados.size()-1).getData();
-		}
-		populaObjetoRecados(listaRecados, recadosTodosVerticalPanel, false);
-		createScroll();
-	}
-
-	private void populaObjetoRecados(List<Recado> listaRecados, VerticalPanel recadosVerticalPanel, boolean limpa){
-		if(limpa){
-			recadosVerticalPanel.clear();
-		}
-		if(listaRecados.size()==0){
-			Label label = new Label("Nenhum recado encontrado");
-			label.setWidth("100%");
-			label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			recadosVerticalPanel.add(label);
-		} else {
-			int i=0;
-			boolean go;
-			for (final Recado recado : listaRecados) {
-				go = true;
-				for (Recado r : listaRecados) {
-					if(r.getPai()!=null && r.getPai().getId().equals(recado.getId()) ){
-						go = false;
-					}
-				}
-				if(go){
-					if(insereRecado(recadosVerticalPanel, recado,  i % 2 == 0, true)){
-						i++;
-					}
-				}
-			}
-		}
-		createScroll();
-	}
-
-	private Boolean insereRecado(VerticalPanel recadosVerticalPanel, final Recado recado, boolean par, boolean original) {
-		boolean ok = true;
-		if(recado.getPai()!=null){
-			if(recado.getPai().getLido()){
-				return false;
-			}
-			ok = insereRecado(recadosVerticalPanel, recado.getPai(), par, false);
-		}
-		if(recado.getMensagem()==null){
-			return false;
-		}
-		if(!ok){
-			return ok;
-		}
-		HorizontalPanel mainHP = new HorizontalPanel();
-		mainHP.setWidth("100%");
-		mainHP.setSpacing(2);
-		if(par){
-			mainHP.setStyleName("simple-Row simple-OddRow");
-		} else {
-			mainHP.setStyleName("simple-Row simple-EvenRow");
-		}
-		if(recado.getPai()!=null){
-			HorizontalPanel hp3 = new HorizontalPanel();
-			hp3.setWidth("15px");
-			mainHP.add(hp3);
-		}
-		if(recado.getCasal().getIdArquivoDigital()!=null){
-			Image imagem = new Image(NavegadorUtil.makeUrl("downloadArquivoDigital?thumb=true&id=" + recado.getCasalOrigem().getIdArquivoDigital()));
-			imagem.setWidth("60px");
-			imagem.setHeight("auto");
-			mainHP.add(imagem);
-			mainHP.setCellWidth(imagem, "60px");
-			imagem.addLoadHandler(new LoadHandler() {
-				@Override
-				public void onLoad(LoadEvent arg0) {
-					createScroll();
-				}
-			});
-		}
-
-		VerticalPanel recadoVP = new VerticalPanel();
-		recadoVP.setWidth("100%");
-		mainHP.add(recadoVP);
-
-		String origem="";
-		if(recado.getCasalOrigem().getSituacao().equals(TipoSituacaoEnum.ATIVO)){
-			origem = recado.getCasalOrigem().getApelidos("e");
-		} else {
-			origem = recado.getPessoaOrigem().getNome();
-		}
-
-		HorizontalPanel hpSpacer;
-
-		//linea 1
-		HorizontalPanel dadosHP = new HorizontalPanel();
-		dadosHP.setWidth("100%");
-
-		HorizontalPanel hp2 = new HorizontalPanel();
-
-		Label label = new Label(origem);
-		label.setStyleName("label-boldRed");
-		hp2.add(label);
-
-		hpSpacer = new HorizontalPanel();
-		hpSpacer.setWidth("3px");
-		hp2.add(hpSpacer);
-
-		label = new Label(" > ");
-		label.setStyleName("label-bold");
-		hp2.add(label);
-
-		hpSpacer = new HorizontalPanel();
-		hpSpacer.setWidth("3px");
-		hp2.add(hpSpacer);
-
-		label = new Label(recado.getCasal().getApelidos("e"));
-		label.setStyleName("label-boldBlue");
-		hp2.add(label);
-
-		dadosHP.add(hp2);
-
-		label = new Label(dfRecado.format(recado.getData()).toUpperCase());
-		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		dadosHP.add(label);
-		dadosHP.setCellWidth(label, "100px");
-
-		recadoVP.add(dadosHP);
-
-		//linea 2
-		recadoVP.add(new HTML(String.valueOf(recado.getMensagem())));
-
-		//linea 3
-		if(original || presenter.getDadosLoginVO().getCasal().getId().equals(recado.getCasal().getId())){
-			hp2 = new HorizontalPanel();
-			Anchor responder, esconder;
-			if(presenter.getDadosLoginVO().getCasal().getId().equals(recado.getCasal().getId()) && !recado.getLido()){
-				if(!recado.getLido()){
-					esconder = new Anchor("Lido");
-					esconder.setStyleName("portal-anchor");
-					esconder.addClickHandler(new ClickHandler() {
-						@Override
-						public void onClick(ClickEvent arg0) {
-							recado.setLido(true);
-							presenter.salvar(recado);
-							((Anchor)arg0.getSource()).setVisible(false);
-						}
-					});
-					hp2.add(esconder);
-				}
-				hpSpacer = new HorizontalPanel();
-				hpSpacer.setWidth("3px");
-				hp2.add(hpSpacer);
-			}
-			if(!presenter.getDadosLoginVO().getCasal().getId().equals(recado.getCasalOrigem().getId())){
-				responder = new Anchor("Responder");
-				responder.setStyleName("portal-anchor");
-				responder.addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent arg0) {
-						Recado r = new Recado();
-						r.setCasal(recado.getCasalOrigem());
-						r.setPai(recado);
-						r.setTipo(recado.getTipo());
-						edita(r);
-					}
-				});
-				hp2.add(responder);
-			}
-			recadoVP.add(hp2);
-		}
-		mainHP.add(recadoVP);
-
-		hpSpacer = new HorizontalPanel();
-		hpSpacer.setWidth("8px");
-		mainHP.add(hpSpacer);
-		mainHP.setCellWidth(hpSpacer, "8px");
-
-		recadosVerticalPanel.add(mainHP);
-		return ok;
-	}
-*/
 	@Override
 	public void populaAniversariantes(List<AniversarianteVO> listaAniversarioPessoa, List<AniversarianteVO> listaAniversarioCasal) {
 		//aniversariantes
@@ -879,21 +586,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		label = new Label(data);
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		dadosHP.add(label);
-		/*
-		if(niver.getCasal().getTipoCasal().equals(TipoCasalEnum.ENCONTRISTA)){
-			Anchor recado = new Anchor("Enviar recado");
-			recado.setStyleName("portal-anchor");
-			recado.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent arg0) {
-					Recado r = new Recado();
-					r.setCasal(niver.getCasal());
-					edita(r);
-				}
-			});
-			dadosHP.add(recado);
-		}
-		*/
+		
 		HorizontalPanel hpSpacer = new HorizontalPanel();
 		hpSpacer.setWidth("8px");
 		mainHP.add(hpSpacer);
@@ -906,6 +599,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 
 	@Override
 	public void populaConvidados(List<Casal> listaConvidados) {
+		this.listaConvidados = listaConvidados;
 		int i=0;
 		convidadosVerticalPanel.clear();
 		for (Casal convidado : listaConvidados) {
@@ -1084,73 +778,7 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 			buffer.append(" " + cidadeTextBox.getValue());
 		if (estadoTextBox.getValue()!=null)
 			buffer.append(" " + estadoTextBox.getValue());
-		//buffer.append(" BRASIL");
 		return buffer.toString().trim();
 	}
 	
-	/*
-	@UiHandler("addEventoAnchor")
-	public void addEventoAnchorClickHandler(ClickEvent event){
-		editaEventoDialogBox.center();
-		editaEventoDialogBox.show();
-	}
-	
-	@UiHandler("salvarEventoButton")
-	public void salvarEventoButtonClickHandler(ClickEvent event){
-		editaEventoDialogBox.hide();
-	}
-	
-	@UiHandler("fecharEventoButton")
-	public void fecharEventoButtonClickHandler(ClickEvent event){
-		editaEventoDialogBox.hide();
-	}
-	
-	@UiHandler("addFotoEventoButton")
-	public void addFotoEventoButtonClickHandler(ClickEvent event){
-		fotosEventosVerticalPanel.clear();
-		descricaoEventoTextBox.setValue(null);
-		
-		
-		uploadImagePreview.setMultiple(true);
-		uploadImagePreview.clear();
-		imageDialogBox.center();
-		imageDialogBox.show();
-		uploadImagePreview.adicionaImage();
-	}
-	
-	
-	@UiHandler("selecionarUploadButton")
-	public void selecionarUploadButtonClickHandler(ClickEvent event){
-		uploadImagePreview.clear();
-		uploadImagePreview.adicionaImage();
-	}
-
-	@UiHandler("aceitarUploadButton")
-	public void aceitarUploadButtonClickHandler(ClickEvent event){
-		fotosEventosVerticalPanel.clear();
-		Image image;
-		int i=0;
-		HorizontalPanel hp = new HorizontalPanel();
-		hp.setWidth("100%");
-		for (UploadImagemItem up : uploadImagePreview.getListaImagens()) {
-			if(i % 3 ==0){
-				hp = new HorizontalPanel();
-				fotosEventosVerticalPanel.add(hp);
-				hp.setWidth("100%");
-			}
-			image = new Image(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + up.getIdArquivoDigital() + "&thumb=true"));
-			image.setWidth("200px");
-			image.setHeight("auto");
-			hp.add(image);
-			hp.add(new Label("Foto1"));
-			i++;
-		}
-		imageDialogBox.hide();
-	}
-
-	@UiHandler("cancelarUploadButton")
-	public void cancelarUploadButtonClickHandler(ClickEvent event){
-		imageDialogBox.hide();
-	}
-	*/
 }

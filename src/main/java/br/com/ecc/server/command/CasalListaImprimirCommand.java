@@ -43,7 +43,6 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 		String valorCampo;
 		int item = 0;
 		for (Casal casal : listaCasal) {
-			System.out.println(casal.toString());
 			dadosItemEle = new ArrayList<String>();
 			dadosItemEla = new ArrayList<String>();
 			titulos = new ArrayList<String>();
@@ -340,6 +339,7 @@ public class CasalListaImprimirCommand implements Callable<Integer>{
 			cmd.setReportPathName("/relatorios/");
 			cmd.setReportFileName("listacasal.jrxml");
 			cmd.setReportName("ListaCasal_"+new SimpleDateFormat("dd_MM_yyyy").format(Calendar.getInstance().getTime()));
+			cmd.setExportarEXCEL(casalOpcaoRelatorioVO.getExportaExcel());
 			return cmd.call();
 		} else {
 			throw new WebException("Nenhum dado encontrado");

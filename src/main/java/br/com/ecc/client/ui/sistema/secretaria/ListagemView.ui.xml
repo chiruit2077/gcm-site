@@ -79,28 +79,33 @@
 				<g:HorizontalPanel styleName="{style.borde}" spacing="2" verticalAlignment="middle" width="100%">
 					<g:Label styleName="{style.titulo}" text="Lista de casais" width="200px"/>
 					<g:Button ui:field="limparListagemButton" text="Limpar listagem"/>
-					<g:Button ui:field="imprimirButton" text="Imprimir listagem"/>
 					<g:Button ui:field="emailButton" text="Gerar lista de emails"/>
 					<g:Label ui:field="itemListagemTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" horizontalAlignment="right"/>
 				</g:HorizontalPanel>
 				<g:FlexTable ui:field="casalListagemFlexTable" cellPadding="0" cellSpacing="0" width="100%"/>
 			</g:VerticalPanel>
-			<g:VerticalPanel width="200px" styleName="{style.opcao}" spacing="2">
-				<g:Label styleName="{style.titulo}" text="Opções de exibição" horizontalAlignment="center" width="100%"/>
-				<g:HorizontalPanel spacing="2" verticalAlignment="middle" width="100%">
-					<g:Label text="Titulo: "/>
-					<g:TextBox ui:field="tituloTextBox" width="150px" />
-				</g:HorizontalPanel>
-				<g:CheckBox ui:field="apelidoCheckBox" text="Apelido"/>
-				<g:CheckBox ui:field="emailCheckBox" text="Email"/>
-				<g:CheckBox ui:field="enderecoCheckBox" text="Endereço"/>
-				<g:CheckBox ui:field="documentoCheckBox" text="Documentos"/>
-				<g:CheckBox ui:field="telefoneCheckBox" text="Telefones"/>
-				<g:CheckBox ui:field="alergiaCheckBox" text="Alergia"/>
-				<g:CheckBox ui:field="vegetarianoCheckBox" text="Vegetariano"/>
-				<g:CheckBox ui:field="diabeticoCheckBox" text="Diabetico"/>
-				<g:CheckBox ui:field="hipertensoCheckBox" text="Hipertenso"/>
-				<g:CheckBox ui:field="tipoCheckBox" text="Tipo"/>
+			<g:VerticalPanel width="200px" spacing="1">
+				<g:VerticalPanel width="100%" styleName="{style.opcao}" spacing="2">
+					<g:Label styleName="{style.titulo}" text="Opções de exibição" horizontalAlignment="center" width="100%"/>
+					<g:HorizontalPanel spacing="2" verticalAlignment="middle" width="100%">
+						<g:Label text="Titulo: "/>
+						<g:TextBox ui:field="tituloTextBox" width="150px" />
+					</g:HorizontalPanel>
+					<g:CheckBox ui:field="apelidoCheckBox" text="Apelido"/>
+					<g:CheckBox ui:field="emailCheckBox" text="Email"/>
+					<g:CheckBox ui:field="enderecoCheckBox" text="Endereço"/>
+					<g:CheckBox ui:field="documentoCheckBox" text="Documentos"/>
+					<g:CheckBox ui:field="telefoneCheckBox" text="Telefones"/>
+					<g:CheckBox ui:field="alergiaCheckBox" text="Alergia"/>
+					<g:CheckBox ui:field="vegetarianoCheckBox" text="Vegetariano"/>
+					<g:CheckBox ui:field="diabeticoCheckBox" text="Diabetico"/>
+					<g:CheckBox ui:field="hipertensoCheckBox" text="Hipertenso"/>
+					<g:CheckBox ui:field="tipoCheckBox" text="Tipo"/>
+				</g:VerticalPanel>
+				<g:VerticalPanel width="100%" spacing="4" horizontalAlignment="center">
+					<g:Button ui:field="imprimirButton" text="Imprimir listagem"/>
+					<g:Button ui:field="excelButton" text="Exportar p/Excel"/>
+				</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:HorizontalPanel>
 		<g:VerticalPanel visible="false">

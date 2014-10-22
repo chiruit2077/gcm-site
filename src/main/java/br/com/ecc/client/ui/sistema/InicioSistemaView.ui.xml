@@ -63,13 +63,64 @@
 		.casalImage {
 			min-width:250px;
 			max-width:400px;
-			max-height: 300px;
+			max-height:300px;
 		}
 		.casalArea {
 			background-color: #f5f5f5;
 		}
+		.apresentacao {
+			background-color: black;
+		}
 		.toolbar {
 		 	background-color:#c5c5c5;
+		}
+		
+		.casalLabel {
+			font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+			text-shadow: 2px 2px 2px rgba(0,0,0,.5);
+			
+			color: white;
+			font-weight: bold;
+			font-size: 4em;
+			width: 100%;
+			text-align: left;
+			position: absolute;
+			top: 40px;
+			left: 30px;
+		}
+		.logoPadrinho{
+			border-radius: 10px 10px 0px 0px;
+			-webkit-border-radius: 10px 10px 0px 0px;
+			-moz-border-radius: 10px 10px 0px 0px;
+
+			-webkit-box-shadow: 0px 0px 10px #fff;
+			-moz-box-shadow: 0px 0px 10px #fff;
+			box-shadow: 0px 0px 10px #fff;
+
+			margin-top: -70%;
+			background-color: white;
+			border: 1px solid lightgray;
+			position: absolute;
+			bottom: 40px;
+			right: 30px;
+		}
+		.casalPadrinhoLabel {
+			font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+			text-shadow: 0 1px 0 rgba(255,255,255,.5);
+			color: white;
+			font-weight: bold;
+			font-size: 2em;
+			width: 100%;
+			text-align: right;
+			position: absolute;
+			bottom: 10px;
+			right: 30px;
+		}
+		.key {
+			position: absolute;
+			bottom: -10px;
+			top: -30px;
+			width: 0px;
 		}
   	</ui:style>
    <g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" height="100%">
@@ -85,6 +136,8 @@
 											<g:Image url="images/email.png" width="16px" height="auto"/>
 										</td>
 										<td><g:Label text="Convidados" styleName="{style.titulo}"/></td>
+										<td align="right">
+											<g:Button text="Apresentar" ui:field="apresenterConvidadosButton"/></td>
 									</tr>
 								</table>
 							</g:HTMLPanel>
@@ -95,26 +148,6 @@
 					</td>
 					<td style="vertical-align:top;font-size:11px;;padding-left:2px;padding-top:2px;padding-right:2px" align="center" width="100%" height="100%">
 					  <g:VerticalPanel ui:field="areaInfoVerticalPanel" width="100%" visible="false" height="100%" horizontalAlignment="center" verticalAlignment="top">
-						<!-- 
-						<g:VerticalPanel ui:field="areaEventosVerticalPanel" width="100%" height="100%" visible="false" styleName="{style.bordeado}">
-							<g:HTMLPanel width="100%" styleName="{style.barra}">
-								<table cellpadding="2" cellspacing="0" width="100%" border="0">
-									<tr>
-										<td width="16px">
-											<g:Image url="images/email.png" width="16px" height="auto"/>
-										</td>
-										<td><g:Label text="Eventos" styleName="{style.titulo}"/></td>
-									    <td width="90px" align="center">
-									    	<g:Anchor ui:field="addEventoAnchor" text="Adicionar evento" styleName="portal-anchor"/>
-									    </td>
-									</tr>
-								</table>
-							</g:HTMLPanel>
-							<g:FlowPanel ui:field="eventosFlowPanel" styleName="content-Scroll" width="100%" height="100%">
-								<g:VerticalPanel ui:field="eventosVerticalPanel" width="100%" height="100%"/>
-							</g:FlowPanel>
-						</g:VerticalPanel>
-						 -->
 						<g:VerticalPanel ui:field="areaAgendaVerticalPanel" width="100%" visible="false" styleName="{style.bordeado}">
 							<g:HTMLPanel width="100%" styleName="{style.barra}">
 								<table cellpadding="2" cellspacing="0" width="100%" border="0">
@@ -136,33 +169,6 @@
 							</g:HTMLPanel>
 							<c:Calendar ui:field="agendaCalendar" width="100%" height="400px"/>
 						</g:VerticalPanel>
-						<!-- 
-						<g:VerticalPanel ui:field="areaRecadoVerticalPanel" width="100%" height="100%" visible="false" styleName="{style.bordeado}">
-							<g:HTMLPanel width="100%" styleName="{style.barra}">
-								<table cellpadding="2" cellspacing="0" width="100%" border="0">
-									<tr>
-										<td width="16px">
-											<g:Image url="images/email.png" width="16px" height="auto"/>
-										</td>
-										<td><g:Label text="Meus Recados" styleName="{style.titulo}"/></td>
-									    <td width="70px" align="center">
-									    	<g:Anchor ui:field="addRecadoAnchor" text="Enviar recado" styleName="portal-anchor"/>
-									    </td>
-									    <td width="70px" align="center">
-									    	<g:Anchor ui:field="verLidosAnchor" text="Ver lidos" styleName="portal-anchor"/>
-									    	<g:Anchor ui:field="esconderLidosAnchor" text="Esconder lidos" styleName="portal-anchor" visible="false"/>
-									    </td>
-									    <td width="50px" align="center">
-									    	<g:Anchor ui:field="verTodosAnchor" text="Ver todos" styleName="portal-anchor"/>
-									    </td>
-									</tr>
-								</table>
-							</g:HTMLPanel>
-							<g:FlowPanel ui:field="recadosFlowPanel" styleName="content-Scroll" width="100%" height="100%">
-								<g:VerticalPanel ui:field="recadosVerticalPanel" width="100%" height="100%"/>
-							</g:FlowPanel>
-						</g:VerticalPanel>
-						 -->
 					  </g:VerticalPanel>
 					</td>
 					<td style="vertical-align:top;padding-left:2px;padding-top:2px;padding-right:2px" width="400px" height="100%">
@@ -229,219 +235,106 @@
 			</table>
 		</g:HTMLPanel>
 		<g:VerticalPanel visible="false">
-		<!-- 
-			<g:DialogBox ui:field="editaEventoDialogBox" visible="false"
-				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Evento">
-				<g:VerticalPanel width="100%">
-					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
-						<g:HTMLPanel width="100%">
-							<table cellpadding="3" cellspacing="0" width="100%">
-								<tr>
-									<td class="portal-formLabel">Descrição:</td>
-									<td colspan="2">
-										<g:TextBox ui:field="descricaoEventoTextBox" width="560px"/>
-									</td>
-								</tr>
-								<tr>
-									<td class="portal-formLabel">Data:</td>
-									<td>
-										<dp:DateBox ui:field="dataEventoDateBox" width="80px"/>
-									</td>
-									<td align="right"><g:Button ui:field="addFotoEventoButton">Adicionar fotos</g:Button></td>
-								</tr>
-								<tr>
-									<td colspan="3" style="border: 1px solid lightgray;">
-										<g:FlowPanel ui:field="fotosFlowPanel" styleName="portal-bodyLayout" height="300px">
-											<g:VerticalPanel ui:field="fotosEventosVerticalPanel" width="100%" styleName="{style.toolbar}">
-												<g:Label text="TEst teste teste teste"/>
-											</g:VerticalPanel>
-										</g:FlowPanel>
-									</td>
-								</tr>
-							</table>
-						</g:HTMLPanel>
-					</g:VerticalPanel>
-					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
-						<g:HorizontalPanel spacing="3">
-							<g:Button ui:field="salvarEventoButton">Salvar</g:Button>
-							<g:Button ui:field="fecharEventoButton">Cancelar</g:Button>
-						</g:HorizontalPanel>
-					</g:VerticalPanel>
-				</g:VerticalPanel>
-			</g:DialogBox>
-			<g:DialogBox ui:field="imageDialogBox" visible="false"
-				         width="550px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Selecionar imagem">
-				<g:VerticalPanel width="100%">
-					<g:VerticalPanel width="100%">
-					    <u:UploadImagePreview ui:field="uploadImagePreview" multiple="false" resample="false"/>
-				    </g:VerticalPanel>
-				    <g:HTMLPanel styleName="{style.toolbar}">
-						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+			<g:DialogBox ui:field="apresentacaoDialogBox" visible="false"
+				         width="600px" glassEnabled="true" autoHideEnabled="true"
+				         glassStyleName="portal-PopupPanelGlass" text="Apresentação">
+		         <g:VerticalPanel width="100%">
+					<g:HTMLPanel width="100%" styleName="{style.apresentacao}">
+						<table cellpadding="1" cellspacing="0" width="100%" border="0">
 							<tr>
-								<td>
-									<g:Button ui:field="selecionarUploadButton" text="Selecionar imagem"/>
-								</td>
-								<td align="right">
-									<g:Button ui:field="aceitarUploadButton" text="Salvar imagem"/>
-									<g:Button ui:field="cancelarUploadButton" text="Cancelar"/>
+								<td align="center" colspan="3" width="100%">
+									<g:Image ui:field="casalApresentacaoImage" url="images/casal.jpg"/>
 								</td>
 							</tr>
 						</table>
 					</g:HTMLPanel>
-			    </g:VerticalPanel>
+					<g:TextBox ui:field="keyTextBox" styleName="{style.key}"/>
+					<g:Label ui:field="casalApresentacaoLabel" width="100%" styleName="{style.casalLabel}"/>
+					<g:Image ui:field="casalPadrinhoImage" width="auto" height="20%" styleName="{style.logoPadrinho}" url="images/casal.jpg"/>
+					<g:Label ui:field="casalPadrinhoLabel" width="100%" styleName="{style.casalPadrinhoLabel}"/>
+		         </g:VerticalPanel>
 			</g:DialogBox>
-		
-			<g:DialogBox ui:field="editaDialogBox" visible="false"
-				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Recado">
+			<g:DialogBox ui:field="editaAgendaDialogBox" visible="false"
+				         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Agenda">
 				<g:VerticalPanel width="100%">
-					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
-						<g:HTMLPanel ui:field="tipoHTMLPanel" width="100%">
-							<table cellpadding="3" cellspacing="0" width="100%">
-								<tr style="background-color:#fcfdbb;">
-									<td class="portal-formLabel">Este recado pode ser visualizado por:</td>
-									<td>
-										<g:ListBox ui:field="tipoLitBox" width="200px"/>
-									</td>
-								</tr>
-							</table>
-						</g:HTMLPanel>
-						<g:HTMLPanel width="100%">
-							<table cellpadding="3" cellspacing="0" align="center">
-								<tr>
-									<td style="vertical-align:top;width:200px;border-right:1px solid lightgray;">
-										<g:Image ui:field="casalRecadoImage" width="100%"/>
-									</td>
-									<td style="vertical-align:top;">
-										<table cellpadding="2" align="center">
-											<tr>
-												<td class="portal-formLabel">Para:</td>
-												<td>
-													<g:SuggestBox ui:field="casalSuggestBox" width="405px"/>
-													<g:Label ui:field="casalRecadoLabel" width="405px" visible="false"/>
-												</td>
-											</tr>
-											<tr>
-												<td colspan="2">
-													<g:VerticalPanel spacing="2">
-														<rt:RichTextToolbar ui:field="mensagemRichTextToolbar"/>
-														<g:RichTextArea ui:field="mensagemRichTextArea" width="445px" height="120px"/>
-													</g:VerticalPanel>
-												</td>
-											</tr>
-										</table>
-									</td>
-								</tr>
-							</table>
-						</g:HTMLPanel>
-					</g:VerticalPanel>
-					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
-						<g:HorizontalPanel spacing="3">
-							<g:Button ui:field="enviarButton">Enviar</g:Button>
-							<g:Button ui:field="fecharButton">Cancelar</g:Button>
-						</g:HorizontalPanel>
-					</g:VerticalPanel>
-				</g:VerticalPanel>
-			</g:DialogBox>
-			<g:DialogBox ui:field="todosDialogBox" visible="false"
-				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Recados">
-				<g:VerticalPanel width="100%">
-					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
-						<g:FlowPanel ui:field="formularioFlowPanel" width="100%" styleName="content-Scroll" >
-							<g:VerticalPanel ui:field="recadosTodosVerticalPanel" width="100%" styleName="{style.recados}"/>
-						</g:FlowPanel>
-					</g:VerticalPanel>
-					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
-						<g:HorizontalPanel spacing="3">
-							<g:Button ui:field="maisTodosButton">Buscar mais recados</g:Button>
-							<g:Button ui:field="fecharTodosButton">Fechar</g:Button>
-						</g:HorizontalPanel>
-					</g:VerticalPanel>
-				</g:VerticalPanel>
-			</g:DialogBox>
-		 -->
-		</g:VerticalPanel>
-		<g:VerticalPanel visible="false">
-				<g:DialogBox ui:field="editaAgendaDialogBox" visible="false"
-					         width="650px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Agenda">
-					<g:VerticalPanel width="100%">
-						<g:HorizontalPanel width="100%" height="100%">
-							<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
-								<g:HTMLPanel ui:field="tipoAgendaHTMLPanel" width="100%">
-									<table cellpadding="3" cellspacing="0" width="100%">
-										<tr style="background-color:#fcfdbb;">
-											<td class="portal-formLabel">Tipo Agenda:</td>
-											<td>
-												<g:ListBox ui:field="tipoAgendaLitBox" width="200px"/>
-											</td>
-										</tr>
-									</table>
-								</g:HTMLPanel>
-								<g:HTMLPanel >
-									<table cellpadding="3" align="center">
-										<tr>
-											<td class="portal-formLabel">Responsável:</td>
-											<td colspan="3">
-												<g:SuggestBox ui:field="casalResponsavelSuggestBox" width="400px"/>
-											</td>
-										</tr>
-										<tr>
-											<td class="portal-formLabel">Data/Hora Início:</td>
-											<td colspan="3">
-												<dp:DateBox ui:field="dataInicioDateBox" width="100px" styleName="portal-formField"/>
-											</td>
-										</tr>
-										<tr>
-											<td class="portal-formLabel">Data/Hora Fim:</td>
-											<td colspan="3">
-												<dp:DateBox ui:field="dataFimDateBox" width="100px" styleName="portal-formField"/>
-											</td>
-										</tr>
-										<tr>
-											<td class="portal-formLabel">Titulo:</td>
-											<td colspan="3">
-												<g:TextBox ui:field="tituloAgendaTextBox" width="400px" />
-											</td>
-										</tr>
-										<tr>
-										<td class="portal-formLabel">Endereço:</td>
-										<td colspan="3">
-											<g:TextBox ui:field="enderecoTextBox" width="370px" maxLength="254"/>
+					<g:HorizontalPanel width="100%" height="100%">
+						<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo">
+							<g:HTMLPanel ui:field="tipoAgendaHTMLPanel" width="100%">
+								<table cellpadding="3" cellspacing="0" width="100%">
+									<tr style="background-color:#fcfdbb;">
+										<td class="portal-formLabel">Tipo Agenda:</td>
+										<td>
+											<g:ListBox ui:field="tipoAgendaLitBox" width="200px"/>
 										</td>
-										</tr>
-										<tr>
-											<td class="portal-formLabel">Bairro:</td>
-											<td>
-												<g:TextBox ui:field="bairroTextBox" width="200px" maxLength="100"/>
-											</td>
-											<td class="portal-formLabel" >CEP:</td>
-											<td>
-												<g:TextBox ui:field="cepTextBox" width="80px" maxLength="15"/>
-											</td>
-										</tr>
-										<tr>
-											<td class="portal-formLabel">Cidade:</td>
-											<td>
-												<g:TextBox ui:field="cidadeTextBox" width="200px" maxLength="100"/>
-											</td>
-											<td class="portal-formLabel">Estado:</td>
-											<td>
-												<g:TextBox ui:field="estadoTextBox" width="80px" maxLength="2" textAlignment="center"/>
-											</td>
-										</tr>
+									</tr>
 								</table>
-								</g:HTMLPanel>
-							</g:VerticalPanel>
-							<g:HorizontalPanel ui:field="googleMapItem" width="400px" height="400px"/>
-						</g:HorizontalPanel>
-						<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
-							<g:HorizontalPanel spacing="3">
-								<g:Button ui:field="salvarAgendaButton">Salvar</g:Button>
-								<g:Button ui:field="excluirAgendaButton">Excluir</g:Button>
-								<g:Button ui:field="fecharAgendaButton">Cancelar</g:Button>
-							</g:HorizontalPanel>
+							</g:HTMLPanel>
+							<g:HTMLPanel >
+								<table cellpadding="3" align="center">
+									<tr>
+										<td class="portal-formLabel">Responsável:</td>
+										<td colspan="3">
+											<g:SuggestBox ui:field="casalResponsavelSuggestBox" width="400px"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Data/Hora Início:</td>
+										<td colspan="3">
+											<dp:DateBox ui:field="dataInicioDateBox" width="100px" styleName="portal-formField"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Data/Hora Fim:</td>
+										<td colspan="3">
+											<dp:DateBox ui:field="dataFimDateBox" width="100px" styleName="portal-formField"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Titulo:</td>
+										<td colspan="3">
+											<g:TextBox ui:field="tituloAgendaTextBox" width="400px" />
+										</td>
+									</tr>
+									<tr>
+									<td class="portal-formLabel">Endereço:</td>
+									<td colspan="3">
+										<g:TextBox ui:field="enderecoTextBox" width="370px" maxLength="254"/>
+									</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Bairro:</td>
+										<td>
+											<g:TextBox ui:field="bairroTextBox" width="200px" maxLength="100"/>
+										</td>
+										<td class="portal-formLabel" >CEP:</td>
+										<td>
+											<g:TextBox ui:field="cepTextBox" width="80px" maxLength="15"/>
+										</td>
+									</tr>
+									<tr>
+										<td class="portal-formLabel">Cidade:</td>
+										<td>
+											<g:TextBox ui:field="cidadeTextBox" width="200px" maxLength="100"/>
+										</td>
+										<td class="portal-formLabel">Estado:</td>
+										<td>
+											<g:TextBox ui:field="estadoTextBox" width="80px" maxLength="2" textAlignment="center"/>
+										</td>
+									</tr>
+							</table>
+							</g:HTMLPanel>
 						</g:VerticalPanel>
+						<g:HorizontalPanel ui:field="googleMapItem" width="400px" height="400px"/>
+					</g:HorizontalPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarAgendaButton">Salvar</g:Button>
+							<g:Button ui:field="excluirAgendaButton">Excluir</g:Button>
+							<g:Button ui:field="fecharAgendaButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
 					</g:VerticalPanel>
-				</g:DialogBox>
+				</g:VerticalPanel>
+			</g:DialogBox>
 		</g:VerticalPanel>
 	</g:VerticalPanel>
 </ui:UiBinder>

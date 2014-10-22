@@ -16,6 +16,7 @@ public class CasalOpcaoRelatorioVO implements Serializable {
 	private Boolean vegetariano;
 	private Boolean hipertenso;
 	private Boolean tipo;
+	private Boolean exportaExcel = false;
 	
 	public Boolean getEmail() {
 		return email;
@@ -82,5 +83,11 @@ public class CasalOpcaoRelatorioVO implements Serializable {
 	}
 	public void setHipertenso(Boolean hipertenso) {
 		this.hipertenso = hipertenso;
+	}
+	public Boolean getExportaExcel() {
+		return exportaExcel;
+	}
+	public void setExportaExcel(Boolean exportaExcel) {
+		this.exportaExcel = exportaExcel;
 	}
 }

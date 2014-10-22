@@ -178,7 +178,17 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 
 	@UiHandler("imprimirButton")
 	public void imprimirButtonClickHandler(ClickEvent event){
+		imprimir(new CasalOpcaoRelatorioVO());
+	}
+	
+	@UiHandler("excelButton")
+	public void excelrButtonClickHandler(ClickEvent event){
 		CasalOpcaoRelatorioVO casalOpcaoRelatorioVO = new CasalOpcaoRelatorioVO();
+		casalOpcaoRelatorioVO.setExportaExcel(true);
+		imprimir(casalOpcaoRelatorioVO);
+	}
+	
+	private void imprimir(CasalOpcaoRelatorioVO casalOpcaoRelatorioVO){
 		casalOpcaoRelatorioVO.setTitulo(tituloTextBox.getValue());
 		casalOpcaoRelatorioVO.setAlergia(alergiaCheckBox.getValue());
 		casalOpcaoRelatorioVO.setApelido(apelidoCheckBox.getValue());
