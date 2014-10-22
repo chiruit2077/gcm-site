@@ -312,10 +312,23 @@ public class Casal extends _WebBaseEntity {
 			return false;
 		Casal other = (Casal) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null){
 				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			} else {
+				if (ele != null && other.ele != null && ele.equals(other.ele) ) {
+					return true;
+				}
+				if (ela != null && other.ela != null && ela.equals(other.ela) ) {
+					return true;
+				}
+			}
+		} else {
+			if (!id.equals(other.id)){
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 }

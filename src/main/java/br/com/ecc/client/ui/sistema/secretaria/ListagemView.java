@@ -182,7 +182,7 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	}
 	
 	@UiHandler("excelButton")
-	public void excelrButtonClickHandler(ClickEvent event){
+	public void excelButtonClickHandler(ClickEvent event){
 		CasalOpcaoRelatorioVO casalOpcaoRelatorioVO = new CasalOpcaoRelatorioVO();
 		casalOpcaoRelatorioVO.setExportaExcel(true);
 		imprimir(casalOpcaoRelatorioVO);
