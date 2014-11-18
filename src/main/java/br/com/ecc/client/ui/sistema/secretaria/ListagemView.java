@@ -75,6 +75,12 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	@UiField CheckBox diabeticoCheckBox;
 	@UiField CheckBox hipertensoCheckBox;
 	@UiField CheckBox tipoCheckBox;
+	
+	@UiField CheckBox filtroTodosCheckBox;
+	@UiField CheckBox filtroAlergicosCheckBox;
+	@UiField CheckBox filtroDiabeticosCheckBox;
+	@UiField CheckBox filtroVegetarianosCheckBox;
+	@UiField CheckBox filtroHipertensosCheckBox;
 
 	@UiField DialogBox emailDialogBox;
 	@UiField TextArea emailTextArea;
@@ -156,6 +162,10 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 		vo.setTipoInscricao((TipoInscricaoEnum) ListBoxUtil.getItemSelected(tipoInscricaoListBox, TipoInscricaoEnum.values()));
 		vo.setTipoCasal((TipoCasalEnum) ListBoxUtil.getItemSelected(tipoListBox, TipoCasalEnum.values()));
 		vo.setTodosInscritos(false);
+		vo.setAlergico(filtroAlergicosCheckBox.getValue());
+		vo.setHipertenso(filtroHipertensosCheckBox.getValue());
+		vo.setDiabetico(filtroDiabeticosCheckBox.getValue());
+		vo.setVegetariano(filtroVegetarianosCheckBox.getValue());
 		if(tipoInscricaoListBox.getSelectedIndex()==1){
 			vo.setTodosInscritos(true);
 		}
@@ -402,5 +412,31 @@ public class ListagemView extends BaseView<ListagemPresenter> implements Listage
 	public void tipoInscricaoListBoxChangeHandler(ChangeEvent event) {
 		agrupamentoListBox.setSelectedIndex(0);
 		nomeTextBox.setValue(null);
+	}
+	
+	@UiHandler("filtroTodosCheckBox")
+	public void filtroTodosClickHandler(ClickEvent event){
+		if(filtroTodosCheckBox.getValue()){
+			filtroAlergicosCheckBox.setValue(true);
+			filtroDiabeticosCheckBox.setValue(true);
+			filtroVegetarianosCheckBox.setValue(true);
+			filtroHipertensosCheckBox.setValue(true);
+		} 
+	}
+	@UiHandler("filtroAlergicosCheckBox")
+	public void filtroAlergicosCheckBoxClickHandler(ClickEvent event){
+		filtroTodosCheckBox.setValue(false);
+	}
+	@UiHandler("filtroDiabeticosCheckBox")
+	public void filtroDiabeticosCheckBoxCheckBoxClickHandler(ClickEvent event){
+		filtroTodosCheckBox.setValue(false);
+	}
+	@UiHandler("filtroHipertensosCheckBox")
+	public void filtroHipertensosCheckBoxCheckBoxCheckBoxClickHandler(ClickEvent event){
+		filtroTodosCheckBox.setValue(false);
+	}
+	@UiHandler("filtroVegetarianosCheckBox")
+	public void filtroVegetarianosCheckBoxCheckBoxClickHandler(ClickEvent event){
+		filtroTodosCheckBox.setValue(false);
 	}
 }

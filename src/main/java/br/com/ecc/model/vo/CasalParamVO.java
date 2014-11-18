@@ -21,6 +21,11 @@ public class CasalParamVO implements Serializable {
 	private Boolean todosInscritos;
 	private TipoSituacaoEnum situacao;
 	
+	private Boolean diabetico = true;
+	private Boolean vegetariano = true;
+	private Boolean hipertenso = true;
+	private Boolean alergico = true;
+	
 	public Grupo getGrupo() {
 		return grupo;
 	}
@@ -68,5 +73,29 @@ public class CasalParamVO implements Serializable {
 	}
 	public void setSituacao(TipoSituacaoEnum situacao) {
 		this.situacao = situacao;
+	}
+	public Boolean getDiabetico() {
+		return diabetico;
+	}
+	public void setDiabetico(Boolean diabetico) {
+		this.diabetico = diabetico;
+	}
+	public Boolean getVegetariano() {
+		return vegetariano;
+	}
+	public void setVegetariano(Boolean vegetariano) {
+		this.vegetariano = vegetariano;
+	}
+	public Boolean getHipertenso() {
+		return hipertenso;
+	}
+	public void setHipertenso(Boolean hipertenso) {
+		this.hipertenso = hipertenso;
+	}
+	public Boolean getAlergico() {
+		return alergico;
+	}
+	public void setAlergico(Boolean alergico) {
+		this.alergico = alergico;
 	}
 }

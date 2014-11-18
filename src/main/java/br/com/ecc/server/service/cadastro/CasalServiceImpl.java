@@ -107,6 +107,37 @@ public class CasalServiceImpl extends SecureRemoteServiceServlet implements Casa
 				}
 			}
 		}
+		
+		if(!casalParamVO.getAlergico() || !casalParamVO.getHipertenso() || !casalParamVO.getDiabetico() || !casalParamVO.getVegetariano()){
+			List<Casal> lc = new ArrayList<Casal>();
+			for (Casal casal : listaCasal) {
+				if(casalParamVO.getAlergico()){ 
+					if(lc.indexOf(casal)<0 && (casal.getEle().getAlergico()!=null && casal.getEle().getAlergico() || casal.getEla().getAlergico()!=null && casal.getEla().getAlergico())){
+						lc.add(casal);
+					}
+				}
+				if(casalParamVO.getHipertenso()){ 
+					if(lc.indexOf(casal)<0 &&
+				       (casal.getEle().getHipertenso()!=null && casal.getEle().getHipertenso() || casal.getEla().getHipertenso()!=null && casal.getEla().getHipertenso())){
+						lc.add(casal);
+					}
+				}
+				if(casalParamVO.getDiabetico()){ 
+					if(lc.indexOf(casal)<0 &&
+					   (casal.getEle().getDiabetico()!=null && casal.getEle().getDiabetico() || casal.getEla().getDiabetico()!=null && casal.getEla().getDiabetico())){
+						lc.add(casal);
+					}
+				}
+				if(casalParamVO.getVegetariano()){ 
+					if(lc.indexOf(casal)<0 &&
+					   (casal.getEle().getVegetariano()!=null && casal.getEle().getVegetariano() || casal.getEla().getVegetariano()!=null && casal.getEla().getVegetariano())){
+						lc.add(casal);
+					}
+				}
+			}
+			listaCasal = lc;
+		}
+		
 		Collections.sort(listaCasal, new Comparator<Casal>() {
 			@Override
 			public int compare(Casal o1, Casal o2) {

@@ -57,10 +57,20 @@
 									<g:ListBox ui:field="agrupamentoListBox" width="160px"/>
 								</td>
 								<td class="portal-formLabel" width="90px">Do encontro:</td>
-								<td width="160px">
+								<td width="160px" colspan="2">
 									<g:ListBox ui:field="tipoInscricaoListBox" width="160px"/>
 								</td>
-								<td width="80px">
+							</tr>
+							<tr>
+								<td class="portal-formLabel" width="50px">Listar:</td>
+								<td colspan="7">
+									<g:CheckBox ui:field="filtroTodosCheckBox" text="Todos" value="true"/>
+									<g:CheckBox ui:field="filtroAlergicosCheckBox" text="Alergicos" value="true"/>
+									<g:CheckBox ui:field="filtroDiabeticosCheckBox" text="Diabéticos" value="true"/>
+									<g:CheckBox ui:field="filtroVegetarianosCheckBox" text="Vegetarianos" value="true"/>
+									<g:CheckBox ui:field="filtroHipertensosCheckBox" text="Hipertensos" value="true"/>
+								</td>
+								<td width="80px" align="right">
 									<g:Button ui:field="buscarButton" text="Pesquisar" />
 								</td>
 							</tr>
