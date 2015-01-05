@@ -54,7 +54,7 @@ public class EnviaEmailCommand extends ECCBaseCommand<Void> {
 				public void run() {
 					try {
 						Transport transport = mailSession.getTransport();
-						transport.connect("smtp.gmail.com", 465, "ecc.uberlandia@gmail.com","ecc1508udia");
+						transport.connect("smtp.gmail.com", 465, "ecc.uberlandia@gmail.com","eccehbomdemais");
 
 						transport.sendMessage(message, message.getAllRecipients());
 						transport.close();
