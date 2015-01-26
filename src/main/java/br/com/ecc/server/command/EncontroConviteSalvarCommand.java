@@ -1,28 +1,17 @@
 package br.com.ecc.server.command;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroConvite;
 import br.com.ecc.model.EncontroFila;
-import br.com.ecc.model.EncontroInscricao;
-import br.com.ecc.model.EncontroInscricaoPagamento;
-import br.com.ecc.model.EncontroInscricaoPagamentoDetalhe;
 import br.com.ecc.model.Usuario;
 import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 import br.com.ecc.model.tipo.TipoFilaEnum;
-import br.com.ecc.model.tipo.TipoInscricaoEnum;
-import br.com.ecc.model.tipo.TipoPagamentoDetalheEnum;
-import br.com.ecc.model.tipo.TipoPagamentoLancamentoEnum;
 import br.com.ecc.model.tipo.TipoRespostaConviteEnum;
-import br.com.ecc.model.tipo.TipoSituacaoEnum;
-import br.com.ecc.model.vo.EncontroInscricaoVO;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -40,18 +29,20 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 	@Transactional
 	public EncontroConvite call() throws Exception {
 		boolean mover = encontroConvite.getMoverFinalFila();
-		if (encontroConvite.getTipoResposta()==null) encontroConvite.setDataResposta(null);
+		if (encontroConvite.getTipoResposta()==null){
+			encontroConvite.setDataResposta(null);
+		}
 
 		if (encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.CONFIRMADO)){
-			geraInscricaoApoio();
+			//geraInscricaoApoio();
 			if( encontroConvite.getTipoResposta()!= null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.ACEITO)){
 				encontroConvite.getCasalConvidado().setCasalPadrinho(encontroConvite.getCasal());
 				encontroConvite.setCasalConvidado(em.merge(encontroConvite.getCasalConvidado()));
-				geraInscricoesAceito();
+				//geraInscricoesAceito();
 			}
 			else if(encontroConvite.getTipoResposta()!= null && encontroConvite.getTipoResposta().equals(TipoRespostaConviteEnum.RECUSADO)){
-				desisteInscricaoConvidado(encontroConvite.getCasalConvidado());
-				desisteInscricaoEncontrista(encontroConvite.getCasalDoacao());
+				//desisteInscricaoConvidado(encontroConvite.getCasalConvidado());
+				//desisteInscricaoEncontrista(encontroConvite.getCasalDoacao());
 				Query q;
 				if(mover){
 					q = em.createNamedQuery("encontroFila.porEncontroFilaGeral");
@@ -95,13 +86,15 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 				}*/
 			}
 		}else if (encontroConvite.getTipoConfirmacao()!=null && encontroConvite.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
-			if (!encontroConvite.getVaiComoApoio()) desisteInscricaoEncontrista(encontroConvite.getCasal());
-			desisteInscricaoConvidado(encontroConvite.getCasalConvidado());
-			desisteInscricaoEncontrista(encontroConvite.getCasalDoacao());
+			if (!encontroConvite.getVaiComoApoio()) {
+				//desisteInscricaoEncontrista(encontroConvite.getCasal());
+			}
+			//desisteInscricaoConvidado(encontroConvite.getCasalConvidado());
+			//desisteInscricaoEncontrista(encontroConvite.getCasalDoacao());
 		}
 		return em.merge(encontroConvite);
 	}
-
+	/*
 	private void desisteInscricaoConvidado(Casal casal) throws Exception {
 		EncontroInscricaoVO vo = getEncontroInscricaoVO(casal);
 		if (vo!=null){
@@ -124,6 +117,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 		}
 	}
 
+	
 	@Transactional
 	private void geraInscricoesAceito() throws Exception {
 		if (encontroConvite.getCasal() != null && encontroConvite.getCasalConvidado() != null){
@@ -386,7 +380,7 @@ public class EncontroConviteSalvarCommand implements Callable<EncontroConvite>{
 		}
 		return null;
 	}
-
+*/
 	public EncontroConvite getEncontroConvite() {
 		return encontroConvite;
 	}
