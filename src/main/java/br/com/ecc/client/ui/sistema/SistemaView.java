@@ -115,7 +115,7 @@ public class SistemaView extends BaseView<SistemaPresenter> implements SistemaPr
 		if(administrador){
 			menuItem = new MenuItem("Tesouraria", new MenuBar(true));
 			sistemaMenuBar.addItem(menuItem);
-			menuItem.getSubMenu().addItem("Pagamentos", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.TESOURARIA_PAGAMENTOS); } });
+			menuItem.getSubMenu().addItem("Doações", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.TESOURARIA_DOACOES); } });
 			menuItem.getSubMenu().addItem("Fichas", new Command() { @Override public void execute() { executaMenu(PresenterCodeEnum.TESOURARIA_FICHAS); } });
 		}
 

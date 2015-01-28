@@ -79,7 +79,7 @@
 									<g:HTMLPanel width="100%">
 										<table cellpadding="2" cellspacing="0" width="100%">
 											<tr>
-												<td class="portal-formLabel">Código de Indentificação:</td>
+												<td class="portal-formLabel">Código de Identificação:</td>
 												<td  width="60%">
 													<cn:NumberTextBox ui:field="codigoNumberTextBox" width="80px" textAlignment="center"/>
 												</td>

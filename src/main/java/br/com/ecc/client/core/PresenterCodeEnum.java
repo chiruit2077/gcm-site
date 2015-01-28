@@ -31,7 +31,7 @@ import br.com.ecc.client.ui.sistema.secretaria.ListagemPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.ListagemSorteioPresenter;
 import br.com.ecc.client.ui.sistema.secretaria.MensagemPresenter;
 import br.com.ecc.client.ui.sistema.tesouraria.FichasPresenter;
-import br.com.ecc.client.ui.sistema.tesouraria.PagamentosPresenter;
+import br.com.ecc.client.ui.sistema.tesouraria.DoacaoPresenter;
 import br.com.ecc.core.mvp.presenter.Presenter;
 
 @SuppressWarnings("rawtypes")
@@ -68,7 +68,7 @@ public enum PresenterCodeEnum  {
 
 	ITEM_PATRIMONIO(2,12, ItemPatrimonioPresenter.class, "Itens do patrimonio", true),
 
-	TESOURARIA_PAGAMENTOS(2,13, PagamentosPresenter.class, "Pagamentos", true),
+	TESOURARIA_DOACOES(2,13, DoacaoPresenter.class, "Doações", true),
 	TESOURARIA_FICHAS(2,15, FichasPresenter.class, "Fichas", true),
 
 	HOTEL_ENCONTRO(2,18, EncontroHotelPresenter.class, "Hoteis do Encontro", true),
