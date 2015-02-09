@@ -66,7 +66,9 @@ public class DoacaoView extends BaseView<DoacaoPresenter> implements DoacaoPrese
 	NumberFormat dfCurrency = NumberFormat.getCurrencyFormat();
 
 	private EncontroInscricaoVO entidadeEditada;
+	@SuppressWarnings("unused")
 	private EncontroInscricaoPagamentoDetalhe entidadeEditadaDetalhe;
+	@SuppressWarnings("unused")
 	private List<EncontroInscricaoVO> listaEncontroVO;
 
 	public DoacaoView() {

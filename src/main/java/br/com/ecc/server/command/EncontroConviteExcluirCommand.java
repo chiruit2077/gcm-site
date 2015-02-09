@@ -6,8 +6,11 @@ import java.util.concurrent.Callable;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.ecc.model.Casal;
 import br.com.ecc.model.EncontroConvite;
+import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.Usuario;
+import br.com.ecc.model.vo.EncontroInscricaoVO;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -25,14 +28,12 @@ public class EncontroConviteExcluirCommand implements Callable<Void>{
 	@Transactional
 	public Void call() throws Exception {
 
-		/*
 		EncontroInscricaoVO voafilhado = getEncontroInscricaoVO(encontroConvite.getCasalConvidado());
 		if (voafilhado!=null){
 			EncontroInscricaoExcluirCommand cmd = inject.getInstance(EncontroInscricaoExcluirCommand.class);
 			cmd.setEncontroInscricao(voafilhado.getEncontroInscricao());
 			cmd.call();
 		}
-		*/
 
 
 		if(encontroConvite.getOrdem()!=null){
@@ -58,7 +59,6 @@ public class EncontroConviteExcluirCommand implements Callable<Void>{
 		return null;
 	}
 
-	/*
 	@SuppressWarnings("unchecked")
 	private EncontroInscricaoVO getEncontroInscricaoVO(Casal casal) throws Exception {
 		Query q = em.createNamedQuery("encontroInscricao.porEncontroCasal");
@@ -72,7 +72,6 @@ public class EncontroConviteExcluirCommand implements Callable<Void>{
 		}
 		return null;
 	}
-	*/
 
 	public EncontroConvite getEncontroConvite() {
 		return encontroConvite;

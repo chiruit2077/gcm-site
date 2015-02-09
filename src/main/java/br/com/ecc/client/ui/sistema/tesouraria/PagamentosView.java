@@ -3,7 +3,6 @@ package br.com.ecc.client.ui.sistema.tesouraria;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import br.com.ecc.client.core.mvp.view.BaseView;

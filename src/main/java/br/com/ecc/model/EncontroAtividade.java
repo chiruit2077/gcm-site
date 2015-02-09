@@ -28,7 +28,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 
 @Entity
-@SequenceGenerator(name="SQ_ATIVIDADE", sequenceName="SQ_ATIVIDADE")
+@SequenceGenerator(name="SQ_ENCONTROATIVIDADE", sequenceName="SQ_ENCONTROATIVIDADE")
 @NamedQueries({
 	@NamedQuery(name="encontroAtividade.porEncontro", query="select u from EncontroAtividade u where u.encontro = :encontro order by u.inicio"),
 	@NamedQuery(name="encontroAtividade.deletePorEncontro", query="delete from EncontroAtividade u where u.encontro = :encontro"),
@@ -44,7 +44,7 @@ public class EncontroAtividade extends _WebBaseEntity {
 	private static final long serialVersionUID = 9141156097707357523L;
 
 	@Id
-	@GeneratedValue(generator="SQ_ATIVIDADE", strategy=GenerationType.AUTO)
+	@GeneratedValue(generator="SQ_ENCONTROATIVIDADE", strategy=GenerationType.AUTO)
 	private Integer id;
 
 	public EncontroAtividade() {
