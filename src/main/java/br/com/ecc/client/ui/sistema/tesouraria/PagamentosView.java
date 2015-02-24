@@ -157,7 +157,7 @@ public class PagamentosView extends BaseView<PagamentosPresenter> implements Pag
 		if(pagamento.getDataPagamento()!=null){
 			pagadoLabel.setText("Parcela paga");
 		}
-		if(combos){
+		if(combos && pagamento.getEncontroInscricao()!=null && pagamento.getEncontroInscricao().getCodigo()!=null){
 			ListBoxUtil.setItemSelected(codigoListBox, pagamento.getEncontroInscricao().getCodigo().toString());
 			//ListBoxUtil.setItemSelected(parcelaListBox, pagamento.getParcela().toString());
 		}
