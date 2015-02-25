@@ -94,7 +94,6 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	@UiField VerticalPanel areaInfoVerticalPanel;
 	@UiField HorizontalPanel areaAniversarioHorizontalPanel;
 	
-	
 	@UiField DialogBox editaAgendaDialogBox;
 	@UiField Calendar agendaCalendar;
 	@UiField Button semanalButton;
@@ -125,11 +124,12 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	
 	//apresentcacao
 	@UiField DialogBox apresentacaoDialogBox;
-	@UiField Image casalApresentacaoImage;
+	@UiField HorizontalPanel casalApresentacaoHorizontalPanel;
 	@UiField Label casalApresentacaoLabel;
-	@UiField Image casalPadrinhoImage;
+	@UiField HorizontalPanel casalPadrinhoHorizontalPanel;
 	@UiField Label casalPadrinhoLabel;
 	@UiField TextBox keyTextBox;
+	@UiField Label labelCarregando;
 
 	private Recado entidadeEditada;
 	private Agenda entidadeAgendaEditada;
@@ -139,6 +139,13 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	Boolean imagemLida=false, aniversariantesLidos=false;
 	
 	private List<Casal> listaConvidados = new ArrayList<Casal>();
+	
+	private ClickHandler ch = new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent arg0) {
+			keyTextBox.setFocus(true);
+		}
+	};
 
 	@SuppressWarnings("deprecation")
 	public InicioSistemaView() {
@@ -200,7 +207,10 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		        case KeyCodes.KEY_RIGHT: 
 		        	apresentaProximo(true);
 		        	break;
-		        case KeyCodes.KEY_DOWN: 
+		        case KeyCodes.KEY_DOWN:
+		        	apresentaProximo(true);
+		        	break;
+		        case KeyCodes.KEY_PAGEDOWN:
 		        	apresentaProximo(true);
 		        	break;
 		        	
@@ -210,47 +220,29 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		        case KeyCodes.KEY_UP: 
 		        	apresentaProximo(false);
 		        	break;
+		        case KeyCodes.KEY_PAGEUP:
+		        	apresentaProximo(false);
+		        	break;
+		        	
 		        case KeyCodes.KEY_ESCAPE: 
 		        	apresentacaoDialogBox.hide();
 		        	break;
+		        	
+		        case KeyCodes.KEY_HOME: 
+		        	indiceApresentacao=0;
+		        	apresentaCasal();
+		        	break;
+			    case KeyCodes.KEY_END: 
+		        	indiceApresentacao=listaConvidados.size()-1;
+		        	if(indiceApresentacao<0){
+		        		indiceApresentacao=0;
+		        	}
+		        	apresentaCasal();
+		        	break;
 		        }
 		    }
-
 		}, KeyDownEvent.getType());
-		ClickHandler ch = new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent arg0) {
-				keyTextBox.setFocus(true);
-			}
-		};
-		casalApresentacaoImage.addClickHandler(ch);
-		casalPadrinhoImage.addClickHandler(ch);
-		casalApresentacaoImage.addLoadHandler(new LoadHandler() {
-			@Override
-			public void onLoad(LoadEvent arg0) {
-				casalApresentacaoImage.setWidth("auto");
-				casalApresentacaoImage.setHeight((getWindowHeight()-40)+"px");
-				/*
-				if(casalApresentacaoImage.getWidth()>casalApresentacaoImage.getHeight()){
-					casalApresentacaoImage.setWidth((getWindowWidth()-20)+"px");
-					casalApresentacaoImage.setHeight("auto");
-				} else {
-					casalApresentacaoImage.setWidth("auto");
-					casalApresentacaoImage.setHeight((getWindowHeight()-40)+"px");
-				}
-				*/
-				//casalApresentacaoImage.setVisible(true);
-			}
-		});
-//		casalPadrinhoImage.addLoadHandler(new LoadHandler() {
-//			@Override
-//			public void onLoad(LoadEvent arg0) {
-//				//casalPadrinhoImage.setVisible(true);
-//			}
-//		});
-
 	}
-
 	public Agenda getAgenda(String id) {
 		for (Agenda agenda : getListaAgenda()) {
 			if( agenda.getId() != null && agenda.getId().toString().equals(id))
@@ -268,11 +260,17 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		apresentacaoDialogBox.center();
 		apresentacaoDialogBox.setPopupPosition(5, 5);
 		apresentacaoDialogBox.show();
-		indiceApresentacao = 0;
-		apresentaCasal();
+		if(listaControleImagens.size()==0){
+			casalApresentacaoHorizontalPanel.setHeight((getWindowHeight()-40)+"px");
+			preparaApresentacao();
+		} else {
+			indiceApresentacao=0;
+			apresentaCasal();
+		}
 	}
 	
 	Integer indiceApresentacao = 0;
+	Boolean apresentacaoCarregada = false;
 	public void apresentaProximo(boolean avanca){
 		if(avanca){
 			indiceApresentacao++;
@@ -289,25 +287,93 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 	
 	private void apresentaCasal(){
 		Casal casal = listaConvidados.get(indiceApresentacao);
-//		casalApresentacaoImage.setVisible(false);
-//		casalPadrinhoImage.setVisible(false);
-		if(casal!=null){
-			if(casal.getIdArquivoDigital()!=null){
-				casalApresentacaoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + casal.getIdArquivoDigital()));
-			} else {
-				casalApresentacaoImage.setUrl("images/casal.jpg");
-			}
-			casalApresentacaoLabel.setText(casal.getApelidos("e"));
-			if(casal.getCasalPadrinho()!=null){
-				if(casal.getCasalPadrinho().getIdArquivoDigital()!=null){
-					casalPadrinhoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + casal.getCasalPadrinho().getIdArquivoDigital()));
-				} else {
-					casalPadrinhoImage.setUrl("images/casal.jpg");
+		for (ControlImagemVO vo : listaControleImagens) {
+			if(casal!=null && vo.getCasal()!=null && casal.getId().equals(vo.getCasal().getId())){
+				vo.getImagemCasal().setVisible(true);
+				vo.getImagemPadrinho().setVisible(true);
+				
+				casalApresentacaoHorizontalPanel.clear();
+				casalApresentacaoHorizontalPanel.add(vo.getImagemCasal());
+				
+				casalPadrinhoHorizontalPanel.clear();
+				casalPadrinhoHorizontalPanel.add(vo.getImagemPadrinho());
+				
+				casalApresentacaoLabel.setText(casal.getApelidos("e"));
+				if(casal.getCasalPadrinho()!=null){
+					casalPadrinhoLabel.setText(casal.getCasalPadrinho().getApelidos("e"));
 				}
-				casalPadrinhoLabel.setText(casal.getCasalPadrinho().getApelidos("e"));
+			} else {
+				vo.getImagemCasal().setVisible(false);
+				vo.getImagemPadrinho().setVisible(false);
 			}
 		}
 		keyTextBox.setFocus(true);
+	}
+	
+	List<ControlImagemVO> listaControleImagens = new ArrayList<ControlImagemVO>();
+	Timer timerApresentacao = null;
+	private void preparaApresentacao(){
+		indiceApresentacao = 0;
+		for (Casal casal : listaConvidados) {
+			if(casal!=null){
+				ControlImagemVO controlImagemVO = new ControlImagemVO();
+				controlImagemVO.setCasal(casal);
+				listaControleImagens.add(controlImagemVO);
+				//convidado
+				final Image casalApresentacaoImage = new Image();
+				controlImagemVO.setImagemCasal(casalApresentacaoImage);
+				casalApresentacaoImage.setVisible(false);
+				if(casal.getIdArquivoDigital()!=null){
+					casalApresentacaoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + casal.getIdArquivoDigital()));
+					casalApresentacaoImage.addLoadHandler(new LoadHandler() {
+						@Override
+						public void onLoad(LoadEvent arg0) {
+							casalApresentacaoImage.setHeight((getWindowHeight()-40)+"px");
+							casalApresentacaoImage.setWidth("auto");
+						}
+					});
+				} else {
+					casalApresentacaoImage.setUrl("images/casal.jpg");
+				}
+				casalApresentacaoImage.addClickHandler(ch);
+				
+				//padrinho
+				final Image casalPadrinhoImage = new Image();
+				controlImagemVO.setImagemPadrinho(casalPadrinhoImage);
+				casalPadrinhoImage.setVisible(false);
+				if(casal.getCasalPadrinho()!=null){
+					if(casal.getCasalPadrinho().getIdArquivoDigital()!=null){
+						casalPadrinhoImage.setUrl(NavegadorUtil.makeUrl("downloadArquivoDigital?id=" + casal.getCasalPadrinho().getIdArquivoDigital()));
+						casalPadrinhoImage.addLoadHandler(new LoadHandler() {
+							@Override
+							public void onLoad(LoadEvent arg0) {
+								casalPadrinhoImage.setHeight("20%");
+								casalPadrinhoImage.setWidth("auto");
+								casalPadrinhoImage.setStyleName("logoPadrinho");
+							}
+						});
+					} else {
+						casalPadrinhoImage.setUrl("images/casal.jpg");
+					}
+				} else {
+					casalPadrinhoImage.setUrl("images/casal.jpg");
+				}
+				casalPadrinhoImage.addClickHandler(ch);
+			}
+		}
+		labelCarregando.setText("Carregando...");
+		timerApresentacao = new Timer() {
+			@Override
+			public void run() {
+				timerApresentacao.cancel();
+				indiceApresentacao = 0;
+				labelCarregando.setText(null);
+				labelCarregando.setVisible(false);
+				apresentaCasal();
+			}
+
+		};
+		timerApresentacao.schedule(3000);
 	}
 	
 	@UiHandler("semanalButton")
@@ -779,6 +845,31 @@ public class InicioSistemaView extends BaseView<InicioSistemaPresenter> implemen
 		if (estadoTextBox.getValue()!=null)
 			buffer.append(" " + estadoTextBox.getValue());
 		return buffer.toString().trim();
+	}
+	
+	private class ControlImagemVO {
+		Casal casal;
+		Image imagemCasal;
+		Image imagemPadrinho;
+		
+		public Casal getCasal() {
+			return casal;
+		}
+		public void setCasal(Casal casal) {
+			this.casal = casal;
+		}
+		public Image getImagemCasal() {
+			return imagemCasal;
+		}
+		public void setImagemCasal(Image imagemCasal) {
+			this.imagemCasal = imagemCasal;
+		}
+		public Image getImagemPadrinho() {
+			return imagemPadrinho;
+		}
+		public void setImagemPadrinho(Image imagemPadrinho) {
+			this.imagemPadrinho = imagemPadrinho;
+		}
 	}
 	
 }
