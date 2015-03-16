@@ -420,7 +420,7 @@ public class DadosPagamento extends Composite {
 			pagamentoEditada.setValor(new BigDecimal(valorParcelaNumberTextBox.getNumber().doubleValue()+(centavos/100)));
 		}
 		entidadeEditada.getListaPagamento().add(pagamentoEditada);
-		entidadeEditada.geraParcelas();
+		//entidadeEditada.geraParcelas();
 		populaPagamentos();
 		dadosAlterados = true;
 		editaPagamentoDialogBox.hide();
