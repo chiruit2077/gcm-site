@@ -5,13 +5,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import br.com.ecc.client.service.patrimonio.ItemPatrimonioService;
-import br.com.ecc.core.mvp.infra.exception.WebException;
 import br.com.ecc.model.Grupo;
 import br.com.ecc.model.ItemPatrimonio;
+import br.com.ecc.model.ItemPatrimonioAtividade;
 import br.com.ecc.model.tipo.Operacao;
+import br.com.ecc.model.vo.ItemPatrimonioVO;
 import br.com.ecc.server.SecureRemoteServiceServlet;
 import br.com.ecc.server.auth.Permissao;
 import br.com.ecc.server.command.basico.DeleteEntityCommand;
+import br.com.ecc.server.command.basico.ExecuteUpdateCommand;
 import br.com.ecc.server.command.basico.GetEntityListCommand;
 import br.com.ecc.server.command.basico.SaveEntityCommand;
 
@@ -50,19 +52,41 @@ public class ItemPatrimonioServiceImpl extends SecureRemoteServiceServlet implem
 		
 		return itens;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Permissao(nomeOperacao="Busca VO", operacao=Operacao.VISUALIZAR)
+	public ItemPatrimonioVO getVO(ItemPatrimonio itemPatrimonio) throws Exception {
+		ItemPatrimonioVO vo = new ItemPatrimonioVO();
+
+		vo.setItemPatrimonio(itemPatrimonio);
+		GetEntityListCommand cmd = injector.getInstance(GetEntityListCommand.class);
+		cmd.setNamedQuery("itemPatrimonioAtividade.porItemPatrimonio");
+		cmd.addParameter("itemPatrimonio", itemPatrimonio);
+		vo.setListaItemPatrimonioAtividade(cmd.call());
+
+		return vo;
+	}
+	
 
 	@Override
-	@Permissao(nomeOperacao="Excluir grupo", operacao=Operacao.EXCLUIR)
+	@Permissao(nomeOperacao="Excluir item", operacao=Operacao.EXCLUIR)
 	public void exclui(ItemPatrimonio itemPatrimonio) throws Exception {
 		//dependencias
-		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
-		cmdEntidade.setNamedQuery("itemPatrimonio.porItemPatrimonio");
-		cmdEntidade.addParameter("itemPatrimonio", itemPatrimonio);
-		if(cmdEntidade.call().size()>0){
-			throw new WebException("Erro ao excluir Item. \nJá existem outros itens pertencentes a este item.");
-		}
+		//verificar caixas
+//		GetEntityListCommand cmdEntidade = injector.getInstance(GetEntityListCommand.class);
+//		cmdEntidade.setNamedQuery("itemPatrimonioAtividade.porItemPatrimonio");
+//		cmdEntidade.addParameter("itemPatrimonio", itemPatrimonio);
+//		if(cmdEntidade.call().size()>0){
+//			throw new WebException("Erro ao excluir Item. \nJá existem outros itens pertencentes a este item.");
+//		}
 		
 		//exclusão
+		ExecuteUpdateCommand cmdu = injector.getInstance(ExecuteUpdateCommand.class);
+		cmdu.setNamedQuery("itemPatrimonioAtividade.deletePorItemPatrimonio");
+		cmdu.addParameter("itemPatrimonio", itemPatrimonio);
+		cmdu.call();
+		
 		DeleteEntityCommand cmd = injector.getInstance(DeleteEntityCommand.class);
 		cmd.setBaseEntity(itemPatrimonio);
 		cmd.call();
@@ -70,10 +94,18 @@ public class ItemPatrimonioServiceImpl extends SecureRemoteServiceServlet implem
 
 	@Override
 	@Permissao(nomeOperacao="Excluir grupo", operacao=Operacao.SALVAR)
-	public ItemPatrimonio salva(ItemPatrimonio itemPatrimonio) throws Exception {
+	public ItemPatrimonio salva(ItemPatrimonioVO itemPatrimonioVO) throws Exception {
 		SaveEntityCommand cmd = injector.getInstance(SaveEntityCommand.class);
-		cmd.setBaseEntity(itemPatrimonio);
-		return (ItemPatrimonio)cmd.call();
+		cmd.setBaseEntity(itemPatrimonioVO.getItemPatrimonio());
+		itemPatrimonioVO.setItemPatrimonio((ItemPatrimonio)cmd.call());
+		
+		for (ItemPatrimonioAtividade itemAtividade : itemPatrimonioVO.getListaItemPatrimonioAtividade()) {
+			itemAtividade.setItemPatrimonio(itemPatrimonioVO.getItemPatrimonio());
+			cmd.setBaseEntity(itemAtividade);
+			cmd.call();
+		}
+		
+		return itemPatrimonioVO.getItemPatrimonio();
 	}
 
 }

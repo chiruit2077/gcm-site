@@ -41,6 +41,10 @@ public class ItemPatrimonio extends _WebBaseEntity {
 	
 	private String nome;
 	
+	private String qtdeNecessaria;
+	
+	private String qtdeExistente;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	private TipoSituacaoEnum situacao;
@@ -131,6 +135,24 @@ public class ItemPatrimonio extends _WebBaseEntity {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	
+
+	public String getQtdeExistente() {
+		return qtdeExistente;
+	}
+
+	public void setQtdeExistente(String qtdeExistente) {
+		this.qtdeExistente = qtdeExistente;
+	}
+
+	public String getQtdeNecessaria() {
+		return qtdeNecessaria;
+	}
+
+	public void setQtdeNecessaria(String qtdeNecessaria) {
+		this.qtdeNecessaria = qtdeNecessaria;
 	}
 	
 }

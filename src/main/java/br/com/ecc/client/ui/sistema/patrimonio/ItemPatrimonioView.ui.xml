@@ -3,7 +3,8 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
-  xmlns:u="urn:import:br.com.ecc.client.ui.component.upload" >
+  xmlns:u="urn:import:br.com.ecc.client.ui.component.upload"
+  xmlns:cn="urn:import:br.com.ecc.client.ui.component.textbox" >
   	<ui:style>
   		.tree {
 			border: 1px solid gray;
@@ -34,18 +35,62 @@
 			<g:DialogBox ui:field="editaDialogBox" visible="false"
 				         width="450px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados do item de patrimônio">
 				<g:VerticalPanel width="100%">
-					<g:HorizontalPanel width="100%" styleName="portal-DialogBoxConteudo" spacing="5">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" spacing="5">
 						<g:HTMLPanel width="100%">
-							<table cellpadding="3" align="center">
+							<table cellpadding="3" align="center" border="0">
+								<tr>
+									<td class="portal-formLabel" width="150px">Tipo:</td>
+									<td>
+										<g:ListBox ui:field="tipoListBox" width="120px"/>
+									</td>
+									<td class="portal-formLabel">Situação:</td>
+									<td align="right">
+										<g:ListBox ui:field="situacaoListBox" width="80px"/>
+									</td>
+								</tr>
 								<tr>
 									<td class="portal-formLabel">Nome:</td>
-									<td>
+									<td colspan="3">
 										<g:TextBox ui:field="nomeTextBox" width="300px" maxLength="250"/>
 									</td>
 								</tr>
 							</table>
 						</g:HTMLPanel>
-					</g:HorizontalPanel>
+						<g:HTMLPanel ui:field="itemHTMLPanel" width="100%" visible="false">
+							<table cellpadding="3" align="center" border="0">
+								<tr>
+									<td class="portal-formLabel">Qtde Existentte:</td>
+									<td>
+										<cn:NumberTextBox ui:field="qtdeExistenteTextBox" width="80px" alignment="CENTER"/>
+									</td>
+									<td class="portal-formLabel">Qtde Necessária:</td>
+									<td align="right">
+										<cn:NumberTextBox ui:field="qtdeNecessariaTextBox" width="80px" alignment="CENTER"/>
+									</td>
+								</tr>
+								
+								<tr>
+									<td colspan="4" align="center" style="border-top:1px solid black;" >Atividades em que este item é utilizado</td>
+								</tr>
+								
+								<tr>
+									<td class="portal-formLabel" width="150px">Atividade:</td>
+									<td colspan="3">
+										<g:ListBox ui:field="atividadeListBox" width="300px"/>
+									</td>
+								</tr>
+								
+								<tr>
+									<td colspan="4">
+										<g:Label ui:field="itemAtividadeTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado" width="100%"/>
+										<g:FlowPanel styleName="portal-FlowPanel" height="190px">
+											<g:FlexTable ui:field="atividadeFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
+										</g:FlowPanel>
+									</td>
+								</tr>					
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
 					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
 						<g:HorizontalPanel spacing="3">
 							<g:Button ui:field="salvarButton">Salvar</g:Button>
