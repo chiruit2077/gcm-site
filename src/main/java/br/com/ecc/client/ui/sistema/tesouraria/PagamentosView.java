@@ -14,6 +14,7 @@ import br.com.ecc.client.util.LabelTotalUtil;
 import br.com.ecc.client.util.ListBoxUtil;
 import br.com.ecc.model.EncontroInscricao;
 import br.com.ecc.model.EncontroInscricaoPagamento;
+import br.com.ecc.model.tipo.TipoConfirmacaoEnum;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -250,7 +251,9 @@ public class PagamentosView extends BaseView<PagamentosPresenter> implements Pag
 		String codigo = codigoListBox.getValue(codigoListBox.getSelectedIndex());
 		if(codigo!=null && !codigo.equals("")){
 			for (EncontroInscricao inscricao : listaInscricao) {
-				if(inscricao.getCodigo()!=null && inscricao.getCodigo().equals(Integer.valueOf(codigo))){
+				if(inscricao.getCodigo()!=null && inscricao.getCodigo().equals(Integer.valueOf(codigo)) && 
+					inscricao.getTipoConfirmacao()!=null &&
+					!inscricao.getTipoConfirmacao().equals(TipoConfirmacaoEnum.DESISTENCIA)){
 					if(inscricao.getCasal()!=null){
 						nomeLabel.setText(inscricao.getCasal().getApelidos("e"));
 					} else {
