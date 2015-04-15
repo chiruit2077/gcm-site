@@ -2,6 +2,7 @@ package br.com.ecc.server.guice;
 
 import br.com.ecc.server.service.cadastro.AgrupamentoServiceImpl;
 import br.com.ecc.server.service.cadastro.AtividadeServiceImpl;
+import br.com.ecc.server.service.cadastro.CaixaServiceImpl;
 import br.com.ecc.server.service.cadastro.CasalServiceImpl;
 import br.com.ecc.server.service.cadastro.EncontroServiceImpl;
 import br.com.ecc.server.service.cadastro.GrupoServiceImpl;
@@ -59,6 +60,7 @@ public class ECCServletModule extends ServletModule {
 		this.serve(contextPath + "mensagem").with(MensagemServiceImpl.class);
 		this.serve(contextPath + "documento").with(DocumentoServiceImpl.class);
 		this.serve(contextPath + "itemPatrimonio").with(ItemPatrimonioServiceImpl.class);
+		this.serve(contextPath + "caixa").with(CaixaServiceImpl.class);
 
 		this.serve(contextPath + "hotel").with(HotelServiceImpl.class);
 		this.serve(contextPath + "restaurante").with(RestauranteServiceImpl.class);

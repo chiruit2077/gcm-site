@@ -1,0 +1,109 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:ct="urn:import:com.google.gwt.user.cellview.client"
+  xmlns:u="urn:import:br.com.ecc.client.ui.component.upload" >
+  <ui:style>
+  	.formulario{
+		overflow-y:scroll;
+	}
+	.tree {
+			border: 1px solid gray;
+			text-align: left;
+		}
+  </ui:style>
+  	<g:VerticalPanel horizontalAlignment="center">
+		<g:HTMLPanel width="100%" styleName="portal-formulario-conteudo">
+			<table cellpadding="0" cellspacing="0" width="100%" class="portal-formulario-titulo">
+				<tr>
+					<td>
+				  		<g:Label ui:field="tituloFormularioLabel" width="100%"/>
+					</td>
+					<td width="30px" align="right">
+						<g:Image ui:field="fecharImage" url="images/close.png" styleName="portal-ImageCursor" width="20px"/>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+		<g:VerticalPanel ui:field="centralPanel" styleName="portal-portlet-content" width="100%" horizontalAlignment="center">
+			<g:HorizontalPanel styleName="formulario-opcoes" horizontalAlignment="center">
+				<g:HTMLPanel width="100%">
+					<table cellpadding="3" cellspacing="0" border="0">
+						<tr>
+							<td colspan="2">
+								<g:Button ui:field="novoButton" text="Adicionar caixa" />
+							</td>
+						</tr>
+					</table>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+			<g:Label ui:field="itemTotal" styleName="portal-rowCountLabel" text="Nenhuma caixa adicionada"/>
+			<g:FlexTable ui:field="caixaFlexTable" cellPadding="0" cellSpacing="0" height="100%"/>
+		</g:VerticalPanel>
+		<g:VerticalPanel visible="false">
+			<g:DialogBox ui:field="editaDialogBox" visible="false"
+				         width="600px" glassEnabled="true" glassStyleName="portal-PopupPanelGlass" text="Dados da caixa">
+				<g:VerticalPanel width="100%">
+					<g:FlowPanel ui:field="formularioFlowPanel" width="100%" styleName="{style.formulario}">
+					<g:VerticalPanel width="100%" styleName="portal-DialogBoxConteudo" spacing="5">
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" width="100%">
+								<tr>
+									<td class="portal-formLabel" width="140px">Nome:</td>
+									<td>
+										<g:TextBox ui:field="nomeTextBox" width="300px" maxLength="150"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel" width="140px">Etiqueta:</td>
+									<td>
+										<g:TextBox ui:field="etiquetaTextBox" width="100px"/>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+						
+						<g:FlowPanel styleName="portal-FlowPanel" height="150px">
+							<g:Tree ui:field="patrimonioTree" width="100%" styleName="{style.tree}"/>
+						</g:FlowPanel>
+						
+						<g:HTMLPanel width="100%">
+							<table cellpadding="3" width="100%">
+								
+								<tr>
+									<td colspan="2">
+										<g:VerticalPanel width="100%">
+											<g:HTMLPanel width="100%">
+												<table cellpadding="3" width="100%">
+													<tr>
+														<td align="left">
+															<g:Button ui:field="excluirItemButton" text="Excluir todos os itens"/>
+														</td>
+														<td align="right">
+															<g:Label ui:field="itemPatrimonioTotal" styleName="portal-rowCountLabel" text="Nenhum item adicionado"/>
+														</td>
+													</tr>
+												</table>
+											</g:HTMLPanel>
+											<g:FlowPanel styleName="portal-FlowPanel" height="100%">
+												<g:FlexTable ui:field="itemFlexTable" width="100%" cellPadding="0" cellSpacing="0" />
+											</g:FlowPanel>
+										</g:VerticalPanel>
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+					</g:VerticalPanel>
+					</g:FlowPanel>
+					<g:VerticalPanel width="100%" styleName="portal-toolbar" horizontalAlignment="center">
+						<g:HorizontalPanel spacing="3">
+							<g:Button ui:field="salvarButton">Salvar</g:Button>
+							<g:Button ui:field="fecharButton">Cancelar</g:Button>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:DialogBox>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+ </ui:UiBinder>
