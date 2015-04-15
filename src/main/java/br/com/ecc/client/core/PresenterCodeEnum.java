@@ -14,6 +14,7 @@ import br.com.ecc.client.ui.sistema.cadastro.OrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.PapelPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.RestauranteLayoutPresenter;
 import br.com.ecc.client.ui.sistema.cadastro.RestaurantePresenter;
+import br.com.ecc.client.ui.sistema.caixa.CaixaPresenter;
 import br.com.ecc.client.ui.sistema.encontro.DistribuicaoOrganogramaPresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroConvitePresenter;
 import br.com.ecc.client.ui.sistema.encontro.EncontroInscricaoPresenter;
@@ -67,6 +68,7 @@ public enum PresenterCodeEnum  {
 	SECRETARIA_RELATORIOS_ENCONTROS(2,26, EncontroRelatoriosSecretariaPresenter.class, "Relatórios do Encontro", true),
 
 	ITEM_PATRIMONIO(2,12, ItemPatrimonioPresenter.class, "Itens do patrimonio", true),
+	CAIXA(2,16, CaixaPresenter.class, "Caixas", true),
 
 	TESOURARIA_DOACOES(2,13, PagamentosPresenter.class, "Doações", true),
 	TESOURARIA_FICHAS(2,15, FichasPresenter.class, "Fichas", true),
