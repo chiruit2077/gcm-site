@@ -43,7 +43,7 @@
 								<tr>
 									<td class="portal-formLabel">Código:</td>
 									<td colspan="2">
-										<g:ListBox ui:field="codigoListBox" width="100px"/>
+										<g:ListBox ui:field="codigoListBox" width="300px"/>
 									</td>
 								</tr>
 								<tr>
@@ -62,15 +62,15 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="portal-formLabel">Valor:</td>
-									<td colspan="2">
-										<cn:NumberTextBox ui:field="valorNumberTextBox" width="100px" textAlignment="right"/>
-									</td>
-								</tr>
-								<tr>
 									<td class="portal-formLabel">Vencimento:</td>
 									<td colspan="2">
 										<g:Label ui:field="vencimentoLabel" width="100px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="portal-formLabel">Valor:</td>
+									<td colspan="2">
+										<cn:NumberTextBox ui:field="valorNumberTextBox" width="100px" textAlignment="right"/>
 									</td>
 								</tr>
 								<tr>
