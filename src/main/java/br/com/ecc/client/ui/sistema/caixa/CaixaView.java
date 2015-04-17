@@ -177,7 +177,7 @@ public class CaixaView extends BaseView<CaixaPresenter> implements CaixaPresente
 		
 		hp.add(adicionar);
 		
-		hp.add(new HTML("&nbsp;&nbsp;" + itemPatrimonio.getNome() + " - " + itemPatrimonio.getTipo().getNome()));
+		hp.add(new HTML("&nbsp;&nbsp;" + itemPatrimonio.getNome()));
 		
 		itemTree = new TreeItem(hp);
 		
